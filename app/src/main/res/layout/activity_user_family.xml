@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/home_manage_backgroud"
+    android:orientation="vertical">
+
+    <include layout="@layout/common_actionbar" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/y50"
+        android:background="@color/white"
+        android:orientation="horizontal">
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <ImageView
+                android:id="@+id/iv_user"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="@dimen/y30"
+                android:src="@mipmap/user_portrait" />
+
+            <TextView
+                android:id="@+id/tv_user"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/iv_user"
+                android:layout_centerHorizontal="true"
+                android:padding="5dp"
+                android:text="纯粹慵懒"
+                android:textColor="@color/home_setting_text"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tv_device_num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_user"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="@dimen/y30"
+                android:text="共享了1个设备"
+                android:textColor="@color/home_setting_text_two"
+                android:textSize="12sp" />
+
+        </RelativeLayout>
+
+        <View
+            android:layout_width="1px"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="@dimen/y20"
+            android:layout_marginTop="@dimen/y20"
+            android:background="@color/black_16" />
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+
+            <ImageView
+                android:id="@+id/iv_dear"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="@dimen/y30"
+                android:src="@mipmap/user_portrait" />
+
+            <TextView
+                android:id="@+id/tv_dear"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/iv_dear"
+                android:layout_centerHorizontal="true"
+                android:padding="5dp"
+                android:text="邀请亲爱的"
+                android:textColor="@color/home_setting_text"
+                android:textSize="14sp" />
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/black_16" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white">
+
+        <TextView
+            android:layout_width="@dimen/x315"
+            android:layout_height="@dimen/y120"
+            android:layout_marginLeft="@dimen/x50"
+            android:layout_marginRight="@dimen/x10"
+            android:layout_marginTop="@dimen/y50"
+            android:background="@color/home_manage_backgroud"
+            android:gravity="center"
+            android:text="爸爸"
+            android:textColor="@color/home_menu"
+            android:textSize="16sp" />
+
+        <TextView
+            android:layout_width="@dimen/x315"
+            android:layout_height="@dimen/y120"
+            android:layout_marginLeft="@dimen/x10"
+            android:layout_marginTop="@dimen/y50"
+            android:background="@color/home_manage_backgroud"
+            android:gravity="center"
+            android:text="妈妈"
+            android:textColor="@color/home_menu"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white">
+
+        <TextView
+            android:layout_width="@dimen/x315"
+            android:layout_height="@dimen/y120"
+            android:layout_marginLeft="@dimen/x50"
+            android:layout_marginRight="@dimen/x10"
+            android:layout_marginTop="@dimen/y20"
+            android:background="@color/home_manage_backgroud"
+            android:gravity="center"
+            android:text="儿子"
+            android:textColor="@color/home_menu"
+            android:textSize="16sp" />
+
+        <TextView
+            android:layout_width="@dimen/x315"
+            android:layout_height="@dimen/y120"
+            android:layout_marginLeft="@dimen/x10"
+            android:layout_marginTop="@dimen/y20"
+            android:background="@color/home_manage_backgroud"
+            android:gravity="center"
+            android:text="女儿"
+            android:textColor="@color/home_menu"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white">
+
+        <TextView
+            android:layout_width="@dimen/x315"
+            android:layout_height="@dimen/y120"
+            android:layout_marginBottom="@dimen/y50"
+            android:layout_marginLeft="@dimen/x50"
+            android:layout_marginRight="@dimen/x10"
+            android:layout_marginTop="@dimen/y20"
+            android:background="@color/home_manage_backgroud"
+            android:gravity="center"
+            android:text="同居密友"
+            android:textColor="@color/home_menu"
+            android:textSize="16sp" />
+
+        <TextView
+            android:layout_width="@dimen/x315"
+            android:layout_height="@dimen/y120"
+            android:layout_marginLeft="@dimen/x10"
+            android:layout_marginTop="@dimen/y20"
+            android:background="@color/home_manage_backgroud"
+            android:gravity="center"
+            android:text="其它家人"
+            android:textColor="@color/home_menu"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+
+</LinearLayout>

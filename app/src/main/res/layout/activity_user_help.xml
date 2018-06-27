@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/home_setting_background"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y80"
+        android:background="@color/white">
+
+        <ImageView
+            android:id="@+id/iv_common_actionbar_goback"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:contentDescription="TODO"
+            android:paddingLeft="@dimen/x20"
+            android:src="@mipmap/actionbar_goback" />
+
+        <TextView
+            android:id="@+id/tv_common_actionbar_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="帮助与反馈"
+            android:textColor="@color/app_title"
+            android:textSize="14sp" />
+
+        <ImageView
+            android:id="@+id/iv_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/x30"
+            android:src="@mipmap/user_help_message" />
+
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/x30"
+        android:paddingTop="@dimen/y40"
+        android:text="我的设备"
+        android:textColor="@color/home_setting_text_three"
+        android:textSize="12sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y300"
+        android:layout_marginTop="@dimen/y25"
+        android:background="@color/white">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </android.support.v7.widget.RecyclerView>
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/x30"
+        android:paddingTop="@dimen/y40"
+        android:text="更多"
+        android:textColor="@color/home_setting_text_three"
+        android:textSize="12sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y300"
+        android:layout_marginTop="@dimen/y25"
+        android:background="@color/white"
+        android:orientation="horizontal">
+
+        <RelativeLayout
+            android:id="@+id/rl_experience"
+            android:layout_marginTop="@dimen/y30"
+            android:layout_marginLeft="@dimen/x55"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_width="@dimen/x160"
+                android:layout_height="@dimen/y160"
+                android:src="@color/red" />
+            <TextView
+                android:layout_marginBottom="@dimen/y60"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:text="应用体验"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_capacity"
+            android:layout_marginTop="@dimen/y30"
+            android:layout_marginLeft="@dimen/x80"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_width="@dimen/x160"
+                android:layout_height="@dimen/y160"
+                android:src="@color/red" />
+            <TextView
+                android:layout_marginBottom="@dimen/y60"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:text="智能"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_other"
+            android:layout_marginTop="@dimen/y30"
+            android:layout_marginLeft="@dimen/x80"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_width="@dimen/x160"
+                android:layout_height="@dimen/y160"
+                android:src="@color/red" />
+            <TextView
+                android:layout_marginBottom="@dimen/y60"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:text="其他"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

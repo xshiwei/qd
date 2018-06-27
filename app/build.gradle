@@ -1,0 +1,90 @@
+apply plugin: 'com.android.application'
+apply plugin: 'org.greenrobot.greendao'
+
+android {
+    compileSdkVersion 27
+    defaultConfig {
+        applicationId "com.qvd.smartswitch"
+        minSdkVersion 18
+        targetSdkVersion 27
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    buildToolsVersion '26.0.2'
+    sourceSets { main { assets.srcDirs = ['src/main/assets', 'src/main/assets/'] } }
+}
+
+greendao {
+    //数据库的schema版本，也可以理解为数据库版本号
+    schemaVersion 1
+    //设置DaoMaster、DaoSession、Dao包名，也就是要放置这些类的包的全路径。
+    daoPackage 'com.qvd.smartswitch.dao'
+    //设置DaoMaster、DaoSession、Dao目录
+    targetGenDir 'src/main/java'
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    //noinspection GradleCompatible
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.1'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+    compile 'com.ashokvarma.android:bottom-navigation-bar:1.2.0'
+    //底部导航栏
+    implementation 'com.jakewharton:butterknife:8.8.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+    //沉浸式状态栏
+    compile 'com.gyf.barlibrary:barlibrary:2.3.0'
+    //noinspection GradleCompatible
+    implementation 'com.android.support:appcompat-v7:27.1.1'
+    implementation 'com.android.support:design:27.1.1'
+    compile 'com.scwang.smartrefresh:SmartRefreshLayout:1.0.4-7'
+    //上拉加载下拉刷新
+    compile 'com.scwang.smartrefresh:SmartRefreshHeader:1.0.4-7'
+    implementation files('libs/SmartAndroid2.0.jar')
+    compile 'com.orhanobut:logger:1.15'
+    //日志
+    implementation 'com.yanzhenjie:permission:2.0.0-rc5'
+    //动态权限
+    compile 'com.amap.api:location:latest.integration'
+    //高德地图定位
+    compile 'com.amap.api:search:latest.integration'
+    //高德地图搜索天气
+    // rxjava
+    compile 'io.reactivex.rxjava2:rxjava:2.1.6'
+    compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
+    compile 'com.github.VictorAlbertos.RxCache:runtime:1.8.3-2.x'
+    compile 'com.github.VictorAlbertos.Jolyglot:gson:0.0.4'
+    // retrofit
+    compile 'com.squareup.retrofit2:retrofit:2.2.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.1.0'
+    compile 'com.squareup.retrofit2:adapter-rxjava2:2.2.0'
+    compile 'com.squareup.picasso:picasso:2.5.2'
+    //greenDao
+    compile 'org.greenrobot:greendao:3.2.2'
+    implementation 'de.hdodenhof:circleimageview:2.2.0'
+    //圆形头像
+    compile 'com.hyman:flowlayout-lib:1.1.2'
+    //流式布局
+    compile 'com.clj.fastble:FastBleLib:2.3.0'
+    implementation files('libs/Msc.jar')
+    //解决64k方法过多
+    compile 'com.android.support:multidex:1.0.1'
+    implementation files('libs/Sunflower.jar')
+    //floatingactionbutton第三方库
+    compile 'com.melnykov:floatingactionbutton:1.3.0'
+    implementation project(':citypickerview')
+    //滚动选择器
+    compile 'cn.carbswang.android:NumberPickerView:1.1.1'
+    //时间轴
+    compile 'com.vivian.widgets:TimeLineItemDecoration:1.3'
+}

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/home_manage_backgroud"
+    android:orientation="vertical">
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y80"
+        android:background="@color/white">
+
+        <ImageView
+            android:id="@+id/iv_common_actionbar_goback"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:contentDescription="TODO"
+            android:paddingLeft="@dimen/x20"
+            android:src="@mipmap/actionbar_goback" />
+
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tbl_share"
+            android:layout_width="@dimen/x300"
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center_horizontal"
+            app:tabBackground="@color/white"
+            app:tabIndicatorColor="@color/capacity_tablayout_text_two"
+            app:tabSelectedTextColor="@color/capacity_tablayout_text_two"
+            app:tabTextColor="@color/capacity_tablayout_text"></android.support.design.widget.TabLayout>
+
+    </RelativeLayout>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/vp_share"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+</LinearLayout>

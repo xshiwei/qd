@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <RelativeLayout
+        android:id="@+id/actionbar_device_log"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y100"
+        android:background="@color/app_color">
+
+        <ImageView
+            android:id="@+id/iv_common_actionbar_goback"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/x20"
+            android:contentDescription="TODO"
+            android:src="@mipmap/actionbar_goback" />
+
+        <TextView
+            android:id="@+id/tv_common_actionbar_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/tv_device_log_edit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:paddingRight="@dimen/x20"
+            android:text="@string/device_log_edit"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+
+    </RelativeLayout>
+
+    <com.qvd.smartswitch.widget.EmptyLayout
+        android:id="@+id/empty_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/actionbar_device_log">
+
+
+        <com.scwang.smartrefresh.layout.SmartRefreshLayout
+            android:id="@+id/refreshLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white1"
+                android:overScrollMode="never" />
+
+        </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+
+    </com.qvd.smartswitch.widget.EmptyLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_device_log_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="#e6e6e6"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="#e5e5e5" />
+
+        <RelativeLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:background="#ffffff">
+
+            <TextView
+                android:id="@+id/tv_device_log_bottom_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="15dp"
+                android:text="@string/device_log_bottom_selete"
+                android:textColor="#1A1A1A"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tv_device_log_bottom_select_num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="9dp"
+                android:layout_toRightOf="@+id/tv_device_log_bottom_text"
+                android:text="0"
+                android:textColor="#1A1A1A"
+                android:textSize="14sp" />
+
+            <Button
+                android:id="@+id/btn_device_log_bottom_delete"
+                android:layout_width="80dp"
+                android:layout_height="33dp"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="15dp"
+                android:background="@drawable/device_log_button_unselete"
+                android:gravity="center"
+                android:text="@string/device_log_bottom_delete"
+                android:textColor="#b7b8bd"
+                android:textSize="14sp" />
+
+            <Button
+                android:id="@+id/select_device_log_bottom_all"
+                android:layout_width="80dp"
+                android:layout_height="33dp"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="15dp"
+                android:layout_toLeftOf="@+id/btn_device_log_bottom_delete"
+                android:background="@drawable/device_log_button_unselete"
+                android:gravity="center"
+                android:text="@string/device_log_bottom_allselete"
+                android:textColor="#000001"
+                android:textSize="14sp" />
+
+        </RelativeLayout>
+    </LinearLayout>
+
+
+</RelativeLayout>

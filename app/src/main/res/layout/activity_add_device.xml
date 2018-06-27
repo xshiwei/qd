@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y80"
+        android:background="@color/white">
+
+        <ImageView
+            android:id="@+id/iv_add_device_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:paddingLeft="@dimen/x20"
+            android:src="@mipmap/actionbar_goback" />
+
+        <TextView
+            android:id="@+id/tv_add_device_nearby"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/x220"
+            android:text="附近设备"
+            android:textColor="@color/add_device_title"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tv_add_device_manual"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/x220"
+            android:text="手动添加"
+            android:textColor="@color/add_device_selete"
+            android:textSize="14sp" />
+
+        <ImageView
+            android:id="@+id/iv_add_device_search"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/x20"
+            android:src="@mipmap/home_search" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <View
+            android:paddingBottom="@dimen/y10"
+            android:paddingTop="@dimen/y10"
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:background="@color/black_16" />
+
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/rl_add_device_nearby"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/add_device_background"
+        android:visibility="gone">
+
+        <com.qvd.smartswitch.widget.RadarScanView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <com.qvd.smartswitch.widget.RandomTextView
+            android:id="@+id/random_textview"
+            android:layout_width="@dimen/x600"
+            android:layout_height="@dimen/y600"
+            android:layout_centerInParent="true"></com.qvd.smartswitch.widget.RandomTextView>
+
+    </RelativeLayout>
+
+
+    <LinearLayout
+        android:id="@+id/ll_add_device_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:visibility="visible"
+        android:weightSum="5">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_sort"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/add_device_background" />
+
+        <FrameLayout
+            android:id="@+id/lin_fragment"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="4"
+            android:background="@color/white"></FrameLayout>
+    </LinearLayout>
+
+
+</LinearLayout>

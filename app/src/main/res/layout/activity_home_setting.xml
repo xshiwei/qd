@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/rl_layout"
+    android:background="@color/home_setting_background">
+
+    <include
+        android:id="@+id/action_bar"
+        layout="@layout/common_actionbar" />
+
+    <RelativeLayout
+        android:id="@+id/rl_home_name"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y100"
+        android:layout_below="@+id/action_bar"
+        android:layout_marginTop="@dimen/y50"
+        android:background="@color/white">
+
+        <TextView
+            android:id="@+id/tv_name_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:paddingLeft="@dimen/x30"
+            android:text="家庭名称"
+            android:textColor="@color/home_setting_text"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/x10"
+            android:layout_toLeftOf="@+id/iv_more"
+            android:layout_toRightOf="@+id/tv_name_title"
+            android:gravity="right|center"
+            android:padding="5dp"
+            android:text="纯粹慵懒的家"
+            android:textColor="@color/home_setting_text_two"
+            android:textSize="14sp" />
+
+
+        <ImageView
+            android:id="@+id/iv_more"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/x30"
+            android:src="@mipmap/device_more_details" />
+
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/rl_home_location"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y100"
+        android:layout_below="@+id/rl_home_name"
+        android:layout_marginTop="@dimen/y5"
+        android:background="@color/white">
+
+        <TextView
+            android:id="@+id/tv_location_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:paddingLeft="@dimen/x30"
+            android:text="家庭位置"
+            android:textColor="@color/home_setting_text"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tv_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/x10"
+            android:layout_toLeftOf="@+id/iv_more_two"
+            android:layout_toRightOf="@+id/tv_location_title"
+            android:gravity="right|center"
+            android:padding="5dp"
+            android:text="深圳"
+            android:textColor="@color/home_setting_text_two"
+            android:textSize="14sp" />
+
+
+        <ImageView
+            android:id="@+id/iv_more_two"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/x30"
+            android:src="@mipmap/device_more_details" />
+
+    </RelativeLayout>
+
+
+    <TextView
+        android:id="@+id/tv_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rl_home_location"
+        android:layout_marginLeft="@dimen/x30"
+        android:layout_marginTop="@dimen/y40"
+        android:text="主题壁纸"
+        android:textColor="@color/home_setting_text_three"
+        android:textSize="12sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y500"
+        android:layout_below="@+id/tv_text"
+        android:layout_marginTop="@dimen/y25"
+        android:background="@color/white"
+        android:orientation="horizontal">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="@dimen/y30"
+            android:layout_marginLeft="@dimen/x10"
+            android:layout_marginTop="@dimen/y30"></android.support.v7.widget.RecyclerView>
+
+    </LinearLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/rl_delete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="@dimen/y30">
+
+        <ImageView
+            android:id="@+id/iv_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="@dimen/y10"
+            android:src="@mipmap/home_setting_delete" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/iv_delete"
+            android:layout_centerHorizontal="true"
+            android:text="删除家庭"
+            android:textColor="@color/home_setting_text_three"
+            android:textSize="12sp" />
+
+    </RelativeLayout>
+
+
+</RelativeLayout>

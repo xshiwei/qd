@@ -1,0 +1,899 @@
+<resources>
+    <string name="app_name">smartswitch</string>
+    <string name="message_permission_always_failed">我们需要权限</string>
+    <string name="message_permission_rationale">您需要以下权限</string>
+    <string name="connect_timeout">设备连接超时</string>
+    <string name="ota_error">更新设备失败，请检查蓝牙连接</string>
+    <string name="update_retry">重试</string>
+    <string name="update_cancel">取消</string>
+    <string name="updating">更新中,请稍后</string>
+    <string name="ota_title">硬件更新</string>
+    <string name="about_company_version">v1.0</string>
+    <string name="about_company_grade">去评分</string>
+    <string name="about_company_privacy">使用条款和隐私政策</string>
+    <string name="device_control_title">智能电灯</string>
+    <string name="device_control_off">已关闭</string>
+    <string name="device_control_on">已开启</string>
+    <string name="device_control_setting_function">使用须知</string>
+    <string name="device_control_setting_log">日志</string>
+    <string name="device_control_setting_password">设置密码</string>
+    <string name="device_control_setting_timing">定时</string>
+    <string name="device_control_setting_nickname">修改名称</string>
+    <string name="device_control_setting_pic">更换图标</string>
+    <string name="device_control_setting_general">通用设置</string>
+    <string name="device_control_setting_type">设备类型</string>
+    <string name="device_control_setting_update">固件更新</string>
+    <string name="device_control_setting_delete">删除设备</string>
+    <string name="device_nickname_update_name">请为产品命名哦</string>
+    <string name="device_nickname_input">请在此输入</string>
+    <string name="device_title">用户设备</string>
+    <string name="device_finding">已经发现设备...</string>
+    <string name="device_scan">重新扫描</string>
+    <string name="home_degree">℃</string>
+    <string name="home_temperature">Temperature</string>
+    <string name="home_humidity">Humidity</string>
+    <string name="home_bulb">灯泡</string>
+    <string name="user_setting">设置</string>
+    <string name="user_notebook">用户手册</string>
+    <string name="user_faq">FAQ</string>
+    <string name="user_about_company">关于科微多</string>
+    <string name="user_clear_cache">清理缓存</string>
+    <string name="device_item_state">状态：</string>
+    <string name="device_item_off_connect">未连接</string>
+    <string name="device_item_on_connect">已连接</string>
+    <string name="empty_view_message">没有可连设备</string>
+    <string name="empty_view_button">空数据</string>
+    <string name="error_view_message">出错了</string>
+    <string name="error_view_button">出错</string>
+    <string name="loading_view_message">加载中</string>
+    <string name="loading_view_button">加载</string>
+    <string name="device_control_setting_title">设备设置</string>
+    <string name="dialog_confirm">确定</string>
+    <string name="dialog_cancle">取消</string>
+    <string name="device_scaning">扫描中...</string>
+    <string name="device_stop_scan">停止扫描</string>
+    <string name="home_unknowe_city">未知</string>
+    <string name="about_company_title">关于科微多</string>
+    <string name="user_delete_cache_title">您确定要删除这些缓存吗</string>
+    <string name="exit_app">再按一次退出程序</string>
+    <string name="device_log_title">操作日志</string>
+    <string name="device_log_cancle_allselete">取消全选</string>
+    <string name="device_log_allselete">全选</string>
+    <string name="device_log_delete_one">删除后不可恢复，是否删除该条目？</string>
+    <string name="device_log_delete_all_one">删除后不可恢复，是否删除这</string>
+    <string name="device_log_delete_all_two">个条目？</string>
+    <string name="device_log_cancle">取消</string>
+    <string name="device_log_edit">编辑</string>
+    <string name="device_log_popuwindow_prompt">提示</string>
+    <string name="device_log_popuwindow_close">关闭</string>
+    <string name="device_log_popuwindow_confirm">确定</string>
+    <string name="device_log_bottom_selete">已选择</string>
+    <string name="device_log_bottom_delete">删除</string>
+    <string name="device_log_bottom_allselete">全选</string>
+    <string name="device_reconnection">连接已中断，正在重连</string>
+    <string name="device_connect_fail">连接失败</string>
+    <string name="device_connect_success">连接成功</string>
+    <string name="device_initiative_break_off_connect">您主动中断连接</string>
+    <string name="device_passive_break_off_connect">被动中断连接</string>
+    <string name="device_not_connect">蓝牙未连接</string>
+    <string name="todo">TODO</string>
+    <string name="device_control_general_setting">通用设置</string>
+    <string name="device_set_type_save">保存</string>
+    <string name="device_timing_save">保存</string>
+    <string name="device_timing_repetition">重复</string>
+    <string name="device_timing_everyday">每天</string>
+    <string name="device_timing_operation">操作</string>
+    <string name="device_timing_open">开启</string>
+    <string name="device_update_nickname_tip">请输入名称，不超过10个字</string>
+    <string name="device_update_nickname_confirm">确定</string>
+    <string name="device_update_pic_save">保存</string>
+    <string name="device_update_light">电灯</string>
+
+
+    <string-array name="minute_display">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+        <item>11</item>
+        <item>12</item>
+        <item>13</item>
+        <item>14</item>
+        <item>15</item>
+        <item>16</item>
+        <item>17</item>
+        <item>18</item>
+        <item>19</item>
+        <item>20</item>
+        <item>21</item>
+        <item>22</item>
+        <item>23</item>
+        <item>24</item>
+        <item>25</item>
+        <item>26</item>
+        <item>27</item>
+        <item>28</item>
+        <item>29</item>
+        <item>30</item>
+        <item>31</item>
+        <item>32</item>
+        <item>33</item>
+        <item>34</item>
+        <item>35</item>
+        <item>36</item>
+        <item>37</item>
+        <item>38</item>
+        <item>39</item>
+        <item>40</item>
+        <item>41</item>
+        <item>42</item>
+        <item>43</item>
+        <item>44</item>
+        <item>45</item>
+        <item>46</item>
+        <item>47</item>
+        <item>48</item>
+        <item>49</item>
+        <item>50</item>
+        <item>51</item>
+        <item>52</item>
+        <item>53</item>
+        <item>54</item>
+        <item>55</item>
+        <item>56</item>
+        <item>57</item>
+        <item>58</item>
+        <item>59</item>
+    </string-array>
+
+    <string-array name="second_display">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+        <item>11</item>
+        <item>12</item>
+        <item>13</item>
+        <item>14</item>
+        <item>15</item>
+        <item>16</item>
+        <item>17</item>
+        <item>18</item>
+        <item>19</item>
+        <item>20</item>
+        <item>21</item>
+        <item>22</item>
+        <item>23</item>
+        <item>24</item>
+        <item>25</item>
+        <item>26</item>
+        <item>27</item>
+        <item>28</item>
+        <item>29</item>
+        <item>30</item>
+        <item>31</item>
+        <item>32</item>
+        <item>33</item>
+        <item>34</item>
+        <item>35</item>
+        <item>36</item>
+        <item>37</item>
+        <item>38</item>
+        <item>39</item>
+        <item>40</item>
+        <item>41</item>
+        <item>42</item>
+        <item>43</item>
+        <item>44</item>
+        <item>45</item>
+        <item>46</item>
+        <item>47</item>
+        <item>48</item>
+        <item>49</item>
+        <item>50</item>
+        <item>51</item>
+        <item>52</item>
+        <item>53</item>
+        <item>54</item>
+        <item>55</item>
+        <item>56</item>
+        <item>57</item>
+        <item>58</item>
+        <item>59</item>
+    </string-array>
+
+
+    <string-array name="temperature_display">
+        <item>-40</item>
+        <item>-39</item>
+        <item>-38</item>
+        <item>-37</item>
+        <item>-36</item>
+        <item>-35</item>
+        <item>-34</item>
+        <item>-33</item>
+        <item>-32</item>
+        <item>-31</item>
+        <item>-30</item>
+        <item>-29</item>
+        <item>-28</item>
+        <item>-27</item>
+        <item>-26</item>
+        <item>-25</item>
+        <item>-24</item>
+        <item>-23</item>
+        <item>-22</item>
+        <item>-21</item>
+        <item>-20</item>
+        <item>-19</item>
+        <item>-18</item>
+        <item>-17</item>
+        <item>-16</item>
+        <item>-15</item>
+        <item>-14</item>
+        <item>-13</item>
+        <item>-12</item>
+        <item>-11</item>
+        <item>-10</item>
+        <item>-9</item>
+        <item>-8</item>
+        <item>-7</item>
+        <item>-6</item>
+        <item>-5</item>
+        <item>-4</item>
+        <item>-3</item>
+        <item>-2</item>
+        <item>-1</item>
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+        <item>11</item>
+        <item>12</item>
+        <item>13</item>
+        <item>14</item>
+        <item>15</item>
+        <item>16</item>
+        <item>17</item>
+        <item>18</item>
+        <item>19</item>
+        <item>20</item>
+        <item>21</item>
+        <item>22</item>
+        <item>23</item>
+        <item>24</item>
+        <item>25</item>
+        <item>26</item>
+        <item>27</item>
+        <item>28</item>
+        <item>29</item>
+        <item>30</item>
+        <item>31</item>
+        <item>32</item>
+        <item>33</item>
+        <item>34</item>
+        <item>35</item>
+        <item>36</item>
+        <item>37</item>
+        <item>38</item>
+        <item>39</item>
+        <item>40</item>
+        <item>41</item>
+        <item>42</item>
+        <item>43</item>
+        <item>44</item>
+        <item>45</item>
+        <item>46</item>
+        <item>47</item>
+        <item>48</item>
+        <item>49</item>
+        <item>50</item>
+        <item>51</item>
+        <item>52</item>
+        <item>53</item>
+        <item>54</item>
+        <item>55</item>
+        <item>56</item>
+        <item>57</item>
+        <item>58</item>
+        <item>59</item>
+        <item>60</item>
+        <item>61</item>
+        <item>62</item>
+        <item>63</item>
+        <item>64</item>
+        <item>65</item>
+        <item>66</item>
+        <item>67</item>
+        <item>68</item>
+        <item>69</item>
+        <item>70</item>
+        <item>71</item>
+        <item>72</item>
+        <item>73</item>
+        <item>74</item>
+        <item>75</item>
+        <item>76</item>
+        <item>77</item>
+        <item>78</item>
+        <item>79</item>
+        <item>80</item>
+        <item>81</item>
+        <item>82</item>
+        <item>83</item>
+        <item>84</item>
+        <item>85</item>
+        <item>86</item>
+        <item>87</item>
+        <item>88</item>
+        <item>89</item>
+        <item>90</item>
+        <item>91</item>
+        <item>92</item>
+        <item>93</item>
+        <item>94</item>
+        <item>95</item>
+        <item>96</item>
+        <item>97</item>
+        <item>98</item>
+        <item>99</item>
+        <item>100</item>
+    </string-array>
+
+    <string-array name="humidity_display">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+        <item>11</item>
+        <item>12</item>
+        <item>13</item>
+        <item>14</item>
+        <item>15</item>
+        <item>16</item>
+        <item>17</item>
+        <item>18</item>
+        <item>19</item>
+        <item>20</item>
+        <item>21</item>
+        <item>22</item>
+        <item>23</item>
+        <item>24</item>
+        <item>25</item>
+        <item>26</item>
+        <item>27</item>
+        <item>28</item>
+        <item>29</item>
+        <item>30</item>
+        <item>31</item>
+        <item>32</item>
+        <item>33</item>
+        <item>34</item>
+        <item>35</item>
+        <item>36</item>
+        <item>37</item>
+        <item>38</item>
+        <item>39</item>
+        <item>40</item>
+        <item>41</item>
+        <item>42</item>
+        <item>43</item>
+        <item>44</item>
+        <item>45</item>
+        <item>46</item>
+        <item>47</item>
+        <item>48</item>
+        <item>49</item>
+        <item>50</item>
+        <item>51</item>
+        <item>52</item>
+        <item>53</item>
+        <item>54</item>
+        <item>55</item>
+        <item>56</item>
+        <item>57</item>
+        <item>58</item>
+        <item>59</item>
+        <item>60</item>
+        <item>61</item>
+        <item>62</item>
+        <item>63</item>
+        <item>64</item>
+        <item>65</item>
+        <item>66</item>
+        <item>67</item>
+        <item>68</item>
+        <item>69</item>
+        <item>70</item>
+        <item>71</item>
+        <item>72</item>
+        <item>73</item>
+        <item>74</item>
+        <item>75</item>
+        <item>76</item>
+        <item>77</item>
+        <item>78</item>
+        <item>79</item>
+        <item>80</item>
+        <item>81</item>
+        <item>82</item>
+        <item>83</item>
+        <item>84</item>
+        <item>85</item>
+        <item>86</item>
+        <item>87</item>
+        <item>88</item>
+        <item>89</item>
+        <item>90</item>
+        <item>91</item>
+        <item>92</item>
+        <item>93</item>
+        <item>94</item>
+        <item>95</item>
+        <item>96</item>
+        <item>97</item>
+        <item>98</item>
+        <item>99</item>
+        <item>100</item>
+    </string-array>
+
+    <string-array name="pm_display">
+        <item>5</item>
+        <item>10</item>
+        <item>15</item>
+        <item>20</item>
+        <item>25</item>
+        <item>30</item>
+        <item>35</item>
+        <item>40</item>
+        <item>45</item>
+        <item>50</item>
+        <item>55</item>
+        <item>60</item>
+        <item>65</item>
+        <item>70</item>
+        <item>75</item>
+        <item>80</item>
+        <item>85</item>
+        <item>90</item>
+        <item>95</item>
+        <item>100</item>
+        <item>105</item>
+        <item>110</item>
+        <item>115</item>
+        <item>120</item>
+        <item>125</item>
+        <item>130</item>
+        <item>135</item>
+        <item>140</item>
+        <item>145</item>
+        <item>150</item>
+        <item>155</item>
+        <item>160</item>
+        <item>165</item>
+        <item>170</item>
+        <item>175</item>
+        <item>180</item>
+        <item>185</item>
+        <item>190</item>
+        <item>195</item>
+        <item>200</item>
+        <item>205</item>
+        <item>210</item>
+        <item>215</item>
+        <item>220</item>
+        <item>225</item>
+        <item>230</item>
+        <item>235</item>
+        <item>240</item>
+        <item>245</item>
+        <item>250</item>
+        <item>255</item>
+        <item>260</item>
+        <item>265</item>
+        <item>270</item>
+        <item>275</item>
+        <item>280</item>
+        <item>285</item>
+        <item>290</item>
+        <item>295</item>
+        <item>300</item>
+        <item>305</item>
+        <item>310</item>
+        <item>315</item>
+        <item>320</item>
+        <item>325</item>
+        <item>330</item>
+        <item>335</item>
+        <item>340</item>
+        <item>345</item>
+        <item>350</item>
+        <item>355</item>
+        <item>360</item>
+        <item>365</item>
+        <item>370</item>
+        <item>375</item>
+        <item>380</item>
+        <item>385</item>
+        <item>390</item>
+        <item>395</item>
+        <item>400</item>
+        <item>405</item>
+        <item>410</item>
+        <item>415</item>
+        <item>420</item>
+        <item>425</item>
+        <item>430</item>
+        <item>435</item>
+        <item>440</item>
+        <item>445</item>
+        <item>450</item>
+        <item>455</item>
+        <item>460</item>
+        <item>465</item>
+        <item>470</item>
+        <item>475</item>
+        <item>480</item>
+        <item>485</item>
+        <item>490</item>
+        <item>495</item>
+        <item>500</item>
+        <item>505</item>
+        <item>510</item>
+        <item>515</item>
+        <item>520</item>
+        <item>525</item>
+        <item>530</item>
+        <item>535</item>
+        <item>540</item>
+        <item>545</item>
+        <item>550</item>
+        <item>555</item>
+        <item>560</item>
+        <item>565</item>
+        <item>570</item>
+        <item>575</item>
+        <item>580</item>
+        <item>585</item>
+        <item>590</item>
+        <item>595</item>
+        <item>600</item>
+        <item>605</item>
+        <item>610</item>
+        <item>615</item>
+        <item>620</item>
+        <item>625</item>
+        <item>630</item>
+        <item>635</item>
+        <item>640</item>
+        <item>645</item>
+        <item>650</item>
+        <item>655</item>
+        <item>660</item>
+        <item>665</item>
+        <item>670</item>
+        <item>675</item>
+        <item>680</item>
+        <item>685</item>
+        <item>690</item>
+        <item>695</item>
+        <item>700</item>
+        <item>705</item>
+        <item>710</item>
+        <item>715</item>
+        <item>720</item>
+        <item>725</item>
+        <item>730</item>
+        <item>735</item>
+        <item>740</item>
+        <item>745</item>
+        <item>750</item>
+        <item>755</item>
+        <item>760</item>
+        <item>765</item>
+        <item>770</item>
+        <item>775</item>
+        <item>780</item>
+        <item>785</item>
+        <item>790</item>
+        <item>795</item>
+        <item>800</item>
+        <item>805</item>
+        <item>810</item>
+        <item>815</item>
+        <item>820</item>
+        <item>825</item>
+        <item>830</item>
+        <item>835</item>
+        <item>840</item>
+        <item>845</item>
+        <item>850</item>
+        <item>855</item>
+        <item>860</item>
+        <item>865</item>
+        <item>870</item>
+        <item>875</item>
+        <item>880</item>
+        <item>885</item>
+        <item>890</item>
+        <item>895</item>
+        <item>900</item>
+        <item>905</item>
+        <item>910</item>
+        <item>915</item>
+        <item>920</item>
+        <item>925</item>
+        <item>930</item>
+        <item>935</item>
+        <item>940</item>
+        <item>945</item>
+        <item>950</item>
+        <item>955</item>
+        <item>960</item>
+        <item>965</item>
+        <item>970</item>
+        <item>975</item>
+        <item>980</item>
+        <item>985</item>
+        <item>990</item>
+        <item>995</item>
+        <item>1000</item>
+        <item>1005</item>
+        <item>1010</item>
+        <item>1015</item>
+        <item>1020</item>
+        <item>1025</item>
+        <item>1030</item>
+        <item>1035</item>
+        <item>1040</item>
+        <item>1045</item>
+        <item>1050</item>
+        <item>1055</item>
+        <item>1060</item>
+        <item>1065</item>
+        <item>1070</item>
+        <item>1075</item>
+        <item>1080</item>
+        <item>1085</item>
+        <item>1090</item>
+        <item>1095</item>
+        <item>1100</item>
+        <item>1105</item>
+        <item>1110</item>
+        <item>1115</item>
+        <item>1120</item>
+        <item>1125</item>
+        <item>1130</item>
+        <item>1135</item>
+        <item>1140</item>
+        <item>1145</item>
+        <item>1150</item>
+        <item>1155</item>
+        <item>1160</item>
+        <item>1165</item>
+        <item>1170</item>
+        <item>1175</item>
+        <item>1180</item>
+        <item>1185</item>
+        <item>1190</item>
+        <item>1195</item>
+        <item>1200</item>
+        <item>1205</item>
+        <item>1210</item>
+        <item>1215</item>
+        <item>1220</item>
+        <item>1225</item>
+        <item>1230</item>
+        <item>1235</item>
+        <item>1240</item>
+        <item>1245</item>
+        <item>1250</item>
+        <item>1255</item>
+        <item>1260</item>
+        <item>1265</item>
+        <item>1270</item>
+        <item>1275</item>
+        <item>1280</item>
+        <item>1285</item>
+        <item>1290</item>
+        <item>1295</item>
+        <item>1300</item>
+        <item>1305</item>
+        <item>1310</item>
+        <item>1315</item>
+        <item>1320</item>
+        <item>1325</item>
+        <item>1330</item>
+        <item>1335</item>
+        <item>1340</item>
+        <item>1345</item>
+        <item>1350</item>
+        <item>1355</item>
+        <item>1360</item>
+        <item>1365</item>
+        <item>1370</item>
+        <item>1375</item>
+        <item>1380</item>
+        <item>1385</item>
+        <item>1390</item>
+        <item>1395</item>
+        <item>1400</item>
+        <item>1405</item>
+        <item>1410</item>
+        <item>1415</item>
+        <item>1420</item>
+        <item>1425</item>
+        <item>1430</item>
+        <item>1435</item>
+        <item>1440</item>
+        <item>1445</item>
+        <item>1450</item>
+        <item>1455</item>
+        <item>1460</item>
+        <item>1465</item>
+        <item>1470</item>
+        <item>1475</item>
+        <item>1480</item>
+        <item>1485</item>
+        <item>1490</item>
+        <item>1495</item>
+        <item>1500</item>
+        <item>1505</item>
+        <item>1510</item>
+        <item>1515</item>
+        <item>1520</item>
+        <item>1525</item>
+        <item>1530</item>
+        <item>1535</item>
+        <item>1540</item>
+        <item>1545</item>
+        <item>1550</item>
+        <item>1555</item>
+        <item>1560</item>
+        <item>1565</item>
+        <item>1570</item>
+        <item>1575</item>
+        <item>1580</item>
+        <item>1585</item>
+        <item>1590</item>
+        <item>1595</item>
+        <item>1600</item>
+        <item>1605</item>
+        <item>1610</item>
+        <item>1615</item>
+        <item>1620</item>
+        <item>1625</item>
+        <item>1630</item>
+        <item>1635</item>
+        <item>1640</item>
+        <item>1645</item>
+        <item>1650</item>
+        <item>1655</item>
+        <item>1660</item>
+        <item>1665</item>
+        <item>1670</item>
+        <item>1675</item>
+        <item>1680</item>
+        <item>1685</item>
+        <item>1690</item>
+        <item>1695</item>
+        <item>1700</item>
+        <item>1705</item>
+        <item>1710</item>
+        <item>1715</item>
+        <item>1720</item>
+        <item>1725</item>
+        <item>1730</item>
+        <item>1735</item>
+        <item>1740</item>
+        <item>1745</item>
+        <item>1750</item>
+        <item>1755</item>
+        <item>1760</item>
+        <item>1765</item>
+        <item>1770</item>
+        <item>1775</item>
+        <item>1780</item>
+        <item>1785</item>
+        <item>1790</item>
+        <item>1795</item>
+        <item>1800</item>
+        <item>1805</item>
+        <item>1810</item>
+        <item>1815</item>
+        <item>1820</item>
+        <item>1825</item>
+        <item>1830</item>
+        <item>1835</item>
+        <item>1840</item>
+        <item>1845</item>
+        <item>1850</item>
+        <item>1855</item>
+        <item>1860</item>
+        <item>1865</item>
+        <item>1870</item>
+        <item>1875</item>
+        <item>1880</item>
+        <item>1885</item>
+        <item>1890</item>
+        <item>1895</item>
+        <item>1900</item>
+        <item>1905</item>
+        <item>1910</item>
+        <item>1915</item>
+        <item>1920</item>
+        <item>1925</item>
+        <item>1930</item>
+        <item>1935</item>
+        <item>1940</item>
+        <item>1945</item>
+        <item>1950</item>
+        <item>1955</item>
+        <item>1960</item>
+        <item>1965</item>
+        <item>1970</item>
+        <item>1975</item>
+        <item>1980</item>
+        <item>1985</item>
+        <item>1990</item>
+        <item>1995</item>
+        <item>2000</item>
+    </string-array>
+
+
+    <string-array name="hour_display">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+        <item>11</item>
+        <item>12</item>
+        <item>13</item>
+        <item>14</item>
+        <item>15</item>
+        <item>16</item>
+        <item>17</item>
+        <item>18</item>
+        <item>19</item>
+        <item>20</item>
+        <item>21</item>
+        <item>22</item>
+        <item>23</item>
+    </string-array>
+
+</resources>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/home_manage_backgroud"
+    android:orientation="vertical">
+
+    <include layout="@layout/common_actionbar" />
+
+    <TextView
+        android:id="@+id/tv_start"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y100"
+        android:layout_marginTop="@dimen/y20"
+        android:background="@drawable/layout_seletor"
+        android:clickable="true"
+        android:gravity="center_vertical"
+        android:paddingLeft="@dimen/x30"
+        android:text="日出时"
+        android:textColor="@color/add_capacity_text" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_marginLeft="@dimen/x30"
+        android:background="@color/black_16" />
+
+    <TextView
+        android:id="@+id/tv_end"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y100"
+        android:background="@drawable/layout_seletor"
+        android:clickable="true"
+        android:gravity="center_vertical"
+        android:paddingLeft="@dimen/x30"
+        android:text="日落时"
+        android:textColor="@color/add_capacity_text" />
+
+
+</LinearLayout>

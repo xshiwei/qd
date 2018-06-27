@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/y130"
+    android:background="@color/white">
+
+
+    <ImageView
+        android:id="@+id/iv_item_device_log_selete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/x20"
+        android:src="@mipmap/device_log_not_selete"
+        android:visibility="gone" />
+
+
+    <TextView
+        android:id="@+id/tv_item_device_log_nickname"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/iv_item_device_log_selete"
+        android:paddingLeft="@dimen/x30"
+        android:paddingTop="@dimen/y20"
+        android:textColor="@color/black"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/tv_item_device_log_type"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/y20"
+        android:layout_toRightOf="@+id/tv_item_device_log_nickname"
+        android:paddingLeft="@dimen/x15"
+        android:textColor="@color/black"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/tv_item_device_log_data"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_item_device_log_nickname"
+        android:layout_marginTop="@dimen/y20"
+        android:layout_toRightOf="@+id/iv_item_device_log_selete"
+        android:paddingLeft="@dimen/x30"
+        android:textColor="@color/black6"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/tv_item_device_log_state"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="@dimen/x30"
+        android:textColor="@color/black"
+        android:textSize="14sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.1dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/black_16" />
+
+
+</RelativeLayout>

@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tool="http://schemas.android.com/tools"
+    android:orientation="vertical">
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y100"
+        android:background="@color/app_color">
+
+        <ImageView
+            android:id="@+id/iv_common_actionbar_goback"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/x20"
+            android:contentDescription="TODO"
+            android:src="@mipmap/actionbar_goback" />
+
+        <TextView
+            android:id="@+id/tv_common_actionbar_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/tv_device_timing_save"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:paddingRight="@dimen/x20"
+            android:text="@string/device_timing_save"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/tv_device_timing_time"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y80"
+        android:gravity="center"
+        tool:text="20小时30分钟之后执行"
+        android:textColor="@color/black_16"
+        android:textSize="14sp" />
+
+    <TimePicker
+        android:id="@+id/tp_device_timing"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:timePickerMode="spinner" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.1dp"
+        android:layout_marginTop="@dimen/y30"
+        android:background="@color/black_16" />
+
+    <RelativeLayout
+        android:id="@+id/rl_device_timing_repeat"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y100">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/x20"
+            android:layout_marginTop="@dimen/y15"
+            android:text="@string/device_timing_repetition"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="@dimen/y15"
+            android:layout_marginLeft="@dimen/x20"
+            android:text="@string/device_timing_everyday"
+            android:textColor="@color/black6"
+            android:textSize="12sp" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/x20"
+            android:src="@mipmap/device_timing_down" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.1dp"
+        android:background="@color/black_16" />
+
+
+    <RelativeLayout
+        android:id="@+id/rl_device_timing_operation"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y100">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/x20"
+            android:layout_marginTop="@dimen/y15"
+            android:text="@string/device_timing_operation"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="@dimen/y15"
+            android:layout_marginLeft="@dimen/x20"
+            android:text="@string/device_timing_open"
+            android:textColor="@color/black6"
+            android:textSize="12sp" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/x20"
+            android:src="@mipmap/device_timing_down" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.1dp"
+        android:background="@color/black_16" />
+
+
+</LinearLayout>

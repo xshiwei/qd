@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/linear_layout"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/y100"
+    android:background="@color/home_background"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_sort"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/x10"
+        android:gravity="center"
+        android:paddingLeft="@dimen/x5"
+        android:paddingRight="@dimen/x5"
+        android:text=""
+        android:textStyle="bold"
+        android:textColor="@color/add_device_list"
+        android:textSize="12sp" />
+
+</LinearLayout>

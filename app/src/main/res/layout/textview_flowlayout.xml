@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="@dimen/x20"
+    android:layout_marginRight="@dimen/x20"
+    android:layout_marginTop="@dimen/y20"
+    android:background="@drawable/device_set_type_selector"
+    android:paddingBottom="@dimen/y10"
+    android:paddingLeft="@dimen/x40"
+    android:paddingRight="@dimen/x40"
+    android:paddingTop="@dimen/y10"
+    android:text="你是"
+    android:textColor="@color/black"
+    android:textSize="14sp">
+
+</TextView>

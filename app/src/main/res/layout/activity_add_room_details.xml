@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/home_manage_backgroud">
+
+    <RelativeLayout
+        android:id="@+id/rl_actionbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y80"
+        android:background="@color/white">
+
+        <TextView
+            android:id="@+id/tv_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/x20"
+            android:background="@drawable/add_room_cancel_selector"
+            android:clickable="true"
+            android:paddingBottom="@dimen/y15"
+            android:paddingLeft="@dimen/x20"
+            android:paddingRight="@dimen/x20"
+            android:paddingTop="@dimen/y15"
+            android:text="取消"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tv_common_actionbar_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="添加房间"
+            android:textColor="@color/app_title"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tv_save"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/x20"
+            android:layout_marginRight="@dimen/x20"
+            android:background="@drawable/add_room_save_selector"
+            android:clickable="true"
+            android:paddingBottom="@dimen/y15"
+            android:paddingLeft="@dimen/x20"
+            android:paddingRight="@dimen/x20"
+            android:paddingTop="@dimen/y15"
+            android:text="保存"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_room_name"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y100"
+        android:layout_below="@+id/rl_actionbar"
+        android:layout_marginTop="@dimen/y50"
+        android:background="@drawable/layout_seletor"
+        android:clickable="true">
+
+        <TextView
+            android:id="@+id/tv_name_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:paddingLeft="@dimen/x30"
+            android:text="房间名称"
+            android:textColor="@color/home_setting_text"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/x10"
+            android:layout_toLeftOf="@+id/iv_more"
+            android:layout_toRightOf="@+id/tv_name_title"
+            android:gravity="right|center"
+            android:padding="5dp"
+            android:textColor="@color/home_setting_text_two"
+            android:textSize="14sp" />
+
+
+        <ImageView
+            android:id="@+id/iv_more"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/x30"
+            android:src="@mipmap/device_more_details" />
+
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/rl_room_pic"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y100"
+        android:layout_below="@+id/rl_room_name"
+        android:layout_marginTop="@dimen/y5"
+        android:background="@drawable/layout_seletor"
+        android:clickable="true">
+
+        <TextView
+            android:id="@+id/tv_pic_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:paddingLeft="@dimen/x30"
+            android:text="房间图标"
+            android:textColor="@color/home_setting_text"
+            android:textSize="14sp" />
+
+
+        <ImageView
+            android:id="@+id/iv_pic"
+            android:layout_width="@dimen/x70"
+            android:layout_height="@dimen/y70"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/x20"
+            android:layout_toLeftOf="@+id/iv_more_two"
+            android:background="@color/red" />
+
+
+        <ImageView
+            android:id="@+id/iv_more_two"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/x30"
+            android:src="@mipmap/device_more_details" />
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/tv_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rl_room_pic"
+        android:layout_marginLeft="@dimen/x30"
+        android:layout_marginTop="@dimen/y40"
+        android:text="已选中0个设备"
+        android:textColor="@color/home_setting_text_three"
+        android:textSize="12sp" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_text"
+        android:layout_marginTop="@dimen/y25">
+
+        <TextView
+            android:id="@+id/tv_home_name"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/y80"
+            android:background="@color/white"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/x30"
+            android:text="纯粹慵懒的家"
+            android:textColor="@color/home_setting_text_three"
+            android:textSize="14sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_below="@+id/tv_home_name"
+            android:layout_marginLeft="@dimen/x20"
+            android:background="@color/black_16" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_home_name"></android.support.v7.widget.RecyclerView>
+
+    </RelativeLayout>
+
+
+</RelativeLayout>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_popupwindow_repeat"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black6"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/x30"
+        android:layout_marginRight="@dimen/x30"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/y100"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/x30"
+            android:text="重复"
+            android:textColor="@color/black6"
+            android:textSize="13sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.1dp"
+            android:layout_marginLeft="@dimen/x30"
+            android:layout_marginRight="@dimen/x30"
+            android:background="@color/black_16" />
+
+        <TextView
+            android:id="@+id/tv_popupwindow_repeat_once"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/y100"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/x30"
+            android:text="仅一次"
+            android:textColor="@color/black"
+            android:textSize="14sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.1dp"
+            android:layout_marginLeft="@dimen/x30"
+            android:layout_marginRight="@dimen/x30"
+            android:background="@color/black_16" />
+
+
+        <TextView
+            android:id="@+id/tv_popupwindow_workday"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/y100"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/x30"
+            android:text="周一至周五"
+            android:textColor="@color/black"
+            android:textSize="14sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.1dp"
+            android:layout_marginLeft="@dimen/x30"
+            android:layout_marginRight="@dimen/x30"
+            android:background="@color/black_16" />
+
+        <TextView
+            android:id="@+id/tv_popupwindow_everyday"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/y100"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/x30"
+            android:text="每天"
+            android:textColor="@color/black"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+</LinearLayout>

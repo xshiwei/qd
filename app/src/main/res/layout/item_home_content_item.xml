@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:clickable="true"
+    android:background="@drawable/layout_seletor"
+    android:layout_height="@dimen/y150">
+
+    <ImageView
+        android:id="@+id/iv_pic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/x60"
+        android:src="@mipmap/home_setting" />
+
+    <TextView
+        android:id="@+id/tv_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/x30"
+        android:layout_marginTop="@dimen/y40"
+        android:layout_toRightOf="@+id/iv_pic"
+        android:text="电动牙刷"
+        android:textColor="@color/home_content_text_two"
+        android:textSize="14sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_text"
+        android:layout_marginLeft="@dimen/x30"
+        android:layout_toRightOf="@+id/iv_pic"
+        android:text="请点击连接"
+        android:textColor="@color/home_list_text"
+        android:textSize="12sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_alignParentBottom="true"
+        android:background="@color/black_16" />
+
+</RelativeLayout>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/y200"
+    android:background="@drawable/layout_seletor">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/x30"
+        android:layout_marginTop="@dimen/y30"
+        android:text="向手机发送通知"
+        android:textColor="@color/home_setting_text" />
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/iv_one"
+        android:layout_width="@dimen/x90"
+        android:layout_height="@dimen/y90"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/y30"
+        android:layout_marginLeft="@dimen/x40"
+        android:src="@color/black6" />
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/iv_two"
+        android:layout_width="@dimen/x70"
+        android:layout_height="@dimen/y70"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/y40"
+        android:layout_marginLeft="@dimen/x30"
+        android:layout_toRightOf="@+id/iv_one"
+        android:src="@color/red" />
+
+    <TextView
+        android:id="@+id/tv_execute"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="@dimen/y40"
+        android:layout_marginRight="@dimen/x30"
+        android:background="@drawable/my_capacity_selector"
+        android:paddingBottom="@dimen/y15"
+        android:paddingLeft="@dimen/x30"
+        android:paddingRight="@dimen/x30"
+        android:paddingTop="@dimen/y15"
+        android:text="执行"
+        android:textColor="@color/capacity_tablayout_text_two"
+        android:textSize="14sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="@dimen/x30"
+        android:background="@color/black_16" />
+
+</RelativeLayout>

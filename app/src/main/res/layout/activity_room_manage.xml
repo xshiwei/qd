@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/home_manage_backgroud"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/rl_actionbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y80"
+        android:background="@color/white">
+
+        <ImageView
+            android:id="@+id/iv_common_actionbar_goback"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:contentDescription="TODO"
+            android:paddingLeft="@dimen/x20"
+            android:src="@mipmap/actionbar_goback" />
+
+        <TextView
+            android:id="@+id/tv_common_actionbar_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="房间管理"
+            android:textColor="@color/app_title"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tv_add_room"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/x20"
+            android:clickable="true"
+            android:text="添加房间"
+            android:textColor="@color/room_manage_add_text"
+            android:textSize="14sp" />
+    </RelativeLayout>
+
+
+    <TextView
+        android:id="@+id/tv_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/x30"
+        android:layout_marginTop="@dimen/y40"
+        android:text="我的房间"
+        android:textColor="@color/home_setting_text_three"
+        android:textSize="12sp" />
+
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/y25">
+
+    </android.support.v7.widget.RecyclerView>
+
+</LinearLayout>
