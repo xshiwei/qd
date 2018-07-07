@@ -65,11 +65,11 @@
             android:launchMode="singleTask" />
 
         <activity
-            android:name=".activity.LoginActivity"
+            android:name=".activity.login.LoginActivity"
             android:configChanges="orientation|keyboardHidden|screenSize" />
 
         <activity
-            android:name=".activity.SignupActivity"
+            android:name=".activity.login.SignupActivity"
             android:configChanges="orientation|keyboardHidden|screenSize" />
 
         <activity
@@ -206,6 +206,22 @@
 
         <activity
             android:name=".activity.capacity.OpenOrCloseCapacityActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize" />
+
+        <activity
+            android:name=".activity.device.DeviceControlTwoActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize" />
+
+        <activity
+            android:name=".activity.login.LoginTestActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize" />
+
+        <activity
+            android:name=".activity.login.SignupTestActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize" />
+
+        <activity
+            android:name=".activity.login.SetPasswordActivity"
             android:configChanges="orientation|keyboardHidden|screenSize" />
 
         <service android:name="com.amap.api.location.APSService"></service>

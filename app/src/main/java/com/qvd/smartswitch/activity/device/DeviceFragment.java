@@ -111,7 +111,6 @@ public class DeviceFragment extends BaseFragment {
     }
 
 
-
     @Override
     protected void initView() {
         adapter.setOnDeviceClickListener(new DeviceListAdapter.OnDeviceClickListener() {
@@ -150,7 +149,7 @@ public class DeviceFragment extends BaseFragment {
                         showDialog();
                         mBleDevice = bleDevice;
                     } else {
-                        Intent intent = new Intent(getActivity(), DeviceControlActivity.class);
+                        Intent intent = new Intent(getActivity(), DeviceControlTwoActivity.class);
                         intent.putExtra("bledevice", bleDevice);
                         startActivity(intent);
                         getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
@@ -245,7 +244,6 @@ public class DeviceFragment extends BaseFragment {
     }
 
 
-
     @Override
     public void onPause() {
         super.onPause();
@@ -280,7 +278,7 @@ public class DeviceFragment extends BaseFragment {
         }
 
         String[] names;
-        String str_name = "SimpleBLEPeripheral,Qevdo,QS01";
+        String str_name = "SimpleBLEPeripheral,Qevdo,QS,Qevdo-QS02";
         if (TextUtils.isEmpty(str_name)) {
             names = null;
         } else {

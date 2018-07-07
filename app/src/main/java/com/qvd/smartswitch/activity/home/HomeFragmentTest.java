@@ -19,6 +19,7 @@ import android.widget.TextView;
 import com.melnykov.fab.FloatingActionButton;
 import com.qvd.smartswitch.R;
 import com.qvd.smartswitch.activity.base.BaseFragment;
+import com.qvd.smartswitch.activity.login.LoginTestActivity;
 import com.qvd.smartswitch.adapter.HomeContentAdapter;
 import com.qvd.smartswitch.adapter.HomeContentTwoAdapter;
 import com.qvd.smartswitch.adapter.HomeListAdapter;
@@ -295,7 +296,9 @@ public class HomeFragmentTest extends BaseFragment {
                 }
                 break;
             case R.id.fab:
-                ToastUtil.showToast("进入声音页面");
+                //声音控制界面
+                startActivity(new Intent(getActivity(), LoginTestActivity.class));
+                getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
                 break;
         }
     }

@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+
+    <RelativeLayout
+        android:id="@+id/rl_actionbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y350"
+        android:background="@color/add_home_background">
+
+        <ImageView
+            android:id="@+id/iv_goback"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/y40"
+            android:contentDescription="TODO"
+            android:paddingLeft="@dimen/x20"
+            android:src="@mipmap/actionbar_goback" />
+
+        <TextView
+            android:id="@+id/tv_country"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/x30"
+            android:layout_marginTop="@dimen/y40"
+            android:text="中国大陆"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
+
+
+    </RelativeLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y80"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_phone_register"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="手机注册"
+            android:textColor="@color/capacity_tablayout_text_two"
+            android:textSize="14sp" />
+
+        <View
+            android:layout_width="1px"
+            android:layout_height="match_parent"
+            android:background="@color/black_16" />
+
+        <TextView
+            android:id="@+id/tv_email_register"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="邮箱注册"
+            android:textColor="@color/capacity_tablayout_text"
+            android:textSize="14sp" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/black_16" />
+
+    <RelativeLayout
+        android:id="@+id/rl_phone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="visible">
+
+        <RelativeLayout
+            android:id="@+id/rl_input_phone"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/y80"
+            android:layout_marginLeft="@dimen/x30"
+            android:layout_marginRight="@dimen/x30"
+            android:layout_marginTop="@dimen/y100">
+
+            <ImageView
+                android:id="@+id/iv_phone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/x40"
+                android:src="@mipmap/login_user_unselete" />
+
+            <EditText
+                android:id="@+id/et_input_phone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/x30"
+                android:layout_toRightOf="@+id/iv_phone"
+                android:background="@null"
+                android:hint="手机号码"
+                android:inputType="phone"
+                android:textColor="@color/home_manage_text"
+                android:textSize="13sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:layout_alignParentBottom="true"
+                android:background="@color/black_16" />
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/tv_phone_error"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/rl_input_phone"
+            android:layout_marginLeft="@dimen/x70"
+            android:padding="5dp"
+            android:text="该手机号已被注册"
+            android:textColor="@color/orangered"
+            android:textSize="12sp"
+            android:visibility="gone" />
+
+
+        <RelativeLayout
+            android:id="@+id/rl_input_code"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/y80"
+            android:layout_below="@+id/tv_phone_error"
+            android:layout_marginLeft="@dimen/x30"
+            android:layout_marginRight="@dimen/x30"
+            android:layout_marginTop="@dimen/y30">
+
+            <ImageView
+                android:id="@+id/iv_code"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/x40"
+                android:src="@mipmap/login_user_unselete" />
+
+            <EditText
+                android:id="@+id/et_input_code"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/x30"
+                android:layout_toLeftOf="@+id/tv_phone_code"
+                android:layout_toRightOf="@+id/iv_code"
+                android:background="@null"
+                android:hint="验证码"
+                android:inputType="number"
+                android:textColor="@color/home_manage_text"
+                android:textSize="13sp" />
+
+            <TextView
+                android:id="@+id/tv_phone_code"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:gravity="center"
+                android:paddingBottom="@dimen/y10"
+                android:paddingLeft="@dimen/x30"
+                android:paddingRight="@dimen/x30"
+                android:paddingTop="@dimen/y10"
+                android:text="发送验证码"
+                android:textColor="@color/orangered"
+                android:textSize="13sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:layout_alignParentBottom="true"
+                android:background="@color/black_16" />
+        </RelativeLayout>
+
+
+        <TextView
+            android:id="@+id/btn_phone_next"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/y80"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="@dimen/y250"
+            android:layout_marginLeft="@dimen/x70"
+            android:layout_marginRight="@dimen/x70"
+            android:background="@drawable/add_room_save_selector"
+            android:clickable="true"
+            android:gravity="center"
+            android:text="下一步"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/rl_email"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+
+
+        <RelativeLayout
+            android:id="@+id/rl_input_email"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/y80"
+            android:layout_marginLeft="@dimen/x30"
+            android:layout_marginRight="@dimen/x30"
+            android:layout_marginTop="@dimen/y100">
+
+            <ImageView
+                android:id="@+id/iv_email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/x40"
+                android:src="@mipmap/login_user_unselete" />
+
+            <EditText
+                android:id="@+id/et_input_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/x30"
+                android:layout_toLeftOf="@+id/tv_email_code"
+                android:layout_toRightOf="@+id/iv_email"
+                android:background="@null"
+                android:hint="邮箱"
+                android:inputType="textEmailAddress"
+                android:textColor="@color/home_manage_text"
+                android:textSize="13sp" />
+
+            <TextView
+                android:id="@+id/tv_email_code"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:gravity="center"
+                android:paddingBottom="@dimen/y10"
+                android:paddingLeft="@dimen/x30"
+                android:paddingRight="@dimen/x30"
+                android:paddingTop="@dimen/y10"
+                android:text="发送验证邮件"
+                android:textColor="@color/orangered"
+                android:textSize="13sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:layout_alignParentBottom="true"
+                android:background="@color/black_16" />
+        </RelativeLayout>
+
+
+        <TextView
+            android:id="@+id/tv_email_error"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/rl_input_email"
+            android:layout_marginLeft="@dimen/x70"
+            android:padding="5dp"
+            android:text="该手机号已被注册"
+            android:textColor="@color/orangered"
+            android:textSize="12sp"
+            android:visibility="gone" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_email_error"
+            android:layout_marginLeft="@dimen/x60"
+            android:layout_marginRight="@dimen/x60"
+            android:layout_marginTop="@dimen/y60"
+            android:padding="5dp"
+            android:text="您已经收到验证邮件，并且确认点击验证链接才能继续下一步？"
+            android:textColor="@color/home_setting_text_three"
+            android:textSize="16sp" />
+
+
+        <TextView
+            android:id="@+id/btn_email_next"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/y80"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="@dimen/y250"
+            android:layout_marginLeft="@dimen/x70"
+            android:layout_marginRight="@dimen/x70"
+            android:layout_marginTop="@dimen/y120"
+            android:background="@drawable/add_room_save_selector"
+            android:clickable="true"
+            android:gravity="center"
+            android:text="下一步"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+    </RelativeLayout>
+
+
+</LinearLayout>

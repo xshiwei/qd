@@ -9,6 +9,8 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import com.qvd.smartswitch.R;
+import com.qvd.smartswitch.activity.login.LoginActivity;
+import com.qvd.smartswitch.activity.login.LoginTestActivity;
 import com.qvd.smartswitch.utils.RxHelper;
 import com.qvd.smartswitch.utils.SysApplication;
 import com.qvd.smartswitch.widget.SimpleButton;
@@ -69,7 +71,7 @@ public class SplashActivity extends AppCompatActivity {
         if (!mIsSkip) {
             mIsSkip = true;
             //自动登录，判断跳到主页还是登录页。
-            startActivity(new Intent(SplashActivity.this, LoginActivity.class));
+            startActivity(new Intent(SplashActivity.this, LoginTestActivity.class));
             overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
             finish();
         }

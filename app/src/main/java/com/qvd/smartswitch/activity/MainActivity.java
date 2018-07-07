@@ -100,7 +100,10 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
     /*设置默认Fragment*/
     private void setDefaultFragment() {
         if (homeFragment == null)
+            //新版
             homeFragment = HomeFragmentTest.newInstance("Home");
+        //旧版
+        //homeFragment = HomeFragment.newInstance("Home");
         addFrag(homeFragment);
         /*默认显示msgFrag*/
         getSupportFragmentManager().beginTransaction().show(homeFragment).commit();
@@ -138,6 +141,7 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
                 if (homeFragment == null) {
                     assert homeFragment != null;
                     homeFragment = HomeFragmentTest.newInstance("home");
+                    //homeFragment = HomeFragment.newInstance("home");
                 }
                 mImmersionBar.fitsSystemWindows(false).transparentStatusBar().init();
                 addFrag(homeFragment);
@@ -148,6 +152,7 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
                 if (capacityFragment == null) {
                     assert capacityFragment != null;
                     capacityFragment = CapacityFragment.newInstance("device");
+                    //capacityFragment = DeviceFragment.newInstance("device");
                 }
                 mImmersionBar.fitsSystemWindows(true).statusBarColor(R.color.white).init();
                 addFrag(capacityFragment);
@@ -158,6 +163,7 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
                 if (userFragment == null) {
                     assert userFragment != null;
                     userFragment = UserFragmentTest.newInstance("user");
+                    //userFragment = UserFragment.newInstance("user");
                 }
                 mImmersionBar.fitsSystemWindows(true).statusBarColor(R.color.white).init();
                 addFrag(userFragment);
