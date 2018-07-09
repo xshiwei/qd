@@ -121,7 +121,6 @@
             android:layout_below="@+id/rl_input_phone"
             android:layout_marginLeft="@dimen/x70"
             android:padding="5dp"
-            android:text="该手机号已被注册"
             android:textColor="@color/orangered"
             android:textSize="12sp"
             android:visibility="gone" />
@@ -257,7 +256,6 @@
                 android:background="@color/black_16" />
         </RelativeLayout>
 
-
         <TextView
             android:id="@+id/tv_email_error"
             android:layout_width="wrap_content"
@@ -265,7 +263,7 @@
             android:layout_below="@+id/rl_input_email"
             android:layout_marginLeft="@dimen/x70"
             android:padding="5dp"
-            android:text="该手机号已被注册"
+            android:text="该邮箱已被注册"
             android:textColor="@color/orangered"
             android:textSize="12sp"
             android:visibility="gone" />

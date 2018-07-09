@@ -30,7 +30,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class RetrofitService {
 
-    private static final String Ipurl = "http://119.29.105.91:8080/v1/";
+    private static final String Ipurl = "  http://119.29.105.91:8000/";
     //设缓存有效期为1天
     private static final long CACHE_STALE_SEC = 60 * 60 * 24;
     //查询缓存的Cache-Control设置，为if-only-cache时只查询缓存而不会请求服务器，max-stale可以配合设置缓存失效时间
@@ -43,7 +43,7 @@ public class RetrofitService {
 
     private static final String IP = Ipurl;
 
-    private static QdoApi qdoApi;
+    public static QdoApi qdoApi;
 
     private RetrofitService() {
         throw new AssertionError();
@@ -71,7 +71,6 @@ public class RetrofitService {
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .baseUrl(IP)
                 .build();
-
 
         qdoApi = retrofit.create(QdoApi.class);
     }
