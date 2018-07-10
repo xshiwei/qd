@@ -1,14 +1,10 @@
 package com.qvd.smartswitch.activity;
 
-import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.view.KeyEvent;
 import android.widget.FrameLayout;
-import android.widget.Toast;
 
 import com.ashokvarma.bottomnavigation.BottomNavigationBar;
 import com.ashokvarma.bottomnavigation.BottomNavigationItem;
@@ -16,10 +12,7 @@ import com.clj.fastble.BleManager;
 import com.qvd.smartswitch.R;
 import com.qvd.smartswitch.activity.base.BaseActivity;
 import com.qvd.smartswitch.activity.capacity.CapacityFragment;
-import com.qvd.smartswitch.activity.device.DeviceFragment;
-import com.qvd.smartswitch.activity.home.HomeFragment;
 import com.qvd.smartswitch.activity.home.HomeFragmentTest;
-import com.qvd.smartswitch.activity.user.UserFragment;
 import com.qvd.smartswitch.activity.user.UserFragmentTest;
 import com.qvd.smartswitch.utils.SysApplication;
 import com.qvd.smartswitch.utils.ToastUtil;
@@ -39,8 +32,6 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
     private Fragment userFragment;
 
     private long firstTime = 0;
-
-    private FragmentManager fManager;
 
 
     @Override
