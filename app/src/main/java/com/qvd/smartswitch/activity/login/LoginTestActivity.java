@@ -2,19 +2,28 @@ package com.qvd.smartswitch.activity.login;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.support.design.widget.CoordinatorLayout;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.orhanobut.logger.Logger;
 import com.qvd.smartswitch.R;
 import com.qvd.smartswitch.activity.MainActivity;
 import com.qvd.smartswitch.activity.base.BaseActivity;
-import com.qvd.smartswitch.utils.ToastUtil;
+import com.qvd.smartswitch.api.RetrofitService;
+import com.qvd.smartswitch.model.login.MessageVo;
+import com.qvd.smartswitch.utils.CommonUtils;
+import com.qvd.smartswitch.utils.SnackbarUtils;
 import com.qvd.smartswitch.widget.MyProgressDialog;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by Administrator on 2018-7-7.
@@ -45,6 +54,8 @@ public class LoginTestActivity extends BaseActivity {
     ImageView ivQq;
     @BindView(R.id.iv_weibo)
     ImageView ivWeibo;
+    @BindView(R.id.coordinatorLayout)
+    CoordinatorLayout coordinatorLayout;
 
     @Override
     protected int setLayoutId() {
@@ -117,10 +128,9 @@ public class LoginTestActivity extends BaseActivity {
      * 登录
      */
     private void login() {
-        //        if (!validate()) {
-//            onLoginFailed();
-//            return;
-//        }
+        if (!validate()) {
+            return;
+        }
 
         btnLogin.setEnabled(false);
 
@@ -136,6 +146,54 @@ public class LoginTestActivity extends BaseActivity {
         progressDialog.show();
 
         //调用接口登录，登陆成功关闭progressDialog
+        RetrofitService.qdoApi.login(etAccount.getText().toString().trim(), etPassword.getText().toString().trim())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<MessageVo>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(MessageVo messageVo) {
+                        if (messageVo.getCode() == 200) {
+                            onLoginSuccess();
+                            progressDialog.dismiss();
+                        } else if (messageVo.getCode() == 400) {
+                            SnackbarUtils.Short(coordinatorLayout, "登录失败");
+                        } else {
+                            SnackbarUtils.Short(coordinatorLayout, "连接超时");
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Logger.e("login->" + e.getMessage());
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
+    /**
+     * 验证账号密码
+     *
+     * @return
+     */
+    private boolean validate() {
+        boolean valid = true;
+        if (CommonUtils.isEmptyString(etAccount.getText().toString().trim()) || CommonUtils.isEmptyString(etPassword.getText().toString().trim())) {
+            valid = false;
+            SnackbarUtils.Short(coordinatorLayout, "密码或账号不能为空").show();
+        } else if (etPassword.length() < 6 || etPassword.length() > 16) {
+            valid = false;
+            SnackbarUtils.Short(coordinatorLayout, "密码长度不规范").show();
+        }
+        return valid;
     }
 
 
@@ -153,7 +211,7 @@ public class LoginTestActivity extends BaseActivity {
      * 登录失败
      */
     private void onLoginFailed() {
-        ToastUtil.showToast("登录失败");
+        SnackbarUtils.Short(coordinatorLayout, "登录失败").show();
         btnLogin.setEnabled(true);
     }
 }

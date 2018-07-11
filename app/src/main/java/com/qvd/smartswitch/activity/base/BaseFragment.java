@@ -24,7 +24,6 @@ import com.qvd.smartswitch.MyApplication;
 import com.qvd.smartswitch.R;
 import com.qvd.smartswitch.utils.DefaultRationale;
 import com.qvd.smartswitch.utils.RuntimeRationale;
-import com.qvd.smartswitch.utils.ToastUtil;
 import com.yanzhenjie.permission.Action;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.Permission;
@@ -196,7 +195,7 @@ public abstract class BaseFragment extends Fragment {
                 .onComeback(new Setting.Action() {
                     @Override
                     public void onAction() {
-                        ToastUtil.showToast("设置权限");
+                        //ToastUtil.showToast("设置权限");
                     }
                 })
                 .start();

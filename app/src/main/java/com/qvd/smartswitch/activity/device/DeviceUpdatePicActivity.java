@@ -20,7 +20,7 @@ import com.qvd.smartswitch.activity.base.BaseActivity;
 import com.qvd.smartswitch.db.DeviceNickNameDaoOpe;
 import com.qvd.smartswitch.model.DeviceNickNameVo;
 import com.qvd.smartswitch.utils.CommonUtils;
-import com.qvd.smartswitch.utils.ToastUtil;
+import com.qvd.smartswitch.utils.SnackbarUtils;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
@@ -71,7 +71,7 @@ public class DeviceUpdatePicActivity extends BaseActivity {
         return R.layout.activity_device_update_pic;
     }
 
-    @OnClick({R.id.iv_common_actionbar_goback, R.id.tv_device_update_pic_save, R.id.tv_device_update_pic_image, R.id.tv_device_update_pic_camera,R.id.ll_device_pic_one})
+    @OnClick({R.id.iv_common_actionbar_goback, R.id.tv_device_update_pic_save, R.id.tv_device_update_pic_image, R.id.tv_device_update_pic_camera, R.id.ll_device_pic_one})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_common_actionbar_goback:
@@ -107,7 +107,7 @@ public class DeviceUpdatePicActivity extends BaseActivity {
         super.initData();
         tvCommonActionbarTitle.setText("更换图标");
         bledevice = getIntent().getParcelableExtra("bledevice");
-        if (bledevice!=null){
+        if (bledevice != null) {
             deviceNickNameVo1 = DeviceNickNameDaoOpe.queryOne(this, CommonUtils.getMac(bledevice.getMac()));
             String pic = deviceNickNameVo1.getPic();
             if (CommonUtils.isEmptyString(pic)) {
@@ -126,7 +126,7 @@ public class DeviceUpdatePicActivity extends BaseActivity {
         DeviceNickNameVo deviceNickNameVo = new DeviceNickNameVo(deviceNickNameVo1.getId(), deviceNickNameVo1.getDeviceId()
                 , deviceNickNameVo1.getDeviceName(), CommonUtils.getDate(), deviceNickNameVo1.getDeviceNickname(), path, deviceNickNameVo1.getType());
         DeviceNickNameDaoOpe.updateData(this, deviceNickNameVo);
-        ToastUtil.showToast("保存成功");
+        SnackbarUtils.Short(tvCommonActionbarTitle, "保存成功").show();
     }
 
     @Override
@@ -177,7 +177,6 @@ public class DeviceUpdatePicActivity extends BaseActivity {
             ivDeviceUpdatePic.setImageBitmap(bitmap);
         }
     }
-
 
 
 }

@@ -24,19 +24,17 @@ import com.amap.api.services.weather.WeatherSearchQuery;
 import com.orhanobut.logger.Logger;
 import com.qvd.smartswitch.R;
 import com.qvd.smartswitch.activity.base.BaseFragment;
-import com.qvd.smartswitch.activity.device.DeviceControlActivity;
 import com.qvd.smartswitch.adapter.HomeTypeAdapter;
 import com.qvd.smartswitch.model.Type;
 import com.qvd.smartswitch.utils.CommonUtils;
-import com.qvd.smartswitch.utils.ToastUtil;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
+
+
 
 /**
  * Created by Administrator on 2018/4/2.
@@ -57,7 +55,6 @@ public class HomeFragment extends BaseFragment implements WeatherSearch.OnWeathe
     FrameLayout appBar;
     @BindView(R.id.home_recycleview)
     RecyclerView homeRecycleview;
-    Unbinder unbinder;
 
 
     //声明WeatherSearchQuery对象
@@ -139,7 +136,7 @@ public class HomeFragment extends BaseFragment implements WeatherSearch.OnWeathe
             @Override
             public void onItemClick(View view, int position) {
 //                startActivity(new Intent(getActivity(), DeviceControlActivity.class));
-                ToastUtil.showToast("功能开发中...");
+                //ToastUtil.showToast("功能开发中...");
             }
 
             @Override

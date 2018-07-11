@@ -23,7 +23,7 @@ import com.qvd.smartswitch.activity.base.BaseActivity;
 import com.qvd.smartswitch.adapter.AddRoomDeviceListAdapter;
 import com.qvd.smartswitch.model.home.RoomDeviceVo;
 import com.qvd.smartswitch.utils.CommonUtils;
-import com.qvd.smartswitch.utils.ToastUtil;
+import com.qvd.smartswitch.utils.SnackbarUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -137,7 +137,7 @@ public class AddRoomDetailsActivity extends BaseActivity {
                 break;
             case R.id.tv_save:
                 //保存
-                ToastUtil.showToast("保存成功");
+                SnackbarUtils.Short(tvSave, "保存成功").show();
                 finish();
                 break;
             case R.id.rl_room_name:
@@ -173,7 +173,7 @@ public class AddRoomDetailsActivity extends BaseActivity {
 
         TextView title = view.findViewById(R.id.tv_title);
         TextView cancel = view.findViewById(R.id.tv_cancel);
-        TextView confirm = view.findViewById(R.id.tv_confirm);
+        final TextView confirm = view.findViewById(R.id.tv_confirm);
         TextView text = view.findViewById(R.id.tv_text);
         title.setText("房间编辑信息未保存");
         text.setText("房间被编辑还未保存，请确认是否要保存编辑信息");
@@ -189,7 +189,7 @@ public class AddRoomDetailsActivity extends BaseActivity {
             @Override
             public void onClick(View v) {
                 popupwindowDelete.dismiss();
-                ToastUtil.showToast("保存成功");
+                SnackbarUtils.Short(confirm, "保存成功").show();
                 finish();
             }
         });
@@ -314,8 +314,8 @@ public class AddRoomDetailsActivity extends BaseActivity {
             showPopupwindowDelete();
             popupwindowDelete.showAtLocation(recyclerview, Gravity.BOTTOM, 0, 30);
         } else {
+            SnackbarUtils.Short(tvSave, "保存成功").show();
             finish();
-            ToastUtil.showToast("保存成功");
         }
     }
 }

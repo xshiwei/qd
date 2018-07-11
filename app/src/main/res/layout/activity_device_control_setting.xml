@@ -1,20 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
-    <include layout="@layout/common_actionbar" />
+    <include
+        android:id="@+id/action_bar"
+        layout="@layout/common_actionbar" />
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_below="@+id/action_bar">
 
 
         <LinearLayout
-            android:background="@color/home_background"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@color/home_background"
             android:orientation="vertical">
 
 
@@ -413,10 +415,10 @@
             </RelativeLayout>
 
             <RelativeLayout
-                android:layout_marginBottom="@dimen/y20"
                 android:id="@+id/rl_device_setting_delete"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/y90">
+                android:layout_height="@dimen/y90"
+                android:layout_marginBottom="@dimen/y20">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -451,4 +453,10 @@
 
     </ScrollView>
 
-</LinearLayout>
+    <android.support.design.widget.CoordinatorLayout
+        android:id="@+id/coordinatorLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"></android.support.design.widget.CoordinatorLayout>
+
+</RelativeLayout>

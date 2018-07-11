@@ -76,7 +76,6 @@
             android:src="@mipmap/login_password_unselete" />
 
         <EditText
-            android:inputType="textPassword"
             android:id="@+id/et_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -85,6 +84,7 @@
             android:layout_toRightOf="@+id/iv_password"
             android:background="@null"
             android:hint="密码"
+            android:inputType="textPassword"
             android:textColor="@color/home_manage_text"
             android:textSize="13sp" />
 
@@ -184,6 +184,21 @@
             android:src="@mipmap/login_weibo" />
 
     </RelativeLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <android.support.design.widget.CoordinatorLayout
+            android:id="@+id/coordinatorLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom">
+
+        </android.support.design.widget.CoordinatorLayout>
+    </LinearLayout>
 
 
 </LinearLayout>

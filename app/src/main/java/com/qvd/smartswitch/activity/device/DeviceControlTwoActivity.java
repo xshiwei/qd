@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.design.widget.CoordinatorLayout;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -31,12 +32,11 @@ import com.orhanobut.logger.Logger;
 import com.qvd.smartswitch.R;
 import com.qvd.smartswitch.activity.base.BaseActivity;
 import com.qvd.smartswitch.db.DeviceNickNameDaoOpe;
-import com.qvd.smartswitch.utils.CommandUtils;
 import com.qvd.smartswitch.utils.CommonUtils;
 import com.qvd.smartswitch.utils.FucUtil;
 import com.qvd.smartswitch.utils.JsonParser;
 import com.qvd.smartswitch.utils.RuntimeRationale;
-import com.qvd.smartswitch.utils.ToastUtil;
+import com.qvd.smartswitch.utils.SnackbarUtils;
 import com.qvd.smartswitch.widget.MyProgressDialog;
 import com.squareup.picasso.Picasso;
 import com.yanzhenjie.permission.Action;
@@ -47,6 +47,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -74,6 +75,8 @@ public class DeviceControlTwoActivity extends BaseActivity {
     TextView tvLightOne;
     @BindView(R.id.tv_light_two)
     TextView tvLightTwo;
+    @BindView(R.id.coordinatorLayout)
+    CoordinatorLayout coordinatorLayout;
 
     /**
      * 灯1未开启
@@ -130,7 +133,7 @@ public class DeviceControlTwoActivity extends BaseActivity {
             @Override
             public void onTimeOut(ProgressDialog dialog) {
                 dialog.dismiss();
-                ToastUtil.showToast("连接超时");
+                SnackbarUtils.Short(coordinatorLayout, "连接超时").show();
             }
         });
     }
@@ -161,7 +164,7 @@ public class DeviceControlTwoActivity extends BaseActivity {
                             }
                         });
                         if (!BleManager.getInstance().isConnected(bledevice)) {
-                            ToastUtil.showToast("蓝牙未连接utils");
+                            SnackbarUtils.Short(coordinatorLayout, "蓝牙未连接utils").show();
                         }
                     }
                 });
@@ -389,7 +392,7 @@ public class DeviceControlTwoActivity extends BaseActivity {
                     dialog.show();
                     writeToBleOne(String.valueOf("FE010000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF"));
                 } else {
-                    ToastUtil.showToast("识别不出来哦");
+                    SnackbarUtils.Short(coordinatorLayout, "识别不出来哦").show();
                 }
             } else {
                 Log.d(TAG, "recognizer result : null");
@@ -434,13 +437,13 @@ public class DeviceControlTwoActivity extends BaseActivity {
                 .onGranted(new Action<List<String>>() {
                     @Override
                     public void onAction(List<String> data) {
-                        ToastUtil.showToast("授权成功");
+                        SnackbarUtils.Short(coordinatorLayout, "授权成功").show();
                     }
                 })
                 .onDenied(new Action<List<String>>() {
                     @Override
                     public void onAction(List<String> data) {
-                        ToastUtil.showToast("授权失败");
+                        SnackbarUtils.Short(coordinatorLayout, "授权失败").show();
                     }
                 })
                 .start();
@@ -451,7 +454,7 @@ public class DeviceControlTwoActivity extends BaseActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                ToastUtil.showToast(str);
+                SnackbarUtils.Short(coordinatorLayout, str).show();
             }
         });
     }
@@ -517,5 +520,4 @@ public class DeviceControlTwoActivity extends BaseActivity {
             mAsr.destroy();
         }
     }
-
 }

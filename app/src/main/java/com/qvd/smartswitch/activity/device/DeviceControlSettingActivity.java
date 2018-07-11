@@ -5,6 +5,8 @@ import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattService;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,16 +27,15 @@ import com.qvd.smartswitch.R;
 import com.qvd.smartswitch.activity.MainActivity;
 import com.qvd.smartswitch.activity.base.BaseActivity;
 import com.qvd.smartswitch.db.DeviceNickNameDaoOpe;
-
 import com.qvd.smartswitch.model.DeviceNickNameVo;
 import com.qvd.smartswitch.utils.CommandUtils;
 import com.qvd.smartswitch.utils.CommonUtils;
-import com.qvd.smartswitch.utils.ToastUtil;
-
+import com.qvd.smartswitch.utils.SnackbarUtils;
 
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -66,6 +67,8 @@ public class DeviceControlSettingActivity extends BaseActivity {
     RelativeLayout rlDeviceSettingUpdate;
     @BindView(R.id.rl_device_setting_delete)
     RelativeLayout rlDeviceSettingDelete;
+    @BindView(R.id.coordinatorLayout)
+    CoordinatorLayout coordinatorLayout;
 
     private BleDevice bledevice;
     private Disposable subscribe;
@@ -127,7 +130,7 @@ public class DeviceControlSettingActivity extends BaseActivity {
                             }
                         });
                         if (!BleManager.getInstance().isConnected(bledevice)) {
-                            ToastUtil.showToast("蓝牙未连接utils");
+                            SnackbarUtils.Short(coordinatorLayout, "蓝牙未连接utils").show();
                         }
                     }
                 });
@@ -192,7 +195,7 @@ public class DeviceControlSettingActivity extends BaseActivity {
                 if (!CommonUtils.isEmptyString(editText.getText().toString()) && editText.getText().length() == 6) {
                     writeToBle(editText.getText().toString());
                 } else {
-                    ToastUtil.showToast("密码不规范");
+                    SnackbarUtils.Short(coordinatorLayout, "密码不规范").show();
                 }
             }
         }).setNegativeButton(R.string.dialog_cancle, null);
@@ -217,9 +220,9 @@ public class DeviceControlSettingActivity extends BaseActivity {
                     DeviceNickNameVo deviceNickNameVo = new DeviceNickNameVo(deviceNickNameVo1.getId(), deviceNickNameVo1.getDeviceId()
                             , deviceNickNameVo1.getDeviceName(), CommonUtils.getDate(), editText.getText().toString(), deviceNickNameVo1.getPic(), deviceNickNameVo1.getType());
                     DeviceNickNameDaoOpe.updateData(DeviceControlSettingActivity.this, deviceNickNameVo);
-                    ToastUtil.showToast("修改成功");
+                    SnackbarUtils.Short(coordinatorLayout, "修改成功").show();
                 } else {
-                    ToastUtil.showToast("修改失败");
+                    SnackbarUtils.Short(coordinatorLayout, "修改失败").show();
                 }
             }
         }).setNegativeButton(R.string.dialog_cancle, null);
@@ -239,7 +242,7 @@ public class DeviceControlSettingActivity extends BaseActivity {
                 Logger.e("write success, current: " + current
                         + " total: " + total
                         + " justWrite: " + HexUtil.formatHexString(justWrite, true));
-                ToastUtil.showToast("修改成功");
+                SnackbarUtils.Short(coordinatorLayout, "修改成功").show();
                 startActivity(new Intent(DeviceControlSettingActivity.this, MainActivity.class));
                 finish();
                 overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
@@ -279,7 +282,7 @@ public class DeviceControlSettingActivity extends BaseActivity {
                 DeviceNickNameVo deviceNickNameVo1 = DeviceNickNameDaoOpe.queryOne(DeviceControlSettingActivity.this, CommonUtils.getMac(bledevice.getMac()));
                 DeviceNickNameDaoOpe.deleteByKeyData(DeviceControlSettingActivity.this, deviceNickNameVo1.getId());
                 BleManager.getInstance().disconnect(bledevice);
-                ToastUtil.showToast("删除成功");
+                SnackbarUtils.Short(coordinatorLayout, "删除成功").show();
                 builder.dismiss();
                 startActivity(new Intent(DeviceControlSettingActivity.this, MainActivity.class));
                 finish();
@@ -298,5 +301,12 @@ public class DeviceControlSettingActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         subscribe.dispose();
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // TODO: add setContentView(...) invocation
+        ButterKnife.bind(this);
     }
 }

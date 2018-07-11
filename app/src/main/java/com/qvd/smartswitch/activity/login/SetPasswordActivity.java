@@ -1,7 +1,6 @@
 package com.qvd.smartswitch.activity.login;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -9,14 +8,21 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.orhanobut.logger.Logger;
 import com.qvd.smartswitch.R;
 import com.qvd.smartswitch.activity.MainActivity;
 import com.qvd.smartswitch.activity.base.BaseActivity;
+import com.qvd.smartswitch.api.RetrofitService;
+import com.qvd.smartswitch.model.login.MessageVo;
 import com.qvd.smartswitch.utils.CommonUtils;
+import com.qvd.smartswitch.utils.SnackbarUtils;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by Administrator on 2018-7-7.
@@ -38,6 +44,15 @@ public class SetPasswordActivity extends BaseActivity {
     @BindView(R.id.tv_password_error)
     TextView tvPasswordError;
 
+    /**
+     * 注册账号
+     */
+    private String userName;
+    /**
+     * 登录标识
+     */
+    private String identity_type;
+
     @Override
     protected int setLayoutId() {
         return R.layout.activity_set_password;
@@ -52,6 +67,8 @@ public class SetPasswordActivity extends BaseActivity {
     @Override
     protected void initData() {
         super.initData();
+        userName = getIntent().getStringExtra("userName");
+        identity_type = getIntent().getStringExtra("identity_type");
         etPassword.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -97,12 +114,50 @@ public class SetPasswordActivity extends BaseActivity {
                 if (!validate()) {
                     return;
                 }
-                startActivity(new Intent(this, MainActivity.class));
-                overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+                register();
                 break;
         }
     }
 
+    /**
+     * 注册
+     */
+    private void register() {
+        RetrofitService.qdoApi.register(userName, etPassword.getText().toString().trim(), etRepassword.getText().toString().trim(), identity_type)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<MessageVo>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(MessageVo messageVo) {
+                        if (messageVo.getCode() == 200) {
+                            startActivity(new Intent(SetPasswordActivity.this, MainActivity.class));
+                            overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+                            SnackbarUtils.Short(btnComplete, "注册成功").show();
+                        } else if (messageVo.getCode() == 400) {
+                            SnackbarUtils.Short(btnComplete, "注册失败").show();
+                        } else if (messageVo.getCode() == 800) {
+                            SnackbarUtils.Short(btnComplete, "连接超时").show();
+                        } else if (messageVo.getCode() == 402) {
+                            SnackbarUtils.Short(btnComplete, "您当前邮箱未验证").show();
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Logger.e("register->" + e.getMessage());
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
 
     /**
      * 验证密码

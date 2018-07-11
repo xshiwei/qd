@@ -68,13 +68,17 @@
             android:id="@+id/iv_sound"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
+            android:layout_above="@+id/coordinatorLayout"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="@dimen/y50"
             android:src="@mipmap/voice_empty" />
 
+        <android.support.design.widget.CoordinatorLayout
+            android:id="@+id/coordinatorLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"></android.support.design.widget.CoordinatorLayout>
 
     </RelativeLayout>
-
 
 </LinearLayout>

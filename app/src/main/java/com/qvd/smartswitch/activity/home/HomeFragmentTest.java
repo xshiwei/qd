@@ -29,20 +29,14 @@ import com.qvd.smartswitch.model.home.HomeContentUtils;
 import com.qvd.smartswitch.model.home.Test1Vo;
 import com.qvd.smartswitch.model.home.Test2Vo;
 import com.qvd.smartswitch.model.home.TestVo;
-import com.qvd.smartswitch.utils.ToastUtil;
 import com.scwang.smartrefresh.header.MaterialHeader;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
-import com.scwang.smartrefresh.layout.api.RefreshLayout;
-import com.scwang.smartrefresh.layout.listener.OnLoadmoreListener;
-import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.Unbinder;
 
 /**
  * Created by Administrator on 2018/6/6 0006.
@@ -220,7 +214,7 @@ public class HomeFragmentTest extends BaseFragment {
                         @Override
                         public void onItemClick(View view, int position) {
                             Footer footer = (Footer) objectList.get(position);
-                            ToastUtil.showToast("点击了。。。" + footer.getDevice());
+                            //ToastUtil.showToast("点击了。。。" + footer.getDevice());
                         }
 
                         @Override

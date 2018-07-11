@@ -31,7 +31,7 @@ import com.qvd.smartswitch.model.DictationResult;
 import com.qvd.smartswitch.utils.FucUtil;
 import com.qvd.smartswitch.utils.JsonParser;
 import com.qvd.smartswitch.utils.RuntimeRationale;
-import com.qvd.smartswitch.utils.ToastUtil;
+import com.qvd.smartswitch.utils.SnackbarUtils;
 import com.yanzhenjie.permission.Action;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.Permission;
@@ -39,7 +39,6 @@ import com.yanzhenjie.permission.Permission;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
@@ -97,17 +96,17 @@ public class SoundControlActivity extends BaseActivity {
     public void onViewClicked(View view) {
         if (null == mAsr) {
             // 创建单例失败，与 21001 错误为同样原因，参考 http://bbs.xfyun.cn/forum.php?mod=viewthread&tid=9688
-            ToastUtil.showToast("创建对象失败，请确认 libmsc.so 放置正确，且有调用 createUtility 进行初始化");
+            SnackbarUtils.Short(isrText, "创建对象失败，请确认 libmsc.so 放置正确，且有调用 createUtility 进行初始化").show();
             return;
         }
 
         if (null == mEngineType) {
-            ToastUtil.showToast("请先选择识别引擎类型");
+            SnackbarUtils.Short(isrText, "请先选择识别引擎类型").show();
             return;
         }
         switch (view.getId()) {
             case R.id.isr_grammar:
-                ToastUtil.showToast("上传预设关键词/语法文件");
+                SnackbarUtils.Short(isrText, "上传预设关键词/语法文件").show();
                 // 在线-构建语法文件，生成语法id
                 isrText.setText(mCloudGrammar);
                 mContent = new String(mCloudGrammar);
@@ -116,7 +115,7 @@ public class SoundControlActivity extends BaseActivity {
                 mAsr.setParameter(SpeechConstant.TEXT_ENCODING, "utf-8");
                 ret = mAsr.buildGrammar(GRAMMAR_TYPE_ABNF, mContent, mCloudGrammarListener);
                 if (ret != ErrorCode.SUCCESS)
-                    ToastUtil.showToast("语法构建失败,错误码：" + ret);
+                    SnackbarUtils.Short(isrText, "语法构建失败,错误码：" + ret).show();
                 break;
             case R.id.isr_recognize:
                 requestPermission();
@@ -304,13 +303,13 @@ public class SoundControlActivity extends BaseActivity {
                 .onGranted(new Action<List<String>>() {
                     @Override
                     public void onAction(List<String> data) {
-                        ToastUtil.showToast("授权成功");
+                        SnackbarUtils.Short(isrText, "授权成功").show();
                     }
                 })
                 .onDenied(new Action<List<String>>() {
                     @Override
                     public void onAction(List<String> data) {
-                        ToastUtil.showToast("授权失败");
+                        SnackbarUtils.Short(isrText, "授权失败").show();
                     }
                 })
                 .start();
@@ -321,7 +320,7 @@ public class SoundControlActivity extends BaseActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                ToastUtil.showToast(str);
+                SnackbarUtils.Short(isrText, str).show();
             }
         });
     }

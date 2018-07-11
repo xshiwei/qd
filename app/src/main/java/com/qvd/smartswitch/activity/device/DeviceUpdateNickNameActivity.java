@@ -15,7 +15,7 @@ import com.qvd.smartswitch.activity.base.BaseActivity;
 import com.qvd.smartswitch.db.DeviceNickNameDaoOpe;
 import com.qvd.smartswitch.model.DeviceNickNameVo;
 import com.qvd.smartswitch.utils.CommonUtils;
-import com.qvd.smartswitch.utils.ToastUtil;
+import com.qvd.smartswitch.utils.SnackbarUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -50,7 +50,7 @@ public class DeviceUpdateNickNameActivity extends BaseActivity {
                 break;
             case R.id.tv_device_update_nickname_confirm:
                 if (CommonUtils.isEmptyString(etDeviceUpdateNickname.getText().toString())) {
-                    ToastUtil.showToast("昵称不能为空");
+                    SnackbarUtils.Short(tvCommonActionbarTitle, "昵称不能为空").show();
                 } else {
                     updateNickname();
                 }
@@ -96,9 +96,9 @@ public class DeviceUpdateNickNameActivity extends BaseActivity {
             public void onClick(View v) {
                 DeviceNickNameVo deviceNickNameVo1 = DeviceNickNameDaoOpe.queryOne(DeviceUpdateNickNameActivity.this, CommonUtils.getMac(bledevice.getMac()));
                 DeviceNickNameVo deviceNickNameVo = new DeviceNickNameVo(deviceNickNameVo1.getId(), deviceNickNameVo1.getDeviceId()
-                        , deviceNickNameVo1.getDeviceName(), CommonUtils.getDate(), etDeviceUpdateNickname.getText().toString(), deviceNickNameVo1.getPic(),deviceNickNameVo1.getType());
+                        , deviceNickNameVo1.getDeviceName(), CommonUtils.getDate(), etDeviceUpdateNickname.getText().toString(), deviceNickNameVo1.getPic(), deviceNickNameVo1.getType());
                 DeviceNickNameDaoOpe.updateData(DeviceUpdateNickNameActivity.this, deviceNickNameVo);
-                ToastUtil.showToast("修改成功");
+                SnackbarUtils.Short(tvCommonActionbarTitle, "修改成功").show();
                 builder.dismiss();
             }
         });

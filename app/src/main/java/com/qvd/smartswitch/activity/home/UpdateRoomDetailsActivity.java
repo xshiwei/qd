@@ -21,7 +21,7 @@ import com.qvd.smartswitch.activity.base.BaseActivity;
 import com.qvd.smartswitch.adapter.AddRoomDeviceListAdapter;
 import com.qvd.smartswitch.model.home.RoomDeviceVo;
 import com.qvd.smartswitch.utils.CommonUtils;
-import com.qvd.smartswitch.utils.ToastUtil;
+import com.qvd.smartswitch.utils.SnackbarUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -137,7 +137,7 @@ public class UpdateRoomDetailsActivity extends BaseActivity {
             case R.id.tv_save:
                 //保存
                 if (isUpdate) {
-                    ToastUtil.showToast("保存成功");
+                    SnackbarUtils.Short(tvSave, "保存成功").show();
                     finish();
                 }
                 break;

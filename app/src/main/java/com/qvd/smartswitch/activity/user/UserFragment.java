@@ -14,10 +14,9 @@ import com.qvd.smartswitch.MyApplication;
 import com.qvd.smartswitch.R;
 import com.qvd.smartswitch.activity.base.BaseFragment;
 import com.qvd.smartswitch.utils.CacheUtils;
-import com.qvd.smartswitch.utils.ToastUtil;
+import com.qvd.smartswitch.utils.SnackbarUtils;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
@@ -56,7 +55,6 @@ public class UserFragment extends BaseFragment {
     }
 
 
-
     @Override
     protected void initData() {
         super.initData();
@@ -90,7 +88,7 @@ public class UserFragment extends BaseFragment {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 CacheUtils.clearAllCache(MyApplication.getContext());
-                                ToastUtil.showToast("缓存已清理");
+                                SnackbarUtils.Short(rlUserClearCache, "缓存已清理").show();
                                 try {
                                     tvUserCache.setText(CacheUtils.getTotalCacheSize(MyApplication.getContext()));
                                 } catch (Exception e) {

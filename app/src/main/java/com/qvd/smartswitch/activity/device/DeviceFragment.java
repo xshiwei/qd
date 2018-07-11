@@ -10,12 +10,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.WindowManager;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -34,9 +35,8 @@ import com.qvd.smartswitch.activity.base.BaseFragment;
 import com.qvd.smartswitch.adapter.DeviceListAdapter;
 import com.qvd.smartswitch.db.DeviceNickNameDaoOpe;
 import com.qvd.smartswitch.model.DeviceNickNameVo;
-import com.qvd.smartswitch.utils.ClsUtils;
 import com.qvd.smartswitch.utils.CommonUtils;
-import com.qvd.smartswitch.utils.ToastUtil;
+import com.qvd.smartswitch.utils.SnackbarUtils;
 import com.qvd.smartswitch.widget.EmptyLayout;
 import com.qvd.smartswitch.widget.MyProgressDialog;
 
@@ -45,9 +45,10 @@ import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.Unbinder;
 import io.reactivex.Observable;
-import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
@@ -69,6 +70,8 @@ public class DeviceFragment extends BaseFragment {
     TextView tvDeviceScan;
     @BindView(R.id.rl_device_bar)
     RelativeLayout rlDeviceBar;
+    @BindView(R.id.coordinatorLayout)
+    CoordinatorLayout coordinatorLayout;
 
 
     private DeviceListAdapter adapter;
@@ -155,7 +158,7 @@ public class DeviceFragment extends BaseFragment {
                         getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
                     }
                 } else {
-                    ToastUtil.showToast(getString(R.string.device_not_connect));
+                    SnackbarUtils.Short(coordinatorLayout, getString(R.string.device_not_connect)).show();
                 }
             }
         });
@@ -180,7 +183,7 @@ public class DeviceFragment extends BaseFragment {
                     int postion = adapter.getPostion(mBleDevice);
                     adapter.notifyItemChanged(postion);
                 } else {
-                    ToastUtil.showToast("不能为空");
+                    SnackbarUtils.Short(coordinatorLayout, "不能为空").show();
                 }
             }
         }).setNegativeButton(R.string.dialog_cancle, null);
@@ -346,7 +349,7 @@ public class DeviceFragment extends BaseFragment {
             @Override
             public void onTimeOut(ProgressDialog dialog) {
                 dialog.dismiss();
-                ToastUtil.showToast("连接超时");
+                SnackbarUtils.Short(coordinatorLayout, "连接超时").show();
             }
         });
         BleManager.getInstance().connect(bleDevice, new BleGattCallback() {
@@ -359,13 +362,13 @@ public class DeviceFragment extends BaseFragment {
             @Override
             public void onConnectFail(BleDevice bleDevice, BleException exception) {
                 dialog.dismiss();
-                ToastUtil.showToast(getString(R.string.device_connect_fail));
+                SnackbarUtils.Short(coordinatorLayout, getString(R.string.device_connect_fail)).show();
             }
 
             @Override
             public void onConnectSuccess(BleDevice bleDevice, BluetoothGatt gatt, int status) {
                 dialog.dismiss();
-                ToastUtil.showToast("连接成功");
+                SnackbarUtils.Short(coordinatorLayout, "连接成功").show();
                 int postion = adapter.getPostion(bleDevice);
                 adapter.notifyItemChanged(postion);
                 readRssi(bleDevice);
@@ -377,7 +380,7 @@ public class DeviceFragment extends BaseFragment {
                 dialog.dismiss();
                 int postion = adapter.getPostion(bleDevice);
                 adapter.notifyItemChanged(postion);
-                ToastUtil.showToast("断开连接");
+                SnackbarUtils.Short(coordinatorLayout, "断开连接").show();
 //                if (!isActiveDisConnected) {
 //                    autoConnect(bleDevice);
 //                }
@@ -493,7 +496,7 @@ public class DeviceFragment extends BaseFragment {
         BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         //判断是否支持蓝牙功能
         if (bluetoothAdapter == null) {
-            ToastUtil.showToast("您的手机不支持蓝牙功能");
+            SnackbarUtils.Short(coordinatorLayout, "您的手机不支持蓝牙功能").show();
             return;
         }
         /**
@@ -508,8 +511,4 @@ public class DeviceFragment extends BaseFragment {
         }
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-    }
 }

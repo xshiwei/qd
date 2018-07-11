@@ -25,7 +25,7 @@ import com.qvd.smartswitch.R;
 import com.qvd.smartswitch.activity.MainActivity;
 import com.qvd.smartswitch.activity.base.BaseActivity;
 import com.qvd.smartswitch.utils.CommonUtils;
-import com.qvd.smartswitch.utils.ToastUtil;
+import com.qvd.smartswitch.utils.SnackbarUtils;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -107,7 +107,7 @@ public class AddHomeActivity extends BaseActivity {
                 //判断名字或者地址有没有填
                 if (CommonUtils.isEmptyString(tvName.getText().toString()) || CommonUtils.isEmptyString(tvLocation.getText().toString())) {
                     tvConfirm.setEnabled(false);
-                    ToastUtil.showToast("名字或位置不能为空");
+                    SnackbarUtils.Short(tvConfirm, "名字或位置不能为空").show();
                 } else {
                     tvConfirm.setEnabled(true);
                     showPopupwindowConfirm();

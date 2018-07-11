@@ -30,7 +30,6 @@ import com.qvd.smartswitch.activity.base.BaseActivity;
 import com.qvd.smartswitch.adapter.HomeSettingPicAdapter;
 import com.qvd.smartswitch.model.home.HomeBackgroundVo;
 import com.qvd.smartswitch.utils.CommonUtils;
-import com.qvd.smartswitch.utils.ToastUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -229,7 +228,7 @@ public class HomeSettingActivity extends BaseActivity {
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ToastUtil.showToast("确认删除");
+                //ToastUtil.showToast("确认删除");
                 popupwindowDelete.dismiss();
             }
         });

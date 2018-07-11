@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
     <RelativeLayout
         android:id="@+id/rl_device_bar"
@@ -21,8 +20,10 @@
     </RelativeLayout>
 
     <RelativeLayout
+        android:id="@+id/rl_scan"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/y150">
+        android:layout_height="@dimen/y150"
+        android:layout_below="@+id/rl_device_bar">
 
         <ImageView
             android:id="@+id/iv_device_bluetooth"
@@ -70,7 +71,8 @@
     <com.qvd.smartswitch.widget.EmptyLayout
         android:id="@+id/empty_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_below="@+id/rl_scan">
 
 
         <android.support.v7.widget.RecyclerView
@@ -82,5 +84,11 @@
 
     </com.qvd.smartswitch.widget.EmptyLayout>
 
+    <android.support.design.widget.CoordinatorLayout
+        android:id="@+id/coordinatorLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"></android.support.design.widget.CoordinatorLayout>
 
-</LinearLayout>
+
+</RelativeLayout>

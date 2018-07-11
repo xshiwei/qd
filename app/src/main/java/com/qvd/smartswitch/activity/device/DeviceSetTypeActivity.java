@@ -13,7 +13,7 @@ import com.qvd.smartswitch.activity.base.BaseActivity;
 import com.qvd.smartswitch.db.DeviceNickNameDaoOpe;
 import com.qvd.smartswitch.model.DeviceNickNameVo;
 import com.qvd.smartswitch.utils.CommonUtils;
-import com.qvd.smartswitch.utils.ToastUtil;
+import com.qvd.smartswitch.utils.SnackbarUtils;
 import com.zhy.view.flowlayout.FlowLayout;
 import com.zhy.view.flowlayout.TagAdapter;
 import com.zhy.view.flowlayout.TagFlowLayout;
@@ -91,7 +91,7 @@ public class DeviceSetTypeActivity extends BaseActivity {
                 DeviceNickNameVo deviceNickNameVo1 = new DeviceNickNameVo(deviceNickNameVo.getId(), deviceNickNameVo.getDeviceId(), deviceNickNameVo.getDeviceName(),
                         deviceNickNameVo.getDate(), deviceNickNameVo.getDeviceNickname(), deviceNickNameVo.getPic(), type);
                 DeviceNickNameDaoOpe.updateData(this, deviceNickNameVo1);
-                ToastUtil.showToast("设置成功");
+                SnackbarUtils.Short(btnDeviceSetTypeSave, "设置成功").show();
                 break;
         }
     }
