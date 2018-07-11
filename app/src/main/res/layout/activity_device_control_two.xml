@@ -7,7 +7,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/y100"
-        android:background="@color/app_color">
+        android:background="@color/white">
 
         <ImageView
             android:id="@+id/iv_device_control_goback"
@@ -24,7 +24,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:text="@string/device_control_title"
-            android:textColor="@color/white"
+            android:textColor="@color/app_title"
             android:textSize="16sp" />
 
         <ImageView
@@ -41,6 +41,7 @@
 
 
     <RelativeLayout
+        android:background="@color/home_manage_backgroud"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -53,7 +54,7 @@
             android:layout_marginRight="@dimen/x30"
             android:background="@color/red"
             android:gravity="center"
-            android:text="关"
+            android:text="已关闭"
             android:textColor="@color/white"
             android:textSize="20sp" />
 
@@ -66,7 +67,7 @@
             android:layout_marginRight="@dimen/x200"
             android:background="@color/blue"
             android:gravity="center"
-            android:text="关"
+            android:text="已关闭"
             android:textColor="@color/white"
             android:textSize="20sp" />
 

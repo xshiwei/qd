@@ -12,6 +12,7 @@ import com.clj.fastble.BleManager;
 import com.qvd.smartswitch.R;
 import com.qvd.smartswitch.activity.base.BaseActivity;
 import com.qvd.smartswitch.activity.capacity.CapacityFragment;
+import com.qvd.smartswitch.activity.device.DeviceFragment;
 import com.qvd.smartswitch.activity.home.HomeFragmentTest;
 import com.qvd.smartswitch.activity.user.UserFragmentTest;
 import com.qvd.smartswitch.utils.SysApplication;
@@ -87,7 +88,6 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
         return super.onKeyUp(keyCode, event);
     }
 
-
     /*设置默认Fragment*/
     private void setDefaultFragment() {
         if (homeFragment == null)
@@ -142,8 +142,8 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
             case 1:
                 if (capacityFragment == null) {
                     assert capacityFragment != null;
-                    capacityFragment = CapacityFragment.newInstance("device");
-                    //capacityFragment = DeviceFragment.newInstance("device");
+                    //capacityFragment = CapacityFragment.newInstance("device");
+                    capacityFragment = DeviceFragment.newInstance("device");
                 }
                 mImmersionBar.fitsSystemWindows(true).statusBarColor(R.color.white).init();
                 addFrag(capacityFragment);

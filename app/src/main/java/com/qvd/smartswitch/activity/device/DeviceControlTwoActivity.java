@@ -31,7 +31,9 @@ import com.iflytek.sunflower.FlowerCollector;
 import com.orhanobut.logger.Logger;
 import com.qvd.smartswitch.R;
 import com.qvd.smartswitch.activity.base.BaseActivity;
+import com.qvd.smartswitch.db.DeviceDaoOpe;
 import com.qvd.smartswitch.db.DeviceNickNameDaoOpe;
+import com.qvd.smartswitch.model.DeviceLogVo;
 import com.qvd.smartswitch.utils.CommonUtils;
 import com.qvd.smartswitch.utils.FucUtil;
 import com.qvd.smartswitch.utils.JsonParser;
@@ -86,8 +88,8 @@ public class DeviceControlTwoActivity extends BaseActivity {
      * 灯2未开启
      */
     private boolean isStatetwo = false;
-    private BleDevice bledevice;
 
+    private BleDevice bledevice;
     private String deviceNickname;
     private Disposable subscribe;
 
@@ -184,7 +186,7 @@ public class DeviceControlTwoActivity extends BaseActivity {
     @Override
     protected void initImmersionBar() {
         super.initImmersionBar();
-        mImmersionBar.fitsSystemWindows(true).statusBarColor(R.color.app_color).init();
+        mImmersionBar.fitsSystemWindows(true).statusBarColor(R.color.white).init();
     }
 
 
@@ -260,7 +262,6 @@ public class DeviceControlTwoActivity extends BaseActivity {
         }
     }
 
-
     /**
      * 向Ble写入数据
      *
@@ -278,10 +279,14 @@ public class DeviceControlTwoActivity extends BaseActivity {
                         + " justWrite: " + HexUtil.formatHexString(justWrite, true));
                 if (!isStateOne) {
                     isStateOne = true;
-                    tvLightOne.setText("开");
+                    tvLightOne.setText("已开启");
+                    DeviceLogVo deviceLogVo = new DeviceLogVo(null, CommonUtils.getMac(bledevice.getMac()), bledevice.getName(), deviceNickname, CommonUtils.getDate(), 1, 1);
+                    DeviceDaoOpe.insertData(DeviceControlTwoActivity.this, deviceLogVo);
                 } else {
                     isStateOne = false;
-                    tvLightOne.setText("关");
+                    tvLightOne.setText("已关闭");
+                    DeviceLogVo deviceLogVo = new DeviceLogVo(null, CommonUtils.getMac(bledevice.getMac()), bledevice.getName(), deviceNickname, CommonUtils.getDate(), 0, 1);
+                    DeviceDaoOpe.insertData(DeviceControlTwoActivity.this, deviceLogVo);
                 }
             }
 
@@ -310,10 +315,10 @@ public class DeviceControlTwoActivity extends BaseActivity {
                         + " justWrite: " + HexUtil.formatHexString(justWrite, true));
                 if (!isStatetwo) {
                     isStatetwo = true;
-                    tvLightTwo.setText("开");
+                    tvLightTwo.setText("已开启");
                 } else {
                     isStatetwo = false;
-                    tvLightTwo.setText("关");
+                    tvLightTwo.setText("已关闭");
                 }
             }
 
@@ -381,16 +386,26 @@ public class DeviceControlTwoActivity extends BaseActivity {
                     text = JsonParser.parseLocalGrammarResult(result.getResultString());
                 }
                 Logger.e(text);
-                if (text.contains("开") || text.contains("open")) {
-                    isStateOne = true;
-                    dialog.show();
-                    //开灯
-                    writeToBleOne(String.valueOf("FE01000100FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF"));
-                } else if (text.contains("关") || text.contains("close")) {
-                    isStateOne = false;
-                    //关灯
-                    dialog.show();
-                    writeToBleOne(String.valueOf("FE010000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF"));
+                if (text.contains("一")) {
+                    if (text.contains("开") || text.contains("open")) {
+                        //isStateOne = true;
+                        //开灯
+                        writeToBleOne(String.valueOf("fe01002120ffffffffffffffffffffffffffffff"));
+                    } else if (text.contains("关") || text.contains("close")) {
+                        //isStateOne = false;
+                        //关灯
+                        writeToBleOne(String.valueOf("fe0100201fffffffffffffffffffffffffffffff"));
+                    }
+                } else if (text.contains("二")) {
+                    if (text.contains("开") || text.contains("open")) {
+                        //isStateOne = true;
+                        //开灯
+                        writeToBleTwo(String.valueOf("FE01000100FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF"));
+                    } else if (text.contains("关") || text.contains("close")) {
+                        //isStateOne = false;
+                        //关灯
+                        writeToBleTwo(String.valueOf("FE010000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF"));
+                    }
                 } else {
                     SnackbarUtils.Short(coordinatorLayout, "识别不出来哦").show();
                 }

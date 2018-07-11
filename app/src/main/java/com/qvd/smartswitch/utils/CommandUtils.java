@@ -1,5 +1,7 @@
 package com.qvd.smartswitch.utils;
 
+import com.orhanobut.logger.Logger;
+
 /**
  * Created by Administrator on 2018/4/26 0026.
  */
@@ -205,7 +207,12 @@ public class CommandUtils {
         String m3 = password.substring(2, 4);
         String m2 = password.substring(4, 6);
         String m1 = password.substring(6);
-        String command = "fe0402" + m1 + m2 + m3 + m4 + "04ffffffffffffffffffffffff";
+        int crc = Integer.parseInt("fe", 16) + Integer.parseInt("04", 16) + Integer.parseInt("02", 16)
+                + Integer.parseInt(m1, 16) + Integer.parseInt(m2, 16) + Integer.parseInt(m3, 16) + Integer.parseInt(m4, 16);
+        String crc1 = encode(crc);
+        String crc2 = crc1.substring(crc1.length() - 1, crc1.length());
+        String command = "fe0402" + m1 + m2 + m3 + m4 + crc2 + "ffffffffffffffffffffffff";
+        Logger.e("password->" + command);
         return command;
     }
 }

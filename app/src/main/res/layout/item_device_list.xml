@@ -10,8 +10,8 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_marginLeft="@dimen/x20"
-        android:src="@mipmap/device_item_switch"
-        android:contentDescription="TODO" />
+        android:contentDescription="TODO"
+        android:src="@mipmap/device_item_switch" />
 
     <TextView
         android:id="@+id/tv_item_device_content"
@@ -33,8 +33,8 @@
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:layout_marginRight="@dimen/x20"
-        android:src="@mipmap/device_more_details"
-        android:contentDescription="TODO" />
+        android:contentDescription="TODO"
+        android:src="@mipmap/device_more_details" />
 
     <ImageView
         android:id="@+id/iv_item_device_signal"
@@ -42,9 +42,9 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_toLeftOf="@+id/tv_item_device_state_title"
+        android:contentDescription="TODO"
         android:paddingRight="@dimen/x10"
-        android:src="@mipmap/device_item_singledeep"
-        android:contentDescription="TODO" />
+        android:src="@mipmap/device_item_singledeep" />
 
 
     <TextView
@@ -53,7 +53,7 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_toLeftOf="@+id/rl_item_device_state"
-        android:paddingRight="@dimen/x5"
+        android:paddingRight="@dimen/x10"
         android:text="@string/device_item_state"
         android:textColor="@color/black6"
         android:textSize="13sp" />
@@ -64,14 +64,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_toLeftOf="@+id/iv_item_device_more"
-        android:paddingRight="@dimen/x10">
+        android:layout_marginRight="@dimen/x10"
+        android:layout_toLeftOf="@+id/iv_item_device_more">
 
 
         <TextView
             android:id="@+id/tv_item_device_state"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:padding="5dp"
             android:text="@string/device_item_off_connect"
             android:textColor="@color/black6"
             android:textSize="13sp" />
@@ -80,6 +81,7 @@
             android:id="@+id/tv_item_device_state_two"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:padding="5dp"
             android:text="@string/device_item_on_connect"
             android:textColor="@color/black6"
             android:textSize="13sp"

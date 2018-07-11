@@ -1,11 +1,13 @@
 package com.qvd.smartswitch.activity.device;
 
+import android.app.ProgressDialog;
 import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattService;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
@@ -31,6 +33,8 @@ import com.qvd.smartswitch.model.DeviceNickNameVo;
 import com.qvd.smartswitch.utils.CommandUtils;
 import com.qvd.smartswitch.utils.CommonUtils;
 import com.qvd.smartswitch.utils.SnackbarUtils;
+import com.qvd.smartswitch.utils.ToastUtil;
+import com.qvd.smartswitch.widget.MyProgressDialog;
 
 import java.util.concurrent.TimeUnit;
 
@@ -72,14 +76,12 @@ public class DeviceControlSettingActivity extends BaseActivity {
 
     private BleDevice bledevice;
     private Disposable subscribe;
-    private BluetoothGatt bluetoothGatt;
-    private BluetoothGattService bluetoothGattService;
-    private BluetoothGattCharacteristic bluetoothGattCharacteristic;
+    private MyProgressDialog progressDialog;
 
 
     @Override
     protected int setLayoutId() {
-        return R.layout.activity_device_control_setting;
+        return R.layout.activity_device_control_setting_two;
     }
 
     @Override
@@ -87,11 +89,14 @@ public class DeviceControlSettingActivity extends BaseActivity {
         super.initData();
         tvCommonActionbarTitle.setText(R.string.device_control_setting_title);
         bledevice = getIntent().getParcelableExtra("bledevice");
-        if (bledevice != null) {
-            bluetoothGatt = BleManager.getInstance().getBluetoothGatt(bledevice);
-            bluetoothGattService = bluetoothGatt.getServices().get(3);
-            bluetoothGattCharacteristic = bluetoothGattService.getCharacteristics().get(5);
-        }
+        progressDialog = MyProgressDialog.createProgressDialog(this, 5000,
+                new MyProgressDialog.OnTimeOutListener() {
+                    @Override
+                    public void onTimeOut(ProgressDialog dialog) {
+                        dialog.dismiss();
+                        ToastUtil.showToast("修改失败");
+                    }
+                });
     }
 
     @Override
@@ -103,7 +108,7 @@ public class DeviceControlSettingActivity extends BaseActivity {
     @Override
     protected void initImmersionBar() {
         super.initImmersionBar();
-        mImmersionBar.fitsSystemWindows(true).statusBarColor(R.color.app_color).init();
+        mImmersionBar.fitsSystemWindows(true).statusBarColor(R.color.white).init();
     }
 
     private void getNotify() {
@@ -113,7 +118,7 @@ public class DeviceControlSettingActivity extends BaseActivity {
                 .subscribe(new Consumer<Long>() {
                     @Override
                     public void accept(Long aLong) throws Exception {
-                        BleManager.getInstance().notify(bledevice, bluetoothGattService.getUuid().toString(), bluetoothGattCharacteristic.getUuid().toString(), new BleNotifyCallback() {
+                        BleManager.getInstance().notify(bledevice, "0000fff0-0000-1000-8000-00805f9b34fb", "0000fff6-0000-1000-8000-00805f9b34fb", new BleNotifyCallback() {
                             @Override
                             public void onNotifySuccess() {
                                 Logger.e("notify-> success");
@@ -130,7 +135,7 @@ public class DeviceControlSettingActivity extends BaseActivity {
                             }
                         });
                         if (!BleManager.getInstance().isConnected(bledevice)) {
-                            SnackbarUtils.Short(coordinatorLayout, "蓝牙未连接utils").show();
+                            SnackbarUtils.Short(coordinatorLayout, "设备未连接").show();
                         }
                     }
                 });
@@ -236,12 +241,15 @@ public class DeviceControlSettingActivity extends BaseActivity {
      * @param s
      */
     private void writeToBle(String s) {
-        BleManager.getInstance().write(bledevice, bluetoothGattService.getUuid().toString(), bluetoothGattCharacteristic.getUuid().toString(), CommandUtils.decodeToByteArray(CommandUtils.updatePassword(s)), new BleWriteCallback() {
+        progressDialog.setMessage("正在修改");
+        progressDialog.show();
+        BleManager.getInstance().write(bledevice, "0000fff0-0000-1000-8000-00805f9b34fb", "0000fff6-0000-1000-8000-00805f9b34fb", HexUtil.hexStringToBytes(CommandUtils.updatePassword(s)), new BleWriteCallback() {
             @Override
             public void onWriteSuccess(int current, int total, byte[] justWrite) {
                 Logger.e("write success, current: " + current
                         + " total: " + total
                         + " justWrite: " + HexUtil.formatHexString(justWrite, true));
+                progressDialog.dismiss();
                 SnackbarUtils.Short(coordinatorLayout, "修改成功").show();
                 startActivity(new Intent(DeviceControlSettingActivity.this, MainActivity.class));
                 finish();
@@ -254,7 +262,6 @@ public class DeviceControlSettingActivity extends BaseActivity {
             }
         });
     }
-
 
     /**
      * 删除设备
@@ -279,6 +286,14 @@ public class DeviceControlSettingActivity extends BaseActivity {
         sure.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        progressDialog.setMessage("正在删除");
+                        progressDialog.dismiss();
+                    }
+                }, 3000);
+                progressDialog.dismiss();
                 DeviceNickNameVo deviceNickNameVo1 = DeviceNickNameDaoOpe.queryOne(DeviceControlSettingActivity.this, CommonUtils.getMac(bledevice.getMac()));
                 DeviceNickNameDaoOpe.deleteByKeyData(DeviceControlSettingActivity.this, deviceNickNameVo1.getId());
                 BleManager.getInstance().disconnect(bledevice);
@@ -303,10 +318,4 @@ public class DeviceControlSettingActivity extends BaseActivity {
         subscribe.dispose();
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.bind(this);
-    }
 }
