@@ -3,7 +3,6 @@
     android:id="@+id/ll_popupwindow_repeat"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black6"
     android:gravity="center"
     android:orientation="vertical">
 
@@ -20,7 +19,7 @@
             android:layout_height="@dimen/y100"
             android:gravity="center_vertical"
             android:paddingLeft="@dimen/x30"
-            android:text="重复"
+            android:text="设备"
             android:textColor="@color/black6"
             android:textSize="13sp" />
 
@@ -32,12 +31,12 @@
             android:background="@color/black_16" />
 
         <TextView
-            android:id="@+id/tv_popupwindow_repeat_once"
+            android:id="@+id/tv_one"
             android:layout_width="match_parent"
             android:layout_height="@dimen/y100"
             android:gravity="center_vertical"
             android:paddingLeft="@dimen/x30"
-            android:text="仅一次"
+            android:text="一"
             android:textColor="@color/black"
             android:textSize="14sp" />
 
@@ -50,29 +49,12 @@
 
 
         <TextView
-            android:id="@+id/tv_popupwindow_workday"
+            android:id="@+id/tv_two"
             android:layout_width="match_parent"
             android:layout_height="@dimen/y100"
             android:gravity="center_vertical"
             android:paddingLeft="@dimen/x30"
-            android:text="周一至周五"
-            android:textColor="@color/black"
-            android:textSize="14sp" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.1dp"
-            android:layout_marginLeft="@dimen/x30"
-            android:layout_marginRight="@dimen/x30"
-            android:background="@color/black_16" />
-
-        <TextView
-            android:id="@+id/tv_popupwindow_everyday"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/y100"
-            android:gravity="center_vertical"
-            android:paddingLeft="@dimen/x30"
-            android:text="每天"
+            android:text="二"
             android:textColor="@color/black"
             android:textSize="14sp" />
 

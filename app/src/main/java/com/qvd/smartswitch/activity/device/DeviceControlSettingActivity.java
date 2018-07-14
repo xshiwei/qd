@@ -113,7 +113,7 @@ public class DeviceControlSettingActivity extends BaseActivity {
 
     private void getNotify() {
         //获取通知信息
-        subscribe = Observable.interval(10, 10, TimeUnit.SECONDS)
+        subscribe = Observable.interval(1, 1, TimeUnit.SECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<Long>() {
                     @Override
@@ -250,7 +250,7 @@ public class DeviceControlSettingActivity extends BaseActivity {
                         + " total: " + total
                         + " justWrite: " + HexUtil.formatHexString(justWrite, true));
                 progressDialog.dismiss();
-                SnackbarUtils.Short(coordinatorLayout, "修改成功").show();
+                ToastUtil.showToast("修改成功");
                 startActivity(new Intent(DeviceControlSettingActivity.this, MainActivity.class));
                 finish();
                 overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
@@ -309,13 +309,18 @@ public class DeviceControlSettingActivity extends BaseActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        subscribe.dispose();
+        if (subscribe != null) {
+            subscribe.dispose();
+        }
+
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        subscribe.dispose();
+        if (subscribe != null) {
+            subscribe.dispose();
+        }
     }
 
 }

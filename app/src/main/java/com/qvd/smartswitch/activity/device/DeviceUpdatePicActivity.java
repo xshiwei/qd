@@ -31,6 +31,7 @@ import java.io.IOException;
 import butterknife.BindView;
 import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
+import io.reactivex.disposables.Disposable;
 
 /**
  * Created by Administrator on 2018/4/16 0016.
@@ -64,6 +65,7 @@ public class DeviceUpdatePicActivity extends BaseActivity {
 
     private String path;
     private DeviceNickNameVo deviceNickNameVo1;
+    private Disposable notify;
 
 
     @Override
@@ -117,6 +119,7 @@ public class DeviceUpdatePicActivity extends BaseActivity {
             }
             Picasso.with(this).load(path).into(ivDeviceUpdatePic);
         }
+        notify = CommonUtils.getNotify(this, bledevice);
     }
 
     /**
@@ -178,5 +181,20 @@ public class DeviceUpdatePicActivity extends BaseActivity {
         }
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (notify != null) {
+            notify.dispose();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (notify != null) {
+            notify.dispose();
+        }
+    }
 
 }

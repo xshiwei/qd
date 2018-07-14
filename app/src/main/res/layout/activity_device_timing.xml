@@ -71,18 +71,19 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/x20"
             android:layout_marginTop="@dimen/y15"
-            android:text="@string/device_timing_repetition"
+            android:text="设备"
             android:textColor="@color/black"
             android:textSize="14sp"
             android:textStyle="bold" />
 
         <TextView
+            android:id="@+id/tv_device"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="@dimen/y15"
             android:layout_marginLeft="@dimen/x20"
-            android:text="@string/device_timing_everyday"
+            android:text="一"
             android:textColor="@color/black6"
             android:textSize="12sp" />
 
@@ -117,6 +118,7 @@
             android:textStyle="bold" />
 
         <TextView
+            android:id="@+id/tv_state"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"

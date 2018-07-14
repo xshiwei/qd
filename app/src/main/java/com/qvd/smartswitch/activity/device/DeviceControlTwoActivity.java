@@ -144,7 +144,7 @@ public class DeviceControlTwoActivity extends BaseActivity {
      * 获取通知
      */
     private void getNotify() {
-        subscribe = Observable.interval(100, 100, TimeUnit.SECONDS)
+        subscribe = Observable.interval(1, 1, TimeUnit.SECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<Long>() {
                     @Override
@@ -166,7 +166,7 @@ public class DeviceControlTwoActivity extends BaseActivity {
                             }
                         });
                         if (!BleManager.getInstance().isConnected(bledevice)) {
-                            SnackbarUtils.Short(coordinatorLayout, "蓝牙未连接utils").show();
+                            SnackbarUtils.Short(getWindow().getDecorView(), "设备未连接").show();
                         }
                     }
                 });
@@ -207,19 +207,19 @@ public class DeviceControlTwoActivity extends BaseActivity {
             case R.id.tv_light_one:
                 if (isStateOne) {
                     //关灯
-                    writeToBleOne(String.valueOf("fe0100201fffffffffffffffffffffffffffffff"));
+                    writeToBleOne(String.valueOf("fe010020ffffffffffffffffffffffffffffffff"));
                 } else {
                     //开灯
-                    writeToBleOne(String.valueOf("fe01002120ffffffffffffffffffffffffffffff"));
+                    writeToBleOne(String.valueOf("fe010021ffffffffffffffffffffffffffffffff"));
                 }
                 break;
             case R.id.tv_light_two:
                 if (isStatetwo) {
                     //关灯
-                    writeToBleTwo(String.valueOf("fe0100100fffffffffffffffffffffffffffffff"));
+                    writeToBleTwo(String.valueOf("fe010010ffffffffffffffffffffffffffffffff"));
                 } else {
                     //开灯
-                    writeToBleTwo(String.valueOf("fe01001110ffffffffffffffffffffffffffffff"));
+                    writeToBleTwo(String.valueOf("fe010011ffffffffffffffffffffffffffffffff"));
                 }
                 break;
         }
@@ -386,25 +386,52 @@ public class DeviceControlTwoActivity extends BaseActivity {
                     text = JsonParser.parseLocalGrammarResult(result.getResultString());
                 }
                 Logger.e(text);
+                SnackbarUtils.Short(coordinatorLayout, text).show();
                 if (text.contains("一")) {
                     if (text.contains("开") || text.contains("open")) {
-                        //isStateOne = true;
+                        isStateOne = false;
                         //开灯
-                        writeToBleOne(String.valueOf("fe01002120ffffffffffffffffffffffffffffff"));
+                        writeToBleOne(String.valueOf("fe010021ffffffffffffffffffffffffffffffff"));
                     } else if (text.contains("关") || text.contains("close")) {
-                        //isStateOne = false;
+                        isStateOne = true;
                         //关灯
-                        writeToBleOne(String.valueOf("fe0100201fffffffffffffffffffffffffffffff"));
+                        writeToBleOne(String.valueOf("fe010020ffffffffffffffffffffffffffffffff"));
                     }
                 } else if (text.contains("二")) {
                     if (text.contains("开") || text.contains("open")) {
-                        //isStateOne = true;
+                        isStatetwo = false;
                         //开灯
-                        writeToBleTwo(String.valueOf("FE01000100FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF"));
+                        writeToBleTwo(String.valueOf("fe010011ffffffffffffffffffffffffffffffff"));
                     } else if (text.contains("关") || text.contains("close")) {
-                        //isStateOne = false;
+                        isStatetwo = true;
                         //关灯
-                        writeToBleTwo(String.valueOf("FE010000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF"));
+                        writeToBleTwo(String.valueOf("fe010010ffffffffffffffffffffffffffffffff"));
+                    }
+                } else if (text.contains("全部")) {
+                    if (text.contains("开") || text.contains("open")) {
+                        isStateOne = false;
+                        //开灯
+                        writeToBleOne(String.valueOf("fe010021ffffffffffffffffffffffffffffffff"));
+                        try {
+                            Thread.sleep(2000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        isStatetwo = false;
+                        //开灯
+                        writeToBleTwo(String.valueOf("fe010011ffffffffffffffffffffffffffffffff"));
+                    } else if (text.contains("关") || text.contains("close")) {
+                        isStateOne = true;
+                        //关灯
+                        writeToBleOne(String.valueOf("fe010020ffffffffffffffffffffffffffffffff"));
+                        try {
+                            Thread.sleep(2000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        isStatetwo = true;
+                        //关灯
+                        writeToBleTwo(String.valueOf("fe010010ffffffffffffffffffffffffffffffff"));
                     }
                 } else {
                     SnackbarUtils.Short(coordinatorLayout, "识别不出来哦").show();

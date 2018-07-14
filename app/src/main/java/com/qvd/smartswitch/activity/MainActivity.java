@@ -1,5 +1,6 @@
 package com.qvd.smartswitch.activity;
 
+import android.app.Activity;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
@@ -34,6 +35,11 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
 
     private long firstTime = 0;
 
+    /**
+     * 别的页面返回时显示的fragment
+     */
+    private int index;
+
 
     @Override
     protected int setLayoutId() {
@@ -46,6 +52,12 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
         super.initImmersionBar();
         mImmersionBar.keyboardEnable(true).init();
     }
+
+    @Override
+    protected void initData() {
+        super.initData();
+    }
+
 
     @Override
     protected void initView() {
@@ -66,7 +78,6 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
         bottomNavigationBar.setTabSelectedListener(this);
         setDefaultFragment();
     }
-
 
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
@@ -91,8 +102,9 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
     /*设置默认Fragment*/
     private void setDefaultFragment() {
         if (homeFragment == null)
-            //新版
-            homeFragment = HomeFragmentTest.newInstance("Home");
+            mImmersionBar.fitsSystemWindows(false).transparentStatusBar().init();
+        //新版
+        homeFragment = HomeFragmentTest.newInstance("Home");
         //旧版
         //homeFragment = HomeFragment.newInstance("Home");
         addFrag(homeFragment);

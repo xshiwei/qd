@@ -23,6 +23,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import io.reactivex.disposables.Disposable;
 
 /**
  * Created by Administrator on 2018/4/17 0017.
@@ -41,6 +42,7 @@ public class DeviceSetTypeActivity extends BaseActivity {
     private List<String> list = new ArrayList<>();
     private String type = "";
     private BleDevice bledevice;
+    private Disposable notify;
 
     @Override
     protected int setLayoutId() {
@@ -57,6 +59,7 @@ public class DeviceSetTypeActivity extends BaseActivity {
     protected void initData() {
         super.initData();
         bledevice = getIntent().getParcelableExtra("bledevice");
+        notify = CommonUtils.getNotify(this, bledevice);
         list.add("开关");
         list.add("机器人");
         list.add("扫地");
@@ -93,6 +96,22 @@ public class DeviceSetTypeActivity extends BaseActivity {
                 DeviceNickNameDaoOpe.updateData(this, deviceNickNameVo1);
                 SnackbarUtils.Short(btnDeviceSetTypeSave, "设置成功").show();
                 break;
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (notify != null) {
+            notify.dispose();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (notify != null) {
+            notify.dispose();
         }
     }
 }

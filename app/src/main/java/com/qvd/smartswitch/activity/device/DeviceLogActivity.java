@@ -33,6 +33,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import io.reactivex.disposables.Disposable;
 
 /**
  * Created by Administrator on 2018/4/13 0013.
@@ -73,6 +74,7 @@ public class DeviceLogActivity extends BaseActivity {
     private boolean isSelectAll = false;
     private boolean editorStatus = false;
     private int index = 0;
+    private Disposable notify;
 
     @Override
     protected int setLayoutId() {
@@ -99,6 +101,7 @@ public class DeviceLogActivity extends BaseActivity {
         refreshLayout.setRefreshHeader(new ClassicsHeader(this));
         refreshLayout.setRefreshFooter(new BallPulseFooter(this).setSpinnerStyle(SpinnerStyle.Scale));
         refreshlayout();
+        notify = CommonUtils.getNotify(this, bledevice);
     }
 
     /**
@@ -328,5 +331,21 @@ public class DeviceLogActivity extends BaseActivity {
         isSelectAll = false;
         selectDeviceLogBottomAll.setText(R.string.device_log_allselete);
         setBtnBackground(0);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (notify != null) {
+            notify.dispose();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (notify != null) {
+            notify.dispose();
+        }
     }
 }

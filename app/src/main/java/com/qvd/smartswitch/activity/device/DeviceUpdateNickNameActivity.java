@@ -20,6 +20,7 @@ import com.qvd.smartswitch.utils.SnackbarUtils;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.disposables.Disposable;
 
 /**
  * Created by Administrator on 2018/4/16 0016.
@@ -36,6 +37,7 @@ public class DeviceUpdateNickNameActivity extends BaseActivity {
     TextView tvDeviceUpdateNicknameConfirm;
 
     private BleDevice bledevice;
+    private Disposable notify;
 
     @Override
     protected int setLayoutId() {
@@ -69,6 +71,7 @@ public class DeviceUpdateNickNameActivity extends BaseActivity {
         super.initData();
         tvCommonActionbarTitle.setText("修改昵称");
         bledevice = getIntent().getParcelableExtra("bledevice");
+        notify = CommonUtils.getNotify(this, bledevice);
     }
 
     /**
@@ -102,5 +105,21 @@ public class DeviceUpdateNickNameActivity extends BaseActivity {
                 builder.dismiss();
             }
         });
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (notify != null) {
+            notify.dispose();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (notify != null) {
+            notify.dispose();
+        }
     }
 }

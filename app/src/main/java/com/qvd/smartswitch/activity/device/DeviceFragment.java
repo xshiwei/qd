@@ -16,7 +16,6 @@ import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -45,9 +44,7 @@ import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.Unbinder;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -125,9 +122,6 @@ public class DeviceFragment extends BaseFragment {
                 } else {
                     if (!BleManager.getInstance().isConnected(bleDevice)) {
                         BleManager.getInstance().cancelScan();
-//                        boolean b = ClsUtils.setPin(bleDevice.getDevice().getClass(), bleDevice.getDevice(), "123456");// 手机和蓝牙采集器配对
-//                        boolean bond = ClsUtils.createBond(bleDevice.getDevice().getClass(), bleDevice.getDevice());
-//                        ClsUtils.cancelPairingUserInput(bleDevice.getDevice().getClass(), bleDevice.getDevice());
                         connect(bleDevice);
                     }
                 }
@@ -381,47 +375,10 @@ public class DeviceFragment extends BaseFragment {
                 int postion = adapter.getPostion(bleDevice);
                 adapter.notifyItemChanged(postion);
                 SnackbarUtils.Short(coordinatorLayout, "断开连接").show();
-//                if (!isActiveDisConnected) {
-//                    autoConnect(bleDevice);
-//                }
                 gatt.connect();
             }
         });
     }
-
-    /**
-     * 自动连接
-     *
-     * @param bleDevice
-     */
-    private void autoConnect(final BleDevice bleDevice) {
-        BleManager.getInstance().connect(bleDevice.getMac(), new BleGattCallback() {
-            @Override
-            public void onStartConnect() {
-            }
-
-            @Override
-            public void onConnectFail(BleDevice bleDevice, BleException exception) {
-
-            }
-
-            @Override
-            public void onConnectSuccess(BleDevice bleDevice, BluetoothGatt gatt, int status) {
-                adapter.addDevice(bleDevice);
-                int postion = adapter.getPostion(bleDevice);
-                adapter.notifyItemChanged(postion);
-                readRssi(bleDevice);
-                setMtu(bleDevice, 23);
-            }
-
-            @Override
-            public void onDisConnected(boolean isActiveDisConnected, BleDevice bleDevice, BluetoothGatt gatt, int status) {
-                int postion = adapter.getPostion(bleDevice);
-                adapter.notifyItemChanged(postion);
-            }
-        });
-    }
-
 
     /**
      * 获取设备的信号强度Rssi

@@ -2,13 +2,13 @@
 mode voice;
 
 root $main;
-$main = ([$place6] [$place3] [$place4] [place1] [$place7] [$place8]) $place2 [$place7] $place8;
-$place1 = 立刻|马上|稍后|稍候|等下;
-$place2 = 开|关|关闭|打开|关上|关掉|关了|开下|关下|开一下|关一下|open!en-us|close!en-us;
+$main = ([$place6] [$place3] [$place4] [place1] [$place7] [$place8]) $place2 $place8 [$place7] [$place8];
+$place1 = 立刻|马上|稍后|稍候|等下|全部|一起|所有|全;
+$place2 = 拉|开|关|关闭|打开|关上|关掉|关了|开下|关下|开一下|关一下|open!en-us|close!en-us;
 $place3 = (我|咱|俺)[们];
 $place4 = 想|要|想要|需要|want!en-us;
 $place5 = 帮|帮忙|帮助|麻烦|help!en-us;
 $place6 = (能不能[$place5])|(请[$place5])|$place5;
-$place7 = 灯|电灯|灯泡|light!en-us;
-$place8 = 一|二;
+$place7 = 号|号灯|灯|电灯|灯泡|light!en-us;
+$place8 = 全部|一|二|one!en-us|two!en-us;
 
