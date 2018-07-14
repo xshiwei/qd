@@ -8,7 +8,7 @@
         android:id="@+id/actionbar_device_log"
         android:layout_width="match_parent"
         android:layout_height="@dimen/y100"
-        android:background="@color/app_color">
+        android:background="@color/white">
 
         <ImageView
             android:id="@+id/iv_common_actionbar_goback"
@@ -24,7 +24,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:textColor="@color/white"
+            android:textColor="@color/app_title"
             android:textSize="16sp" />
 
         <TextView
@@ -35,7 +35,7 @@
             android:layout_centerVertical="true"
             android:paddingRight="@dimen/x20"
             android:text="@string/device_log_edit"
-            android:textColor="@color/white"
+            android:textColor="@color/app_title"
             android:textSize="16sp" />
 
     </RelativeLayout>

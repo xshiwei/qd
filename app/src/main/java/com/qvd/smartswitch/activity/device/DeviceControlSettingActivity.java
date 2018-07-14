@@ -113,7 +113,7 @@ public class DeviceControlSettingActivity extends BaseActivity {
 
     private void getNotify() {
         //获取通知信息
-        subscribe = Observable.interval(1, 1, TimeUnit.SECONDS)
+        subscribe = Observable.interval(5, 5, TimeUnit.SECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<Long>() {
                     @Override
@@ -135,7 +135,8 @@ public class DeviceControlSettingActivity extends BaseActivity {
                             }
                         });
                         if (!BleManager.getInstance().isConnected(bledevice)) {
-                            SnackbarUtils.Short(coordinatorLayout, "设备未连接").show();
+                            //SnackbarUtils.Short(coordinatorLayout, "设备未连接").show();
+                            ToastUtil.showToast("设备未连接");
                         }
                     }
                 });

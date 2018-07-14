@@ -52,7 +52,7 @@ public class DeviceSetTypeActivity extends BaseActivity {
     @Override
     protected void initImmersionBar() {
         super.initImmersionBar();
-        mImmersionBar.fitsSystemWindows(true).statusBarColor(R.color.app_color).init();
+        mImmersionBar.fitsSystemWindows(true).statusBarColor(R.color.white).init();
     }
 
     @Override

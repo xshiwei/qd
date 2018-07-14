@@ -149,7 +149,7 @@ public class CommonUtils {
      * 获取通知
      */
     public static Disposable getNotify(final AppCompatActivity activity, final BleDevice bleDevice) {
-        Disposable subscribe = Observable.interval(1, 1, TimeUnit.SECONDS)
+        Disposable subscribe = Observable.interval(5, 5, TimeUnit.SECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<Long>() {
                     @Override
@@ -171,7 +171,8 @@ public class CommonUtils {
                             }
                         });
                         if (!BleManager.getInstance().isConnected(bleDevice)) {
-                            SnackbarUtils.Short(activity.getWindow().getDecorView(), "设备未连接").show();
+                            //SnackbarUtils.Short(activity.getWindow().getDecorView(), "设备未连接").show();
+                            ToastUtil.showToast("设备未连接");
                         }
                     }
                 });

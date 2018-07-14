@@ -7,7 +7,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/y100"
-        android:background="@color/app_color">
+        android:background="@color/white">
 
         <ImageView
             android:id="@+id/iv_device_control_goback"
@@ -24,7 +24,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:text="@string/device_control_title"
-            android:textColor="@color/white"
+            android:textColor="@color/app_title"
             android:textSize="16sp" />
 
         <ImageView

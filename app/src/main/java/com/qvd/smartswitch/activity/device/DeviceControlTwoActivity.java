@@ -39,6 +39,7 @@ import com.qvd.smartswitch.utils.FucUtil;
 import com.qvd.smartswitch.utils.JsonParser;
 import com.qvd.smartswitch.utils.RuntimeRationale;
 import com.qvd.smartswitch.utils.SnackbarUtils;
+import com.qvd.smartswitch.utils.ToastUtil;
 import com.qvd.smartswitch.widget.MyProgressDialog;
 import com.squareup.picasso.Picasso;
 import com.yanzhenjie.permission.Action;
@@ -144,7 +145,7 @@ public class DeviceControlTwoActivity extends BaseActivity {
      * 获取通知
      */
     private void getNotify() {
-        subscribe = Observable.interval(1, 1, TimeUnit.SECONDS)
+        subscribe = Observable.interval(3, 3, TimeUnit.SECONDS)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<Long>() {
                     @Override
@@ -166,7 +167,8 @@ public class DeviceControlTwoActivity extends BaseActivity {
                             }
                         });
                         if (!BleManager.getInstance().isConnected(bledevice)) {
-                            SnackbarUtils.Short(getWindow().getDecorView(), "设备未连接").show();
+                            //SnackbarUtils.Short(getWindow().getDecorView(), "设备未连接").show();
+                            ToastUtil.showToast("设备未连接");
                         }
                     }
                 });

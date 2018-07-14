@@ -120,7 +120,7 @@ public class DeviceTimingActivity extends BaseActivity {
     @Override
     protected void initImmersionBar() {
         super.initImmersionBar();
-        mImmersionBar.fitsSystemWindows(true).statusBarColor(R.color.app_color).init();
+        mImmersionBar.fitsSystemWindows(true).statusBarColor(R.color.white).init();
     }
 
     @OnClick({R.id.iv_common_actionbar_goback, R.id.tv_device_timing_save, R.id.rl_device_timing_repeat, R.id.rl_device_timing_operation})
