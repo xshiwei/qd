@@ -251,6 +251,8 @@ public class SignupTestActivity extends BaseActivity {
                             SnackbarUtils.Short(btnEmailNext, "验证邮件发送成功").show();
                         } else if (messageVo.getCode() == 400) {
                             SnackbarUtils.Short(btnEmailNext, "验证邮件发送失败").show();
+                        } else if (messageVo.getCode() == 405) {
+                            SnackbarUtils.Short(btnEmailNext, "重复发送").show();
                         } else {
                             SnackbarUtils.Short(btnEmailNext, "网络连接超时").show();
                         }

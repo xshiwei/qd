@@ -1,12 +1,16 @@
 package com.qvd.smartswitch.activity.home;
 
+import android.bluetooth.BluetoothAdapter;
+import android.content.Context;
 import android.content.Intent;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -15,6 +19,10 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.clj.fastble.BleManager;
+import com.clj.fastble.callback.BleScanCallback;
+import com.clj.fastble.data.BleDevice;
+import com.clj.fastble.scan.BleScanRuleConfig;
 import com.google.gson.Gson;
 import com.qvd.smartswitch.R;
 import com.qvd.smartswitch.activity.base.BaseActivity;
@@ -22,6 +30,8 @@ import com.qvd.smartswitch.activity.device.DeviceControlActivity;
 import com.qvd.smartswitch.adapter.AddDeviceListener;
 import com.qvd.smartswitch.adapter.AddDeviceSortAdapter;
 import com.qvd.smartswitch.model.home.SortBean;
+import com.qvd.smartswitch.utils.SnackbarUtils;
+import com.qvd.smartswitch.utils.ToastUtil;
 import com.qvd.smartswitch.widget.CheckListener;
 import com.qvd.smartswitch.widget.ItemHeaderDecoration;
 import com.qvd.smartswitch.widget.RandomTextView;
@@ -30,6 +40,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -80,6 +91,10 @@ public class AddDeviceActivity extends BaseActivity implements CheckListener {
 
     private RandomTextView randomTextview;
 
+    private static final int REQUEST_CODE_OPEN_GPS = 1;
+
+    public final int REQUEST_ENABLE_BT = 110;
+
     @Override
     protected int setLayoutId() {
         return R.layout.activity_add_device;
@@ -103,6 +118,14 @@ public class AddDeviceActivity extends BaseActivity implements CheckListener {
      * 附近设备添加
      */
     private void initNearby() {
+        //初始化设备管理器
+        BleManager.getInstance()
+                .enableLog(true)
+                .setReConnectCount(1, 5000)
+                .setSplitWriteNum(20)
+                .setMaxConnectCount(7)
+                .setOperateTimeout(5000);
+
         randomTextview.setOnRippleViewClickListener(new RandomTextView.OnRippleViewClickListener() {
             @Override
             public void onRippleViewClicked(int position) {
@@ -119,13 +142,126 @@ public class AddDeviceActivity extends BaseActivity implements CheckListener {
      * 开始获得扫描设备
      */
     private void getNearByData() {
+        checkPermission();
+        //randomTextview.addKeyWord("你好");
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                randomTextview.addKeyWord("你好");
                 randomTextview.show();
             }
         }, 1 * 1000);
+    }
+
+
+    /**
+     * 检查扫描需要的权限
+     */
+    private void checkPermission() {
+        BluetoothAdapter bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        //判断是否支持蓝牙功能
+        if (bluetoothAdapter == null) {
+            ToastUtil.showToast("您的手机不支持蓝牙功能");
+            return;
+        }
+        /**
+         * 去打开蓝牙，否则直接扫描设备
+         */
+        if (!bluetoothAdapter.isEnabled()) {
+            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+        } else {
+            setScanRule();
+            startScan();
+        }
+    }
+
+    /**
+     * 设置扫描规则
+     */
+    private void setScanRule() {
+        String[] uuids;
+        String str_uuid = "";
+        if (TextUtils.isEmpty(str_uuid)) {
+            uuids = null;
+        } else {
+            uuids = str_uuid.split(",");
+        }
+        UUID[] serviceUuids = null;
+        if (uuids != null && uuids.length > 0) {
+            serviceUuids = new UUID[uuids.length];
+            for (int i = 0; i < uuids.length; i++) {
+                String name = uuids[i];
+                String[] components = name.split("-");
+                if (components.length != 5) {
+                    serviceUuids[i] = null;
+                } else {
+                    serviceUuids[i] = UUID.fromString(uuids[i]);
+                }
+            }
+        }
+
+        String[] names;
+        String str_name = "SimpleBLEPeripheral,Qevdo,QS,Qevdo-QS02";
+        if (TextUtils.isEmpty(str_name)) {
+            names = null;
+        } else {
+            names = str_name.split(",");
+        }
+        String mac = "";
+
+        BleScanRuleConfig scanRuleConfig = new BleScanRuleConfig.Builder()
+                .setServiceUuids(serviceUuids)      // 只扫描指定的服务的设备，可选
+                .setDeviceName(true, names)   // 只扫描指定广播名的设备，可选
+                .setDeviceMac(mac)                  // 只扫描指定mac的设备，可选
+                .setAutoConnect(false)      // 连接时的autoConnect参数，可选，默认false
+                .setScanTimeOut(8000)              // 扫描超时时间，可选，默认10秒
+                .build();
+        BleManager.getInstance().initScanRule(scanRuleConfig);
+    }
+
+    /**
+     * 开始扫描
+     */
+    private void startScan() {
+        BleManager.getInstance().scan(new BleScanCallback() {
+            @Override
+            public void onScanStarted(boolean success) {
+
+            }
+
+            @Override
+            public void onScanning(BleDevice bleDevice) {
+                randomTextview.addKeyWord(bleDevice.getName());
+            }
+
+            @Override
+            public void onScanFinished(List<BleDevice> scanResultList) {
+
+            }
+        });
+    }
+
+    /**
+     * 检查gps定位是否打开
+     *
+     * @return
+     */
+    private boolean checkGPSIsOpen() {
+        LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        if (locationManager == null)
+            return false;
+        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_CODE_OPEN_GPS) {
+            if (checkGPSIsOpen()) {
+                setScanRule();
+                startScan();
+            }
+        }
     }
 
 

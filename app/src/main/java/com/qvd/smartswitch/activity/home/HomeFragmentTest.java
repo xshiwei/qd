@@ -145,7 +145,7 @@ public class HomeFragmentTest extends BaseFragment {
         //获取右侧家庭设备数据
         for (int i = 0; i < 5; i++) {
             List<Test1Vo.ArgumentsBean> list = new ArrayList<>();
-            list.add(new Test1Vo.ArgumentsBean("爱你"));
+            list.add(new Test1Vo.ArgumentsBean("你好"));
             contentList.add(new Test1Vo("办公室", list));
         }
         //转成我们自己定义的格式
@@ -153,7 +153,7 @@ public class HomeFragmentTest extends BaseFragment {
 
         //获取menu列表数据
         menuList.add(new Test2Vo("纯粹慵懒"));
-        menuList.add(new Test2Vo("珊珊"));
+        menuList.add(new Test2Vo("笑忘颜"));
 
         //设置左侧列表
         listAdapter = new HomeListAdapter(getActivity(), list);
