@@ -11,6 +11,7 @@
         android:background="@color/white">
 
         <ImageView
+            android:padding="5dp"
             android:id="@+id/iv_common_actionbar_goback"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -35,7 +36,7 @@
             android:layout_centerVertical="true"
             android:paddingRight="@dimen/x20"
             android:text="@string/device_update_pic_save"
-            android:textColor="@color/white"
+            android:textColor="@color/app_title"
             android:textSize="16sp" />
 
     </RelativeLayout>

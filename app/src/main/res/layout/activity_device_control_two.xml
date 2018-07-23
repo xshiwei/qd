@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
     <RelativeLayout
+        android:id="@+id/action_bar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/y100"
         android:background="@color/white">
@@ -16,6 +16,7 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/x20"
             android:contentDescription="TODO"
+            android:padding="5dp"
             android:src="@mipmap/actionbar_goback" />
 
         <TextView
@@ -35,61 +36,151 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/x20"
             android:contentDescription="TODO"
+            android:padding="5dp"
             android:src="@mipmap/actionbar_more_details" />
 
     </RelativeLayout>
 
+    <TextView
+        android:id="@+id/tv_timing_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/action_bar"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/y30"
+        android:text="在15点"
+        android:textColor="@color/home_setting_text_two"
+        android:textSize="13sp"
+        android:visibility="gone" />
 
     <RelativeLayout
-        android:background="@color/home_manage_backgroud"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/rl_test"
+        android:layout_below="@+id/tv_timing_text"
+        android:layout_marginBottom="@dimen/y100"
+        android:layout_marginLeft="@dimen/x100">
 
         <TextView
-            android:id="@+id/tv_light_one"
-            android:layout_width="@dimen/x150"
-            android:layout_height="@dimen/y100"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/x200"
-            android:layout_marginRight="@dimen/x30"
-            android:background="@color/red"
-            android:gravity="center"
-            android:text="已关闭"
-            android:textColor="@color/white"
-            android:textSize="20sp" />
-
-        <TextView
-            android:id="@+id/tv_light_two"
-            android:layout_width="@dimen/x150"
-            android:layout_height="@dimen/y100"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="@dimen/x200"
-            android:background="@color/blue"
-            android:gravity="center"
-            android:text="已关闭"
-            android:textColor="@color/white"
-            android:textSize="20sp" />
-
-        <ImageView
-            android:layout_above="@+id/coordinatorLayout"
-            android:id="@+id/iv_sound"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_above="@+id/iv_light_one"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="@dimen/y50"
-            android:src="@mipmap/voice_empty" />
+            android:text="电灯一"
+            android:textColor="@color/home_setting_text_two"
+            android:textSize="14sp" />
 
-        <android.support.design.widget.CoordinatorLayout
-            android:id="@+id/coordinatorLayout"
-            android:layout_width="match_parent"
+        <ImageView
+            android:id="@+id/iv_light_one"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"></android.support.design.widget.CoordinatorLayout>
+            android:layout_centerVertical="true"
+            android:src="@mipmap/device_light_off" />
+
+        <TextView
+            android:padding="20dp"
+            android:id="@+id/iv_switch_one"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/iv_light_one"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/y50"
+            android:background="@drawable/device_switch_control_selector"
+            android:clickable="true" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_above="@id/rl_test"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/tv_timing_text"
+        android:layout_marginBottom="@dimen/y100"
+        android:layout_marginRight="@dimen/x100">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/iv_light_two"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="@dimen/y50"
+            android:text="电灯二"
+            android:textColor="@color/home_setting_text_two"
+            android:textSize="14sp" />
+
+        <ImageView
+            android:id="@+id/iv_light_two"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/device_light_off" />
+
+        <TextView
+            android:padding="20dp"
+            android:id="@+id/iv_switch_two"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/iv_light_two"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/y50"
+            android:background="@drawable/device_switch_control_selector"
+            android:clickable="true" />
 
 
     </RelativeLayout>
 
+    <LinearLayout
+        android:id="@+id/rl_test"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/iv_sound"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_success"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tv_error"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tv_total"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:textSize="14sp" />
 
 
+    </LinearLayout>
 
-</LinearLayout>
+
+    <ImageView
+        android:id="@+id/iv_sound"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/coordinatorLayout"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="@dimen/y50"
+        android:src="@mipmap/voice_empty" />
+
+    <android.support.design.widget.CoordinatorLayout
+        android:id="@+id/coordinatorLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true">
+
+    </android.support.design.widget.CoordinatorLayout>
+
+
+</RelativeLayout>

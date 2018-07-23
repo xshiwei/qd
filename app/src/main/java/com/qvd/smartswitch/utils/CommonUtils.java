@@ -1,20 +1,31 @@
 package com.qvd.smartswitch.utils;
 
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.ProgressDialog;
+import android.bluetooth.BluetoothGatt;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.hardware.input.InputManager;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 
 import com.clj.fastble.BleManager;
+import com.clj.fastble.callback.BleGattCallback;
 import com.clj.fastble.callback.BleNotifyCallback;
 import com.clj.fastble.data.BleDevice;
 import com.clj.fastble.exception.BleException;
 import com.clj.fastble.utils.HexUtil;
 import com.orhanobut.logger.Logger;
+import com.trello.rxlifecycle2.android.ActivityEvent;
+import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -27,6 +38,7 @@ import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 
 public class CommonUtils {
@@ -91,6 +103,7 @@ public class CommonUtils {
     public static List<String> getTiming(int hour, int minute) {
         List<String> date = new ArrayList<>();
         String strHours = "", strMinutes = "";
+        String t = "false";
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
         calendar.set(Calendar.HOUR_OF_DAY, hour);
@@ -99,6 +112,7 @@ public class CommonUtils {
         calendar.set(Calendar.MILLISECOND, 0);
         if (calendar.getTimeInMillis() < System.currentTimeMillis()) {
             calendar.setTimeInMillis(calendar.getTimeInMillis() + 24 * 60 * 60 * 1000);
+            t = "true";
         }
         long diff = calendar.getTimeInMillis() - System.currentTimeMillis();
         long days = diff / (1000 * 60 * 60 * 24);
@@ -116,6 +130,7 @@ public class CommonUtils {
         }
         date.add(strHours);
         date.add(strMinutes);
+        date.add(t);
         return date;
     }
 
@@ -148,21 +163,24 @@ public class CommonUtils {
     /**
      * 获取通知
      */
-    public static Disposable getNotify(final AppCompatActivity activity, final BleDevice bleDevice) {
-        Disposable subscribe = Observable.interval(5, 5, TimeUnit.SECONDS)
+    @SuppressLint("CheckResult")
+    public static void getNotify(final RxAppCompatActivity activity, final BleDevice bleDevice, final String uuid_service, final String uuid_notify) {
+        Observable.interval(1, 1, TimeUnit.SECONDS)
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .compose(activity.<Long>bindUntilEvent(ActivityEvent.DESTROY))
                 .subscribe(new Consumer<Long>() {
                     @Override
                     public void accept(Long aLong) throws Exception {
-                        BleManager.getInstance().notify(bleDevice, "0000fff0-0000-1000-8000-00805f9b34fb", "0000fff6-0000-1000-8000-00805f9b34fb", new BleNotifyCallback() {
+                        BleManager.getInstance().notify(bleDevice, uuid_service, uuid_notify, new BleNotifyCallback() {
                             @Override
                             public void onNotifySuccess() {
-                                Logger.e("notify-> success");
+
                             }
 
                             @Override
                             public void onNotifyFailure(BleException exception) {
-                                Logger.e("notify->" + exception.toString());
+
                             }
 
                             @Override
@@ -170,13 +188,74 @@ public class CommonUtils {
                                 Logger.e("notify->" + HexUtil.formatHexString(data, false));
                             }
                         });
+                    }
+                });
+    }
+
+    /**
+     * 获取重连通知
+     */
+    @SuppressLint("CheckResult")
+    public static void getConnectNotify(final RxAppCompatActivity activity, final BleDevice bleDevice, final View view) {
+        final ProgressDialog dialog = new ProgressDialog(activity);
+        Observable.interval(5, 5, TimeUnit.SECONDS)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .compose(activity.<Long>bindUntilEvent(ActivityEvent.DESTROY))
+                .subscribe(new Consumer<Long>() {
+                    @Override
+                    public void accept(Long aLong) throws Exception {
+                        Logger.e("这是一个千古难题！");
                         if (!BleManager.getInstance().isConnected(bleDevice)) {
-                            //SnackbarUtils.Short(activity.getWindow().getDecorView(), "设备未连接").show();
-                            ToastUtil.showToast("设备未连接");
+                            dialog.show();
+                            dialog.setMessage("设备已断开，正在进行重连");
+                            BleManager.getInstance().connect(bleDevice.getMac(), new BleGattCallback() {
+                                @Override
+                                public void onStartConnect() {
+
+                                }
+
+                                @Override
+                                public void onConnectFail(BleDevice bleDevice, BleException exception) {
+                                    final BluetoothGatt bluetoothGatt = BleManager.getInstance().getBluetoothGatt(bleDevice);
+                                    if (bluetoothGatt != null) {
+                                        new Handler().postDelayed(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                bluetoothGatt.disconnect();
+                                                bluetoothGatt.close();
+                                            }
+                                        }, 100);
+                                    }
+                                }
+
+                                @Override
+                                public void onConnectSuccess(BleDevice bleDevice, BluetoothGatt gatt, int status) {
+                                    dialog.dismiss();
+                                    SnackbarUtils.Short(view, "连接成功").show();
+                                }
+
+                                @Override
+                                public void onDisConnected(boolean isActiveDisConnected, BleDevice device, BluetoothGatt gatt, int status) {
+
+                                }
+                            });
                         }
                     }
                 });
-        return subscribe;
     }
+
+    /**
+     * 关闭软键盘
+     */
+    public static void closeSoftKeyboard(Activity activity) {
+        //隐藏软键盘
+        View view = activity.getWindow().peekDecorView();
+        if (view != null) {
+            InputMethodManager inputmanger = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
+            inputmanger.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+        }
+    }
+
 
 }

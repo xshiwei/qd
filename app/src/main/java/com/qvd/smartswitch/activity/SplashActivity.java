@@ -11,9 +11,12 @@ import android.view.WindowManager;
 import com.qvd.smartswitch.R;
 import com.qvd.smartswitch.activity.login.LoginActivity;
 import com.qvd.smartswitch.activity.login.LoginTestActivity;
+import com.qvd.smartswitch.activity.login.WelcomeGuideActivity;
 import com.qvd.smartswitch.utils.RxHelper;
+import com.qvd.smartswitch.utils.SharedPreferencesUtil;
 import com.qvd.smartswitch.utils.SysApplication;
 import com.qvd.smartswitch.widget.SimpleButton;
+import com.yanzhenjie.permission.Permission;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -36,13 +39,22 @@ public class SplashActivity extends AppCompatActivity {
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);//去掉标题栏
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);//去掉信息栏
         super.onCreate(savedInstanceState);
+        SysApplication.getInstance().addActivity(this);
+        // 判断是否是第一次开启应用
+        boolean isFirstOpen = SharedPreferencesUtil.getBoolean(this, SharedPreferencesUtil.FIRST_OPEN, true);
+        // 如果是第一次启动，则先进入功能引导页
+        if (isFirstOpen) {
+            Intent intent = new Intent(this, WelcomeGuideActivity.class);
+            startActivity(intent);
+            finish();
+            return;
+        }
         setContentView(R.layout.activity_splash);
         ButterKnife.bind(this);
         initData();
     }
 
     protected void initData() {
-        SysApplication.getInstance().addActivity(this);
         sbSkip = findViewById(R.id.sb_skip);
         RxHelper.countdown(3)
                 .subscribe(new Observer<Integer>() {
@@ -88,4 +100,5 @@ public class SplashActivity extends AppCompatActivity {
     public void onViewClicked() {
         _doSkip();
     }
+
 }

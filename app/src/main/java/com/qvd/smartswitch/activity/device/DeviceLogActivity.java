@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.clj.fastble.BleManager;
 import com.clj.fastble.data.BleDevice;
 import com.qvd.smartswitch.R;
 import com.qvd.smartswitch.activity.base.BaseActivity;
@@ -74,7 +75,6 @@ public class DeviceLogActivity extends BaseActivity {
     private boolean isSelectAll = false;
     private boolean editorStatus = false;
     private int index = 0;
-    private Disposable notify;
 
     @Override
     protected int setLayoutId() {
@@ -101,7 +101,8 @@ public class DeviceLogActivity extends BaseActivity {
         refreshLayout.setRefreshHeader(new ClassicsHeader(this));
         refreshLayout.setRefreshFooter(new BallPulseFooter(this).setSpinnerStyle(SpinnerStyle.Scale));
         refreshlayout();
-        notify = CommonUtils.getNotify(this, bledevice);
+       //CommonUtils.getNotify(this, bledevice, "0000fff0-0000-1000-8000-00805f9b34fb", "0000fff6-0000-1000-8000-00805f9b34fb");
+         CommonUtils.getConnectNotify(this, bledevice, btnDeviceLogBottomDelete);
     }
 
     /**
@@ -334,18 +335,9 @@ public class DeviceLogActivity extends BaseActivity {
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
-        if (notify != null) {
-            notify.dispose();
-        }
-    }
-
-    @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (notify != null) {
-            notify.dispose();
-        }
+        BleManager.getInstance().stopNotify(bledevice, "0000fff0-0000-1000-8000-00805f9b34fb", "0000fff6-0000-1000-8000-00805f9b34fb");
     }
+
 }

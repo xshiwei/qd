@@ -1,24 +1,33 @@
 package com.qvd.smartswitch.activity.device;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattService;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AlertDialog;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.clj.fastble.BleManager;
+import com.clj.fastble.callback.BleGattCallback;
 import com.clj.fastble.callback.BleNotifyCallback;
 import com.clj.fastble.callback.BleWriteCallback;
 import com.clj.fastble.data.BleDevice;
@@ -28,6 +37,7 @@ import com.orhanobut.logger.Logger;
 import com.qvd.smartswitch.R;
 import com.qvd.smartswitch.activity.MainActivity;
 import com.qvd.smartswitch.activity.base.BaseActivity;
+import com.qvd.smartswitch.dao.DeviceNickNameVoDao;
 import com.qvd.smartswitch.db.DeviceNickNameDaoOpe;
 import com.qvd.smartswitch.model.DeviceNickNameVo;
 import com.qvd.smartswitch.utils.CommandUtils;
@@ -73,10 +83,27 @@ public class DeviceControlSettingActivity extends BaseActivity {
     RelativeLayout rlDeviceSettingDelete;
     @BindView(R.id.coordinatorLayout)
     CoordinatorLayout coordinatorLayout;
+    @BindView(R.id.tv_device_name)
+    TextView tvDeviceName;
 
     private BleDevice bledevice;
-    private Disposable subscribe;
+    /**
+     * 超时dialog
+     */
     private MyProgressDialog progressDialog;
+    /**
+     * 修改名称的弹出框
+     */
+    private PopupWindow popupWindowName;
+
+    /**
+     * 设备昵称
+     */
+    private String deviceNickname;
+    /**
+     * 修改密码的弹出框
+     */
+    private PopupWindow popupWindowPassword;
 
 
     @Override
@@ -97,6 +124,8 @@ public class DeviceControlSettingActivity extends BaseActivity {
                         ToastUtil.showToast("修改失败");
                     }
                 });
+        deviceNickname = DeviceNickNameDaoOpe.queryOne(this, CommonUtils.getMac(bledevice.getMac())).getDeviceNickname();
+        tvDeviceName.setText(deviceNickname);
     }
 
     @Override
@@ -112,34 +141,7 @@ public class DeviceControlSettingActivity extends BaseActivity {
     }
 
     private void getNotify() {
-        //获取通知信息
-        subscribe = Observable.interval(5, 5, TimeUnit.SECONDS)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<Long>() {
-                    @Override
-                    public void accept(Long aLong) throws Exception {
-                        BleManager.getInstance().notify(bledevice, "0000fff0-0000-1000-8000-00805f9b34fb", "0000fff6-0000-1000-8000-00805f9b34fb", new BleNotifyCallback() {
-                            @Override
-                            public void onNotifySuccess() {
-                                Logger.e("notify-> success");
-                            }
-
-                            @Override
-                            public void onNotifyFailure(BleException exception) {
-                                Logger.e("notify->" + exception.toString());
-                            }
-
-                            @Override
-                            public void onCharacteristicChanged(byte[] data) {
-                                Logger.e("notify->" + HexUtil.formatHexString(data, false));
-                            }
-                        });
-                        if (!BleManager.getInstance().isConnected(bledevice)) {
-                            //SnackbarUtils.Short(coordinatorLayout, "设备未连接").show();
-                            ToastUtil.showToast("设备未连接");
-                        }
-                    }
-                });
+        CommonUtils.getConnectNotify(this, bledevice, coordinatorLayout);
     }
 
     @OnClick({R.id.iv_common_actionbar_goback, R.id.rl_device_setting_log, R.id.rl_device_setting_password, R.id.rl_device_setting_timing, R.id.rl_device_setting_name, R.id.rl_device_setting_pic, R.id.rl_device_setting_type, R.id.rl_device_setting_update, R.id.rl_device_setting_delete})
@@ -155,7 +157,8 @@ public class DeviceControlSettingActivity extends BaseActivity {
                 break;
             case R.id.rl_device_setting_password:
                 //修改密码
-                showDialog();
+                showPopupwindowPassword();
+                popupWindowPassword.showAtLocation(view, Gravity.CENTER, 0, 0);
                 break;
             case R.id.rl_device_setting_timing:
                 //定时
@@ -164,7 +167,8 @@ public class DeviceControlSettingActivity extends BaseActivity {
                 break;
             case R.id.rl_device_setting_name:
                 //设置名称
-                showNicknameDialog();
+                showPopupwindowName();
+                popupWindowName.showAtLocation(view, Gravity.CENTER, 0, 0);
                 break;
             case R.id.rl_device_setting_pic:
                 //更换图标
@@ -187,81 +191,227 @@ public class DeviceControlSettingActivity extends BaseActivity {
     }
 
     /**
-     * 显示Dialog
+     * 显示更换名字的popupwindow
      */
-    private void showDialog() {
-        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
-        LayoutInflater inflater = getLayoutInflater();
-        final View layout = inflater.inflate(R.layout.dialog_device_update_password, null);//获取自定义布局
-        builder.setView(layout);
-        final EditText editText = layout.findViewById(R.id.et_dialog_device_nickname);
-        builder.setPositiveButton(R.string.dialog_confirm, new DialogInterface.OnClickListener() {
+    private void showPopupwindowPassword() {
+        LayoutInflater inflater = LayoutInflater.from(this);
+        View view = inflater.inflate(R.layout.popupwindow_edittext, null, false);
+        popupWindowPassword = new PopupWindow(view, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+        popupWindowPassword.setBackgroundDrawable(new ColorDrawable());
+        popupWindowPassword.setAnimationStyle(R.style.AnimBottom);
+        popupWindowPassword.setOutsideTouchable(true);
+        popupWindowPassword.setFocusable(true);
+        CommonUtils.setBackgroundAlpha(this, 0.5f);
+        //popupWindowPassword.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        //popupWindowPassword.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+
+        popupWindowPassword.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if (!CommonUtils.isEmptyString(editText.getText().toString()) && editText.getText().length() == 6) {
-                    writeToBle(editText.getText().toString());
+            public void onDismiss() {
+                CommonUtils.setBackgroundAlpha(DeviceControlSettingActivity.this, 1.0f);
+            }
+        });
+
+        TextView title = view.findViewById(R.id.tv_title);
+        final EditText editText = view.findViewById(R.id.et_edittext);
+        ImageView delete = view.findViewById(R.id.iv_delete);
+        final TextView error = view.findViewById(R.id.tv_error);
+        TextView cancel = view.findViewById(R.id.tv_cancel);
+        final TextView confirm = view.findViewById(R.id.tv_confirm);
+
+        title.setText("设置密码");
+        editText.setHint("");
+        if (editText.getText().toString().equals("")) {
+            confirm.setEnabled(false);
+            confirm.setTextColor(getResources().getColor(R.color.home_setting_text_three));
+        }
+        editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (s.toString().length() > 6) {
+                    error.setVisibility(View.VISIBLE);
+                    error.setText("长度超过最大");
+                    confirm.setEnabled(false);
+                    confirm.setTextColor(getResources().getColor(R.color.home_setting_text_three));
+                } else if (s.toString().length() == 0) {
+                    confirm.setEnabled(false);
+                    confirm.setTextColor(getResources().getColor(R.color.home_setting_text_three));
+                    editText.setCursorVisible(false);
+                } else if (s.length() == 6) {
+                    error.setVisibility(View.GONE);
+                    confirm.setEnabled(true);
+                    confirm.setTextColor(getResources().getColor(R.color.popupwindow_confirm_text));
                 } else {
-                    SnackbarUtils.Short(coordinatorLayout, "密码不规范").show();
+                    confirm.setEnabled(false);
+                    confirm.setTextColor(getResources().getColor(R.color.home_setting_text_three));
                 }
             }
-        }).setNegativeButton(R.string.dialog_cancle, null);
-        builder.create().show();
+        });
+
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popupWindowPassword.dismiss();
+            }
+        });
+
+        delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editText.setText("");
+                editText.setCursorVisible(false);
+            }
+        });
+
+        confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                writeToBle(editText.getText().toString());
+                popupWindowPassword.dismiss();
+            }
+        });
+
     }
 
 
     /**
-     * 显示Dialog
+     * 显示更换名字的popupwindow
      */
-    private void showNicknameDialog() {
-        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(this);
-        LayoutInflater inflater = getLayoutInflater();
-        final View layout = inflater.inflate(R.layout.dialog_update_nickname, null);//获取自定义布局
-        builder.setView(layout);
-        final EditText editText = layout.findViewById(R.id.et_dialog_device_nickname);
-        builder.setPositiveButton(R.string.dialog_confirm, new DialogInterface.OnClickListener() {
+    private void showPopupwindowName() {
+        LayoutInflater inflater = LayoutInflater.from(this);
+        final View view = inflater.inflate(R.layout.popupwindow_edittext, null, false);
+        popupWindowName = new PopupWindow(view, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+        popupWindowName.setBackgroundDrawable(new ColorDrawable());
+        popupWindowName.setAnimationStyle(R.style.AnimBottom);
+        popupWindowName.setOutsideTouchable(true);
+        popupWindowName.setFocusable(true);
+        CommonUtils.setBackgroundAlpha(this, 0.5f);
+//        popupWindowName.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+//        popupWindowName.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+
+        popupWindowName.setOnDismissListener(new PopupWindow.OnDismissListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if (!CommonUtils.isEmptyString(editText.getText().toString())) {
-                    DeviceNickNameVo deviceNickNameVo1 = DeviceNickNameDaoOpe.queryOne(DeviceControlSettingActivity.this, CommonUtils.getMac(bledevice.getMac()));
-                    DeviceNickNameVo deviceNickNameVo = new DeviceNickNameVo(deviceNickNameVo1.getId(), deviceNickNameVo1.getDeviceId()
-                            , deviceNickNameVo1.getDeviceName(), CommonUtils.getDate(), editText.getText().toString(), deviceNickNameVo1.getPic(), deviceNickNameVo1.getType());
-                    DeviceNickNameDaoOpe.updateData(DeviceControlSettingActivity.this, deviceNickNameVo);
-                    SnackbarUtils.Short(coordinatorLayout, "修改成功").show();
+            public void onDismiss() {
+                CommonUtils.setBackgroundAlpha(DeviceControlSettingActivity.this, 1.0f);
+            }
+        });
+
+        TextView title = view.findViewById(R.id.tv_title);
+        final EditText editText = view.findViewById(R.id.et_edittext);
+        ImageView delete = view.findViewById(R.id.iv_delete);
+        final TextView error = view.findViewById(R.id.tv_error);
+        TextView cancel = view.findViewById(R.id.tv_cancel);
+        final TextView confirm = view.findViewById(R.id.tv_confirm);
+
+        title.setText("设置设备名称");
+        editText.setHint(deviceNickname);
+        if (editText.getText().toString().equals("")) {
+            confirm.setEnabled(false);
+            confirm.setTextColor(getResources().getColor(R.color.home_setting_text_three));
+        }
+        editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (s.toString().length() > 20) {
+                    error.setVisibility(View.VISIBLE);
+                    error.setText("长度超过最大");
+                    confirm.setEnabled(false);
+                    confirm.setTextColor(getResources().getColor(R.color.home_setting_text_three));
+                } else if (s.toString().length() == 0) {
+                    confirm.setEnabled(false);
+                    confirm.setTextColor(getResources().getColor(R.color.home_setting_text_three));
+                    editText.setCursorVisible(false);
                 } else {
-                    SnackbarUtils.Short(coordinatorLayout, "修改失败").show();
+                    error.setVisibility(View.GONE);
+                    confirm.setEnabled(true);
+                    confirm.setTextColor(getResources().getColor(R.color.popupwindow_confirm_text));
                 }
             }
-        }).setNegativeButton(R.string.dialog_cancle, null);
-        builder.create().show();
-    }
+        });
 
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CommonUtils.closeSoftKeyboard(DeviceControlSettingActivity.this);
+                popupWindowName.dismiss();
+            }
+        });
+
+        delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editText.setText("");
+                editText.setCursorVisible(false);
+            }
+        });
+
+        confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DeviceNickNameVo deviceNickNameVo1 = DeviceNickNameDaoOpe.queryOne(DeviceControlSettingActivity.this, CommonUtils.getMac(bledevice.getMac()));
+                DeviceNickNameVo deviceNickNameVo = new DeviceNickNameVo(deviceNickNameVo1.getId(), deviceNickNameVo1.getDeviceId()
+                        , deviceNickNameVo1.getDeviceName(), CommonUtils.getDate(), editText.getText().toString(), deviceNickNameVo1.getPic(), deviceNickNameVo1.getType());
+                DeviceNickNameDaoOpe.updateData(DeviceControlSettingActivity.this, deviceNickNameVo);
+                SnackbarUtils.Short(coordinatorLayout, "修改成功").show();
+                tvDeviceName.setText(editText.getText().toString());
+                popupWindowName.dismiss();
+                CommonUtils.closeSoftKeyboard(DeviceControlSettingActivity.this);
+            }
+        });
+
+    }
 
     /**
      * 向Ble写入数据
      *
      * @param s
      */
-    private void writeToBle(String s) {
+    private void writeToBle(final String s) {
         progressDialog.setMessage("正在修改");
         progressDialog.show();
-        BleManager.getInstance().write(bledevice, "0000fff0-0000-1000-8000-00805f9b34fb", "0000fff6-0000-1000-8000-00805f9b34fb", HexUtil.hexStringToBytes(CommandUtils.updatePassword(s)), new BleWriteCallback() {
+        new Handler().postDelayed(new Runnable() {
             @Override
-            public void onWriteSuccess(int current, int total, byte[] justWrite) {
-                Logger.e("write success, current: " + current
-                        + " total: " + total
-                        + " justWrite: " + HexUtil.formatHexString(justWrite, true));
-                progressDialog.dismiss();
-                ToastUtil.showToast("修改成功");
-                startActivity(new Intent(DeviceControlSettingActivity.this, MainActivity.class));
-                finish();
-                overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
-            }
+            public void run() {
+                BleManager.getInstance().write(bledevice, "0000fff0-0000-1000-8000-00805f9b34fb", "0000fff6-0000-1000-8000-00805f9b34fb", HexUtil.hexStringToBytes(CommandUtils.updatePassword(s)), new BleWriteCallback() {
+                    @Override
+                    public void onWriteSuccess(int current, int total, byte[] justWrite) {
+                        Logger.e("write success, current: " + current
+                                + " total: " + total
+                                + " justWrite: " + HexUtil.formatHexString(justWrite, true));
+                        progressDialog.dismiss();
+                        ToastUtil.showToast("修改成功");
+                        startActivity(new Intent(DeviceControlSettingActivity.this, MainActivity.class));
+                        finish();
+                        overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+                    }
 
-            @Override
-            public void onWriteFailure(BleException exception) {
-                Logger.e("write" + exception.toString());
+                    @Override
+                    public void onWriteFailure(BleException exception) {
+                        Logger.e("write" + exception.toString());
+                    }
+                });
             }
-        });
+        }, 100);
     }
 
     /**
@@ -308,20 +458,7 @@ public class DeviceControlSettingActivity extends BaseActivity {
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
-        if (subscribe != null) {
-            subscribe.dispose();
-        }
-
-    }
-
-    @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (subscribe != null) {
-            subscribe.dispose();
-        }
     }
-
 }

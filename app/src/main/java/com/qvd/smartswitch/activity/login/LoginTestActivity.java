@@ -54,8 +54,6 @@ public class LoginTestActivity extends BaseActivity {
     ImageView ivQq;
     @BindView(R.id.iv_weibo)
     ImageView ivWeibo;
-    @BindView(R.id.coordinatorLayout)
-    CoordinatorLayout coordinatorLayout;
 
     @Override
     protected int setLayoutId() {
@@ -65,7 +63,7 @@ public class LoginTestActivity extends BaseActivity {
     @Override
     protected void initImmersionBar() {
         super.initImmersionBar();
-        mImmersionBar.fitsSystemWindows(true).statusBarColor(R.color.add_home_background).init();
+        mImmersionBar.fitsSystemWindows(false).transparentBar().init();
     }
 
     @Override
@@ -161,9 +159,9 @@ public class LoginTestActivity extends BaseActivity {
                             onLoginSuccess();
                             progressDialog.dismiss();
                         } else if (messageVo.getCode() == 400) {
-                            SnackbarUtils.Short(coordinatorLayout, "登录失败");
+                            SnackbarUtils.Short(btnLogin, "登录失败");
                         } else {
-                            SnackbarUtils.Short(coordinatorLayout, "连接超时");
+                            SnackbarUtils.Short(btnLogin, "连接超时");
                         }
                     }
 
@@ -188,10 +186,10 @@ public class LoginTestActivity extends BaseActivity {
         boolean valid = true;
         if (CommonUtils.isEmptyString(etAccount.getText().toString().trim()) || CommonUtils.isEmptyString(etPassword.getText().toString().trim())) {
             valid = false;
-            SnackbarUtils.Short(coordinatorLayout, "密码或账号不能为空").show();
+            SnackbarUtils.Short(btnLogin, "密码或账号不能为空").show();
         } else if (etPassword.length() < 6 || etPassword.length() > 16) {
             valid = false;
-            SnackbarUtils.Short(coordinatorLayout, "密码长度不规范").show();
+            SnackbarUtils.Short(btnLogin, "密码长度不规范").show();
         }
         return valid;
     }
@@ -211,7 +209,7 @@ public class LoginTestActivity extends BaseActivity {
      * 登录失败
      */
     private void onLoginFailed() {
-        SnackbarUtils.Short(coordinatorLayout, "登录失败").show();
+        SnackbarUtils.Short(btnLogin, "登录失败").show();
         btnLogin.setEnabled(true);
     }
 }

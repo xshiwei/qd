@@ -264,7 +264,6 @@ public class AddDeviceActivity extends BaseActivity implements CheckListener {
         }
     }
 
-
     /**
      * 手动添加
      */

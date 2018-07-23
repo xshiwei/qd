@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.clj.fastble.BleManager;
 import com.clj.fastble.data.BleDevice;
 import com.qvd.smartswitch.R;
 import com.qvd.smartswitch.activity.base.BaseActivity;
@@ -65,7 +66,6 @@ public class DeviceUpdatePicActivity extends BaseActivity {
 
     private String path;
     private DeviceNickNameVo deviceNickNameVo1;
-    private Disposable notify;
 
 
     @Override
@@ -119,7 +119,8 @@ public class DeviceUpdatePicActivity extends BaseActivity {
             }
             Picasso.with(this).load(path).into(ivDeviceUpdatePic);
         }
-        notify = CommonUtils.getNotify(this, bledevice);
+        // CommonUtils.getNotify(this, bledevice, "0000fff0-0000-1000-8000-00805f9b34fb", "0000fff6-0000-1000-8000-00805f9b34fb");
+        CommonUtils.getConnectNotify(this, bledevice, tvCommonActionbarTitle);
     }
 
     /**
@@ -182,19 +183,10 @@ public class DeviceUpdatePicActivity extends BaseActivity {
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
-        if (notify != null) {
-            notify.dispose();
-        }
-    }
-
-    @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (notify != null) {
-            notify.dispose();
-        }
+        BleManager.getInstance().stopNotify(bledevice, "0000fff0-0000-1000-8000-00805f9b34fb", "0000fff6-0000-1000-8000-00805f9b34fb");
     }
+
 
 }

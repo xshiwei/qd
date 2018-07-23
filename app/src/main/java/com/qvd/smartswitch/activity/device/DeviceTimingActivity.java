@@ -3,7 +3,7 @@ package com.qvd.smartswitch.activity.device;
 
 import android.app.ProgressDialog;
 import android.graphics.drawable.ColorDrawable;
-import android.os.Bundle;
+import android.os.Handler;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +12,6 @@ import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.TimePicker;
 
 import com.clj.fastble.BleManager;
 import com.clj.fastble.callback.BleWriteCallback;
@@ -22,15 +21,21 @@ import com.clj.fastble.utils.HexUtil;
 import com.orhanobut.logger.Logger;
 import com.qvd.smartswitch.R;
 import com.qvd.smartswitch.activity.base.BaseActivity;
+import com.qvd.smartswitch.db.DeviceTimgTimeDaoOpe;
+import com.qvd.smartswitch.model.DeviceTimgTimeVo;
 import com.qvd.smartswitch.utils.CommonUtils;
+import com.qvd.smartswitch.utils.SnackbarUtils;
 import com.qvd.smartswitch.utils.ToastUtil;
+import com.qvd.smartswitch.widget.MyPopupWindowOne;
 import com.qvd.smartswitch.widget.MyProgressDialog;
 
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import io.reactivex.disposables.Disposable;
+import cn.carbswang.android.numberpickerview.library.NumberPickerView;
 
 /**
  * Created by Administrator on 2018/4/17 0017.
@@ -45,8 +50,6 @@ public class DeviceTimingActivity extends BaseActivity {
     TextView tvDeviceTimingSave;
     @BindView(R.id.tv_device_timing_time)
     TextView tvDeviceTimingTime;
-    @BindView(R.id.tp_device_timing)
-    TimePicker tpDeviceTiming;
     @BindView(R.id.rl_device_timing_repeat)
     RelativeLayout rlDeviceTimingRepeat;
     @BindView(R.id.rl_device_timing_operation)
@@ -55,6 +58,16 @@ public class DeviceTimingActivity extends BaseActivity {
     TextView tvDevice;
     @BindView(R.id.tv_state)
     TextView tvState;
+    @BindView(R.id.picker_hour)
+    NumberPickerView pickerHour;
+    @BindView(R.id.picker_minute)
+    NumberPickerView pickerMinute;
+    @BindView(R.id.tv_timing)
+    TextView tvTiming;
+    @BindView(R.id.tv_delete_timing)
+    TextView tvDeleteTiming;
+    @BindView(R.id.rl_timing)
+    RelativeLayout rlTiming;
 
 
     private PopupWindow popupWindow;
@@ -83,7 +96,23 @@ public class DeviceTimingActivity extends BaseActivity {
      */
     private String mMinute;
     private MyProgressDialog progressDialog;
-    private Disposable notify;
+    private int newHour = 0;
+    private int newMinute = 0;
+
+    /**
+     * 获得存储的定时信息
+     */
+    private DeviceTimgTimeVo timgTime;
+    /**
+     * 删除定时
+     */
+    private PopupWindow popupwindowDelete;
+    private GregorianCalendar calendar;
+    /**
+     * 判断是否超过当天
+     */
+    private String isOutDay;
+    private MyPopupWindowOne popupwindowOne;
 
     @Override
     protected int setLayoutId() {
@@ -95,6 +124,19 @@ public class DeviceTimingActivity extends BaseActivity {
         super.initData();
         bledevice = getIntent().getParcelableExtra("bledevice");
         tvCommonActionbarTitle.setText("设备定时");
+        List<DeviceTimgTimeVo> deviceTimgTimeVos = DeviceTimgTimeDaoOpe.queryList(this, CommonUtils.getMac(bledevice.getMac()));
+        if (deviceTimgTimeVos != null) {
+            timgTime = deviceTimgTimeVos.get(0);
+        }
+        if (timgTime != null) {
+            if (CommonUtils.isEmptyString(timgTime.getContent())) {
+                rlTiming.setVisibility(View.GONE);
+            } else {
+                tvTiming.setText(timgTime.getContent());
+            }
+        } else {
+            rlTiming.setVisibility(View.GONE);
+        }
         progressDialog = MyProgressDialog.createProgressDialog(this, 5000,
                 new MyProgressDialog.OnTimeOutListener() {
                     @Override
@@ -103,18 +145,44 @@ public class DeviceTimingActivity extends BaseActivity {
                         ToastUtil.showToast("设置失败");
                     }
                 });
-        //设置24小时制
-        tpDeviceTiming.setIs24HourView(true);
-        tpDeviceTiming.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
+        calendar = (GregorianCalendar) GregorianCalendar.getInstance();
+        int h = calendar.get(Calendar.HOUR_OF_DAY);
+        int m = calendar.get(Calendar.MINUTE);
+        setData(pickerHour, 0, 23, h);
+        setData(pickerMinute, 0, 59, m);
+        pickerHour.setOnValueChangeListenerInScrolling(new NumberPickerView.OnValueChangeListenerInScrolling() {
             @Override
-            public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
-                List<String> timing = CommonUtils.getTiming(hourOfDay, minute);
+            public void onValueChangeInScrolling(NumberPickerView picker, int oldVal, int newVal) {
+                newHour = oldVal;
+                newMinute = pickerMinute.getValue();
+                List<String> timing = CommonUtils.getTiming(newHour, newMinute);
+                tvDeviceTimingTime.setText(timing.get(0) + "小时" + timing.get(1) + "分钟之后执行");
+                mHour = timing.get(0);
+                mMinute = timing.get(1);
+                isOutDay = timing.get(2);
+                Logger.e("hour->" + newVal);
+            }
+        });
+        pickerMinute.setOnValueChangeListenerInScrolling(new NumberPickerView.OnValueChangeListenerInScrolling() {
+            @Override
+            public void onValueChangeInScrolling(NumberPickerView picker, int oldVal, int newVal) {
+                newMinute = oldVal;
+                newHour = pickerHour.getValue();
+                List<String> timing = CommonUtils.getTiming(newHour, newMinute);
                 tvDeviceTimingTime.setText(timing.get(0) + "小时" + timing.get(1) + "分钟后执行");
                 mHour = timing.get(0);
                 mMinute = timing.get(1);
+                isOutDay = timing.get(2);
+                Logger.e("minute->" + newVal);
             }
         });
-        notify = CommonUtils.getNotify(this, bledevice);
+        CommonUtils.getConnectNotify(this, bledevice, tvDevice);
+    }
+
+    private void setData(NumberPickerView picker, int minValue, int maxValue, int value) {
+        picker.setMinValue(minValue);
+        picker.setMaxValue(maxValue);
+        picker.setValue(value);
     }
 
     @Override
@@ -123,7 +191,7 @@ public class DeviceTimingActivity extends BaseActivity {
         mImmersionBar.fitsSystemWindows(true).statusBarColor(R.color.white).init();
     }
 
-    @OnClick({R.id.iv_common_actionbar_goback, R.id.tv_device_timing_save, R.id.rl_device_timing_repeat, R.id.rl_device_timing_operation})
+    @OnClick({R.id.iv_common_actionbar_goback, R.id.tv_device_timing_save, R.id.rl_device_timing_repeat, R.id.rl_device_timing_operation, R.id.tv_delete_timing})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_common_actionbar_goback:
@@ -131,6 +199,10 @@ public class DeviceTimingActivity extends BaseActivity {
                 break;
             case R.id.tv_device_timing_save:
                 //实现定时功能
+                if (mHour.equals("00") && mMinute.equals("00")) {
+                    SnackbarUtils.Short(view, "时间不能设置为零");
+                    return;
+                }
                 setTiming();
                 break;
             case R.id.rl_device_timing_repeat:
@@ -141,7 +213,96 @@ public class DeviceTimingActivity extends BaseActivity {
                 showOperationPopuwindow();
                 popupWindow2.showAtLocation(view, Gravity.CENTER, 0, 0);
                 break;
+            case R.id.tv_delete_timing:
+                //取消定时
+                //showPopupwindowDelete();
+                //popupwindowDelete.showAtLocation(view, Gravity.CENTER, 0, 0);
+                show();
+                popupwindowOne.showPopupWindow(view);
+                break;
         }
+    }
+
+    /**
+     * 显示删除家庭的popupwindow
+     */
+    private void showPopupwindowDelete() {
+        LayoutInflater inflater = LayoutInflater.from(this);
+        View view = inflater.inflate(R.layout.popupwindow_dialog, null, false);
+        popupwindowDelete = new PopupWindow(view, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+        popupwindowDelete.setBackgroundDrawable(new ColorDrawable());
+        popupwindowDelete.setAnimationStyle(R.style.AnimBottom);
+        popupwindowDelete.setOutsideTouchable(true);
+        popupwindowDelete.setFocusable(true);
+        CommonUtils.setBackgroundAlpha(this, 0.5f);
+        popupwindowDelete.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                CommonUtils.setBackgroundAlpha(DeviceTimingActivity.this, 1.0f);
+            }
+        });
+
+        TextView title = view.findViewById(R.id.tv_title);
+        TextView cancel = view.findViewById(R.id.tv_cancel);
+        TextView confirm = view.findViewById(R.id.tv_confirm);
+
+        title.setText("您确定要删除这条智能吗？");
+
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                popupwindowDelete.dismiss();
+            }
+        });
+
+        confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                writeToBleCancleTiming();
+                popupwindowDelete.dismiss();
+            }
+        });
+    }
+
+    private void show() {
+        popupwindowOne = new MyPopupWindowOne(this, "您确定要删除这条智能吗？", new MyPopupWindowOne.IPopupWindowListener() {
+            @Override
+            public void cancel() {
+                popupwindowOne.dismiss();
+            }
+
+            @Override
+            public void confirm() {
+                writeToBleCancleTiming();
+                popupwindowOne.dismiss();
+            }
+        });
+    }
+
+    /**
+     * 取消定时
+     */
+    private void writeToBleCancleTiming() {
+        progressDialog.setMessage("正在设置");
+        progressDialog.show();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                BleManager.getInstance().write(bledevice, "0000fff0-0000-1000-8000-00805f9b34fb", "0000fff6-0000-1000-8000-00805f9b34fb", HexUtil.hexStringToBytes("FE030408FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF"), new BleWriteCallback() {
+                    @Override
+                    public void onWriteSuccess(int current, int total, byte[] justWrite) {
+                        DeviceTimgTimeDaoOpe.deleteData(DeviceTimingActivity.this, timgTime);
+                        rlTiming.setVisibility(View.GONE);
+                        progressDialog.dismiss();
+                    }
+
+                    @Override
+                    public void onWriteFailure(BleException exception) {
+
+                    }
+                });
+            }
+        }, 100);
     }
 
     /**
@@ -163,7 +324,6 @@ public class DeviceTimingActivity extends BaseActivity {
             }
         }
         String s = "fe0304" + one + mHour + mMinute + "ffffffffffffffffffffffffffff";
-        Logger.e("timing->" + s);
         writeToBle(s);
     }
 
@@ -181,6 +341,24 @@ public class DeviceTimingActivity extends BaseActivity {
                 Logger.e("write success, current: " + current
                         + " total: " + total
                         + " justWrite: " + HexUtil.formatHexString(justWrite, true));
+                String content = "";
+                if (isDevice == 1) {
+                    content += "电灯一";
+                } else {
+                    content += "电灯二";
+                }
+                if (isOutDay.equals("true")) {
+                    content += (calendar.get(Calendar.MONTH) + 1) + "月" + (calendar.get(Calendar.DAY_OF_MONTH) + 1) + "日" + newHour + "时" + newMinute + "分";
+                } else {
+                    content += (calendar.get(Calendar.MONTH) + 1) + "月" + calendar.get(Calendar.DAY_OF_MONTH) + "日" + newHour + "时" + newMinute + "分";
+                }
+                if (isState) {
+                    content += "开";
+                } else {
+                    content += "关";
+                }
+                DeviceTimgTimeDaoOpe.insertData(DeviceTimingActivity.this, new DeviceTimgTimeVo(null, CommonUtils.getMac(bledevice.getMac()), content));
+                //SharedPreferencesUtil.putTimgTime(DeviceTimingActivity.this, SharedPreferencesUtil.TIMG_TIME + bledevice.getMac(), content);
                 progressDialog.dismiss();
                 ToastUtil.showToast("定时成功");
                 finish();
@@ -276,18 +454,9 @@ public class DeviceTimingActivity extends BaseActivity {
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
-        if (notify != null) {
-            notify.dispose();
-        }
-    }
-
-    @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (notify != null) {
-            notify.dispose();
-        }
+        BleManager.getInstance().stopNotify(bledevice, "0000fff0-0000-1000-8000-00805f9b34fb", "0000fff6-0000-1000-8000-00805f9b34fb");
     }
+
 }

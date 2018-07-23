@@ -138,12 +138,12 @@ public class HomeFragmentTest extends BaseFragment {
         list.add(new TestVo("常用", 1));
 
         //获取右侧常用内容数据
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 2; i++) {
             listContent2.add(new Test2Vo("电动牙刷"));
             listContent2.add(new Test2Vo("电动牙刷"));
         }
         //获取右侧家庭设备数据
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 2; i++) {
             List<Test1Vo.ArgumentsBean> list = new ArrayList<>();
             list.add(new Test1Vo.ArgumentsBean("你好"));
             contentList.add(new Test1Vo("办公室", list));
@@ -185,7 +185,6 @@ public class HomeFragmentTest extends BaseFragment {
         //设置FloatingActionButton
         fab.attachToRecyclerView(rvContent);
         fab.attachToRecyclerView(rvContentTwo);
-
 
         //设置左边菜单点击事件
         listAdapter.setOnItemClickListener(new HomeListAdapter.OnItemClickListener() {

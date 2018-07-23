@@ -19,7 +19,6 @@
             android:background="@color/home_background"
             android:orientation="vertical">
 
-
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/y90"
@@ -115,6 +114,7 @@
                     android:textColor="@color/black"
                     android:textSize="13sp" />
 
+
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -148,6 +148,7 @@
                     android:textSize="14sp" />
 
                 <ImageView
+                    android:id="@+id/iv_more"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
@@ -155,6 +156,17 @@
                     android:layout_marginRight="@dimen/x50"
                     android:contentDescription="TODO"
                     android:src="@mipmap/user_more_details" />
+
+                <TextView
+                    android:id="@+id/tv_device_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/x10"
+                    android:layout_toLeftOf="@+id/iv_more"
+                    android:text="名称"
+                    android:textColor="@color/home_setting_text_two"
+                    android:textSize="13sp" />
 
                 <View
                     android:layout_width="match_parent"
@@ -338,6 +350,8 @@
                     android:layout_marginRight="@dimen/x50"
                     android:contentDescription="TODO"
                     android:src="@mipmap/user_more_details" />
+
+
 
                 <View
                     android:layout_width="match_parent"

@@ -9,7 +9,7 @@
         android:id="@+id/iv_item_pic"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@mipmap/home_setting" />
+        android:src="@mipmap/test" />
 
     <TextView
         android:id="@+id/tv_item_text"

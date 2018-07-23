@@ -9,14 +9,14 @@
     <RelativeLayout
         android:id="@+id/rl_actionbar"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/y350"
-        android:background="@color/add_home_background">
+        android:layout_height="@dimen/y400"
+        android:background="@mipmap/register_actionbar">
 
         <ImageView
             android:id="@+id/iv_goback"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/y40"
+            android:layout_marginTop="@dimen/y90"
             android:contentDescription="TODO"
             android:paddingLeft="@dimen/x20"
             android:src="@mipmap/actionbar_goback" />
@@ -27,7 +27,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_marginRight="@dimen/x30"
-            android:layout_marginTop="@dimen/y40"
+            android:layout_marginTop="@dimen/y90"
             android:text="中国大陆"
             android:textColor="@color/white"
             android:textSize="14sp" />
@@ -67,10 +67,7 @@
             android:textSize="14sp" />
     </LinearLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="@color/black_16" />
+
 
     <RelativeLayout
         android:id="@+id/rl_phone"
@@ -79,6 +76,7 @@
         android:visibility="visible">
 
         <RelativeLayout
+            android:background="@drawable/login_edittext_shape"
             android:id="@+id/rl_input_phone"
             android:layout_width="match_parent"
             android:layout_height="@dimen/y80"
@@ -108,11 +106,6 @@
                 android:textColor="@color/home_manage_text"
                 android:textSize="13sp" />
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:layout_alignParentBottom="true"
-                android:background="@color/black_16" />
         </RelativeLayout>
 
         <TextView
@@ -128,6 +121,7 @@
 
 
         <RelativeLayout
+            android:background="@drawable/login_edittext_shape"
             android:id="@+id/rl_input_code"
             android:layout_width="match_parent"
             android:layout_height="@dimen/y80"
@@ -173,11 +167,6 @@
                 android:textColor="@color/orangered"
                 android:textSize="13sp" />
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:layout_alignParentBottom="true"
-                android:background="@color/black_16" />
         </RelativeLayout>
 
 
@@ -189,7 +178,7 @@
             android:layout_marginBottom="@dimen/y250"
             android:layout_marginLeft="@dimen/x70"
             android:layout_marginRight="@dimen/x70"
-            android:background="@drawable/add_room_save_selector"
+            android:background="@drawable/login_text_selector"
             android:clickable="true"
             android:gravity="center"
             android:text="下一步"
@@ -206,6 +195,7 @@
 
 
         <RelativeLayout
+            android:background="@drawable/login_edittext_shape"
             android:id="@+id/rl_input_email"
             android:layout_width="match_parent"
             android:layout_height="@dimen/y80"
@@ -249,12 +239,6 @@
                 android:text="发送验证邮件"
                 android:textColor="@color/orangered"
                 android:textSize="13sp" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1px"
-                android:layout_alignParentBottom="true"
-                android:background="@color/black_16" />
         </RelativeLayout>
 
         <TextView

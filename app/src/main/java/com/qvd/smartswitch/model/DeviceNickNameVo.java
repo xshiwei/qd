@@ -79,7 +79,7 @@ public class DeviceNickNameVo {
         this.type = type;
     }
 
-    
+   
 
 
 }

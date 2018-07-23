@@ -9,22 +9,41 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="@dimen/x20"
+        android:layout_marginLeft="@dimen/x30"
         android:contentDescription="TODO"
-        android:src="@mipmap/device_item_switch" />
+        android:src="@mipmap/device_unconnect" />
 
     <TextView
-        android:id="@+id/tv_item_device_content"
+        android:id="@+id/tv_decive_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="@dimen/x15"
-        android:layout_toLeftOf="@+id/iv_item_device_signal"
+        android:layout_marginLeft="@dimen/x40"
+        android:layout_marginRight="@dimen/x30"
+        android:layout_marginTop="@dimen/y25"
+        android:layout_toLeftOf="@+id/tv_item_device_off"
         android:layout_toRightOf="@+id/iv_item_device_pic"
         android:ellipsize="end"
         android:lines="1"
-        android:textColor="@color/black_87"
-        android:textSize="15sp" />
+        android:text="11111"
+        android:textColor="@color/home_setting_text_three"
+        android:textSize="13sp" />
+
+    <TextView
+        android:id="@+id/tv_decive_state"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/y25"
+        android:layout_marginLeft="@dimen/x40"
+        android:layout_marginRight="@dimen/x30"
+        android:layout_toLeftOf="@+id/tv_item_device_off"
+        android:layout_toRightOf="@+id/iv_item_device_pic"
+        android:ellipsize="end"
+        android:lines="1"
+        android:text="已连接"
+        android:textColor="@color/home_setting_text_three"
+        android:textSize="13sp" />
+
 
     <ImageView
         android:id="@+id/iv_item_device_more"
@@ -32,61 +51,45 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:layout_marginRight="@dimen/x20"
+        android:layout_marginRight="@dimen/x30"
         android:contentDescription="TODO"
         android:src="@mipmap/device_more_details" />
 
-    <ImageView
-        android:id="@+id/iv_item_device_signal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
-        android:layout_toLeftOf="@+id/tv_item_device_state_title"
-        android:contentDescription="TODO"
-        android:paddingRight="@dimen/x10"
-        android:src="@mipmap/device_item_singledeep" />
-
 
     <TextView
-        android:id="@+id/tv_item_device_state_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/tv_item_device_off"
+        android:layout_width="@dimen/x120"
+        android:layout_height="@dimen/y60"
         android:layout_centerVertical="true"
-        android:layout_toLeftOf="@+id/rl_item_device_state"
-        android:paddingRight="@dimen/x10"
-        android:text="@string/device_item_state"
-        android:textColor="@color/black6"
-        android:textSize="13sp" />
+        android:layout_marginRight="@dimen/x10"
+        android:layout_toLeftOf="@+id/iv_item_device_more"
+        android:background="@drawable/device_log_button_selete"
+        android:gravity="center"
+        android:text="断开连接"
+        android:textColor="@color/white"
+        android:textSize="13sp"
+        android:visibility="gone" />
 
+    <ProgressBar
+        android:id="@+id/progress"
+        android:layout_width="@dimen/x50"
+        android:layout_height="@dimen/y50"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="@dimen/x10"
+        android:layout_toLeftOf="@+id/tv_connecting"
+        android:visibility="gone" />
 
-    <RelativeLayout
-        android:id="@+id/rl_item_device_state"
+    <TextView
+        android:id="@+id/tv_connecting"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_marginRight="@dimen/x10"
-        android:layout_toLeftOf="@+id/iv_item_device_more">
-
-
-        <TextView
-            android:id="@+id/tv_item_device_state"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="5dp"
-            android:text="@string/device_item_off_connect"
-            android:textColor="@color/black6"
-            android:textSize="13sp" />
-
-        <TextView
-            android:id="@+id/tv_item_device_state_two"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="5dp"
-            android:text="@string/device_item_on_connect"
-            android:textColor="@color/black6"
-            android:textSize="13sp"
-            android:visibility="gone" />
-    </RelativeLayout>
+        android:layout_toLeftOf="@+id/iv_item_device_more"
+        android:text="正在连接"
+        android:textColor="@color/home_setting_text_three"
+        android:textSize="13sp"
+        android:visibility="gone" />
 
     <View
         android:layout_width="match_parent"

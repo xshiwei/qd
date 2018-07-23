@@ -24,6 +24,7 @@ import com.qvd.smartswitch.MyApplication;
 import com.qvd.smartswitch.R;
 import com.qvd.smartswitch.utils.DefaultRationale;
 import com.qvd.smartswitch.utils.RuntimeRationale;
+import com.trello.rxlifecycle2.components.support.RxFragment;
 import com.yanzhenjie.permission.Action;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.Permission;
@@ -39,7 +40,7 @@ import butterknife.Unbinder;
 /**
  * 所有fragment的基类
  */
-public abstract class BaseFragment extends Fragment {
+public abstract class BaseFragment extends RxFragment {
 
     protected Activity mActivity;
     protected View mRootView;

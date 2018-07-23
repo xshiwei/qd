@@ -21,6 +21,7 @@ import com.qvd.smartswitch.activity.SplashActivity;
 import com.qvd.smartswitch.utils.RuntimeRationale;
 import com.qvd.smartswitch.utils.SysApplication;
 import com.qvd.smartswitch.utils.ToastUtil;
+import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 import com.yanzhenjie.permission.Action;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.Permission;
@@ -35,7 +36,7 @@ import butterknife.Unbinder;
  * Activity的基类
  */
 
-public abstract class BaseActivity extends AppCompatActivity {
+public abstract class BaseActivity extends RxAppCompatActivity {
 
     private InputMethodManager imm;
     protected ImmersionBar mImmersionBar;
@@ -136,13 +137,13 @@ public abstract class BaseActivity extends AppCompatActivity {
                 .onGranted(new Action<List<String>>() {
                     @Override
                     public void onAction(List<String> permissions) {
-                        Logger.e("授权成功");
+                        //Logger.e("授权成功");
                     }
                 })
                 .onDenied(new Action<List<String>>() {
                     @Override
                     public void onAction(@NonNull List<String> permissions) {
-                        Logger.e("授权失败");
+                        //Logger.e("授权失败");
                         if (AndPermission.hasAlwaysDeniedPermission(getApplicationContext(), permissions)) {
                             showSettingDialog(BaseActivity.this, permissions);
                         }

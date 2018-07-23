@@ -7,6 +7,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.clj.fastble.BleManager;
 import com.clj.fastble.data.BleDevice;
 import com.qvd.smartswitch.R;
 import com.qvd.smartswitch.activity.base.BaseActivity;
@@ -42,7 +43,6 @@ public class DeviceSetTypeActivity extends BaseActivity {
     private List<String> list = new ArrayList<>();
     private String type = "";
     private BleDevice bledevice;
-    private Disposable notify;
 
     @Override
     protected int setLayoutId() {
@@ -59,7 +59,8 @@ public class DeviceSetTypeActivity extends BaseActivity {
     protected void initData() {
         super.initData();
         bledevice = getIntent().getParcelableExtra("bledevice");
-        notify = CommonUtils.getNotify(this, bledevice);
+         //CommonUtils.getNotify(this, bledevice, "0000fff0-0000-1000-8000-00805f9b34fb", "0000fff6-0000-1000-8000-00805f9b34fb");
+       CommonUtils.getConnectNotify(this, bledevice, btnDeviceSetTypeSave);
         list.add("开关");
         list.add("机器人");
         list.add("扫地");
@@ -100,18 +101,9 @@ public class DeviceSetTypeActivity extends BaseActivity {
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
-        if (notify != null) {
-            notify.dispose();
-        }
-    }
-
-    @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (notify != null) {
-            notify.dispose();
-        }
+        BleManager.getInstance().stopNotify(bledevice, "0000fff0-0000-1000-8000-00805f9b34fb", "0000fff6-0000-1000-8000-00805f9b34fb");
     }
+
 }

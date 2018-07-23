@@ -85,7 +85,7 @@ public class SignupTestActivity extends BaseActivity {
     @Override
     protected void initImmersionBar() {
         super.initImmersionBar();
-        mImmersionBar.fitsSystemWindows(true).statusBarColor(R.color.add_home_background).init();
+        mImmersionBar.fitsSystemWindows(false).transparentBar().init();
     }
 
     @Override

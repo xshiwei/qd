@@ -1,32 +1,27 @@
 package com.qvd.smartswitch.activity.device;
 
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
+import android.bluetooth.BluetoothGatt;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Environment;
+import android.os.Handler;
 import android.support.design.widget.CoordinatorLayout;
-import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.clj.fastble.BleManager;
+import com.clj.fastble.callback.BleGattCallback;
+import com.clj.fastble.callback.BleIndicateCallback;
 import com.clj.fastble.callback.BleNotifyCallback;
 import com.clj.fastble.callback.BleWriteCallback;
 import com.clj.fastble.data.BleDevice;
 import com.clj.fastble.exception.BleException;
 import com.clj.fastble.utils.HexUtil;
-import com.iflytek.cloud.ErrorCode;
-import com.iflytek.cloud.GrammarListener;
-import com.iflytek.cloud.InitListener;
-import com.iflytek.cloud.RecognizerListener;
-import com.iflytek.cloud.RecognizerResult;
-import com.iflytek.cloud.SpeechConstant;
-import com.iflytek.cloud.SpeechError;
-import com.iflytek.cloud.SpeechRecognizer;
 import com.iflytek.sunflower.FlowerCollector;
 import com.orhanobut.logger.Logger;
 import com.qvd.smartswitch.R;
@@ -35,27 +30,21 @@ import com.qvd.smartswitch.db.DeviceDaoOpe;
 import com.qvd.smartswitch.db.DeviceNickNameDaoOpe;
 import com.qvd.smartswitch.model.DeviceLogVo;
 import com.qvd.smartswitch.utils.CommonUtils;
-import com.qvd.smartswitch.utils.FucUtil;
-import com.qvd.smartswitch.utils.JsonParser;
-import com.qvd.smartswitch.utils.RuntimeRationale;
+import com.qvd.smartswitch.utils.OnMultiClickListener;
 import com.qvd.smartswitch.utils.SnackbarUtils;
-import com.qvd.smartswitch.utils.ToastUtil;
-import com.qvd.smartswitch.widget.MyProgressDialog;
-import com.squareup.picasso.Picasso;
-import com.yanzhenjie.permission.Action;
-import com.yanzhenjie.permission.AndPermission;
-import com.yanzhenjie.permission.Permission;
+import com.trello.rxlifecycle2.android.ActivityEvent;
 
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.Observable;
+import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by Administrator on 2018/4/3.
@@ -63,23 +52,38 @@ import io.reactivex.functions.Consumer;
 
 public class DeviceControlTwoActivity extends BaseActivity {
 
-
     @BindView(R.id.iv_device_control_goback)
     ImageView ivDeviceControlGoback;
     @BindView(R.id.tv_device_control_title)
     TextView tvDeviceControlTitle;
     @BindView(R.id.iv_device_control_more)
     ImageView ivDeviceControlMore;
-
-    private static String TAG = DeviceControlTwoActivity.class.getSimpleName();
+    @BindView(R.id.action_bar)
+    RelativeLayout actionBar;
+    @BindView(R.id.tv_timing_text)
+    TextView tvTimingText;
+    @BindView(R.id.iv_light_one)
+    ImageView ivLightOne;
+    @BindView(R.id.iv_switch_one)
+    TextView ivSwitchOne;
+    @BindView(R.id.iv_light_two)
+    ImageView ivLightTwo;
+    @BindView(R.id.iv_switch_two)
+    TextView ivSwitchTwo;
+    @BindView(R.id.tv_success)
+    TextView tvSuccess;
+    @BindView(R.id.tv_error)
+    TextView tvError;
+    @BindView(R.id.tv_total)
+    TextView tvTotal;
+    @BindView(R.id.rl_test)
+    LinearLayout rlTest;
     @BindView(R.id.iv_sound)
     ImageView ivSound;
-    @BindView(R.id.tv_light_one)
-    TextView tvLightOne;
-    @BindView(R.id.tv_light_two)
-    TextView tvLightTwo;
     @BindView(R.id.coordinatorLayout)
     CoordinatorLayout coordinatorLayout;
+
+    private static String TAG = DeviceControlTwoActivity.class.getSimpleName();
 
     /**
      * 灯1未开启
@@ -92,32 +96,18 @@ public class DeviceControlTwoActivity extends BaseActivity {
 
     private BleDevice bledevice;
     private String deviceNickname;
-    private Disposable subscribe;
 
-    //语音控制变量
-    // 语音识别对象
-    private SpeechRecognizer mAsr;
-    // 缓存
-    private SharedPreferences mSharedPreferences;
-    // 云端语法文件
-    private String mCloudGrammar = null;
-
-    private static final String KEY_GRAMMAR_ABNF_ID = "grammar_abnf_id";
-    private static final String GRAMMAR_TYPE_ABNF = "abnf";
-    private static final String GRAMMAR_TYPE_BNF = "bnf";
-
-    private String mEngineType = SpeechConstant.TYPE_CLOUD;
-    // 语法、词典临时变量
-    String mContent;
-    // 函数调用返回值
-    int ret = 0;
-    private MyProgressDialog dialog;
+    private int successCount = 0;
+    private int errorCount = 0;
+    private int count = 0;
 
     @Override
     protected int setLayoutId() {
         return R.layout.activity_device_control_two;
     }
 
+
+    @SuppressLint("CheckResult")
     @Override
     protected void initData() {
         super.initData();
@@ -125,18 +115,102 @@ public class DeviceControlTwoActivity extends BaseActivity {
         if (bledevice != null) {
             deviceNickname = DeviceNickNameDaoOpe.queryOne(this, CommonUtils.getMac(bledevice.getMac())).getDeviceNickname();
         }
-
-        // 初始化识别对象
-        mAsr = SpeechRecognizer.createRecognizer(this, mInitListener);
-        mCloudGrammar = FucUtil.readFile(this, "grammar_sample.abnf", "utf-8");
-
-        mSharedPreferences = getSharedPreferences(getPackageName(), MODE_PRIVATE);
-
-        dialog = MyProgressDialog.createProgressDialog(this, 5000, new MyProgressDialog.OnTimeOutListener() {
+        ivSwitchOne.setOnClickListener(new OnMultiClickListener() {
             @Override
-            public void onTimeOut(ProgressDialog dialog) {
-                dialog.dismiss();
-                SnackbarUtils.Short(coordinatorLayout, "连接超时").show();
+            public void onMultiClick(View v) {
+                count++;
+                tvTotal.setText(count + "");
+                if (isStateOne) {
+                    //关灯
+                    writeToBleOne(String.valueOf("fe010020ffffffffffffffffffffffffffffffff"));
+                } else {
+                    //开灯
+                    writeToBleOne(String.valueOf("fe010021ffffffffffffffffffffffffffffffff"));
+                }
+            }
+        });
+
+        ivSwitchTwo.setOnClickListener(new OnMultiClickListener() {
+            @Override
+            public void onMultiClick(View v) {
+                count++;
+                tvTotal.setText(count + "");
+                if (isStatetwo) {
+                    //关灯
+                    writeToBleTwo(String.valueOf("fe010010ffffffffffffffffffffffffffffffff"));
+                } else {
+                    //开灯
+                    writeToBleTwo(String.valueOf("fe010011ffffffffffffffffffffffffffffffff"));
+                }
+            }
+        });
+        final ProgressDialog dialog = new ProgressDialog(this);
+        Observable.interval(5, 5, TimeUnit.SECONDS)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .compose(this.<Long>bindUntilEvent(ActivityEvent.DESTROY))
+                .subscribe(new Consumer<Long>() {
+                    @Override
+                    public void accept(Long aLong) throws Exception {
+                        Logger.e("这是一个千古难题！");
+                        if (!BleManager.getInstance().isConnected(bledevice)) {
+                            dialog.show();
+                            dialog.setMessage("设备已断开，正在进行重连");
+                            BleManager.getInstance().connect(bledevice.getMac(), new BleGattCallback() {
+                                @Override
+                                public void onStartConnect() {
+
+                                }
+
+                                @Override
+                                public void onConnectFail(BleDevice bleDevice, BleException exception) {
+                                    final BluetoothGatt bluetoothGatt = BleManager.getInstance().getBluetoothGatt(bleDevice);
+                                    if (bluetoothGatt != null) {
+                                        new Handler().postDelayed(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                bluetoothGatt.disconnect();
+                                                bluetoothGatt.close();
+                                            }
+                                        }, 100);
+                                    }
+                                }
+
+                                @Override
+                                public void onConnectSuccess(BleDevice bleDevice, BluetoothGatt gatt, int status) {
+                                    getNotify();
+                                    new Handler().postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            dialog.dismiss();
+                                            sendMessage();
+                                            SnackbarUtils.Short(coordinatorLayout, "连接成功").show();
+                                        }
+                                    }, 300);
+                                }
+
+                                @Override
+                                public void onDisConnected(boolean isActiveDisConnected, BleDevice device, BluetoothGatt gatt, int status) {
+
+                                }
+                            });
+                        }
+                    }
+                });
+    }
+
+    private void sendMessage() {
+        BleManager.getInstance().write(bledevice, "0000fff0-0000-1000-8000-00805f9b34fb", "0000fff6-0000-1000-8000-00805f9b34fb", HexUtil.hexStringToBytes("FE0001FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF"), true, new BleWriteCallback() {
+            @Override
+            public void onWriteSuccess(int current, int total, byte[] justWrite) {
+                Logger.e("write success, current: " + current
+                        + " total: " + total
+                        + " justWrite: " + HexUtil.formatHexString(justWrite, true));
+            }
+
+            @Override
+            public void onWriteFailure(BleException exception) {
+                SnackbarUtils.Short(coordinatorLayout, "初始化灯泡状态失败");
             }
         });
     }
@@ -144,44 +218,55 @@ public class DeviceControlTwoActivity extends BaseActivity {
     /**
      * 获取通知
      */
+    @SuppressLint("CheckResult")
     private void getNotify() {
-        subscribe = Observable.interval(3, 3, TimeUnit.SECONDS)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<Long>() {
-                    @Override
-                    public void accept(Long aLong) throws Exception {
-                        BleManager.getInstance().notify(bledevice, "0000fff0-0000-1000-8000-00805f9b34fb", "0000fff6-0000-1000-8000-00805f9b34fb", new BleNotifyCallback() {
-                            @Override
-                            public void onNotifySuccess() {
-                                Logger.e("notify-> success");
-                            }
+        BleManager.getInstance().notify(bledevice, "0000fff0-0000-1000-8000-00805f9b34fb", "0000fff6-0000-1000-8000-00805f9b34fb", new BleNotifyCallback() {
+            @Override
+            public void onNotifySuccess() {
 
-                            @Override
-                            public void onNotifyFailure(BleException exception) {
-                                Logger.e("notify->" + exception.toString());
-                            }
+            }
 
-                            @Override
-                            public void onCharacteristicChanged(byte[] data) {
-                                Logger.e("notify->" + HexUtil.formatHexString(data, false));
-                            }
-                        });
-                        if (!BleManager.getInstance().isConnected(bledevice)) {
-                            //SnackbarUtils.Short(getWindow().getDecorView(), "设备未连接").show();
-                            ToastUtil.showToast("设备未连接");
-                        }
-                    }
-                });
+            @Override
+            public void onNotifyFailure(BleException exception) {
+                Logger.e("notify->" + exception.toString());
+            }
+
+            @Override
+            public void onCharacteristicChanged(byte[] data) {
+                String s = HexUtil.formatHexString(data, false);
+                if (s.equals("2010")) {
+                    ivLightOne.setImageResource(R.mipmap.device_light_off);
+                    ivLightTwo.setImageResource(R.mipmap.device_light_off);
+                } else if (s.equals("2011")) {
+                    ivLightOne.setImageResource(R.mipmap.device_light_off);
+                    ivLightTwo.setImageResource(R.mipmap.device_light_on);
+                } else if (s.equals("2110")) {
+                    ivLightOne.setImageResource(R.mipmap.device_light_on);
+                    ivLightTwo.setImageResource(R.mipmap.device_light_off);
+                } else if (s.equals("2111")) {
+                    ivLightOne.setImageResource(R.mipmap.device_light_on);
+                    ivLightTwo.setImageResource(R.mipmap.device_light_on);
+                }
+                Logger.e("notify->" + HexUtil.formatHexString(data, false));
+            }
+        });
     }
 
     @Override
     protected void onResume() {
+        super.onResume();
         //移动数据统计分析
+        Logger.e("oncreate");
         FlowerCollector.onResume(this);
         FlowerCollector.onPageStart(TAG);
-        super.onResume();
         if (bledevice != null) {
             getNotify();
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    sendMessage();
+                }
+            }, 100);
         }
     }
 
@@ -191,8 +276,7 @@ public class DeviceControlTwoActivity extends BaseActivity {
         mImmersionBar.fitsSystemWindows(true).statusBarColor(R.color.white).init();
     }
 
-
-    @OnClick({R.id.iv_device_control_goback, R.id.iv_device_control_more, R.id.iv_sound, R.id.tv_light_one, R.id.tv_light_two})
+    @OnClick({R.id.iv_device_control_goback, R.id.iv_device_control_more, R.id.iv_sound})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_device_control_goback:
@@ -204,99 +288,12 @@ public class DeviceControlTwoActivity extends BaseActivity {
                 break;
             case R.id.iv_sound:
                 //语音控制开关灯
-                setSound();
-                break;
-            case R.id.tv_light_one:
-                if (isStateOne) {
-                    //关灯
-                    writeToBleOne(String.valueOf("fe010020ffffffffffffffffffffffffffffffff"));
-                } else {
-                    //开灯
-                    writeToBleOne(String.valueOf("fe010021ffffffffffffffffffffffffffffffff"));
-                }
-                break;
-            case R.id.tv_light_two:
-                if (isStatetwo) {
-                    //关灯
-                    writeToBleTwo(String.valueOf("fe010010ffffffffffffffffffffffffffffffff"));
-                } else {
-                    //开灯
-                    writeToBleTwo(String.valueOf("fe010011ffffffffffffffffffffffffffffffff"));
-                }
+                Intent intent = new Intent(this, DeviceSoundControlActivity.class);
+                intent.putExtra("bledevice", bledevice);
+                startActivity(intent);
+                overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
                 break;
         }
-    }
-
-
-    /**
-     * 设置语音控制
-     */
-    private void setSound() {
-        if (null == mAsr) {
-            // 创建单例失败，与 21001 错误为同样原因，参考 http://bbs.xfyun.cn/forum.php?mod=viewthread&tid=9688
-            Logger.e("创建对象失败，请确认 libmsc.so 放置正确，且有调用 createUtility 进行初始化");
-            return;
-        }
-
-        if (null == mEngineType) {
-            Logger.e("请先选择识别引擎类型");
-            return;
-        }
-        mContent = new String(mCloudGrammar);
-        //指定引擎类型
-        mAsr.setParameter(SpeechConstant.ENGINE_TYPE, mEngineType);
-        mAsr.setParameter(SpeechConstant.TEXT_ENCODING, "utf-8");
-        ret = mAsr.buildGrammar(GRAMMAR_TYPE_ABNF, mContent, mCloudGrammarListener);
-        if (ret != ErrorCode.SUCCESS) {
-            Logger.e("语法构建失败,错误码：" + ret);
-            return;
-        }
-        requestPermission();
-        // 设置参数
-        if (!setParam()) {
-            Logger.e("请先构建语法。");
-            return;
-        }
-        ret = mAsr.startListening(mRecognizerListener);
-        if (ret != ErrorCode.SUCCESS) {
-            Logger.e("识别失败,错误码: " + ret);
-            return;
-        }
-    }
-
-    /**
-     * 向Ble写入数据
-     *
-     * @param s
-     */
-    private void writeToBleOne(String s) {
-        if (bledevice == null) {
-            return;
-        }
-        BleManager.getInstance().write(bledevice, "0000fff0-0000-1000-8000-00805f9b34fb", "0000fff6-0000-1000-8000-00805f9b34fb", HexUtil.hexStringToBytes(s), true, new BleWriteCallback() {
-            @Override
-            public void onWriteSuccess(int current, int total, byte[] justWrite) {
-                Logger.e("write success, current: " + current
-                        + " total: " + total
-                        + " justWrite: " + HexUtil.formatHexString(justWrite, true));
-                if (!isStateOne) {
-                    isStateOne = true;
-                    tvLightOne.setText("已开启");
-                    DeviceLogVo deviceLogVo = new DeviceLogVo(null, CommonUtils.getMac(bledevice.getMac()), bledevice.getName(), deviceNickname, CommonUtils.getDate(), 1, 1);
-                    DeviceDaoOpe.insertData(DeviceControlTwoActivity.this, deviceLogVo);
-                } else {
-                    isStateOne = false;
-                    tvLightOne.setText("已关闭");
-                    DeviceLogVo deviceLogVo = new DeviceLogVo(null, CommonUtils.getMac(bledevice.getMac()), bledevice.getName(), deviceNickname, CommonUtils.getDate(), 0, 1);
-                    DeviceDaoOpe.insertData(DeviceControlTwoActivity.this, deviceLogVo);
-                }
-            }
-
-            @Override
-            public void onWriteFailure(BleException exception) {
-                Logger.e("write" + exception.toString());
-            }
-        });
     }
 
 
@@ -305,263 +302,98 @@ public class DeviceControlTwoActivity extends BaseActivity {
      *
      * @param s
      */
-    private void writeToBleTwo(String s) {
+    synchronized private void writeToBleOne(final String s) {
         if (bledevice == null) {
             return;
         }
-        BleManager.getInstance().write(bledevice, "0000fff0-0000-1000-8000-00805f9b34fb", "0000fff6-0000-1000-8000-00805f9b34fb", HexUtil.hexStringToBytes(s), true, new BleWriteCallback() {
-            @Override
-            public void onWriteSuccess(int current, int total, byte[] justWrite) {
-                Logger.e("write success, current: " + current
-                        + " total: " + total
-                        + " justWrite: " + HexUtil.formatHexString(justWrite, true));
-                if (!isStatetwo) {
-                    isStatetwo = true;
-                    tvLightTwo.setText("已开启");
-                } else {
-                    isStatetwo = false;
-                    tvLightTwo.setText("已关闭");
-                }
-            }
-
-            @Override
-            public void onWriteFailure(BleException exception) {
-                Logger.e("write" + exception.toString());
-            }
-        });
-    }
-
-    /**
-     * 初始化监听器。
-     */
-    private InitListener mInitListener = new InitListener() {
-
-        @Override
-        public void onInit(int code) {
-            Log.d(TAG, "SpeechRecognizer init() code = " + code);
-            if (code != ErrorCode.SUCCESS) {
-                Logger.e("初始化失败,错误码：" + code);
-            }
-        }
-    };
-
-    /**
-     * 云端构建语法监听器。
-     */
-    private GrammarListener mCloudGrammarListener = new GrammarListener() {
-        @Override
-        public void onBuildFinish(String grammarId, SpeechError error) {
-            if (error == null) {
-                String grammarID = new String(grammarId);
-                SharedPreferences.Editor editor = mSharedPreferences.edit();
-                if (!TextUtils.isEmpty(grammarId))
-                    editor.putString(KEY_GRAMMAR_ABNF_ID, grammarID);
-                editor.commit();
-            } else {
-                Logger.e("语法构建失败,错误码：" + error.getErrorCode());
-            }
-        }
-    };
-
-    /**
-     * 识别监听器。
-     */
-    private RecognizerListener mRecognizerListener = new RecognizerListener() {
-
-        @Override
-        public void onVolumeChanged(int volume, byte[] data) {
-            if (volume < 10) {
-                Picasso.with(DeviceControlTwoActivity.this).load(R.mipmap.voice_empty).into(ivSound);
-            } else {
-                Picasso.with(DeviceControlTwoActivity.this).load(R.mipmap.voice_full).into(ivSound);
-            }
-        }
-
-        @Override
-        public void onResult(final RecognizerResult result, boolean isLast) {
-            if (null != result) {
-                Log.d(TAG, "recognizer result：" + result.getResultString());
-                String text;
-                if ("cloud".equalsIgnoreCase(mEngineType)) {
-                    text = JsonParser.parseIatResult(result.getResultString());
-                } else {
-                    text = JsonParser.parseLocalGrammarResult(result.getResultString());
-                }
-                Logger.e(text);
-                SnackbarUtils.Short(coordinatorLayout, text).show();
-                if (text.contains("一")) {
-                    if (text.contains("开") || text.contains("open")) {
-                        isStateOne = false;
-                        //开灯
-                        writeToBleOne(String.valueOf("fe010021ffffffffffffffffffffffffffffffff"));
-                    } else if (text.contains("关") || text.contains("close")) {
-                        isStateOne = true;
-                        //关灯
-                        writeToBleOne(String.valueOf("fe010020ffffffffffffffffffffffffffffffff"));
-                    }
-                } else if (text.contains("二")) {
-                    if (text.contains("开") || text.contains("open")) {
-                        isStatetwo = false;
-                        //开灯
-                        writeToBleTwo(String.valueOf("fe010011ffffffffffffffffffffffffffffffff"));
-                    } else if (text.contains("关") || text.contains("close")) {
-                        isStatetwo = true;
-                        //关灯
-                        writeToBleTwo(String.valueOf("fe010010ffffffffffffffffffffffffffffffff"));
-                    }
-                } else if (text.contains("全部")) {
-                    if (text.contains("开") || text.contains("open")) {
-                        isStateOne = false;
-                        //开灯
-                        writeToBleOne(String.valueOf("fe010021ffffffffffffffffffffffffffffffff"));
-                        try {
-                            Thread.sleep(2000);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                        isStatetwo = false;
-                        //开灯
-                        writeToBleTwo(String.valueOf("fe010011ffffffffffffffffffffffffffffffff"));
-                    } else if (text.contains("关") || text.contains("close")) {
-                        isStateOne = true;
-                        //关灯
-                        writeToBleOne(String.valueOf("fe010020ffffffffffffffffffffffffffffffff"));
-                        try {
-                            Thread.sleep(2000);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                        isStatetwo = true;
-                        //关灯
-                        writeToBleTwo(String.valueOf("fe010010ffffffffffffffffffffffffffffffff"));
-                    }
-                } else {
-                    SnackbarUtils.Short(coordinatorLayout, "识别不出来哦").show();
-                }
-            } else {
-                Log.d(TAG, "recognizer result : null");
-            }
-        }
-
-        @Override
-        public void onEndOfSpeech() {
-            // 此回调表示：检测到了语音的尾端点，已经进入识别过程，不再接受语音输入
-            showTip("结束说话");
-        }
-
-        @Override
-        public void onBeginOfSpeech() {
-            // 此回调表示：sdk内部录音机已经准备好了，用户可以开始语音输入
-            showTip("开始说话");
-        }
-
-        @Override
-        public void onError(SpeechError error) {
-            showTip("onError Code：" + error.getErrorCode());
-        }
-
-        @Override
-        public void onEvent(int eventType, int arg1, int arg2, Bundle obj) {
-            // 以下代码用于获取与云端的会话id，当业务出错时将会话id提供给技术支持人员，可用于查询会话日志，定位出错原因
-            // 若使用本地能力，会话id为null
-            //	if (SpeechEvent.EVENT_SESSION_ID == eventType) {
-            //		String sid = obj.getString(SpeechEvent.KEY_EVENT_SESSION_ID);
-            //		Log.d(TAG, "session id =" + sid);
-            //	}
-        }
-
-    };
-
-
-    private void requestPermission() {
-        AndPermission.with(this)
-                .runtime()
-                .permission(Permission.RECORD_AUDIO)
-                .rationale(new RuntimeRationale())
-                .onGranted(new Action<List<String>>() {
-                    @Override
-                    public void onAction(List<String> data) {
-                        SnackbarUtils.Short(coordinatorLayout, "授权成功").show();
-                    }
-                })
-                .onDenied(new Action<List<String>>() {
-                    @Override
-                    public void onAction(List<String> data) {
-                        SnackbarUtils.Short(coordinatorLayout, "授权失败").show();
-                    }
-                })
-                .start();
-    }
-
-
-    private void showTip(final String str) {
-        runOnUiThread(new Runnable() {
+        new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                SnackbarUtils.Short(coordinatorLayout, str).show();
+                BleManager.getInstance().write(bledevice, "0000fff0-0000-1000-8000-00805f9b34fb", "0000fff6-0000-1000-8000-00805f9b34fb", HexUtil.hexStringToBytes(s), true, new BleWriteCallback() {
+                    @Override
+                    public void onWriteSuccess(int current, int total, byte[] justWrite) {
+                        successCount++;
+                        tvSuccess.setText(successCount + "");
+                        Logger.e("write success, current: " + current
+                                + " total: " + total
+                                + " justWrite: " + HexUtil.formatHexString(justWrite, true) + "count:" + successCount);
+                        if (!isStateOne) {
+                            isStateOne = true;
+                            ivLightOne.setImageResource(R.mipmap.device_light_on);
+                            DeviceLogVo deviceLogVo = new DeviceLogVo(null, CommonUtils.getMac(bledevice.getMac()), bledevice.getName(), deviceNickname, CommonUtils.getDate(), 1, 1);
+                            DeviceDaoOpe.insertData(DeviceControlTwoActivity.this, deviceLogVo);
+                        } else {
+                            isStateOne = false;
+                            ivLightOne.setImageResource(R.mipmap.device_light_off);
+                            DeviceLogVo deviceLogVo = new DeviceLogVo(null, CommonUtils.getMac(bledevice.getMac()), bledevice.getName(), deviceNickname, CommonUtils.getDate(), 0, 1);
+                            DeviceDaoOpe.insertData(DeviceControlTwoActivity.this, deviceLogVo);
+                        }
+                    }
+
+                    @Override
+                    public void onWriteFailure(BleException exception) {
+                        errorCount++;
+                        tvError.setText(errorCount + "");
+                        Logger.e("write->" + exception.toString() + "---------count=" + errorCount);
+                    }
+                });
             }
-        });
+        }, 150);
     }
+
 
     /**
-     * 参数设置
+     * 向Ble写入数据
      *
-     * @return
+     * @param s
      */
-    public boolean setParam() {
-        boolean result = false;
-        //设置识别引擎
-        mAsr.setParameter(SpeechConstant.ENGINE_TYPE, mEngineType);
-        //设置返回结果为json格式
-        mAsr.setParameter(SpeechConstant.RESULT_TYPE, "json");
-
-        if ("cloud".equalsIgnoreCase(mEngineType)) {
-            String grammarId = mSharedPreferences.getString(KEY_GRAMMAR_ABNF_ID, null);
-            if (TextUtils.isEmpty(grammarId)) {
-                result = false;
-            } else {
-                //设置云端识别使用的语法id
-                mAsr.setParameter(SpeechConstant.CLOUD_GRAMMAR, grammarId);
-                result = true;
-            }
+    synchronized private void writeToBleTwo(final String s) {
+        if (bledevice == null) {
+            return;
         }
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                BleManager.getInstance().write(bledevice, "0000fff0-0000-1000-8000-00805f9b34fb", "0000fff6-0000-1000-8000-00805f9b34fb", HexUtil.hexStringToBytes(s), true, new BleWriteCallback() {
+                    @Override
+                    public void onWriteSuccess(int current, int total, byte[] justWrite) {
+                        successCount++;
+                        tvSuccess.setText(successCount + "");
+                        Logger.e("write success, current: " + current
+                                + " total: " + total
+                                + " justWrite: " + HexUtil.formatHexString(justWrite, true) + "count:" + successCount);
+                        if (!isStatetwo) {
+                            isStatetwo = true;
+                            ivLightTwo.setImageResource(R.mipmap.device_light_on);
+                        } else {
+                            isStatetwo = false;
+                            ivLightTwo.setImageResource(R.mipmap.device_light_off);
+                        }
+                    }
 
-        // 设置音频保存路径，保存音频格式支持pcm、wav，设置路径为sd卡请注意WRITE_EXTERNAL_STORAGE权限
-        // 注：AUDIO_FORMAT参数语记需要更新版本才能生效
-        mAsr.setParameter(SpeechConstant.AUDIO_FORMAT, "wav");
-        mAsr.setParameter(SpeechConstant.ASR_AUDIO_PATH, Environment.getExternalStorageDirectory() + "/msc/asr.wav");
-        return result;
+                    @Override
+                    public void onWriteFailure(BleException exception) {
+                        errorCount++;
+                        tvError.setText(errorCount + "");
+                        Logger.e("write->" + exception.toString() + "---------count=" + errorCount);
+                    }
+                });
+            }
+        }, 150);
     }
+
 
     @Override
     protected void onPause() {
         //移动数据统计分析
         FlowerCollector.onPageEnd(TAG);
         FlowerCollector.onPause(this);
+        BleManager.getInstance().stopNotify(bledevice, "0000fff0-0000-1000-8000-00805f9b34fb", "0000fff6-0000-1000-8000-00805f9b34fb");
         super.onPause();
-        if (subscribe != null) {
-            subscribe.dispose();
-        }
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        if (subscribe != null) {
-            subscribe.dispose();
-        }
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (subscribe != null) {
-            subscribe.dispose();
-        }
-        if (null != mAsr) {
-            // 退出时释放连接
-            mAsr.cancel();
-            mAsr.destroy();
-        }
     }
 }
