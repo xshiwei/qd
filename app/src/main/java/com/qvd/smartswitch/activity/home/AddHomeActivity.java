@@ -1,17 +1,13 @@
 package com.qvd.smartswitch.activity.home;
 
 import android.content.Intent;
-import android.graphics.drawable.ColorDrawable;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -21,14 +17,30 @@ import com.lljjcoder.bean.DistrictBean;
 import com.lljjcoder.bean.ProvinceBean;
 import com.lljjcoder.citywheel.CityConfig;
 import com.lljjcoder.style.citypickerview.CityPickerView;
+import com.orhanobut.logger.Logger;
 import com.qvd.smartswitch.R;
 import com.qvd.smartswitch.activity.MainActivity;
 import com.qvd.smartswitch.activity.base.BaseActivity;
+import com.qvd.smartswitch.adapter.HomeSettingPicAdapter;
+import com.qvd.smartswitch.api.RetrofitService;
+import com.qvd.smartswitch.model.home.HomeBackgroundVo;
+import com.qvd.smartswitch.model.login.MessageVo;
 import com.qvd.smartswitch.utils.CommonUtils;
+import com.qvd.smartswitch.utils.ConfigUtils;
 import com.qvd.smartswitch.utils.SnackbarUtils;
+import com.qvd.smartswitch.widget.MyPopupWindowOne;
+import com.qvd.smartswitch.widget.MyPopupWindowThree;
+import com.qvd.smartswitch.widget.MyPopupWindowTwo;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by Administrator on 2018/6/13 0013.
@@ -49,17 +61,18 @@ public class AddHomeActivity extends BaseActivity {
     RelativeLayout rlHomeLocation;
     @BindView(R.id.tv_confirm)
     TextView tvConfirm;
-
+    @BindView(R.id.recyclerview)
+    RecyclerView recyclerview;
 
     /**
      * 更改名称的popupwindow
      */
-    private PopupWindow popupWindowName;
+    private MyPopupWindowThree popupWindowName;
 
     /**
      * 删除家庭的popupwindow
      */
-    private PopupWindow popupwindowConfirm;
+    private MyPopupWindowTwo popupwindowConfirm;
 
     /**
      * 声明城市选择器
@@ -68,6 +81,16 @@ public class AddHomeActivity extends BaseActivity {
     private String provinceName;   //省
     private String cityName;       //市
     private String districtName;   //区
+
+    /**
+     * 图片集合
+     */
+    private List<HomeBackgroundVo> list = new ArrayList<>();
+    private HomeSettingPicAdapter adapter;
+    /**
+     * 当未保存时弹出该提示框
+     */
+    private MyPopupWindowOne popupWindowBack;
 
     @Override
     protected int setLayoutId() {
@@ -84,6 +107,7 @@ public class AddHomeActivity extends BaseActivity {
     protected void initData() {
         super.initData();
         tvCommonActionbarTitle.setText("添加家庭");
+        setRecycleView();
         mPicker.init(this);
     }
 
@@ -91,12 +115,17 @@ public class AddHomeActivity extends BaseActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_common_actionbar_goback:
-                finish();
+                if (!CommonUtils.isEmptyString(tvName.getText().toString()) || !CommonUtils.isEmptyString(tvLocation.getText().toString())) {
+                    showPopupWindowBack();
+                    popupWindowBack.showPopupWindow(tvCommonActionbarTitle);
+                } else {
+                    finish();
+                }
                 break;
             case R.id.rl_home_name:
                 //设置名字
-                showPopupwindowName();
-                popupWindowName.showAtLocation(view, Gravity.BOTTOM, 0, 30);
+                showPopupWindowName();
+                popupWindowName.showPopupWindow(view);
                 break;
             case R.id.rl_home_location:
                 //设置位置
@@ -106,15 +135,91 @@ public class AddHomeActivity extends BaseActivity {
                 //确认
                 //判断名字或者地址有没有填
                 if (CommonUtils.isEmptyString(tvName.getText().toString()) || CommonUtils.isEmptyString(tvLocation.getText().toString())) {
-                    tvConfirm.setEnabled(false);
                     SnackbarUtils.Short(tvConfirm, "名字或位置不能为空").show();
                 } else {
-                    tvConfirm.setEnabled(true);
-                    showPopupwindowConfirm();
-                    popupwindowConfirm.showAtLocation(view, Gravity.BOTTOM, 0, 30);
+                    addFamily();
                 }
                 break;
         }
+    }
+
+    /**
+     * 创建退出时提示用户还未创建成功的popupwindow
+     */
+    private void showPopupWindowBack() {
+        popupWindowBack = new MyPopupWindowOne(this, "您当前创建的家庭还没有保存，是否放弃编辑并退出？", "继续编辑", "退出", new MyPopupWindowOne.IPopupWindowListener() {
+            @Override
+            public void cancel() {
+                popupWindowBack.dismiss();
+            }
+
+            @Override
+            public void confirm() {
+                popupWindowBack.dismiss();
+                finish();
+            }
+        });
+    }
+
+    /**
+     * 设置图片列表
+     */
+    private void setRecycleView() {
+        list.add(new HomeBackgroundVo(R.color.black));
+        list.add(new HomeBackgroundVo(R.color.red));
+        list.add(new HomeBackgroundVo(R.color.orange));
+        recyclerview.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        adapter = new HomeSettingPicAdapter(this, list);
+        recyclerview.setAdapter(adapter);
+        adapter.setOnItemClickListener(new HomeSettingPicAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                adapter.setSelection(position);
+            }
+
+            @Override
+            public void onItemLongClickListener(View view, int position) {
+
+            }
+        });
+    }
+
+    /**
+     * 添加家庭
+     */
+    private void addFamily() {
+        RetrofitService.qdoApi.addFamily(tvName.getText().toString(), tvLocation.getText().toString(), ConfigUtils.user_id, "https://www.qq745.com/uploads/allimg/141009/1-14100ZT451-51.jpg")
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<MessageVo>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(MessageVo messageVo) {
+                        //判断有没有添加成功，添加成功则跳出一个弹窗提示。
+                        if (messageVo.getCode() == 200) {
+                            showPopupWindowConfirm();
+                            popupwindowConfirm.showPopupWindow(tvCommonActionbarTitle);
+                        } else if (messageVo.getCode() == 400) {
+                            SnackbarUtils.Short(tvCommonActionbarTitle, "保存失败");
+                        } else {
+                            SnackbarUtils.Short(tvCommonActionbarTitle, "网络连接超时");
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Logger.e(e.getMessage());
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
     }
 
     /**
@@ -155,94 +260,60 @@ public class AddHomeActivity extends BaseActivity {
 
 
     /**
-     * 显示删除家庭的popupwindow
+     * 显示popupwindow
      */
-    private void showPopupwindowConfirm() {
-        LayoutInflater inflater = LayoutInflater.from(this);
-        View view = inflater.inflate(R.layout.popupwindow_dialog_two, null, false);
-        popupwindowConfirm = new PopupWindow(view, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
-        popupwindowConfirm.setBackgroundDrawable(new ColorDrawable());
-        popupwindowConfirm.setAnimationStyle(R.style.AnimBottom);
-        popupwindowConfirm.setOutsideTouchable(true);
-        popupwindowConfirm.setFocusable(true);
-        CommonUtils.setBackgroundAlpha(this, 0.5f);
-        popupwindowConfirm.setOnDismissListener(new PopupWindow.OnDismissListener() {
+    private void showPopupWindowConfirm() {
+        popupwindowConfirm = new MyPopupWindowTwo(this, "已成功创建- 二宝", "是否现在立刻去设置新家庭", "稍后再说", "立即设置", new MyPopupWindowTwo.IPopupWindowListener() {
             @Override
-            public void onDismiss() {
-                CommonUtils.setBackgroundAlpha(AddHomeActivity.this, 1.0f);
-            }
-        });
-
-        TextView title = view.findViewById(R.id.tv_title);
-        TextView cancel = view.findViewById(R.id.tv_cancel);
-        TextView confirm = view.findViewById(R.id.tv_confirm);
-        TextView text = view.findViewById(R.id.tv_text);
-
-        cancel.setText("稍后再说");
-        confirm.setText("立即设置");
-        title.setText("已成功创建- 二宝");
-        text.setText("是否现在立刻去设置新家庭");
-
-        cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            public void cancel() {
                 popupwindowConfirm.dismiss();
                 startActivity(new Intent(AddHomeActivity.this, MainActivity.class));
                 overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
                 finish();
             }
-        });
 
-        confirm.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void confirm() {
+                popupwindowConfirm.dismiss();
                 startActivity(new Intent(AddHomeActivity.this, AddRoomListActivity.class));
                 overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
-                popupwindowConfirm.dismiss();
                 finish();
             }
         });
-
-
     }
 
 
     /**
      * 显示更换名字的popupwindow
      */
-    private void showPopupwindowName() {
-        LayoutInflater inflater = LayoutInflater.from(this);
-        View view = inflater.inflate(R.layout.popupwindow_edittext, null, false);
-        popupWindowName = new PopupWindow(view, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
-        popupWindowName.setBackgroundDrawable(new ColorDrawable());
-        popupWindowName.setAnimationStyle(R.style.AnimBottom);
-        popupWindowName.setOutsideTouchable(true);
-        popupWindowName.setFocusable(true);
-        CommonUtils.setBackgroundAlpha(this, 0.5f);
-        popupWindowName.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
-        popupWindowName.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+    private void showPopupWindowName() {
 
-        popupWindowName.setOnDismissListener(new PopupWindow.OnDismissListener() {
+        popupWindowName = new MyPopupWindowThree(this, "设置家庭名称", tvName.getText().toString(), new MyPopupWindowThree.IPopupWindowListener() {
             @Override
-            public void onDismiss() {
-                CommonUtils.setBackgroundAlpha(AddHomeActivity.this, 1.0f);
+            public void cancel() {
+                popupWindowName.dismiss();
+                CommonUtils.closeSoftKeyboard(AddHomeActivity.this);
+            }
+
+            @Override
+            public void confirm() {
+                EditText etEditText = popupWindowName.getEtEditText();
+                tvName.setText(etEditText.getText().toString());
+                popupWindowName.dismiss();
+                CommonUtils.closeSoftKeyboard(AddHomeActivity.this);
             }
         });
+        final EditText etEditText = popupWindowName.getEtEditText();
+        final TextView tvConfirm = popupWindowName.getTvConfirm();
+        final TextView tvError = popupWindowName.getTvError();
 
-        TextView title = view.findViewById(R.id.tv_title);
-        final EditText editText = view.findViewById(R.id.et_edittext);
-        ImageView delete = view.findViewById(R.id.iv_delete);
-        final TextView error = view.findViewById(R.id.tv_error);
-        TextView cancel = view.findViewById(R.id.tv_cancel);
-        final TextView confirm = view.findViewById(R.id.tv_confirm);
-
-        title.setText("设置家庭名称");
-        editText.setText("");
-        if (editText.getText().toString().equals("")) {
-            confirm.setEnabled(false);
-            confirm.setTextColor(getResources().getColor(R.color.home_setting_text_three));
+        if (etEditText.getText().toString().equals("")) {
+            tvConfirm.setEnabled(false);
+            tvConfirm.setTextColor(etEditText.getResources().getColor(R.color.home_setting_text_three));
         }
-        editText.addTextChangedListener(new TextWatcher() {
+
+        //判断当前输入是否符合要求
+        etEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -255,45 +326,31 @@ public class AddHomeActivity extends BaseActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (s.toString().length() > 10) {
-                    error.setVisibility(View.VISIBLE);
-                    error.setText("长度超过最大");
-                    confirm.setEnabled(false);
-                    confirm.setTextColor(getResources().getColor(R.color.home_setting_text_three));
+                if (s.toString().length() > 20) {
+                    tvError.setVisibility(View.VISIBLE);
+                    tvError.setText("长度超过最大");
+                    tvConfirm.setEnabled(false);
+                    tvConfirm.setTextColor(getResources().getColor(R.color.home_setting_text_three));
                 } else if (s.toString().length() == 0) {
-                    confirm.setEnabled(false);
-                    confirm.setTextColor(getResources().getColor(R.color.home_setting_text_three));
-                    editText.setCursorVisible(false);
+                    tvConfirm.setEnabled(false);
+                    tvConfirm.setTextColor(getResources().getColor(R.color.home_setting_text_three));
+                    etEditText.setCursorVisible(false);
                 } else {
-                    error.setVisibility(View.GONE);
-                    confirm.setEnabled(true);
-                    confirm.setTextColor(getResources().getColor(R.color.popupwindow_confirm_text));
+                    tvError.setVisibility(View.GONE);
+                    tvConfirm.setEnabled(true);
+                    tvConfirm.setTextColor(getResources().getColor(R.color.popupwindow_confirm_text));
                 }
             }
         });
+    }
 
-        cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                popupWindowName.dismiss();
-            }
-        });
-
-        delete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                editText.setText("");
-                editText.setCursorVisible(false);
-            }
-        });
-
-        confirm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                tvName.setText(editText.getText().toString());
-                popupWindowName.dismiss();
-            }
-        });
-
+    @Override
+    public void onBackPressed() {
+        if (!CommonUtils.isEmptyString(tvName.getText().toString()) || !CommonUtils.isEmptyString(tvLocation.getText().toString())) {
+            showPopupWindowBack();
+            popupWindowBack.showPopupWindow(tvCommonActionbarTitle);
+        } else {
+            finish();
+        }
     }
 }

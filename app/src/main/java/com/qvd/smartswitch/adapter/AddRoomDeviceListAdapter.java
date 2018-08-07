@@ -9,7 +9,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.qvd.smartswitch.R;
+import com.qvd.smartswitch.model.home.DeviceListVo;
 import com.qvd.smartswitch.model.home.RoomDeviceVo;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,15 +23,15 @@ import java.util.List;
 
 public class AddRoomDeviceListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private Context context;
-    private List<RoomDeviceVo> data;
+    private List<DeviceListVo.MyDataBean> data;
     private OnItemClickListener onItemClickListener;
 
-    public AddRoomDeviceListAdapter(Context context, List<RoomDeviceVo> data) {
+    public AddRoomDeviceListAdapter(Context context, List<DeviceListVo.MyDataBean> data) {
         this.context = context;
         this.data = data;
     }
 
-    public List<RoomDeviceVo> getAllList() {
+    public List<DeviceListVo.MyDataBean> getAllList() {
         if (data == null) {
             data = new ArrayList<>();
         }
@@ -41,7 +43,7 @@ public class AddRoomDeviceListAdapter extends RecyclerView.Adapter<RecyclerView.
     }
 
     public interface OnItemClickListener {
-        void onItemClickListener(int pos, List<RoomDeviceVo> myLiveList);
+        void onItemClickListener(int pos, List<DeviceListVo.MyDataBean> myLiveList);
     }
 
 
@@ -69,16 +71,15 @@ public class AddRoomDeviceListAdapter extends RecyclerView.Adapter<RecyclerView.
             } else {
                 ((MyViewHolder) holder).iv_item_device_selete.setImageResource(R.mipmap.device_log_not_selete);
             }
-            ((MyViewHolder) holder).tv_text.setText(data.get(position).getText());
+            Picasso.with(context).load(data.get(position).getBean().getDevice_pic()).into(((MyViewHolder) holder).iv_pic);
+            ((MyViewHolder) holder).tv_text.setText(data.get(position).getBean().getDevice_name());
         }
     }
-
 
     @Override
     public int getItemCount() {
         return data.size();
     }
-
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
         ImageView iv_item_device_selete, iv_pic;

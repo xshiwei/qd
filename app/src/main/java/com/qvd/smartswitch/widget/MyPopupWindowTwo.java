@@ -27,7 +27,7 @@ public class MyPopupWindowTwo extends PopupWindow {
         LayoutInflater inflater = LayoutInflater.from(activity);
         rootView = inflater.inflate(R.layout.popupwindow_dialog_two, null, false);
         this.setContentView(rootView);
-        this.setWidth(ViewGroup.LayoutParams.WRAP_CONTENT);
+        this.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
         this.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
         this.setBackgroundDrawable(new ColorDrawable());
         this.setAnimationStyle(R.style.AnimBottom);
@@ -76,7 +76,7 @@ public class MyPopupWindowTwo extends PopupWindow {
      */
     public void showPopupWindow(View parent) {
         if (!this.isShowing()) {
-            this.showAtLocation(parent, Gravity.BOTTOM, 0, 20);
+            this.showAtLocation(parent, Gravity.BOTTOM, 0, 30);
         } else {
             this.dismiss();
         }

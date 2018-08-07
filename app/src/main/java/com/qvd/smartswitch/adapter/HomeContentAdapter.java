@@ -8,8 +8,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.qvd.smartswitch.R;
-import com.qvd.smartswitch.model.home.Footer;
-import com.qvd.smartswitch.model.home.Header;
 import com.qvd.smartswitch.model.home.Test1Vo;
 
 import java.util.List;
@@ -20,10 +18,9 @@ import java.util.List;
 
 public class HomeContentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private Context context;
-    private List<Object> data;
-    private int ITEM_HEADER = 1, ITEM_CONTENT = 2;
+    private List<Test1Vo> data;
 
-    public HomeContentAdapter(Context context, List<Object> data) {
+    public HomeContentAdapter(Context context, List<Test1Vo> data) {
         this.context = context;
         this.data = data;
     }
@@ -45,24 +42,14 @@ public class HomeContentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view;
-        if (viewType == ITEM_HEADER) {
-            view = LayoutInflater.from(context).inflate(R.layout.item_home_content, parent, false);
-            return new MyViewHolder(view);
-        } else if (viewType == ITEM_CONTENT) {
-            view = LayoutInflater.from(context).inflate(R.layout.item_home_content_item, parent, false);
-            return new ViewHolderContent(view);
-        }
-        return null;
+        view = LayoutInflater.from(context).inflate(R.layout.item_home_content_item, parent, false);
+        return new ViewHolderContent(view);
     }
 
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
-        if (holder instanceof MyViewHolder) {
-            Header header = (Header) data.get(position);
-            ((MyViewHolder) holder).tv_room.setText(header.getText());
-        } else if (holder instanceof ViewHolderContent) {
-            Footer footer = (Footer) data.get(position);
-            ((ViewHolderContent) holder).tv_text.setText(footer.getDevice());
+        if (holder instanceof ViewHolderContent) {
+            ((ViewHolderContent) holder).tv_text.setText(data.get(position).getText());
             if (onItemClickListener != null) {
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
 
@@ -86,28 +73,8 @@ public class HomeContentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     }
 
     @Override
-    public int getItemViewType(int position) {
-        if (data.get(position) instanceof Header) {
-            return ITEM_HEADER;
-        } else if (data.get(position) instanceof Footer) {
-            return ITEM_CONTENT;
-        }
-        return ITEM_CONTENT;
-    }
-
-    @Override
     public int getItemCount() {
-        return data.size() == 0 ? 1 : data.size();
-    }
-
-
-    public class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView tv_room;
-
-        public MyViewHolder(View itemView) {
-            super(itemView);
-            tv_room = itemView.findViewById(R.id.tv_room);
-        }
+        return data.size();
     }
 
     public class ViewHolderContent extends RecyclerView.ViewHolder {

@@ -25,6 +25,7 @@ import com.iflytek.cloud.RecognizerResult;
 import com.iflytek.cloud.SpeechConstant;
 import com.iflytek.cloud.SpeechError;
 import com.iflytek.cloud.SpeechRecognizer;
+import com.iflytek.sunflower.FlowerCollector;
 import com.orhanobut.logger.Logger;
 import com.qvd.smartswitch.R;
 import com.qvd.smartswitch.activity.base.BaseActivity;
@@ -73,6 +74,7 @@ public class DeviceSoundControlActivity extends BaseActivity {
     // 函数调用返回值
     int ret = 0;
     private BleDevice bledevice;
+    private static String TAG = DeviceSoundControlActivity.class.getSimpleName();
 
     @Override
     protected int setLayoutId() {
@@ -104,6 +106,13 @@ public class DeviceSoundControlActivity extends BaseActivity {
                 finish();
                 break;
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        FlowerCollector.onResume(this);
+        FlowerCollector.onPageStart(TAG);
     }
 
     /**
@@ -201,40 +210,40 @@ public class DeviceSoundControlActivity extends BaseActivity {
                 if (text.contains("一")) {
                     if (text.contains("开") || text.contains("open")) {
                         //开灯
-                        writeToBle(String.valueOf("fe010021ffffffffffffffffffffffffffffffff"));
+                        writeToBle(String.valueOf("fe010011ffffffffffffffffffffffffffffffff"));
                     } else if (text.contains("关") || text.contains("close")) {
                         //关灯
-                        writeToBle(String.valueOf("fe010020ffffffffffffffffffffffffffffffff"));
+                        writeToBle(String.valueOf("fe010010ffffffffffffffffffffffffffffffff"));
                     }
                 } else if (text.contains("二")) {
                     if (text.contains("开") || text.contains("open")) {
                         //开灯
-                        writeToBle(String.valueOf("fe010011ffffffffffffffffffffffffffffffff"));
+                        writeToBle(String.valueOf("fe010021ffffffffffffffffffffffffffffffff"));
                     } else if (text.contains("关") || text.contains("close")) {
                         //关灯
-                        writeToBle(String.valueOf("fe010010ffffffffffffffffffffffffffffffff"));
+                        writeToBle(String.valueOf("fe010020ffffffffffffffffffffffffffffffff"));
                     }
                 } else if (text.contains("全部")) {
                     if (text.contains("开") || text.contains("open")) {
                         //开灯
-                        writeToBle(String.valueOf("fe010021ffffffffffffffffffffffffffffffff"));
+                        writeToBle(String.valueOf("fe010011ffffffffffffffffffffffffffffffff"));
                         try {
                             Thread.sleep(2000);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
                         //开灯
-                        writeToBle(String.valueOf("fe010011ffffffffffffffffffffffffffffffff"));
+                        writeToBle(String.valueOf("fe010021ffffffffffffffffffffffffffffffff"));
                     } else if (text.contains("关") || text.contains("close")) {
                         //关灯
-                        writeToBle(String.valueOf("fe010020ffffffffffffffffffffffffffffffff"));
+                        writeToBle(String.valueOf("fe010010ffffffffffffffffffffffffffffffff"));
                         try {
                             Thread.sleep(2000);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
                         //关灯
-                        writeToBle(String.valueOf("fe010010ffffffffffffffffffffffffffffffff"));
+                        writeToBle(String.valueOf("fe010020ffffffffffffffffffffffffffffffff"));
                     }
                 } else {
                     tvText.setText("识别不出来哦");
@@ -371,6 +380,9 @@ public class DeviceSoundControlActivity extends BaseActivity {
             mAsr.cancel();
             mAsr.destroy();
         }
+        //移动数据统计分析
+        FlowerCollector.onPageEnd(TAG);
+        FlowerCollector.onPause(this);
         BleManager.getInstance().stopNotify(bledevice, "0000fff0-0000-1000-8000-00805f9b34fb", "0000fff6-0000-1000-8000-00805f9b34fb");
     }
 }

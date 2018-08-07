@@ -11,7 +11,7 @@ public class SharedPreferencesUtil {
 
     private static final String spFileName = "qevdo_sp";
     public static final String FIRST_OPEN = "first_open";
-    public static final String TIMG_TIME = "timg_time";
+    public static final String USER_ID = "user_id";
 
     /**
      * 获取是否第一次进入app
@@ -45,30 +45,28 @@ public class SharedPreferencesUtil {
     }
 
     /**
-     * 提交保存定时的信息
+     * 写入String数据
      *
      * @param context
      * @param strKey
-     * @param strTime
+     * @param strData
      */
-    public static void putTimgTime(Context context, String strKey, String strTime) {
+    public static void putString(Context context, String strKey, String strData) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(spFileName, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(strKey, strTime);
+        editor.putString(strKey, strData);
         editor.commit();
     }
 
-
     /**
-     * 获取保存的定时的消息
+     * 获取String数据
      *
      * @param context
      * @param strKey
-     * @param strDefault
      * @return
      */
-    public static String getTimgTime(Context context, String strKey, String strDefault) {
+    public static String getString(Context context, String strKey) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(spFileName, Context.MODE_PRIVATE);
-        return sharedPreferences.getString(strKey, strDefault);
+        return sharedPreferences.getString(strKey, "");
     }
 }

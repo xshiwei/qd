@@ -9,7 +9,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.qvd.smartswitch.R;
+import com.qvd.smartswitch.model.home.RoomPicListVo;
 import com.qvd.smartswitch.model.home.Test2Vo;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -19,9 +21,9 @@ import java.util.List;
 
 public class AddRoomListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private Context context;
-    private List<Test2Vo> data;
+    private List<RoomPicListVo.DataBean> data;
 
-    public AddRoomListAdapter(Context context, List<Test2Vo> data) {
+    public AddRoomListAdapter(Context context, List<RoomPicListVo.DataBean> data) {
         this.context = context;
         this.data = data;
     }
@@ -50,25 +52,18 @@ public class AddRoomListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof MyViewHolder) {
             if (onItemClickListener != null) {
-                holder.itemView.setOnClickListener(new View.OnClickListener() {
-
-                    @Override
-                    public void onClick(View view) {
-                        int position = holder.getLayoutPosition();
-                        onItemClickListener.onItemClick(holder.itemView, position);
-                    }
+                holder.itemView.setOnClickListener(view -> {
+                    int position1 = holder.getLayoutPosition();
+                    onItemClickListener.onItemClick(holder.itemView, position1);
                 });
-                holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
-
-                    @Override
-                    public boolean onLongClick(View view) {
-                        int position = holder.getLayoutPosition();
-                        onItemClickListener.onItemClick(holder.itemView, position);
-                        return false;
-                    }
+                holder.itemView.setOnLongClickListener(view -> {
+                    int position12 = holder.getLayoutPosition();
+                    onItemClickListener.onItemClick(holder.itemView, position12);
+                    return false;
                 });
             }
-            ((MyViewHolder) holder).tv_text.setText(data.get(position).getTest());
+            Picasso.with(context).load(data.get(position).getRoom_max_pic()).into(((MyViewHolder) holder).iv_pic);
+            ((MyViewHolder) holder).tv_text.setText(data.get(position).getRoom_name());
         }
     }
 

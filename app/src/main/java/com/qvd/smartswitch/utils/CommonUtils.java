@@ -8,10 +8,13 @@ import android.bluetooth.BluetoothGatt;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.hardware.input.InputManager;
+import android.os.Build;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresPermission;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.telephony.TelephonyManager;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -39,6 +42,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
+
+import static android.Manifest.permission.READ_PHONE_STATE;
 
 
 public class CommonUtils {
@@ -161,51 +166,18 @@ public class CommonUtils {
     }
 
     /**
-     * 获取通知
-     */
-    @SuppressLint("CheckResult")
-    public static void getNotify(final RxAppCompatActivity activity, final BleDevice bleDevice, final String uuid_service, final String uuid_notify) {
-        Observable.interval(1, 1, TimeUnit.SECONDS)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .compose(activity.<Long>bindUntilEvent(ActivityEvent.DESTROY))
-                .subscribe(new Consumer<Long>() {
-                    @Override
-                    public void accept(Long aLong) throws Exception {
-                        BleManager.getInstance().notify(bleDevice, uuid_service, uuid_notify, new BleNotifyCallback() {
-                            @Override
-                            public void onNotifySuccess() {
-
-                            }
-
-                            @Override
-                            public void onNotifyFailure(BleException exception) {
-
-                            }
-
-                            @Override
-                            public void onCharacteristicChanged(byte[] data) {
-                                Logger.e("notify->" + HexUtil.formatHexString(data, false));
-                            }
-                        });
-                    }
-                });
-    }
-
-    /**
      * 获取重连通知
      */
     @SuppressLint("CheckResult")
     public static void getConnectNotify(final RxAppCompatActivity activity, final BleDevice bleDevice, final View view) {
         final ProgressDialog dialog = new ProgressDialog(activity);
-        Observable.interval(5, 5, TimeUnit.SECONDS)
+        Observable.interval(3, 3, TimeUnit.SECONDS)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .compose(activity.<Long>bindUntilEvent(ActivityEvent.DESTROY))
                 .subscribe(new Consumer<Long>() {
                     @Override
                     public void accept(Long aLong) throws Exception {
-                        Logger.e("这是一个千古难题！");
                         if (!BleManager.getInstance().isConnected(bleDevice)) {
                             dialog.show();
                             dialog.setMessage("设备已断开，正在进行重连");
@@ -249,13 +221,57 @@ public class CommonUtils {
      * 关闭软键盘
      */
     public static void closeSoftKeyboard(Activity activity) {
-        //隐藏软键盘
-        View view = activity.getWindow().peekDecorView();
-        if (view != null) {
-            InputMethodManager inputmanger = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
-            inputmanger.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+        /**
+         * 设置输入法,如果当前页面输入法打开则关闭
+         * @param activity
+         */
+        View a = activity.getCurrentFocus();
+        if (a != null) {
+            InputMethodManager imm = (InputMethodManager) activity.getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            try {
+                imm.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
+    /**
+     * 获得IMEI
+     * <p>Must hold
+     * {@code <uses-permission android:name="android.permission.READ_PHONE_STATE" />}</p>
+     *
+     * @return the IMEI
+     */
+    @SuppressLint({"HardwareIds", "MissingPermission"})
+    @RequiresPermission(READ_PHONE_STATE)
+    public static String getIMEI(Context context) {
+        TelephonyManager tm =
+                (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            return tm != null ? tm.getImei() : "";
+        }
+        return tm != null ? tm.getDeviceId() : "";
+    }
+
+
+    /**
+     * 根据设备型号返回设备名称
+     *
+     * @param name
+     * @return
+     */
+    public static String getDeviceName(String name) {
+        String newName = "";
+        switch (name) {
+            case "QS02":
+                newName = "蓝牙智能开关";
+                break;
+            case "qevdo_qs03":
+                newName = "Wi_Fi智能开关";
+                break;
+        }
+        return newName;
+    }
 
 }

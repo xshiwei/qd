@@ -122,10 +122,10 @@ public class DeviceControlTwoActivity extends BaseActivity {
                 tvTotal.setText(count + "");
                 if (isStateOne) {
                     //关灯
-                    writeToBleOne(String.valueOf("fe010020ffffffffffffffffffffffffffffffff"));
+                    writeToBleOne(String.valueOf("fe010010ffffffffffffffffffffffffffffffff"));
                 } else {
                     //开灯
-                    writeToBleOne(String.valueOf("fe010021ffffffffffffffffffffffffffffffff"));
+                    writeToBleOne(String.valueOf("fe010011ffffffffffffffffffffffffffffffff"));
                 }
             }
         });
@@ -137,10 +137,10 @@ public class DeviceControlTwoActivity extends BaseActivity {
                 tvTotal.setText(count + "");
                 if (isStatetwo) {
                     //关灯
-                    writeToBleTwo(String.valueOf("fe010010ffffffffffffffffffffffffffffffff"));
+                    writeToBleTwo(String.valueOf("fe010020ffffffffffffffffffffffffffffffff"));
                 } else {
                     //开灯
-                    writeToBleTwo(String.valueOf("fe010011ffffffffffffffffffffffffffffffff"));
+                    writeToBleTwo(String.valueOf("fe010021ffffffffffffffffffffffffffffffff"));
                 }
             }
         });
@@ -234,16 +234,24 @@ public class DeviceControlTwoActivity extends BaseActivity {
             @Override
             public void onCharacteristicChanged(byte[] data) {
                 String s = HexUtil.formatHexString(data, false);
-                if (s.equals("2010")) {
+                if (s.equals("1020")) {
+                    isStateOne = false;
+                    isStatetwo = false;
                     ivLightOne.setImageResource(R.mipmap.device_light_off);
                     ivLightTwo.setImageResource(R.mipmap.device_light_off);
-                } else if (s.equals("2011")) {
-                    ivLightOne.setImageResource(R.mipmap.device_light_off);
-                    ivLightTwo.setImageResource(R.mipmap.device_light_on);
-                } else if (s.equals("2110")) {
+                } else if (s.equals("1120")) {
+                    isStateOne = true;
+                    isStatetwo = false;
                     ivLightOne.setImageResource(R.mipmap.device_light_on);
                     ivLightTwo.setImageResource(R.mipmap.device_light_off);
-                } else if (s.equals("2111")) {
+                } else if (s.equals("1021")) {
+                    isStateOne = false;
+                    isStatetwo = true;
+                    ivLightOne.setImageResource(R.mipmap.device_light_off);
+                    ivLightTwo.setImageResource(R.mipmap.device_light_on);
+                } else if (s.equals("1121")) {
+                    isStateOne = true;
+                    isStatetwo = true;
                     ivLightOne.setImageResource(R.mipmap.device_light_on);
                     ivLightTwo.setImageResource(R.mipmap.device_light_on);
                 }
@@ -385,9 +393,6 @@ public class DeviceControlTwoActivity extends BaseActivity {
 
     @Override
     protected void onPause() {
-        //移动数据统计分析
-        FlowerCollector.onPageEnd(TAG);
-        FlowerCollector.onPause(this);
         BleManager.getInstance().stopNotify(bledevice, "0000fff0-0000-1000-8000-00805f9b34fb", "0000fff6-0000-1000-8000-00805f9b34fb");
         super.onPause();
     }

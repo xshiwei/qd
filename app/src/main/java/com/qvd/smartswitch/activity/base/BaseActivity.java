@@ -18,6 +18,7 @@ import com.gyf.barlibrary.ImmersionBar;
 import com.orhanobut.logger.Logger;
 import com.qvd.smartswitch.R;
 import com.qvd.smartswitch.activity.SplashActivity;
+import com.qvd.smartswitch.utils.PermissionUtils;
 import com.qvd.smartswitch.utils.RuntimeRationale;
 import com.qvd.smartswitch.utils.SysApplication;
 import com.qvd.smartswitch.utils.ToastUtil;
@@ -82,7 +83,7 @@ public abstract class BaseActivity extends RxAppCompatActivity {
     protected void initImmersionBar() {
         //在BaseActivity里初始化
         mImmersionBar = ImmersionBar.with(this);
-        mImmersionBar.init();
+        mImmersionBar.statusBarDarkFont(true,1).init();
     }
 
     @Override
@@ -91,10 +92,7 @@ public abstract class BaseActivity extends RxAppCompatActivity {
     }
 
     protected void initData() {
-        requestPermission(Permission.Group.LOCATION);
-        requestPermission(Permission.WRITE_EXTERNAL_STORAGE);
-        requestPermission(Permission.READ_EXTERNAL_STORAGE);
-        requestPermission(Permission.READ_PHONE_STATE);
+
     }
 
     protected void initView() {
@@ -129,68 +127,69 @@ public abstract class BaseActivity extends RxAppCompatActivity {
         }
     }
 
-    private void requestPermission(String... permissions) {
-        AndPermission.with(this)
-                .runtime()
-                .permission(permissions)
-                .rationale(new RuntimeRationale())
-                .onGranted(new Action<List<String>>() {
-                    @Override
-                    public void onAction(List<String> permissions) {
-                        //Logger.e("授权成功");
-                    }
-                })
-                .onDenied(new Action<List<String>>() {
-                    @Override
-                    public void onAction(@NonNull List<String> permissions) {
-                        //Logger.e("授权失败");
-                        if (AndPermission.hasAlwaysDeniedPermission(getApplicationContext(), permissions)) {
-                            showSettingDialog(BaseActivity.this, permissions);
-                        }
-                    }
-                })
-                .start();
-    }
-
-    /**
-     * Display setting dialog.
-     */
-    public void showSettingDialog(Context context, final List<String> permissions) {
-        List<String> permissionNames = Permission.transformText(context, permissions);
-        String message = context.getString(R.string.message_permission_always_failed) + TextUtils.join("\n", permissionNames);
-
-        new AlertDialog.Builder(context)
-                .setCancelable(false)
-                .setTitle("申请权限")
-                .setMessage(message)
-                .setPositiveButton("设置", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        setPermission();
-                    }
-                })
-                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                    }
-                })
-                .show();
-    }
-
-    /**
-     * Set permissions.
-     */
-    private void setPermission() {
-        AndPermission.with(this)
-                .runtime()
-                .setting()
-                .onComeback(new Setting.Action() {
-                    @Override
-                    public void onAction() {
-                        ToastUtil.showToast("设置权限");
-                    }
-                })
-                .start();
-    }
+//    private void requestPermission(String... permissions) {
+//        AndPermission.with(this)
+//                .runtime()
+//                .permission(permissions)
+//                .rationale(new RuntimeRationale())
+//                .onGranted(new Action<List<String>>() {
+//                    @Override
+//                    public void onAction(List<String> permissions) {
+//                        //Logger.e("授权成功");
+//                    }
+//                })
+//                .onDenied(new Action<List<String>>() {
+//                    @Override
+//                    public void onAction(@NonNull List<String> permissions) {
+//                        //Logger.e("授权失败");
+//                        if (AndPermission.hasAlwaysDeniedPermission(getApplicationContext(), permissions)) {
+//                            showSettingDialog(BaseActivity.this, permissions);
+//                        }
+//                    }
+//                })
+//                .start();
+//    }
+//
+//    /**
+//     * Display setting dialog.
+//     */
+//    public void showSettingDialog(Context context, final List<String> permissions) {
+//        List<String> permissionNames = Permission.transformText(context, permissions);
+//        String message = context.getString(R.string.message_permission_always_failed) + TextUtils.join("\n", permissionNames);
+//
+//        new AlertDialog.Builder(context)
+//                .setCancelable(false)
+//                .setTitle("申请权限")
+//                .setMessage(message)
+//                .setPositiveButton("设置", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//                        setPermission();
+//                    }
+//                })
+//                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+//                    @Override
+//                    public void onClick(DialogInterface dialog, int which) {
+//
+//                    }
+//                })
+//                .show();
+//    }
+//
+//    /**
+//     * Set permissions.
+//     */
+//    private void setPermission() {
+//        AndPermission.with(this)
+//                .runtime()
+//                .setting()
+//                .onComeback(new Setting.Action() {
+//                    @Override
+//                    public void onAction() {
+//                        ToastUtil.showToast("设置权限");
+//                    }
+//                })
+//                .start();
+//    }
 
 }

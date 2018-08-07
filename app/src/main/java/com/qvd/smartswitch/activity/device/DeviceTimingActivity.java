@@ -18,6 +18,7 @@ import com.clj.fastble.callback.BleWriteCallback;
 import com.clj.fastble.data.BleDevice;
 import com.clj.fastble.exception.BleException;
 import com.clj.fastble.utils.HexUtil;
+import com.iflytek.sunflower.FlowerCollector;
 import com.orhanobut.logger.Logger;
 import com.qvd.smartswitch.R;
 import com.qvd.smartswitch.activity.base.BaseActivity;
@@ -106,13 +107,12 @@ public class DeviceTimingActivity extends BaseActivity {
     /**
      * 删除定时
      */
-    private PopupWindow popupwindowDelete;
+    private MyPopupWindowOne popupwindowDelete;
     private GregorianCalendar calendar;
     /**
      * 判断是否超过当天
      */
     private String isOutDay;
-    private MyPopupWindowOne popupwindowOne;
 
     @Override
     protected int setLayoutId() {
@@ -185,6 +185,7 @@ public class DeviceTimingActivity extends BaseActivity {
         picker.setValue(value);
     }
 
+
     @Override
     protected void initImmersionBar() {
         super.initImmersionBar();
@@ -218,63 +219,22 @@ public class DeviceTimingActivity extends BaseActivity {
                 //showPopupwindowDelete();
                 //popupwindowDelete.showAtLocation(view, Gravity.CENTER, 0, 0);
                 show();
-                popupwindowOne.showPopupWindow(view);
+                popupwindowDelete.showPopupWindow(view);
                 break;
         }
     }
 
-    /**
-     * 显示删除家庭的popupwindow
-     */
-    private void showPopupwindowDelete() {
-        LayoutInflater inflater = LayoutInflater.from(this);
-        View view = inflater.inflate(R.layout.popupwindow_dialog, null, false);
-        popupwindowDelete = new PopupWindow(view, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
-        popupwindowDelete.setBackgroundDrawable(new ColorDrawable());
-        popupwindowDelete.setAnimationStyle(R.style.AnimBottom);
-        popupwindowDelete.setOutsideTouchable(true);
-        popupwindowDelete.setFocusable(true);
-        CommonUtils.setBackgroundAlpha(this, 0.5f);
-        popupwindowDelete.setOnDismissListener(new PopupWindow.OnDismissListener() {
-            @Override
-            public void onDismiss() {
-                CommonUtils.setBackgroundAlpha(DeviceTimingActivity.this, 1.0f);
-            }
-        });
-
-        TextView title = view.findViewById(R.id.tv_title);
-        TextView cancel = view.findViewById(R.id.tv_cancel);
-        TextView confirm = view.findViewById(R.id.tv_confirm);
-
-        title.setText("您确定要删除这条智能吗？");
-
-        cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                popupwindowDelete.dismiss();
-            }
-        });
-
-        confirm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                writeToBleCancleTiming();
-                popupwindowDelete.dismiss();
-            }
-        });
-    }
-
     private void show() {
-        popupwindowOne = new MyPopupWindowOne(this, "您确定要删除这条智能吗？", new MyPopupWindowOne.IPopupWindowListener() {
+        popupwindowDelete = new MyPopupWindowOne(this, "您确定要删除这条智能吗？", "取消", "确定", new MyPopupWindowOne.IPopupWindowListener() {
             @Override
             public void cancel() {
-                popupwindowOne.dismiss();
+                popupwindowDelete.dismiss();
             }
 
             @Override
             public void confirm() {
                 writeToBleCancleTiming();
-                popupwindowOne.dismiss();
+                popupwindowDelete.dismiss();
             }
         });
     }

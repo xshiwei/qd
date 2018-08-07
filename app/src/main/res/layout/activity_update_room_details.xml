@@ -11,19 +11,19 @@
         android:background="@color/white">
 
         <TextView
-            android:textColor="@color/home_setting_text_two"
             android:id="@+id/tv_cancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/x20"
-            android:background="@drawable/add_room_cancel_selector"
+            android:background="@drawable/selector_circle_shallow_gray_gray_five"
             android:clickable="true"
             android:paddingBottom="@dimen/y15"
             android:paddingLeft="@dimen/x20"
             android:paddingRight="@dimen/x20"
             android:paddingTop="@dimen/y15"
             android:text="取消"
+            android:textColor="@color/home_setting_text_two"
             android:textSize="14sp" />
 
         <TextView
@@ -43,7 +43,7 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/x20"
             android:layout_marginRight="@dimen/x20"
-            android:background="@drawable/add_room_cancel_unselete_background"
+            android:background="@drawable/circle_shallow_gray_five"
             android:clickable="true"
             android:paddingBottom="@dimen/y15"
             android:paddingLeft="@dimen/x20"
@@ -119,14 +119,20 @@
             android:textSize="14sp" />
 
 
-        <ImageView
-            android:id="@+id/iv_pic"
+        <RelativeLayout
+            android:background="@color/popupwindow_edittext"
             android:layout_width="@dimen/x70"
             android:layout_height="@dimen/y70"
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/x20"
-            android:layout_toLeftOf="@+id/iv_more_two"
-            android:background="@color/red" />
+            android:layout_toLeftOf="@+id/iv_more_two">
+
+            <ImageView
+                android:id="@+id/iv_pic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true" />
+        </RelativeLayout>
 
 
         <ImageView

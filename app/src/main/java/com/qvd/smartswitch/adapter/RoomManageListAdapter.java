@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.qvd.smartswitch.R;
+import com.qvd.smartswitch.model.home.RoomListVo;
 import com.qvd.smartswitch.model.home.Test2Vo;
 
 import java.util.List;
@@ -19,9 +20,9 @@ import java.util.List;
 
 public class RoomManageListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private Context context;
-    private List<Test2Vo> data;
+    private List<RoomListVo.DataBean> data;
 
-    public RoomManageListAdapter(Context context, List<Test2Vo> data) {
+    public RoomManageListAdapter(Context context, List<RoomListVo.DataBean> data) {
         this.context = context;
         this.data = data;
     }
@@ -63,12 +64,12 @@ public class RoomManageListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                     @Override
                     public boolean onLongClick(View view) {
                         int position = holder.getLayoutPosition();
-                        onItemClickListener.onItemClick(holder.itemView, position);
-                        return false;
+                        onItemClickListener.onItemLongClickListener(holder.itemView, position);
+                        return true;
                     }
                 });
             }
-            ((MyViewHolder) holder).tv_text.setText(data.get(position).getTest());
+            ((MyViewHolder) holder).tv_text.setText(data.get(position).getRoom_name());
         }
     }
 

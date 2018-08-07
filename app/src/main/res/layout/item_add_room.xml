@@ -1,29 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="@dimen/x160"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginLeft="@dimen/x5"
-    android:layout_marginRight="@dimen/x5"
     android:layout_marginTop="@dimen/y20">
 
-    <ImageView
-        android:id="@+id/iv_pic"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/y160"
-        android:src="@color/add_room_background" />
+    <RelativeLayout
+        android:layout_centerHorizontal="true"
+        android:background="@color/popupwindow_edittext"
+        android:id="@+id/rl_pic"
+        android:layout_width="@dimen/x120"
+        android:layout_height="@dimen/y120">
+
+        <ImageView
+            android:layout_centerInParent="true"
+            android:id="@+id/iv_pic"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/room_pic" />
+    </RelativeLayout>
+
 
     <TextView
         android:id="@+id/tv_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/iv_pic"
+        android:layout_below="@+id/rl_pic"
         android:layout_centerHorizontal="true"
         android:gravity="center"
-        android:paddingBottom="@dimen/y10"
+        android:paddingBottom="@dimen/y20"
         android:paddingTop="@dimen/y10"
         android:text="客厅"
         android:textColor="@color/add_room_text"
-        android:textSize="14sp" />
-
+        android:textSize="13sp" />
 
 </RelativeLayout>

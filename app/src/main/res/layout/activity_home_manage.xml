@@ -15,7 +15,7 @@
         android:layout_below="@+id/action_bar"
         android:layout_marginLeft="@dimen/x30"
         android:layout_marginTop="@dimen/y40"
-        android:text="我的空间"
+        android:text="我的家庭"
         android:textColor="@color/home_setting_text_three"
         android:textSize="12sp" />
 

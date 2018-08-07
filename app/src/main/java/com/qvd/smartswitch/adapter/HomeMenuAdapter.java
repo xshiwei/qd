@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.qvd.smartswitch.R;
+import com.qvd.smartswitch.model.home.HomeListVo;
 import com.qvd.smartswitch.model.home.Test2Vo;
 
 import java.util.List;
@@ -18,9 +19,9 @@ import java.util.List;
 
 public class HomeMenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private Context context;
-    private List<Test2Vo> data;
+    private List<HomeListVo.DataBean> data;
 
-    public HomeMenuAdapter(Context context, List<Test2Vo> data) {
+    public HomeMenuAdapter(Context context, List<HomeListVo.DataBean> data) {
         this.context = context;
         this.data = data;
     }
@@ -67,7 +68,7 @@ public class HomeMenuAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     }
                 });
             }
-            ((MyViewHolder) holder).tv_text.setText(data.get(position).getTest());
+            ((MyViewHolder) holder).tv_text.setText(data.get(position).getFamily_name());
         }
     }
 

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/home_manage_backgroud"
+    android:orientation="vertical">
+
+    <include layout="@layout/common_actionbar" />
+
+    <TextView
+        android:id="@+id/tv_connect"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y80"
+        android:layout_marginTop="@dimen/y20"
+        android:background="@drawable/layout_seletor"
+        android:clickable="true"
+        android:gravity="center"
+        android:text="连接" />
+
+    <TextView
+        android:id="@+id/tv_disconnect"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y80"
+        android:layout_marginTop="@dimen/y20"
+        android:background="@drawable/layout_seletor"
+        android:clickable="true"
+        android:gravity="center"
+        android:text="断开连接" />
+
+    <TextView
+        android:id="@+id/tv_publish"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y80"
+        android:layout_marginTop="@dimen/y20"
+        android:background="@drawable/layout_seletor"
+        android:clickable="true"
+        android:gravity="center"
+        android:text="发布" />
+
+    <TextView
+        android:id="@+id/tv_subscriber"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y80"
+        android:layout_marginTop="@dimen/y20"
+        android:background="@drawable/layout_seletor"
+        android:clickable="true"
+        android:gravity="center"
+        android:text="订阅" />
+
+    <TextView
+        android:id="@+id/tv_unSubscriber"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y80"
+        android:layout_marginTop="@dimen/y20"
+        android:background="@drawable/layout_seletor"
+        android:clickable="true"
+        android:gravity="center"
+        android:text="取消订阅" />
+
+
+    <TextView
+        android:id="@+id/tv_text"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/y20"
+        android:padding="5dp"
+        android:textSize="14sp" />
+
+
+</LinearLayout>

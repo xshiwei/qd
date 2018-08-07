@@ -11,6 +11,8 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 
+import com.qvd.smartswitch.model.device.ScanResultVo;
+import com.qvd.smartswitch.utils.CommonUtils;
 
 import java.util.LinkedList;
 import java.util.Random;
@@ -34,7 +36,7 @@ public class RandomTextView extends FrameLayout
     private static final int TEXT_SIZE = 12;
 
     private Random random;
-    private Vector<String> vecKeywords;
+    private Vector<ScanResultVo> vecKeywords;
     private int width;
     private int height;
     private int mode = RippleView.MODE_OUT;
@@ -80,28 +82,27 @@ public class RandomTextView extends FrameLayout
     /**
      * 添加RippleOutView的内容
      *
-     * @param keyword
+     * @param resultVo
      */
-    public void addKeyWord(String keyword) {
+    public void addKeyWord(ScanResultVo resultVo) {
         if (vecKeywords.size() < MAX) {
-            if (!vecKeywords.contains(keyword))
-                vecKeywords.add(keyword);
+            vecKeywords.add(resultVo);
         }
     }
 
-    public Vector<String> getKeyWords() {
+    public Vector<ScanResultVo> getKeyWords() {
         return vecKeywords;
     }
 
-    public void removeKeyWord(String keyword) {
-        if (vecKeywords.contains(keyword)) {
-            vecKeywords.remove(keyword);
+    public void removeKeyWords() {
+        if (vecKeywords != null) {
+            vecKeywords.clear();
         }
     }
 
     private void init(AttributeSet attrs, Context context) {
         random = new Random();
-        vecKeywords = new Vector<String>(MAX);
+        vecKeywords = new Vector<ScanResultVo>(MAX);
         getViewTreeObserver().addOnGlobalLayoutListener(this);
 
     }
@@ -139,7 +140,7 @@ public class RandomTextView extends FrameLayout
             LinkedList<RippleView> listTxtBottom = new LinkedList<>();
 
             for (int i = 0; i < size; i++) {
-                String keyword = vecKeywords.get(i);
+                String keyword = vecKeywords.get(i).getDeviceName();
                 // 随机颜色  
                 int ranColor = fontColor;
                 // 随机位置，糙值  
@@ -244,8 +245,8 @@ public class RandomTextView extends FrameLayout
                 sortXYList(listTxt, i + 1);
             }
             FrameLayout.LayoutParams layParams = new FrameLayout.LayoutParams(
-            /* FrameLayout.LayoutParams.WRAP_CONTENT */200,
-            /* FrameLayout.LayoutParams.WRAP_CONTENT */200);
+                    /* FrameLayout.LayoutParams.WRAP_CONTENT */200,
+                    /* FrameLayout.LayoutParams.WRAP_CONTENT */200);
             layParams.gravity = Gravity.LEFT | Gravity.TOP;
             layParams.leftMargin = iXY[IDX_X];
             layParams.topMargin = iXY[IDX_Y];

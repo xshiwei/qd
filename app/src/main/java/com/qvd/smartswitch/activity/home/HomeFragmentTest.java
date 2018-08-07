@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.RequiresApi;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,26 +18,41 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.melnykov.fab.FloatingActionButton;
+import com.orhanobut.logger.Logger;
 import com.qvd.smartswitch.R;
 import com.qvd.smartswitch.activity.base.BaseFragment;
-import com.qvd.smartswitch.activity.login.LoginTestActivity;
+import com.qvd.smartswitch.activity.wifi.DeviceWifiControlActivity;
+import com.qvd.smartswitch.activity.wifi.MqttTestActivity;
 import com.qvd.smartswitch.adapter.HomeContentAdapter;
 import com.qvd.smartswitch.adapter.HomeContentTwoAdapter;
 import com.qvd.smartswitch.adapter.HomeListAdapter;
 import com.qvd.smartswitch.adapter.HomeMenuAdapter;
-import com.qvd.smartswitch.model.home.Footer;
-import com.qvd.smartswitch.model.home.HomeContentUtils;
+import com.qvd.smartswitch.api.RetrofitService;
+import com.qvd.smartswitch.model.home.HomeListVo;
 import com.qvd.smartswitch.model.home.Test1Vo;
 import com.qvd.smartswitch.model.home.Test2Vo;
 import com.qvd.smartswitch.model.home.TestVo;
+import com.qvd.smartswitch.model.login.MessageVo;
+import com.qvd.smartswitch.utils.ConfigUtils;
+import com.qvd.smartswitch.utils.PermissionUtils;
+import com.qvd.smartswitch.utils.SnackbarUtils;
+import com.qvd.smartswitch.utils.ToastUtil;
+import com.qvd.smartswitch.widget.EmptyLayout;
 import com.scwang.smartrefresh.header.MaterialHeader;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.yanzhenjie.permission.Permission;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.Unbinder;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by Administrator on 2018/6/6 0006.
@@ -72,6 +88,10 @@ public class HomeFragmentTest extends BaseFragment {
     RelativeLayout rlLayout;
     @BindView(R.id.fab)
     FloatingActionButton fab;
+    @BindView(R.id.rl_list)
+    RelativeLayout rlList;
+    @BindView(R.id.emptylayout)
+    EmptyLayout emptylayout;
 
 
     public static int mPosition = 0; //通过这个位置来设置当前的图片类型和文字颜色
@@ -92,13 +112,10 @@ public class HomeFragmentTest extends BaseFragment {
      */
     private List<Test2Vo> listContent2 = new ArrayList<>();
     /**
-     * room适配器
+     * 房间点击后设备适配器
      */
     private HomeContentAdapter contentAdapter;
-    /**
-     * 设备数据源
-     */
-    private List<Object> objectList = new ArrayList<>();
+
     /**
      * 服务器获取的设备数据源
      */
@@ -110,7 +127,7 @@ public class HomeFragmentTest extends BaseFragment {
     /**
      * menu家庭列表数据
      */
-    private List<Test2Vo> menuList = new ArrayList<>();
+    private List<HomeListVo.DataBean> menuList = new ArrayList<>();
     /**
      * menu数据适配器
      */
@@ -132,60 +149,23 @@ public class HomeFragmentTest extends BaseFragment {
     @Override
     protected void initData() {
         super.initData();
-        //获取左侧list列表数据
-        list.add(new TestVo("常用", 1));
-        list.add(new TestVo("常用", 2));
-        list.add(new TestVo("常用", 1));
+        PermissionUtils.requestPermission(getActivity(), Permission.WRITE_EXTERNAL_STORAGE);
+        PermissionUtils.requestPermission(getActivity(), Permission.READ_EXTERNAL_STORAGE);
+        PermissionUtils.requestPermission(getActivity(), Permission.READ_PHONE_STATE);
+    }
 
-        //获取右侧常用内容数据
-        for (int i = 0; i < 2; i++) {
-            listContent2.add(new Test2Vo("电动牙刷"));
-            listContent2.add(new Test2Vo("电动牙刷"));
-        }
-        //获取右侧家庭设备数据
-        for (int i = 0; i < 2; i++) {
-            List<Test1Vo.ArgumentsBean> list = new ArrayList<>();
-            list.add(new Test1Vo.ArgumentsBean("你好"));
-            contentList.add(new Test1Vo("办公室", list));
-        }
-        //转成我们自己定义的格式
-        objectList.addAll(HomeContentUtils.getDataAfterHandle(contentList));
+    @Override
+    public void onResume() {
+        super.onResume();
+        initEvent();
+        setMenuOnClick();
+    }
 
-        //获取menu列表数据
-        menuList.add(new Test2Vo("纯粹慵懒"));
-        menuList.add(new Test2Vo("笑忘颜"));
 
-        //设置左侧列表
-        listAdapter = new HomeListAdapter(getActivity(), list);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false) {
-            @Override
-            public boolean canScrollVertically() {
-                return false;
-            }
-        };
-        rvList.setLayoutManager(layoutManager);
-        rvList.setAdapter(listAdapter);
-
-        //设置常用列表
-        twoAdapter = new HomeContentTwoAdapter(getActivity(), listContent2);
-        rvContentTwo.setLayoutManager(new GridLayoutManager(getActivity(), 2, LinearLayoutManager.VERTICAL, false));
-        rvContentTwo.setAdapter(twoAdapter);
-
-        //设置room列表
-        //contentAdapter = new HomeContentAdapter(getActivity(), objectList);
-        //rvContent.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-        //rvContent.setAdapter(contentAdapter);
-
-        //设置刷新控件头部高度
-        refreshLayout.setHeaderHeight(100);
-        refreshLayout.setEnableLoadmoreWhenContentNotFull(true);//是否在列表不满一页时候开启上拉加载功能
-        //设置头部样式
-        refreshLayout.setRefreshHeader(new MaterialHeader(getActivity()));
-
-        //设置FloatingActionButton
-        fab.attachToRecyclerView(rvContent);
-        fab.attachToRecyclerView(rvContentTwo);
-
+    /**
+     * 设置菜单点击事件
+     */
+    private void setMenuOnClick() {
         //设置左边菜单点击事件
         listAdapter.setOnItemClickListener(new HomeListAdapter.OnItemClickListener() {
             @Override
@@ -202,7 +182,7 @@ public class HomeFragmentTest extends BaseFragment {
                     rvContentTwo.setVisibility(View.VISIBLE);
                     rvContent.setVisibility(View.GONE);
                 } else if (list.get(position).getType() == 2) {
-                    contentAdapter = new HomeContentAdapter(getActivity(), objectList);
+                    contentAdapter = new HomeContentAdapter(getActivity(), contentList);
                     rvContent.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
                     rvContent.setAdapter(contentAdapter);
                     contentAdapter.notifyDataSetChanged();
@@ -212,7 +192,6 @@ public class HomeFragmentTest extends BaseFragment {
                     contentAdapter.setOnItemClickListener(new HomeContentAdapter.OnItemClickListener() {
                         @Override
                         public void onItemClick(View view, int position) {
-                            Footer footer = (Footer) objectList.get(position);
                             //ToastUtil.showToast("点击了。。。" + footer.getDevice());
                         }
 
@@ -229,7 +208,113 @@ public class HomeFragmentTest extends BaseFragment {
 
             }
         });
+    }
 
+
+    /**
+     * 初始化加载界面
+     */
+    private void initEvent() {
+        rlList.setVisibility(View.VISIBLE);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                rvContentTwo.setVisibility(View.VISIBLE);
+            }
+        }, 1500);
+        //获取左侧list列表数据
+        list.clear();
+        list.add(new TestVo("常用", 1));
+        list.add(new TestVo("常用", 2));
+        list.add(new TestVo("常用", 1));
+
+        //获取右侧常用内容数据
+        listContent2.clear();
+        for (int i = 0; i < 2; i++) {
+            listContent2.add(new Test2Vo("电动牙刷"));
+            listContent2.add(new Test2Vo("电动牙刷"));
+        }
+        //获取右侧家庭设备数据
+        contentList.clear();
+        for (int i = 0; i < 2; i++) {
+            contentList.add(new Test1Vo("办公室"));
+        }
+
+        //获取menu列表数据
+        getHomeMenuList();
+
+        //设置左侧列表
+        listAdapter = new HomeListAdapter(getActivity(), list);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false) {
+            @Override
+            public boolean canScrollVertically() {
+                return false;
+            }
+        };
+        rvList.setLayoutManager(layoutManager);
+        rvList.setAdapter(listAdapter);
+
+        //设置常用列表,默认进入首页显示该列表
+        twoAdapter = new HomeContentTwoAdapter(getActivity(), listContent2);
+        rvContentTwo.setLayoutManager(new GridLayoutManager(getActivity(), 2, LinearLayoutManager.VERTICAL, false));
+        rvContentTwo.setAdapter(twoAdapter);
+
+        //设置刷新控件头部高度
+        refreshLayout.setHeaderHeight(100);
+        refreshLayout.setEnableLoadmoreWhenContentNotFull(true);//是否在列表不满一页时候开启上拉加载功能
+        //设置头部样式
+        refreshLayout.setRefreshHeader(new MaterialHeader(getActivity()));
+
+        //设置FloatingActionButton
+        fab.attachToRecyclerView(rvContent);
+        fab.attachToRecyclerView(rvContentTwo);
+    }
+
+    /**
+     * 获取家庭列表
+     */
+    private void getHomeMenuList() {
+        RetrofitService.qdoApi.getFamilyList(ConfigUtils.user_id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<HomeListVo>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(HomeListVo homeListVo) {
+                        if (homeListVo != null) {
+                            if (homeListVo.getCode() == 200) {
+                                menuList.clear();
+                                for (HomeListVo.DataBean dataBean : homeListVo.getData()) {
+                                    if (dataBean.getIs_opened() == 1) {
+                                        tvSceneSetting.setText(dataBean.getFamily_name());
+                                        ConfigUtils.family_locate = dataBean;
+                                    }
+                                    menuList.add(dataBean);
+                                    emptylayout.hide();
+                                }
+                            } else if (homeListVo.getCode() == 400) {
+                                emptylayout.showError();
+                                SnackbarUtils.Short(mRootView, "获取失败").show();
+                            } else {
+                                SnackbarUtils.Short(mRootView, "连接超时").show();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
     }
 
 
@@ -248,6 +333,7 @@ public class HomeFragmentTest extends BaseFragment {
         // 设置此参数获得焦点，否则无法点击
         popupWindow.setFocusable(true);
         RecyclerView recycleView = view.findViewById(R.id.recyclerview);
+        RelativeLayout rl_home_manage = view.findViewById(R.id.rl_home_manage);
         recycleView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         menuAdapter = new HomeMenuAdapter(getActivity(), menuList);
         recycleView.setAdapter(menuAdapter);
@@ -255,8 +341,8 @@ public class HomeFragmentTest extends BaseFragment {
             @Override
             public void onItemClick(View view, int position) {
                 popupWindow.dismiss();
-                startActivity(new Intent(getActivity(), HomeSettingActivity.class));
-                getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+                //切换家庭
+                replaceFamily(menuList.get(position).getFamily_id());
             }
 
             @Override
@@ -264,6 +350,50 @@ public class HomeFragmentTest extends BaseFragment {
 
             }
         });
+        //家庭管理设置
+        rl_home_manage.setOnClickListener(v -> {
+            popupWindow.dismiss();
+            startActivity(new Intent(getActivity(), HomeManageActivity.class));
+            getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+        });
+    }
+
+
+    /**
+     * 切换家庭
+     */
+    private void replaceFamily(String family_id) {
+        RetrofitService.qdoApi.switchFamily(family_id, ConfigUtils.user_id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<MessageVo>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(MessageVo messageVo) {
+                        if (messageVo != null) {
+                            if (messageVo.getCode() == 200) {
+                                emptylayout.showLoading(R.layout.view_loading, getString(R.string.device_scaning));
+                                initEvent();
+                            } else {
+                                ToastUtil.showToast("切换失败");
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Logger.e(e.getMessage());
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
@@ -271,26 +401,28 @@ public class HomeFragmentTest extends BaseFragment {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_menu:
+                //添加设备
                 startActivity(new Intent(getActivity(), AddDeviceActivity.class));
                 getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
                 break;
             case R.id.home_setting:
-                startActivity(new Intent(getActivity(), HomeManageActivity.class));
+                //房间管理
+                startActivity(new Intent(getActivity(), RoomManageActivity.class).putExtra("family_id", ConfigUtils.family_locate.getFamily_id()));
                 getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
                 break;
             case R.id.tv_scene_setting:
                 //用户注册后默认是有一个房间的，不存在为空。
-                if (menuList.size() == 1) {
-                    startActivity(new Intent(getActivity(), HomeSettingActivity.class));
-                    getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
-                } else {
-                    shouPopupwindow();
-                    popupWindow.showAsDropDown(tvSceneSetting, 30, 0);
-                }
+                shouPopupwindow();
+                popupWindow.showAsDropDown(tvSceneSetting, 30, 0);
                 break;
             case R.id.fab:
                 //声音控制界面
-                startActivity(new Intent(getActivity(), LoginTestActivity.class));
+//                startActivity(new Intent(getActivity(), LoginTestActivity.class));
+//                startActivity(new Intent(getActivity(), ConfirmLightFlickerActivity.class));
+//                startActivity(new Intent(getActivity(), MqttTestActivity.class));
+//                startActivity(new Intent(getActivity(), DeviceWifiControlActivity.class));
+//                startActivity(new Intent(getActivity(), DeviceConnectActivity.class));
+                startActivity(new Intent(getActivity(), SetDeviceToRoomActivity.class));
                 getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
                 break;
         }

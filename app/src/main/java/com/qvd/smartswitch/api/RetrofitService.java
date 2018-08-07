@@ -1,10 +1,15 @@
 package com.qvd.smartswitch.api;
 
+import android.app.Activity;
 import android.support.annotation.NonNull;
+import android.view.Window;
+import android.view.WindowManager;
 
 import com.orhanobut.logger.Logger;
 import com.qvd.smartswitch.MyApplication;
 import com.qvd.smartswitch.utils.NetUtil;
+import com.qvd.smartswitch.utils.SnackbarUtils;
+import com.qvd.smartswitch.utils.ToastUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -85,7 +90,7 @@ public class RetrofitService {
             Request request = chain.request();
             if (!NetUtil.isNetworkAvalible(MyApplication.getContext())) {
                 request = request.newBuilder().cacheControl(CacheControl.FORCE_CACHE).build();
-                Logger.e("no network");
+                ToastUtil.showToast("网络未连接");
             }
             Response originalResponse = chain.proceed(request);
 

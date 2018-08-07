@@ -1,6 +1,179 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
 
-</RelativeLayout>
+    <include layout="@layout/common_actionbar" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="3px"
+        android:background="@color/black_16" />
+
+
+    <com.wang.avi.AVLoadingIndicatorView xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/avi_loading"
+        style="@style/AVLoadingIndicatorView.Large"
+        android:layout_width="@dimen/x300"
+        android:layout_height="@dimen/y300"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/y50"
+        app:indicatorColor="@color/add_device_selete"
+        app:indicatorName="BallScaleMultipleIndicator" />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/y50"
+        android:padding="5dp"
+        android:text="正在连接"
+        android:textColor="@color/app_title"
+        android:textSize="16sp" />
+
+
+    <LinearLayout
+        android:id="@+id/ll_one"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y60"
+        android:layout_marginTop="@dimen/y80"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <com.wang.avi.AVLoadingIndicatorView xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/avi_one"
+            style="@style/AVLoadingIndicatorView.Large"
+            android:layout_width="@dimen/x45"
+            android:layout_height="@dimen/y45"
+            android:layout_gravity="center"
+            android:layout_marginLeft="@dimen/x50"
+            app:indicatorColor="@color/add_device_selete"
+            app:indicatorName="CubeTransitionIndicator" />
+
+        <TextView
+            android:id="@+id/tv_one"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/x20"
+            android:text="连接设备成功"
+            android:textColor="@color/add_device_selete"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_two"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y60"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <com.wang.avi.AVLoadingIndicatorView xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/avi_two"
+            style="@style/AVLoadingIndicatorView.Large"
+            android:layout_width="@dimen/x45"
+            android:layout_height="@dimen/y45"
+            android:layout_gravity="center"
+            android:layout_marginLeft="@dimen/x50"
+            app:indicatorColor="@color/add_device_selete"
+            app:indicatorName="CubeTransitionIndicator" />
+
+        <TextView
+            android:id="@+id/tv_two"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/x20"
+            android:text="安全验证成功"
+            android:textColor="@color/add_device_selete"
+            android:textSize="13sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_three"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y60"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <com.wang.avi.AVLoadingIndicatorView xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/avi_three"
+            style="@style/AVLoadingIndicatorView.Large"
+            android:layout_width="@dimen/x45"
+            android:layout_height="@dimen/y45"
+            android:layout_gravity="center"
+            android:layout_marginLeft="@dimen/x50"
+            app:indicatorColor="@color/add_device_selete"
+            app:indicatorName="CubeTransitionIndicator" />
+
+        <TextView
+            android:id="@+id/tv_three"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/x20"
+            android:text="设备绑定账号成功"
+            android:textColor="@color/add_device_selete"
+            android:textSize="13sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_four"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y60"
+        android:orientation="horizontal"
+        android:visibility="gone">
+
+        <com.wang.avi.AVLoadingIndicatorView xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/avi_four"
+            style="@style/AVLoadingIndicatorView.Large"
+            android:layout_width="@dimen/x45"
+            android:layout_height="@dimen/y45"
+            android:layout_gravity="center"
+            android:layout_marginLeft="@dimen/x50"
+            app:indicatorColor="@color/add_device_selete"
+            app:indicatorName="CubeTransitionIndicator" />
+
+        <TextView
+            android:id="@+id/tv_four"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="@dimen/x20"
+            android:text="扩展程序初始化成功"
+            android:textColor="@color/add_device_selete"
+            android:textSize="13sp" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="bottom"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/tv_complete"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/y90"
+            android:layout_marginBottom="@dimen/y30"
+            android:layout_marginLeft="@dimen/x40"
+            android:layout_marginRight="@dimen/x40"
+            android:background="@drawable/seletor_circle_blue_gray_five"
+            android:gravity="center"
+            android:text="完成"
+            android:textColor="@color/white"
+            android:textSize="13sp" />
+
+    </LinearLayout>
+
+
+</LinearLayout>

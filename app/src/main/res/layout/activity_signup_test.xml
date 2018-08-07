@@ -275,7 +275,7 @@
             android:layout_marginLeft="@dimen/x70"
             android:layout_marginRight="@dimen/x70"
             android:layout_marginTop="@dimen/y120"
-            android:background="@drawable/add_room_save_selector"
+            android:background="@drawable/login_background_selector"
             android:clickable="true"
             android:gravity="center"
             android:text="下一步"

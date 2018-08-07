@@ -23,5 +23,37 @@
 
     </LinearLayout>
 
+    <RelativeLayout
+        android:id="@+id/rl_home_manage"
+        android:layout_width="@dimen/x250"
+        android:layout_height="@dimen/y70"
+        android:background="@color/home_menu">
+
+        <ImageView
+            android:id="@+id/iv_home"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:paddingLeft="@dimen/x20"
+            android:src="@mipmap/home_menu" />
+
+        <TextView
+            android:id="@+id/tv_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/iv_home"
+            android:padding="5dp"
+            android:text="家庭管理"
+            android:textColor="@color/white"
+            android:textSize="13sp" />
+
+        <View
+            android:layout_width="@dimen/x250"
+            android:layout_height="1px"
+            android:background="@color/home_menu_line" />
+
+    </RelativeLayout>
+
 
 </LinearLayout>

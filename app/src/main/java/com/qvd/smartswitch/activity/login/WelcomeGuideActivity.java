@@ -48,10 +48,9 @@ public class WelcomeGuideActivity extends BaseActivity implements View.OnClickLi
 
     @Override
     protected void initData() {
-        super.initData();
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);//去掉标题栏
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);//去掉信息栏
-
+        super.initData();
         views = new ArrayList<>();
 
         // 初始化引导页视图列表

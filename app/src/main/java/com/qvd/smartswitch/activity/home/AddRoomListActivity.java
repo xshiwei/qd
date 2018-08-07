@@ -8,9 +8,12 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.orhanobut.logger.Logger;
 import com.qvd.smartswitch.R;
 import com.qvd.smartswitch.activity.base.BaseActivity;
 import com.qvd.smartswitch.adapter.AddRoomListAdapter;
+import com.qvd.smartswitch.api.RetrofitService;
+import com.qvd.smartswitch.model.home.RoomPicListVo;
 import com.qvd.smartswitch.model.home.Test2Vo;
 
 import java.util.ArrayList;
@@ -18,6 +21,10 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by Administrator on 2018/6/13 0013.
@@ -34,8 +41,9 @@ public class AddRoomListActivity extends BaseActivity {
     /**
      * 房间数据源
      */
-    private List<Test2Vo> list = new ArrayList<>();
+    private List<RoomPicListVo.DataBean> list = new ArrayList<>();
     private AddRoomListAdapter adapter;
+    private String family_id;
 
 
     @Override
@@ -53,17 +61,23 @@ public class AddRoomListActivity extends BaseActivity {
     protected void initData() {
         super.initData();
         tvCommonActionbarTitle.setText("添加房间");
-        for (int i = 0; i < 15; i++) {
-            list.add(new Test2Vo("客厅"));
-        }
+        family_id = getIntent().getStringExtra("family_id");
+        getData();
         recyclerview.setLayoutManager(new GridLayoutManager(this, 4, LinearLayoutManager.VERTICAL, false));
         adapter = new AddRoomListAdapter(this, list);
         recyclerview.setAdapter(adapter);
         adapter.setOnItemClickListener(new AddRoomListAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                startActivity(new Intent(AddRoomListActivity.this, AddRoomDetailsActivity.class));
-                overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+                if (position == list.size() - 1) {
+                    //说明点击了最后一个
+                } else {
+                    startActivity(new Intent(AddRoomListActivity.this, AddRoomDetailsActivity.class)
+                            .putExtra("name", list.get(position).getRoom_name())
+                            .putExtra("pic", list.get(position).getRoom_min_pic())
+                            .putExtra("family_id", family_id));
+                    overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+                }
                 finish();
             }
 
@@ -72,6 +86,37 @@ public class AddRoomListActivity extends BaseActivity {
 
             }
         });
+    }
+
+    @Override
+    protected void getData() {
+        super.getData();
+        RetrofitService.qdoApi.getRoomPicList()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<RoomPicListVo>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(RoomPicListVo roomPicListVo) {
+                        list.clear();
+                        list.addAll(roomPicListVo.getData());
+                        adapter.notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Logger.e(e.getMessage());
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
     }
 
     @OnClick(R.id.iv_common_actionbar_goback)

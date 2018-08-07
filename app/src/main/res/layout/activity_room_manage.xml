@@ -16,8 +16,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/x20"
             android:contentDescription="TODO"
-            android:paddingLeft="@dimen/x20"
+            android:padding="5dp"
             android:src="@mipmap/actionbar_goback" />
 
         <TextView
@@ -53,13 +54,20 @@
         android:textColor="@color/home_setting_text_three"
         android:textSize="12sp" />
 
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerview"
+    <com.qvd.smartswitch.widget.EmptyLayout
+        android:id="@+id/emptylayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/y25">
+        android:layout_height="match_parent">
 
-    </android.support.v7.widget.RecyclerView>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/y25">
+
+        </android.support.v7.widget.RecyclerView>
+
+    </com.qvd.smartswitch.widget.EmptyLayout>
+
 
 </LinearLayout>

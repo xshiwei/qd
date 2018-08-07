@@ -13,6 +13,7 @@ import com.qvd.smartswitch.R;
 import com.qvd.smartswitch.activity.MainActivity;
 import com.qvd.smartswitch.activity.base.BaseActivity;
 import com.qvd.smartswitch.api.RetrofitService;
+import com.qvd.smartswitch.model.login.LoginVo;
 import com.qvd.smartswitch.model.login.MessageVo;
 import com.qvd.smartswitch.utils.CommonUtils;
 import com.qvd.smartswitch.utils.SnackbarUtils;
@@ -147,14 +148,14 @@ public class LoginTestActivity extends BaseActivity {
         RetrofitService.qdoApi.login(etAccount.getText().toString().trim(), etPassword.getText().toString().trim())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<MessageVo>() {
+                .subscribe(new Observer<LoginVo>() {
                     @Override
                     public void onSubscribe(Disposable d) {
 
                     }
 
                     @Override
-                    public void onNext(MessageVo messageVo) {
+                    public void onNext(LoginVo messageVo) {
                         if (messageVo.getCode() == 200) {
                             onLoginSuccess();
                             progressDialog.dismiss();

@@ -1,36 +1,44 @@
 package com.qvd.smartswitch.activity.home;
 
-import android.graphics.drawable.ColorDrawable;
-import android.os.Bundle;
+import android.content.Intent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.Gravity;
-import android.view.KeyEvent;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.orhanobut.logger.Logger;
 import com.qvd.smartswitch.R;
 import com.qvd.smartswitch.activity.base.BaseActivity;
 import com.qvd.smartswitch.adapter.AddRoomDeviceListAdapter;
+import com.qvd.smartswitch.api.RetrofitService;
+import com.qvd.smartswitch.model.home.DeviceListVo;
 import com.qvd.smartswitch.model.home.RoomDeviceVo;
+import com.qvd.smartswitch.model.login.MessageVo;
 import com.qvd.smartswitch.utils.CommonUtils;
+import com.qvd.smartswitch.utils.ConfigUtils;
 import com.qvd.smartswitch.utils.SnackbarUtils;
+import com.qvd.smartswitch.utils.ToastUtil;
+import com.qvd.smartswitch.widget.MyPopupWindowOne;
+import com.qvd.smartswitch.widget.MyPopupWindowThree;
+import com.qvd.smartswitch.widget.MyPopupWindowTwo;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by Administrator on 2018/6/13 0013.
@@ -58,7 +66,7 @@ public class AddRoomDetailsActivity extends BaseActivity {
     @BindView(R.id.recyclerview)
     RecyclerView recyclerview;
 
-    private List<RoomDeviceVo> list = new ArrayList<>();
+    private List<DeviceListVo.MyDataBean> list = new ArrayList<>();
     private AddRoomDeviceListAdapter adapter;
 
     /**
@@ -73,15 +81,24 @@ public class AddRoomDetailsActivity extends BaseActivity {
     /**
      * 更换名字
      */
-    private PopupWindow popupWindowName;
+    private MyPopupWindowThree popupWindowName;
     /**
      * 名字
      */
     private String name;
     /**
+     * 图标
+     */
+    private String pic;
+    /**
      * 取消
      */
-    private PopupWindow popupwindowDelete;
+    private MyPopupWindowTwo popupwindowDelete;
+    /**
+     * 确定移动设备
+     */
+    private MyPopupWindowOne popupWindowConfirm;
+    private String family_id;
 
     @Override
     protected int setLayoutId() {
@@ -97,30 +114,93 @@ public class AddRoomDetailsActivity extends BaseActivity {
     @Override
     protected void initData() {
         super.initData();
-        name = "客厅";
-        for (int i = 0; i < 10; i++) {
-            list.add(new RoomDeviceVo("电动牙刷", false));
-        }
+        name = getIntent().getStringExtra("name");
+        pic = getIntent().getStringExtra("pic");
+        family_id = getIntent().getStringExtra("family_id");
+        Picasso.with(this).load(pic).into(ivPic);
+        getDeviceList();
         recyclerview.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         adapter = new AddRoomDeviceListAdapter(this, list);
         recyclerview.setAdapter(adapter);
-        adapter.setOnItemClickListener(new AddRoomDeviceListAdapter.OnItemClickListener() {
+        adapter.setOnItemClickListener((pos, myLiveList) -> {
+            DeviceListVo.MyDataBean bean = myLiveList.get(pos);
+            boolean selete = bean.isSelete();
+            if (!selete) {
+                showPopupwindowConfirm(bean);
+                popupWindowConfirm.showPopupWindow(tvCommonActionbarTitle);
+                //index++;
+                //bean.setSelete(true);
+            } else {
+                index--;
+                bean.setSelete(false);
+            }
+            tvText.setText("已选中" + index + "个设备");
+            adapter.notifyDataSetChanged();
+            isUpdate = true;
+        });
+    }
+
+    /**
+     * 显示是否将该设备移至当前房间中
+     */
+    private void showPopupwindowConfirm(DeviceListVo.MyDataBean dataBean) {
+        popupWindowConfirm = new MyPopupWindowOne(this, "该设备已关联到[客厅]确定要移动到[书房]吗？", "取消", "确定", new MyPopupWindowOne.IPopupWindowListener() {
             @Override
-            public void onItemClickListener(int pos, List<RoomDeviceVo> myLiveList) {
-                RoomDeviceVo roomDeviceVo = myLiveList.get(pos);
-                boolean selete = roomDeviceVo.isSelete();
-                if (!selete) {
-                    index++;
-                    roomDeviceVo.setSelete(true);
-                } else {
-                    index--;
-                    roomDeviceVo.setSelete(false);
-                }
-                tvText.setText("已选中" + index + "个设备");
-                adapter.notifyDataSetChanged();
-                isUpdate = true;
+            public void cancel() {
+                popupWindowConfirm.dismiss();
+            }
+
+            @Override
+            public void confirm() {
+                index++;
+                dataBean.setSelete(true);
+                popupWindowConfirm.dismiss();
             }
         });
+    }
+
+    /**
+     * 获取设备列表
+     */
+    public void getDeviceList() {
+        Map<String, String> map = new HashMap<>();
+        map.put("user_id", ConfigUtils.user_id);
+        map.put("family_id", ConfigUtils.family_id);
+        RetrofitService.qdoApi.getDeviceList(map)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<DeviceListVo>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(DeviceListVo deviceListVo) {
+                        if (deviceListVo.getCode() == 200) {
+                            if (deviceListVo.getData() != null) {
+                                for (DeviceListVo.DataBean dataBean : deviceListVo.getData()) {
+                                    list.add(new DeviceListVo.MyDataBean(dataBean, false));
+                                }
+                                adapter.notifyDataSetChanged();
+                            }
+                        } else if (deviceListVo.getCode() == 400) {
+                            ToastUtil.showToast("连接失败");
+                        } else {
+                            ToastUtil.showToast("连接超时");
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Logger.e(e.getMessage());
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
     }
 
     @OnClick({R.id.tv_cancel, R.id.tv_save, R.id.rl_room_name, R.id.rl_room_pic})
@@ -130,108 +210,114 @@ public class AddRoomDetailsActivity extends BaseActivity {
                 //取消
                 if (isUpdate) {
                     showPopupwindowDelete();
-                    popupwindowDelete.showAtLocation(view, Gravity.BOTTOM, 0, 30);
+                    popupwindowDelete.showPopupWindow(view);
                 } else {
                     finish();
                 }
                 break;
             case R.id.tv_save:
                 //保存
-                SnackbarUtils.Short(tvSave, "保存成功").show();
-                finish();
+                addRoom();
                 break;
             case R.id.rl_room_name:
                 //房间名字
                 showPopupwindowName();
-                popupWindowName.showAtLocation(view, Gravity.BOTTOM, 0, 30);
+                popupWindowName.showPopupWindow(view);
                 break;
             case R.id.rl_room_pic:
                 //更换图标
                 isUpdate = true;
+                startActivity(new Intent(this, RoomPicListActivity.class));
                 break;
         }
+    }
+
+    /**
+     * 保存房间
+     */
+    private void addRoom() {
+        RetrofitService.qdoApi.addRoom(tvName.getText().toString(), pic, family_id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<MessageVo>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(MessageVo messageVo) {
+                        if (messageVo.getCode() == 200) {
+                            ToastUtil.showToast("添加成功");
+                            finish();
+                        } else if (messageVo.getCode() == 400) {
+                            ToastUtil.showToast("添加失败");
+                        } else {
+                            ToastUtil.showToast("添加超时");
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Logger.e(e.getMessage());
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
     }
 
     /**
      * 显示删除家庭的popupwindow
      */
     private void showPopupwindowDelete() {
-        LayoutInflater inflater = LayoutInflater.from(this);
-        View view = inflater.inflate(R.layout.popupwindow_dialog_two, null, false);
-        popupwindowDelete = new PopupWindow(view, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
-        popupwindowDelete.setBackgroundDrawable(new ColorDrawable());
-        popupwindowDelete.setAnimationStyle(R.style.AnimBottom);
-        popupwindowDelete.setOutsideTouchable(true);
-        popupwindowDelete.setFocusable(true);
-        CommonUtils.setBackgroundAlpha(this, 0.5f);
-        popupwindowDelete.setOnDismissListener(new PopupWindow.OnDismissListener() {
+        popupwindowDelete = new MyPopupWindowTwo(this, "房间编辑信息未保存", "房间被编辑还未保存，请确认是否要保存编辑信息", "取消", "确定", new MyPopupWindowTwo.IPopupWindowListener() {
             @Override
-            public void onDismiss() {
-                CommonUtils.setBackgroundAlpha(AddRoomDetailsActivity.this, 1.0f);
-            }
-        });
-
-        TextView title = view.findViewById(R.id.tv_title);
-        TextView cancel = view.findViewById(R.id.tv_cancel);
-        final TextView confirm = view.findViewById(R.id.tv_confirm);
-        TextView text = view.findViewById(R.id.tv_text);
-        title.setText("房间编辑信息未保存");
-        text.setText("房间被编辑还未保存，请确认是否要保存编辑信息");
-        cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            public void cancel() {
                 popupwindowDelete.dismiss();
                 finish();
             }
-        });
 
-        confirm.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void confirm() {
                 popupwindowDelete.dismiss();
-                SnackbarUtils.Short(confirm, "保存成功").show();
+                SnackbarUtils.Short(tvCommonActionbarTitle, "保存成功").show();
                 finish();
             }
         });
-
     }
 
     /**
-     * 显示更换名字的popupwindow
+     * 显示房间名字的popupwindow
      */
     private void showPopupwindowName() {
-        LayoutInflater inflater = LayoutInflater.from(this);
-        View view = inflater.inflate(R.layout.popupwindow_edittext, null, false);
-        popupWindowName = new PopupWindow(view, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
-        popupWindowName.setBackgroundDrawable(new ColorDrawable());
-        popupWindowName.setAnimationStyle(R.style.AnimBottom);
-        popupWindowName.setOutsideTouchable(true);
-        popupWindowName.setFocusable(true);
-        CommonUtils.setBackgroundAlpha(this, 0.5f);
-        popupWindowName.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
-        popupWindowName.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
-
-        popupWindowName.setOnDismissListener(new PopupWindow.OnDismissListener() {
+        popupWindowName = new MyPopupWindowThree(this, "设置房间名称", tvName.getText().toString(), new MyPopupWindowThree.IPopupWindowListener() {
             @Override
-            public void onDismiss() {
-                CommonUtils.setBackgroundAlpha(AddRoomDetailsActivity.this, 1.0f);
+            public void cancel() {
+                popupWindowName.dismiss();
+                CommonUtils.closeSoftKeyboard(AddRoomDetailsActivity.this);
+            }
+
+            @Override
+            public void confirm() {
+                EditText etEditText = popupWindowName.getEtEditText();
+                isUpdate = true;
+                tvName.setText(etEditText.getText().toString());
+                popupWindowName.dismiss();
+                CommonUtils.closeSoftKeyboard(AddRoomDetailsActivity.this);
             }
         });
+        final EditText etEditText = popupWindowName.getEtEditText();
+        final TextView tvConfirm = popupWindowName.getTvConfirm();
+        final TextView tvError = popupWindowName.getTvError();
 
-        TextView title = view.findViewById(R.id.tv_title);
-        final EditText editText = view.findViewById(R.id.et_edittext);
-        ImageView delete = view.findViewById(R.id.iv_delete);
-        final TextView error = view.findViewById(R.id.tv_error);
-        TextView cancel = view.findViewById(R.id.tv_cancel);
-        final TextView confirm = view.findViewById(R.id.tv_confirm);
-
-        title.setText("设置家庭名称");
-        editText.setText(name);
-        if (editText.getText().toString().equals(name)) {
-            confirm.setEnabled(false);
-            confirm.setTextColor(getResources().getColor(R.color.home_setting_text_three));
+        if (etEditText.getText().toString().equals(name)) {
+            tvConfirm.setEnabled(false);
+            tvConfirm.setTextColor(getResources().getColor(R.color.home_setting_text_three));
         }
-        editText.addTextChangedListener(new TextWatcher() {
+        etEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -245,60 +331,33 @@ public class AddRoomDetailsActivity extends BaseActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 if (s.toString().equals(name)) {
-                    error.setVisibility(View.VISIBLE);
-                    error.setText("不能和之前名字一致");
-                    confirm.setEnabled(false);
-                    confirm.setTextColor(getResources().getColor(R.color.home_setting_text_three));
+                    tvError.setVisibility(View.VISIBLE);
+                    tvError.setText("不能和之前名字一致");
+                    tvConfirm.setEnabled(false);
+                    tvConfirm.setTextColor(getResources().getColor(R.color.home_setting_text_three));
                 } else if (s.toString().length() > 10) {
-                    error.setVisibility(View.VISIBLE);
-                    error.setText("长度超过最大");
-                    confirm.setEnabled(false);
-                    confirm.setTextColor(getResources().getColor(R.color.home_setting_text_three));
+                    tvError.setVisibility(View.VISIBLE);
+                    tvError.setText("长度超过最大");
+                    tvConfirm.setEnabled(false);
+                    tvConfirm.setTextColor(getResources().getColor(R.color.home_setting_text_three));
                 } else if (s.toString().length() == 0) {
-                    confirm.setEnabled(false);
-                    confirm.setTextColor(getResources().getColor(R.color.home_setting_text_three));
-                    editText.setCursorVisible(false);
+                    tvConfirm.setEnabled(false);
+                    tvConfirm.setTextColor(getResources().getColor(R.color.home_setting_text_three));
+                    etEditText.setCursorVisible(false);
                 } else {
-                    error.setVisibility(View.GONE);
-                    confirm.setEnabled(true);
-                    confirm.setTextColor(getResources().getColor(R.color.popupwindow_confirm_text));
+                    tvError.setVisibility(View.GONE);
+                    tvConfirm.setEnabled(true);
+                    tvConfirm.setTextColor(getResources().getColor(R.color.popupwindow_confirm_text));
                 }
             }
         });
-
-        cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                tvName.setText(name);
-                popupWindowName.dismiss();
-            }
-        });
-
-        delete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                editText.setText("");
-                editText.setCursorVisible(false);
-            }
-        });
-
-        confirm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                isUpdate = true;
-                tvName.setText(editText.getText().toString());
-                popupWindowName.dismiss();
-            }
-        });
-
     }
-
 
     /**
      * 获取所选中的所有条目
      */
-    private List<RoomDeviceVo> getSeleteList() {
-        List<RoomDeviceVo> roomDeviceList = new ArrayList<>();
+    private List<DeviceListVo.MyDataBean> getSeleteList() {
+        List<DeviceListVo.MyDataBean> roomDeviceList = new ArrayList<>();
         for (int i = 0; i < adapter.getAllList().size(); i++) {
             if (adapter.getAllList().get(i).isSelete()) {
                 roomDeviceList.add(adapter.getAllList().get(i));
@@ -312,10 +371,11 @@ public class AddRoomDetailsActivity extends BaseActivity {
         //取消
         if (isUpdate) {
             showPopupwindowDelete();
-            popupwindowDelete.showAtLocation(recyclerview, Gravity.BOTTOM, 0, 30);
+            popupwindowDelete.showPopupWindow(recyclerview);
         } else {
             SnackbarUtils.Short(tvSave, "保存成功").show();
             finish();
         }
     }
+
 }

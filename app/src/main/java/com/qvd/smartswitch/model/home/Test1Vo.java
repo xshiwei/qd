@@ -8,43 +8,16 @@ import java.util.List;
 
 public class Test1Vo {
     private String room;
-    private List<ArgumentsBean> arguments;
 
-    public Test1Vo(String room, List<ArgumentsBean> arguments) {
+    public Test1Vo(String room) {
         this.room = room;
-        this.arguments = arguments;
     }
 
-    public List<ArgumentsBean> getArguments() {
-        return arguments;
-    }
-
-    public void setArguments(List<ArgumentsBean> arguments) {
-        this.arguments = arguments;
-    }
-
-    public String getRoom() {
+    public String getText() {
         return room;
     }
 
-    public void setRoom(String room) {
-        this.room = room;
-    }
-
-
-    public static class ArgumentsBean {
-        private String text;
-
-        public ArgumentsBean(String text) {
-            this.text = text;
-        }
-
-        public String getText() {
-            return text;
-        }
-
-        public void setText(String text) {
-            this.text = text;
-        }
+    public void setText(String text) {
+        this.room = text;
     }
 }

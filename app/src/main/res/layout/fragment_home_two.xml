@@ -38,199 +38,207 @@
             android:src="@mipmap/home_add" />
     </RelativeLayout>
 
+
     <com.scwang.smartrefresh.layout.SmartRefreshLayout
         android:id="@+id/refreshLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/rl_actionbar">
 
-        <RelativeLayout
+        <com.qvd.smartswitch.widget.EmptyLayout
+            android:id="@+id/emptylayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <TextView
-                android:id="@+id/tv_temperature"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/x30"
-                android:gravity="center"
-                android:text="26"
-                android:textColor="@color/home_text"
-                android:textSize="50sp"
-                android:textStyle="normal" />
-
-            <TextView
-                android:id="@+id/tv_temperature_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/tv_temperature"
-                android:layout_toRightOf="@+id/tv_temperature"
-                android:paddingBottom="@dimen/y20"
-                android:paddingLeft="@dimen/x10"
-                android:text="°C"
-                android:textColor="@color/white_home_text"
-                android:textSize="13sp"
-                android:textStyle="normal" />
-
-            <TextView
-                android:id="@+id/tv_city"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignTop="@+id/tv_temperature"
-                android:layout_toRightOf="@+id/tv_temperature_title"
-                android:paddingLeft="@dimen/x20"
-                android:paddingTop="@dimen/y40"
-                android:text="深圳"
-                android:textColor="@color/white_home_text"
-                android:textSize="13sp"
-                android:textStyle="normal" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/tv_temperature_title"
-                android:layout_alignLeft="@+id/tv_city"
-                android:paddingBottom="@dimen/y20"
-                android:paddingLeft="@dimen/x20"
-                android:text="小雨"
-                android:textColor="@color/white_home_text"
-                android:textSize="13sp"
-                android:textStyle="normal" />
-
-            <LinearLayout
-                android:id="@+id/ll_outdoor"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/tv_temperature"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
+                android:layout_height="match_parent">
 
                 <TextView
-                    android:id="@+id/tv_outdoor_air"
+                    android:id="@+id/tv_temperature"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/x30"
-                    android:text="室外空气 优"
-                    android:textColor="@color/white_home_text"
-                    android:textSize="12sp"
+                    android:gravity="center"
+                    android:text="26"
+                    android:textColor="@color/home_text"
+                    android:textSize="50sp"
                     android:textStyle="normal" />
-
-                <View
-                    android:layout_width="1dp"
-                    android:layout_height="@dimen/y25"
-                    android:layout_marginLeft="@dimen/x10"
-                    android:background="@color/white" />
 
                 <TextView
-                    android:id="@+id/tv_water_quality"
+                    android:id="@+id/tv_temperature_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/x10"
-                    android:text="周边水质 不可直饮"
+                    android:layout_alignBottom="@+id/tv_temperature"
+                    android:layout_toRightOf="@+id/tv_temperature"
+                    android:paddingBottom="@dimen/y20"
+                    android:paddingLeft="@dimen/x10"
+                    android:text="°C"
                     android:textColor="@color/white_home_text"
-                    android:textSize="12sp"
+                    android:textSize="13sp"
                     android:textStyle="normal" />
-
-                <View
-                    android:layout_width="1dp"
-                    android:layout_height="@dimen/y25"
-                    android:layout_marginLeft="@dimen/x10"
-                    android:background="@color/white" />
 
                 <TextView
-                    android:id="@+id/tv_humidness"
+                    android:id="@+id/tv_city"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/x10"
-                    android:text="环境湿度 非常潮湿"
+                    android:layout_alignTop="@+id/tv_temperature"
+                    android:layout_toRightOf="@+id/tv_temperature_title"
+                    android:paddingLeft="@dimen/x20"
+                    android:paddingTop="@dimen/y40"
+                    android:text="深圳"
                     android:textColor="@color/white_home_text"
-                    android:textSize="12sp"
+                    android:textSize="13sp"
                     android:textStyle="normal" />
 
-            </LinearLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@+id/tv_temperature_title"
+                    android:layout_alignLeft="@+id/tv_city"
+                    android:paddingBottom="@dimen/y20"
+                    android:paddingLeft="@dimen/x20"
+                    android:text="小雨"
+                    android:textColor="@color/white_home_text"
+                    android:textSize="13sp"
+                    android:textStyle="normal" />
 
-            <RelativeLayout
+                <LinearLayout
+                    android:id="@+id/ll_outdoor"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tv_temperature"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
 
-                android:id="@+id/rl_list"
-                android:layout_width="@dimen/x90"
-                android:layout_height="match_parent"
-                android:layout_below="@+id/ll_outdoor"
-                android:layout_marginBottom="@dimen/y10"
-                android:layout_marginLeft="@dimen/x10"
-                android:layout_marginTop="@dimen/y80"
-                android:alpha="0.95"
-                android:background="@drawable/home_shape">
+
+                    <TextView
+                        android:id="@+id/tv_outdoor_air"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/x30"
+                        android:text="室外空气 优"
+                        android:textColor="@color/white_home_text"
+                        android:textSize="12sp"
+                        android:textStyle="normal" />
+
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="@dimen/y25"
+                        android:layout_marginLeft="@dimen/x10"
+                        android:background="@color/white" />
+
+                    <TextView
+                        android:id="@+id/tv_water_quality"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/x10"
+                        android:text="周边水质 不可直饮"
+                        android:textColor="@color/white_home_text"
+                        android:textSize="12sp"
+                        android:textStyle="normal" />
+
+                    <View
+                        android:layout_width="1dp"
+                        android:layout_height="@dimen/y25"
+                        android:layout_marginLeft="@dimen/x10"
+                        android:background="@color/white" />
+
+                    <TextView
+                        android:id="@+id/tv_humidness"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/x10"
+                        android:text="环境湿度 非常潮湿"
+                        android:textColor="@color/white_home_text"
+                        android:textSize="12sp"
+                        android:textStyle="normal" />
+
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:id="@+id/rl_list"
+                    android:layout_width="@dimen/x90"
+                    android:layout_height="match_parent"
+                    android:layout_below="@+id/ll_outdoor"
+                    android:layout_marginBottom="@dimen/y10"
+                    android:layout_marginLeft="@dimen/x10"
+                    android:layout_marginTop="@dimen/y80"
+                    android:alpha="0.95"
+                    android:background="@drawable/home_shape"
+                    android:visibility="gone">
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/rv_list"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_above="@+id/view">
+
+                    </android.support.v7.widget.RecyclerView>
+
+                    <View
+                        android:id="@+id/view"
+                        android:layout_width="@dimen/x30"
+                        android:layout_height="1dp"
+                        android:layout_above="@+id/home_setting"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginBottom="@dimen/y20"
+                        android:alpha="0.5"
+                        android:background="@color/black6" />
+
+                    <ImageView
+                        android:id="@+id/home_setting"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginBottom="@dimen/y30"
+                        android:src="@mipmap/home_setting" />
+
+                </RelativeLayout>
 
                 <android.support.v7.widget.RecyclerView
-                    android:id="@+id/rv_list"
+                    android:id="@+id/rv_content_two"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/ll_outdoor"
+                    android:layout_marginBottom="@dimen/x10"
+                    android:layout_marginRight="@dimen/x10"
+                    android:layout_marginTop="@dimen/y80"
+                    android:layout_toRightOf="@+id/rl_list"
+                    android:visibility="gone"></android.support.v7.widget.RecyclerView>
+
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rv_content"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_above="@+id/view">
+                    android:layout_below="@+id/ll_outdoor"
+                    android:layout_marginBottom="@dimen/x10"
+                    android:layout_marginLeft="@dimen/x10"
+                    android:layout_marginRight="@dimen/x10"
+                    android:layout_marginTop="@dimen/y80"
+                    android:layout_toRightOf="@+id/rl_list"
+                    android:alpha="0.95"
+                    android:background="@drawable/home_null_shape"
+                    android:visibility="gone"></android.support.v7.widget.RecyclerView>
 
-                </android.support.v7.widget.RecyclerView>
-
-                <View
-                    android:id="@+id/view"
-                    android:layout_width="@dimen/x30"
-                    android:layout_height="1dp"
-                    android:layout_above="@+id/home_setting"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginBottom="@dimen/y20"
-                    android:alpha="0.5"
-                    android:background="@color/black6" />
-
-                <ImageView
-                    android:id="@+id/home_setting"
+                <com.melnykov.fab.FloatingActionButton
+                    android:id="@+id/fab"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginBottom="@dimen/y30"
-                    android:src="@mipmap/home_setting" />
+                    android:layout_alignParentRight="true"
+                    android:layout_marginBottom="@dimen/y40"
+                    android:layout_marginRight="@dimen/x40"
+                    android:src="@mipmap/home_voice"
+                    app:fab_colorNormal="@color/home_voice_normal"
+                    app:fab_colorPressed="@color/add_device_background"
+                    app:fab_type="normal" />
 
             </RelativeLayout>
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/rv_content_two"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/ll_outdoor"
-                android:layout_marginBottom="@dimen/x10"
-                android:layout_marginRight="@dimen/x10"
-                android:layout_marginTop="@dimen/y80"
-                android:layout_toRightOf="@+id/rl_list"
-                android:visibility="visible"></android.support.v7.widget.RecyclerView>
-
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/rv_content"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_below="@+id/ll_outdoor"
-                android:layout_marginBottom="@dimen/x10"
-                android:layout_marginLeft="@dimen/x10"
-                android:layout_marginRight="@dimen/x10"
-                android:layout_marginTop="@dimen/y80"
-                android:layout_toRightOf="@+id/rl_list"
-                android:alpha="0.95"
-                android:background="@drawable/home_null_shape"
-                android:visibility="gone"></android.support.v7.widget.RecyclerView>
-
-            <com.melnykov.fab.FloatingActionButton
-                android:id="@+id/fab"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentRight="true"
-                android:layout_marginBottom="@dimen/y40"
-                android:layout_marginRight="@dimen/x40"
-                android:src="@mipmap/home_voice"
-                app:fab_colorNormal="@color/home_voice_normal"
-                app:fab_colorPressed="@color/add_device_background"
-                app:fab_type="normal" />
-
-        </RelativeLayout>
+        </com.qvd.smartswitch.widget.EmptyLayout>
 
     </com.scwang.smartrefresh.layout.SmartRefreshLayout>
 

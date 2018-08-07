@@ -22,12 +22,12 @@ public class MyPopupWindowOne extends PopupWindow {
     private IPopupWindowListener mListener;
 
 
-    public MyPopupWindowOne(final Activity activity, String title, IPopupWindowListener listener) {
+    public MyPopupWindowOne(final Activity activity, String title, String cancel, String confirm, IPopupWindowListener listener) {
         this.mListener = listener;
         LayoutInflater inflater = LayoutInflater.from(activity);
         rootView = inflater.inflate(R.layout.popupwindow_dialog, null, false);
         this.setContentView(rootView);
-        this.setWidth(ViewGroup.LayoutParams.WRAP_CONTENT);
+        this.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
         this.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
         this.setBackgroundDrawable(new ColorDrawable());
         this.setAnimationStyle(R.style.AnimBottom);
@@ -46,6 +46,8 @@ public class MyPopupWindowOne extends PopupWindow {
         tvConfirm = rootView.findViewById(R.id.tv_confirm);
 
         tvTitle.setText(title);
+        tvCancel.setText(cancel);
+        tvConfirm.setText(confirm);
         tvCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -72,7 +74,7 @@ public class MyPopupWindowOne extends PopupWindow {
      */
     public void showPopupWindow(View parent) {
         if (!this.isShowing()) {
-            this.showAtLocation(parent, Gravity.CENTER, 0, 0);
+            this.showAtLocation(parent, Gravity.BOTTOM, 0, 30);
         } else {
             this.dismiss();
         }

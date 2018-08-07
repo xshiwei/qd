@@ -136,7 +136,7 @@
             android:windowSoftInputMode="adjustPan" />
 
         <activity
-            android:name=".activity.home.HomeManageActivity"
+            android:name=".activity.home.SpaceManageActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:windowSoftInputMode="adjustPan" />
 
@@ -275,6 +275,45 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:windowSoftInputMode="adjustPan" />
 
+        <activity
+            android:name=".activity.home.HomeManageActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:windowSoftInputMode="adjustPan" />
+
+        <activity
+            android:name=".activity.wifi.DeviceWifiSettingActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:windowSoftInputMode="adjustPan" />
+
+        <activity
+            android:name=".activity.wifi.ConfirmLightFlickerActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:windowSoftInputMode="adjustPan" />
+
+        <activity
+            android:name=".activity.wifi.MqttTestActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:windowSoftInputMode="adjustPan" />
+
+        <activity
+            android:name=".activity.wifi.DeviceWifiControlActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:windowSoftInputMode="adjustPan" />
+
+        <activity
+            android:name=".activity.home.RoomPicListActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:windowSoftInputMode="adjustPan" />
+
+        <activity
+            android:name=".activity.login.WelcomeGuideActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:windowSoftInputMode="adjustPan" />
+
+        <activity
+            android:name=".activity.home.SetDeviceToRoomActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:windowSoftInputMode="adjustPan" />
 
         <service android:name="com.amap.api.location.APSService"></service>
 

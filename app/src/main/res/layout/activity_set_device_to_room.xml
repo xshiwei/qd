@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/home_manage_backgroud">
+
+    <ImageView
+        android:id="@+id/iv_device_pic"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y400"
+        android:background="@color/white" />
+
+    <ImageView
+        android:id="@+id/iv_common_actionbar_goback"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/x20"
+        android:layout_marginTop="@dimen/y60"
+        android:contentDescription="TODO"
+        android:padding="5dp"
+        android:src="@mipmap/actionbar_goback" />
+
+    <RelativeLayout
+        android:id="@+id/rl_device_name"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y100"
+        android:layout_below="@+id/iv_device_pic"
+        android:layout_marginTop="@dimen/y20"
+        android:background="@drawable/layout_seletor"
+        android:clickable="true">
+
+        <TextView
+            android:id="@+id/tv_name_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:paddingLeft="@dimen/x30"
+            android:text="设备名称"
+            android:textColor="@color/app_title"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/x30"
+            android:layout_marginRight="@dimen/x10"
+            android:layout_toLeftOf="@+id/iv_more"
+            android:layout_toRightOf="@+id/tv_name_title"
+            android:gravity="right|center"
+            android:padding="5dp"
+            android:textColor="@color/home_setting_text_two"
+            android:textSize="14sp" />
+
+        <ImageView
+            android:id="@+id/iv_more"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/x30"
+            android:src="@mipmap/device_more_details" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_selete_room"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y100"
+        android:layout_below="@+id/rl_device_name"
+        android:layout_marginTop="@dimen/y20"
+        android:background="@drawable/layout_seletor"
+        android:clickable="true">
+
+        <TextView
+            android:id="@+id/tv_selete_room_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:paddingLeft="@dimen/x30"
+            android:text="选择设备所在房间"
+            android:textColor="@color/app_title"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tv_room_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/x30"
+            android:layout_marginRight="@dimen/x10"
+            android:layout_toLeftOf="@+id/iv_more_two"
+            android:layout_toRightOf="@+id/tv_selete_room_title"
+            android:gravity="right|center"
+            android:padding="5dp"
+            android:textColor="@color/home_setting_text_two"
+            android:textSize="14sp" />
+
+        <ImageView
+            android:id="@+id/iv_more_two"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/x30"
+            android:src="@mipmap/device_more_details" />
+
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/rl_set_common"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y100"
+        android:layout_below="@+id/rl_selete_room"
+        android:layout_marginTop="@dimen/y20"
+        android:background="@color/white">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/x30"
+            android:text="常用设备"
+            android:textColor="@color/app_title"
+            android:textSize="14sp" />
+
+        <ImageView
+            android:id="@+id/iv_set_common"
+            android:layout_width="@dimen/x50"
+            android:layout_height="@dimen/y50"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/x30"
+            android:src="@drawable/register_image_selete" />
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/tv_complete"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y80"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/y80"
+        android:layout_marginLeft="@dimen/x60"
+        android:layout_marginRight="@dimen/x60"
+        android:background="@drawable/popupwindow_edittext"
+        android:gravity="center"
+        android:text="立即使用"
+        android:textColor="@color/add_capacity_text"
+        android:textSize="14sp" />
+
+
+</RelativeLayout>

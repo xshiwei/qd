@@ -5,7 +5,7 @@
     android:layout_marginLeft="@dimen/x20"
     android:layout_marginRight="@dimen/x20"
     android:layout_marginTop="@dimen/y20"
-    android:background="@drawable/device_set_type_selector"
+    android:background="@drawable/selector_circle_shallow_gray_gray_five"
     android:paddingBottom="@dimen/y10"
     android:paddingLeft="@dimen/x40"
     android:paddingRight="@dimen/x40"

@@ -5,33 +5,17 @@ package com.qvd.smartswitch.activity.base;
  */
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.gyf.barlibrary.ImmersionBar;
-import com.orhanobut.logger.Logger;
-import com.qvd.smartswitch.MyApplication;
-import com.qvd.smartswitch.R;
-import com.qvd.smartswitch.utils.DefaultRationale;
-import com.qvd.smartswitch.utils.RuntimeRationale;
 import com.trello.rxlifecycle2.components.support.RxFragment;
-import com.yanzhenjie.permission.Action;
-import com.yanzhenjie.permission.AndPermission;
-import com.yanzhenjie.permission.Permission;
-import com.yanzhenjie.permission.Rationale;
-import com.yanzhenjie.permission.Setting;
 
-import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -110,7 +94,7 @@ public abstract class BaseFragment extends RxFragment {
      */
     protected void initImmersionBar() {
         mImmersionBar = ImmersionBar.with(mActivity);
-        mImmersionBar.keyboardEnable(true).navigationBarWithKitkatEnable(false).init();
+        mImmersionBar.keyboardEnable(true).navigationBarWithKitkatEnable(false).statusBarDarkFont(true, 1).init();
     }
 
 
@@ -118,10 +102,7 @@ public abstract class BaseFragment extends RxFragment {
      * 初始化数据
      */
     protected void initData() {
-//        requestPermission(Permission.Group.LOCATION);
-//        requestPermission(Permission.WRITE_EXTERNAL_STORAGE);
-//        requestPermission(Permission.READ_EXTERNAL_STORAGE);
-//        requestPermission(Permission.READ_PHONE_STATE);
+
     }
 
     /**
@@ -137,71 +118,6 @@ public abstract class BaseFragment extends RxFragment {
     protected void getData() {
 
     }
-
-    private void requestPermission(String... permissions) {
-        AndPermission.with(this)
-                .runtime()
-                .permission(permissions)
-                .rationale(new RuntimeRationale())
-                .onGranted(new Action<List<String>>() {
-                    @Override
-                    public void onAction(List<String> permissions) {
-                        Logger.e("授权成功");
-                    }
-                })
-                .onDenied(new Action<List<String>>() {
-                    @Override
-                    public void onAction(@NonNull List<String> permissions) {
-                        Logger.e("授权失败");
-                        if (AndPermission.hasAlwaysDeniedPermission(getActivity(), permissions)) {
-                            showSettingDialog(getActivity(), permissions);
-                        }
-                    }
-                })
-                .start();
-    }
-
-    /**
-     * Display setting dialog.
-     */
-    public void showSettingDialog(Context context, final List<String> permissions) {
-        List<String> permissionNames = Permission.transformText(context, permissions);
-        String message = context.getString(R.string.message_permission_always_failed) + TextUtils.join("\n", permissionNames);
-
-        new AlertDialog.Builder(context)
-                .setCancelable(false)
-                .setTitle("申请权限")
-                .setMessage(message)
-                .setPositiveButton("设置", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        setPermission();
-                    }
-                })
-                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                    }
-                })
-                .show();
-    }
-
-    /**
-     * Set permissions.
-     */
-    private void setPermission() {
-        AndPermission.with(this)
-                .runtime()
-                .setting()
-                .onComeback(new Setting.Action() {
-                    @Override
-                    public void onAction() {
-                        //ToastUtil.showToast("设置权限");
-                    }
-                })
-                .start();
-    }
-
 
     /**
      * 找到activity的控件

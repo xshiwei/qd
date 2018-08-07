@@ -2,8 +2,6 @@ package com.qvd.smartswitch.widget;
 
 import android.app.Activity;
 import android.graphics.drawable.ColorDrawable;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,22 +15,22 @@ import com.qvd.smartswitch.R;
 import com.qvd.smartswitch.utils.CommonUtils;
 
 public class MyPopupWindowThree extends PopupWindow {
-    private final TextView tvTitle;
-    private final EditText etEditText;
-    private final ImageView ivDelete;
-    private final TextView tvError;
-    private final TextView tvCancel;
-    private final TextView tvConfirm;
-    private View rootView;
+    private TextView tvTitle;
+    private EditText etEditText;
+    private ImageView ivDelete;
+    private TextView tvError;
+    private TextView tvCancel;
+    private TextView tvConfirm;
+    private final View rootView;
 
     private IPopupWindowListener mListener;
 
-    public MyPopupWindowThree(final Activity activity, String title, String hint, final int length, IPopupWindowListener listener) {
+    public MyPopupWindowThree(final Activity activity, String title, String hint, IPopupWindowListener listener) {
         this.mListener = listener;
         LayoutInflater inflater = LayoutInflater.from(activity);
         rootView = inflater.inflate(R.layout.popupwindow_edittext, null, false);
         this.setContentView(rootView);
-        this.setWidth(ViewGroup.LayoutParams.WRAP_CONTENT);
+        this.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
         this.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
         this.setBackgroundDrawable(new ColorDrawable());
         this.setAnimationStyle(R.style.AnimBottom);
@@ -56,62 +54,6 @@ public class MyPopupWindowThree extends PopupWindow {
 
         tvTitle.setText(title);
         etEditText.setHint(hint);
-
-        if (etEditText.getText().toString().equals("")) {
-            tvConfirm.setEnabled(false);
-            tvConfirm.setTextColor(activity.getResources().getColor(R.color.home_setting_text_three));
-        }
-
-        etEditText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if (length == 0) {
-                    if (s.toString().length() > 20) {
-                        tvError.setVisibility(View.VISIBLE);
-                        tvError.setText("长度超过最大");
-                        tvConfirm.setEnabled(false);
-                        tvConfirm.setTextColor(activity.getResources().getColor(R.color.home_setting_text_three));
-                    } else if (s.toString().length() == 0) {
-                        tvConfirm.setEnabled(false);
-                        tvConfirm.setTextColor(activity.getResources().getColor(R.color.home_setting_text_three));
-                        etEditText.setCursorVisible(false);
-                    } else {
-                        tvError.setVisibility(View.GONE);
-                        tvConfirm.setEnabled(true);
-                        tvConfirm.setTextColor(activity.getResources().getColor(R.color.popupwindow_confirm_text));
-                    }
-                } else {
-                    if (s.toString().length() > length) {
-                        tvError.setVisibility(View.VISIBLE);
-                        tvError.setText("长度超过最大");
-                        tvConfirm.setEnabled(false);
-                        tvConfirm.setTextColor(activity.getResources().getColor(R.color.home_setting_text_three));
-                    } else if (s.toString().length() == 0) {
-                        tvConfirm.setEnabled(false);
-                        tvConfirm.setTextColor(activity.getResources().getColor(R.color.home_setting_text_three));
-                        etEditText.setCursorVisible(false);
-                    } else if (s.length() == length) {
-                        tvError.setVisibility(View.GONE);
-                        tvConfirm.setEnabled(true);
-                        tvConfirm.setTextColor(activity.getResources().getColor(R.color.popupwindow_confirm_text));
-                    } else {
-                        tvConfirm.setEnabled(false);
-                        tvConfirm.setTextColor(activity.getResources().getColor(R.color.home_setting_text_three));
-                    }
-                }
-
-            }
-        });
 
         tvCancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -142,12 +84,24 @@ public class MyPopupWindowThree extends PopupWindow {
         void confirm();
     }
 
+    public EditText getEtEditText() {
+        return etEditText;
+    }
+
+    public TextView getTvError() {
+        return tvError;
+    }
+
+    public TextView getTvConfirm() {
+        return tvConfirm;
+    }
+
     /**
      * 显示popupWindow
      */
     public void showPopupWindow(View parent) {
         if (!this.isShowing()) {
-            this.showAtLocation(parent, Gravity.BOTTOM, 0, 20);
+            this.showAtLocation(parent, Gravity.BOTTOM, 0, 30);
         } else {
             this.dismiss();
         }

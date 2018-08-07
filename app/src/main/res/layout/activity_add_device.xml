@@ -10,11 +10,12 @@
         android:background="@color/white">
 
         <ImageView
+            android:padding="5dp"
+            android:layout_marginLeft="@dimen/x20"
             android:id="@+id/iv_add_device_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:paddingLeft="@dimen/x20"
             android:src="@mipmap/actionbar_goback" />
 
         <TextView
@@ -39,6 +40,7 @@
             android:textSize="14sp" />
 
         <ImageView
+            android:visibility="gone"
             android:id="@+id/iv_add_device_search"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -77,8 +79,8 @@
 
         <com.qvd.smartswitch.widget.RandomTextView
             android:id="@+id/random_textview"
-            android:layout_width="@dimen/x600"
-            android:layout_height="@dimen/y600"
+            android:layout_width="@dimen/x700"
+            android:layout_height="@dimen/y880"
             android:layout_centerInParent="true"></com.qvd.smartswitch.widget.RandomTextView>
 
     </RelativeLayout>

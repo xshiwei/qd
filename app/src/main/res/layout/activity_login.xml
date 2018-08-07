@@ -116,7 +116,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/y80"
             android:layout_marginTop="@dimen/y60"
-            android:background="@drawable/add_room_save_selector"
+            android:background="@drawable/login_background_selector"
             android:clickable="true"
             android:gravity="center"
             android:padding="@dimen/x10"

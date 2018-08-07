@@ -52,7 +52,7 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/x20"
-            android:background="@drawable/device_backgroud_scan"
+            android:background="@drawable/circle_shallow_gray_five_stroke_two"
             android:paddingBottom="@dimen/y15"
             android:paddingLeft="@dimen/x20"
             android:paddingRight="@dimen/x20"

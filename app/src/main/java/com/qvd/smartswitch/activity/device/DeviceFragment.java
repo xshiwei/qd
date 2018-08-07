@@ -2,14 +2,10 @@ package com.qvd.smartswitch.activity.device;
 
 
 import android.annotation.SuppressLint;
-import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothGatt;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.drawable.ColorDrawable;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
@@ -20,12 +16,8 @@ import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -42,14 +34,13 @@ import com.clj.fastble.scan.BleScanRuleConfig;
 import com.orhanobut.logger.Logger;
 import com.qvd.smartswitch.R;
 import com.qvd.smartswitch.activity.base.BaseFragment;
-import com.qvd.smartswitch.activity.home.AddHomeActivity;
 import com.qvd.smartswitch.adapter.DeviceListAdapter;
 import com.qvd.smartswitch.db.DeviceNickNameDaoOpe;
 import com.qvd.smartswitch.model.DeviceNickNameVo;
 import com.qvd.smartswitch.utils.CommonUtils;
 import com.qvd.smartswitch.utils.SnackbarUtils;
 import com.qvd.smartswitch.widget.EmptyLayout;
-import com.qvd.smartswitch.widget.MyProgressDialog;
+import com.qvd.smartswitch.widget.MyPopupWindowThree;
 import com.trello.rxlifecycle2.android.FragmentEvent;
 
 import java.util.List;
@@ -60,7 +51,6 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
@@ -91,11 +81,12 @@ public class DeviceFragment extends BaseFragment {
     private BleDevice mBleDevice = null;
     private EmptyLayout emptyView;
 
-    private PopupWindow popupWindowName;
+    private MyPopupWindowThree popupWindowName;
 
     private ProgressBar mProgressBar;
     private TextView mTextView;
     private int mPosition;
+
 
     public static DeviceFragment newInstance(String param1) {
         DeviceFragment fragment = new DeviceFragment();
@@ -174,38 +165,34 @@ public class DeviceFragment extends BaseFragment {
      * 显示更换名字的popupwindow
      */
     private void showPopupwindowName() {
-        LayoutInflater inflater = LayoutInflater.from(getActivity());
-        View view = inflater.inflate(R.layout.popupwindow_edittext, null, false);
-        popupWindowName = new PopupWindow(view, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
-        popupWindowName.setBackgroundDrawable(new ColorDrawable());
-        popupWindowName.setAnimationStyle(R.style.AnimBottom);
-        popupWindowName.setOutsideTouchable(true);
-        popupWindowName.setFocusable(true);
-        CommonUtils.setBackgroundAlpha(getActivity(), 0.5f);
-        popupWindowName.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
-        popupWindowName.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
-
-        popupWindowName.setOnDismissListener(new PopupWindow.OnDismissListener() {
+        popupWindowName = new MyPopupWindowThree(getActivity(), "设置设备名称", "", new MyPopupWindowThree.IPopupWindowListener() {
             @Override
-            public void onDismiss() {
-                CommonUtils.setBackgroundAlpha(getActivity(), 1.0f);
+            public void cancel() {
+                popupWindowName.dismiss();
+                CommonUtils.closeSoftKeyboard(getActivity());
+            }
+
+            @Override
+            public void confirm() {
+                EditText etEditText = popupWindowName.getEtEditText();
+                DeviceNickNameVo deviceNickNameVo = new DeviceNickNameVo(DeviceNickNameDaoOpe.queryOne(getActivity(), CommonUtils.getMac(mBleDevice.getMac())).getId(), CommonUtils.getMac(mBleDevice.getMac()),
+                        mBleDevice.getName(), CommonUtils.getDate(), etEditText.getText().toString().trim(), null, null);
+                DeviceNickNameDaoOpe.updateData(getActivity(), deviceNickNameVo);
+                int postion = adapter.getPostion(mBleDevice);
+                adapter.notifyItemChanged(postion);
+                popupWindowName.dismiss();
+                CommonUtils.closeSoftKeyboard(getActivity());
             }
         });
-
-        TextView title = view.findViewById(R.id.tv_title);
-        final EditText editText = view.findViewById(R.id.et_edittext);
-        ImageView delete = view.findViewById(R.id.iv_delete);
-        final TextView error = view.findViewById(R.id.tv_error);
-        TextView cancel = view.findViewById(R.id.tv_cancel);
-        final TextView confirm = view.findViewById(R.id.tv_confirm);
-
-        title.setText("设置设备名称");
-        editText.setText("");
-        if (editText.getText().toString().equals("")) {
-            confirm.setEnabled(false);
-            confirm.setTextColor(getResources().getColor(R.color.home_setting_text_three));
+        final EditText etEditText = popupWindowName.getEtEditText();
+        final TextView tvConfirm = popupWindowName.getTvConfirm();
+        final TextView tvError = popupWindowName.getTvError();
+        if (etEditText.getText().toString().equals("")) {
+            tvConfirm.setEnabled(false);
+            tvConfirm.setTextColor(etEditText.getResources().getColor(R.color.home_setting_text_three));
         }
-        editText.addTextChangedListener(new TextWatcher() {
+
+        etEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -219,46 +206,19 @@ public class DeviceFragment extends BaseFragment {
             @Override
             public void afterTextChanged(Editable s) {
                 if (s.toString().length() > 20) {
-                    error.setVisibility(View.VISIBLE);
-                    error.setText("长度超过最大");
-                    confirm.setEnabled(false);
-                    confirm.setTextColor(getResources().getColor(R.color.home_setting_text_three));
+                    tvError.setVisibility(View.VISIBLE);
+                    tvError.setText("长度超过最大");
+                    tvConfirm.setEnabled(false);
+                    tvConfirm.setTextColor(getResources().getColor(R.color.home_setting_text_three));
                 } else if (s.toString().length() == 0) {
-                    confirm.setEnabled(false);
-                    confirm.setTextColor(getResources().getColor(R.color.home_setting_text_three));
-                    editText.setCursorVisible(false);
+                    tvConfirm.setEnabled(false);
+                    tvConfirm.setTextColor(getResources().getColor(R.color.home_setting_text_three));
+                    etEditText.setCursorVisible(false);
                 } else {
-                    error.setVisibility(View.GONE);
-                    confirm.setEnabled(true);
-                    confirm.setTextColor(getResources().getColor(R.color.popupwindow_confirm_text));
+                    tvError.setVisibility(View.GONE);
+                    tvConfirm.setEnabled(true);
+                    tvConfirm.setTextColor(getResources().getColor(R.color.popupwindow_confirm_text));
                 }
-            }
-        });
-
-        cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                popupWindowName.dismiss();
-            }
-        });
-
-        delete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                editText.setText("");
-                editText.setCursorVisible(false);
-            }
-        });
-
-        confirm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DeviceNickNameVo deviceNickNameVo = new DeviceNickNameVo(DeviceNickNameDaoOpe.queryOne(getActivity(), CommonUtils.getMac(mBleDevice.getMac())).getId(), CommonUtils.getMac(mBleDevice.getMac()),
-                        mBleDevice.getName(), CommonUtils.getDate(), editText.getText().toString().trim(), null, null);
-                DeviceNickNameDaoOpe.updateData(getActivity(), deviceNickNameVo);
-                int postion = adapter.getPostion(mBleDevice);
-                adapter.notifyItemChanged(postion);
-                popupWindowName.dismiss();
             }
         });
     }

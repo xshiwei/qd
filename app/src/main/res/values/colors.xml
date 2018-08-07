@@ -419,4 +419,5 @@
     <color name="add_capacity_text_two">#747474</color>
     <color name="notification_text">#5473AB</color>
     <color name="login_text">#63666D</color>
+    <color name="device_connect_background">#F8FCFB</color>
 </resources>

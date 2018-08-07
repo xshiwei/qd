@@ -140,7 +140,7 @@ public class DeviceControlActivity extends BaseActivity {
             @Override
             public void onTimeOut(ProgressDialog dialog) {
                 dialog.dismiss();
-                SnackbarUtils.Short(coordinatorLayout, "连接超时").show();
+                SnackbarUtils.Short(coordinatorLayout, "连接超时").show(); 
             }
         });
     }

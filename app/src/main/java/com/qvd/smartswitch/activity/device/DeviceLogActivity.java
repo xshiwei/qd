@@ -34,7 +34,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import io.reactivex.disposables.Disposable;
 
 /**
  * Created by Administrator on 2018/4/13 0013.
@@ -172,11 +171,11 @@ public class DeviceLogActivity extends BaseActivity {
      */
     private void setBtnBackground(int size) {
         if (size != 0) {
-            btnDeviceLogBottomDelete.setBackgroundResource(R.drawable.device_log_button_selete);
+            btnDeviceLogBottomDelete.setBackgroundResource(R.drawable.circle_orange_five);
             btnDeviceLogBottomDelete.setEnabled(true);
             btnDeviceLogBottomDelete.setTextColor(Color.WHITE);
         } else {
-            btnDeviceLogBottomDelete.setBackgroundResource(R.drawable.device_log_button_unselete);
+            btnDeviceLogBottomDelete.setBackgroundResource(R.drawable.circle_white_five);
             btnDeviceLogBottomDelete.setEnabled(false);
             btnDeviceLogBottomDelete.setTextColor(ContextCompat.getColor(this, R.color.app_color));
         }
