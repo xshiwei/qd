@@ -6,22 +6,24 @@
 
     <ImageView
         android:id="@+id/iv_home"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/x50"
+        android:layout_height="@dimen/y50"
         android:layout_centerVertical="true"
-        android:paddingLeft="@dimen/x20"
+        android:paddingLeft="@dimen/x10"
         android:src="@mipmap/home_menu" />
 
     <TextView
+        android:ellipsize="end"
+        android:lines="1"
         android:id="@+id/tv_text"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_toRightOf="@+id/iv_home"
         android:padding="5dp"
         android:text="扫一扫"
         android:textColor="@color/white"
-        android:textSize="13sp" />
+        android:textSize="11sp" />
 
     <View
         android:layout_width="@dimen/x250"

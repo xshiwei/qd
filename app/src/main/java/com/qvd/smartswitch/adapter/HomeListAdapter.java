@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.qvd.smartswitch.R;
 import com.qvd.smartswitch.activity.home.HomeFragment;
 import com.qvd.smartswitch.activity.home.HomeFragmentTest;
+import com.qvd.smartswitch.model.home.HomeLeftListVo;
 import com.qvd.smartswitch.model.home.TestVo;
 import com.qvd.smartswitch.utils.CommonUtils;
 import com.squareup.picasso.Picasso;
@@ -24,10 +25,10 @@ import java.util.List;
 
 public class HomeListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private Context context;
-    private List<TestVo> data;
+    private List<HomeLeftListVo.DataBean> data;
     public static int mPosition;
 
-    public HomeListAdapter(Context context, List<TestVo> data) {
+    public HomeListAdapter(Context context, List<HomeLeftListVo.DataBean> data) {
         this.context = context;
         this.data = data;
     }
@@ -75,7 +76,7 @@ public class HomeListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                 });
             }
             mPosition = position;
-            ((MyViewHolder) holder).tv_item_text.setText(data.get(position).getTest());
+            ((MyViewHolder) holder).tv_item_text.setText(data.get(position).getRoom_name());
             if (position == HomeFragmentTest.mPosition) {
                 ((MyViewHolder) holder).iv_item_pic.setImageDrawable(CommonUtils.tintDrawable(((MyViewHolder) holder).iv_item_pic.getDrawable(), Color.parseColor("#F78F4F")));
                 ((MyViewHolder) holder).tv_item_text.setTextColor(context.getResources().getColor(R.color.app_color));

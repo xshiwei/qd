@@ -264,11 +264,30 @@ public class CommonUtils {
     public static String getDeviceName(String name) {
         String newName = "";
         switch (name) {
-            case "QS02":
+            case "qs02":
                 newName = "蓝牙智能开关";
                 break;
-            case "qevdo_qs03":
+            case "qs03":
                 newName = "Wi_Fi智能开关";
+                break;
+        }
+        return newName;
+    }
+
+    /**
+     * 根据设备型号返回设备名称
+     *
+     * @param name
+     * @return
+     */
+    public static String getTableName(String name) {
+        String newName = "";
+        switch (name) {
+            case "qs02":
+                newName = "qs02";
+                break;
+            case "qs03":
+                newName = "qs03";
                 break;
         }
         return newName;

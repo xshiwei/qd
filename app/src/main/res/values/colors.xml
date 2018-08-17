@@ -420,4 +420,8 @@
     <color name="notification_text">#5473AB</color>
     <color name="login_text">#63666D</color>
     <color name="device_connect_background">#F8FCFB</color>
+    <color name="light_background_start">#60589E</color>
+    <color name="light_background_end">#1D3158</color>
+    <color name="light_background_start_two">#5EC562</color>
+    <color name="light_background_end_two">#5FE075</color>
 </resources>

@@ -6,6 +6,7 @@ package com.qvd.smartswitch.activity.login;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -46,32 +47,32 @@ public class WelcomeGuideActivity extends BaseActivity implements View.OnClickLi
         return R.layout.activity_guide;
     }
 
+
     @Override
-    protected void initData() {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);//去掉标题栏
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);//去掉信息栏
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    protected void initData() {
         super.initData();
         views = new ArrayList<>();
-
         // 初始化引导页视图列表
         for (int i = 0; i < pics.length; i++) {
             View view = LayoutInflater.from(this).inflate(pics[i], null);
-
             if (i == pics.length - 1) {
                 startBtn = view.findViewById(R.id.btn_enter);
                 startBtn.setTag("enter");
                 startBtn.setOnClickListener(this);
             }
-
             views.add(view);
-
         }
-
         vp = findViewById(R.id.vp_guide);
         adapter = new GuideViewPagerAdapter(views);
         vp.setAdapter(adapter);
         vp.addOnPageChangeListener(new PageChangeListener());
-
         initDots();
     }
 

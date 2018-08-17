@@ -16,6 +16,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.orhanobut.logger.Logger;
 import com.qvd.smartswitch.R;
+import com.qvd.smartswitch.activity.MainActivity;
 import com.qvd.smartswitch.activity.base.BaseActivity;
 import com.qvd.smartswitch.model.mqtt.WifiSmartNotifyVo;
 import com.qvd.smartswitch.utils.JsonParser;
@@ -52,11 +53,11 @@ public class DeviceWifiControlActivity extends BaseActivity {
     @BindView(R.id.iv_light_one)
     ImageView ivLightOne;
     @BindView(R.id.iv_switch_one)
-    TextView ivSwitchOne;
+    ImageView ivSwitchOne;
     @BindView(R.id.iv_light_two)
     ImageView ivLightTwo;
     @BindView(R.id.iv_switch_two)
-    TextView ivSwitchTwo;
+    ImageView ivSwitchTwo;
     @BindView(R.id.tv_total)
     TextView tvTotal;
     @BindView(R.id.rl_test)
@@ -78,12 +79,17 @@ public class DeviceWifiControlActivity extends BaseActivity {
      * 灯2未开启
      */
     private boolean isStatetwo = false;
+    /**
+     * 是否第一次连接
+     */
+    private int isFirstConnect;
 
     @Override
     protected int setLayoutId() {
         return R.layout.activity_device_wifi_control;
     }
 
+    @SuppressLint("HandlerLeak")
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -91,18 +97,22 @@ public class DeviceWifiControlActivity extends BaseActivity {
             switch (msg.what) {
                 case 0:
                     isStateOne = true;
+                    ivSwitchOne.setImageResource(R.mipmap.device_switch_on);
                     ivLightOne.setImageResource(R.mipmap.device_light_on);
                     break;
                 case 1:
                     isStateOne = false;
+                    ivSwitchOne.setImageResource(R.mipmap.device_switch_off);
                     ivLightOne.setImageResource(R.mipmap.device_light_off);
                     break;
                 case 2:
                     isStatetwo = true;
+                    ivSwitchTwo.setImageResource(R.mipmap.device_switch_on);
                     ivLightTwo.setImageResource(R.mipmap.device_light_on);
                     break;
                 case 3:
                     isStatetwo = false;
+                    ivSwitchOne.setImageResource(R.mipmap.device_switch_off);
                     ivLightTwo.setImageResource(R.mipmap.device_light_off);
                     break;
             }
@@ -113,6 +123,7 @@ public class DeviceWifiControlActivity extends BaseActivity {
     @Override
     protected void initData() {
         super.initData();
+        isFirstConnect = getIntent().getIntExtra("isFirstConnect", -1);
         PermissionUtils.requestPermission(this, Permission.READ_PHONE_STATE);
         try {
             //获取消息
@@ -249,6 +260,7 @@ public class DeviceWifiControlActivity extends BaseActivity {
                 public void success() {
                     if (i == 1) {
                         isStateOne = b;
+
                     } else {
                         isStatetwo = b;
                     }
@@ -274,10 +286,26 @@ public class DeviceWifiControlActivity extends BaseActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_device_control_goback:
+                startActivity(new Intent(this, MainActivity.class));
+                overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
                 finish();
                 break;
             case R.id.iv_device_control_more:
-                ToastUtil.showToast("暂不支持");
+                try {
+                    MqttUtils.getInstance().pub("{\"key_one\":\"softapinit\",\"key_two\":\"5\"}", MqttUtils.TOPIC_ONE, new MqttUtils.IMqttResultListener() {
+                        @Override
+                        public void success() {
+
+                        }
+
+                        @Override
+                        public void fail() {
+
+                        }
+                    });
+                } catch (MqttException e) {
+                    e.printStackTrace();
+                }
                 break;
             case R.id.iv_sound:
                 ToastUtil.showToast("暂不支持");
@@ -306,5 +334,13 @@ public class DeviceWifiControlActivity extends BaseActivity {
                 e.printStackTrace();
             }
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(this, MainActivity.class));
+        overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+        finish();
+        super.onBackPressed();
     }
 }

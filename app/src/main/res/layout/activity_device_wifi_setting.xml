@@ -145,36 +145,24 @@
             android:textSize="16sp"
             android:textStyle="bold" />
 
-        <ProgressBar
-            android:id="@+id/progress"
-            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+        <com.wang.avi.AVLoadingIndicatorView xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/avi_loading"
+            style="@style/AVLoadingIndicatorView.Large"
+            android:layout_width="@dimen/x180"
+            android:layout_height="@dimen/y180"
             android:layout_below="@+id/tv_title_two"
-            android:layout_marginLeft="@dimen/x30"
-            android:layout_marginRight="@dimen/x30"
+            android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/y30"
-            android:max="100"
-            android:progress="0" />
-
-        <TextView
-            android:id="@+id/tv_progress"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/progress"
-            android:layout_marginLeft="@dimen/x30"
-            android:layout_marginTop="@dimen/y10"
-            android:text="0%"
-            android:textColor="@color/room_manage_add_text"
-            android:textSize="14sp" />
+            app:indicatorColor="@color/add_device_selete"
+            app:indicatorName="CubeTransitionIndicator" />
 
         <TextView
             android:id="@+id/tv_text_two"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/tv_progress"
+            android:layout_below="@+id/avi_loading"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="@dimen/y30"
+            android:layout_marginTop="@dimen/y50"
             android:text="路由器、手机、设备尽量靠的近"
             android:textColor="@color/home_manage_text"
             android:textSize="14sp" />
@@ -185,7 +173,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/tv_text_two"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="@dimen/y50"
+            android:layout_marginTop="@dimen/y30"
             android:text="找到设备"
             android:textColor="@color/home_setting_text_two"
             android:textSize="13sp" />

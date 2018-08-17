@@ -17,6 +17,7 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.PopupWindow;
 import android.widget.ProgressBar;
@@ -37,6 +38,7 @@ import com.qvd.smartswitch.activity.base.BaseFragment;
 import com.qvd.smartswitch.adapter.DeviceListAdapter;
 import com.qvd.smartswitch.db.DeviceNickNameDaoOpe;
 import com.qvd.smartswitch.model.DeviceNickNameVo;
+import com.qvd.smartswitch.model.device.ScanResultVo;
 import com.qvd.smartswitch.utils.CommonUtils;
 import com.qvd.smartswitch.utils.SnackbarUtils;
 import com.qvd.smartswitch.widget.EmptyLayout;
@@ -106,7 +108,6 @@ public class DeviceFragment extends BaseFragment {
     protected void initData() {
         super.initData();
         emptyView = mRootView.findViewById(R.id.empty_view);
-        checkPermission();
         BleManager.getInstance()
                 .enableLog(true)
                 .setReConnectCount(1, 1000)//设置重连次数以及相隔时间
@@ -117,6 +118,7 @@ public class DeviceFragment extends BaseFragment {
         recyclerview.setLayoutManager(new LinearLayoutManager(getActivity()));
         adapter = new DeviceListAdapter(getActivity());
         recyclerview.setAdapter(adapter);
+        checkPermission();
     }
 
     @Override
@@ -135,7 +137,8 @@ public class DeviceFragment extends BaseFragment {
                         mBleDevice = bleDevice;
                     } else {
                         Intent intent = new Intent(getActivity(), DeviceControlTwoActivity.class);
-                        intent.putExtra("bledevice", bleDevice);
+                        ScanResultVo resultVo = new ScanResultVo(bleDevice.getName(),CommonUtils.getDeviceName(bleDevice.getName()),bleDevice.getMac(),1);
+                        intent.putExtra("scanResult", resultVo);
                         startActivity(intent);
                         getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
                     }
@@ -499,7 +502,6 @@ public class DeviceFragment extends BaseFragment {
             }
         }
     }
-
 
     @OnClick(R.id.tv_device_scan)
     public void onViewClicked() {

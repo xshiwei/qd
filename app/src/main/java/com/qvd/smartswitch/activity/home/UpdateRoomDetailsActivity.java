@@ -23,6 +23,7 @@ import com.qvd.smartswitch.model.login.MessageVo;
 import com.qvd.smartswitch.utils.CommonUtils;
 import com.qvd.smartswitch.utils.ConfigUtils;
 import com.qvd.smartswitch.utils.ToastUtil;
+import com.qvd.smartswitch.widget.MyPopupWindowOne;
 import com.qvd.smartswitch.widget.MyPopupWindowThree;
 import com.qvd.smartswitch.widget.MyPopupWindowTwo;
 import com.squareup.picasso.Picasso;
@@ -65,7 +66,7 @@ public class UpdateRoomDetailsActivity extends BaseActivity {
     @BindView(R.id.recyclerview)
     RecyclerView recyclerview;
 
-    private List<DeviceListVo.MyDataBean> list = new ArrayList<>();
+    private List<DeviceListVo.DataBean> list = new ArrayList<>();
     private AddRoomDeviceListAdapter adapter;
 
     /**
@@ -87,6 +88,8 @@ public class UpdateRoomDetailsActivity extends BaseActivity {
     private MyPopupWindowTwo popupwindowDelete;
     private RoomListVo.DataBean roomVo;
     private String pic;
+
+    private MyPopupWindowOne popupWindowConfirm;
 
     @Override
     protected int setLayoutId() {
@@ -112,14 +115,14 @@ public class UpdateRoomDetailsActivity extends BaseActivity {
         adapter = new AddRoomDeviceListAdapter(this, list);
         recyclerview.setAdapter(adapter);
         adapter.setOnItemClickListener((pos, myLiveList) -> {
-            DeviceListVo.MyDataBean dataBean = myLiveList.get(pos);
-            boolean selete = dataBean.isSelete();
+            DeviceListVo.DataBean dataBean = myLiveList.get(pos);
+            boolean selete = dataBean.isIs_selete();
             if (!selete) {
-                index++;
-                dataBean.setSelete(true);
+                showPopupwindowConfirm(dataBean);
+                popupWindowConfirm.showPopupWindow(tvCommonActionbarTitle);
             } else {
                 index--;
-                dataBean.setSelete(false);
+                dataBean.setIs_selete(false);
             }
             tvText.setText("已选中" + index + "个设备");
             adapter.notifyDataSetChanged();
@@ -130,12 +133,33 @@ public class UpdateRoomDetailsActivity extends BaseActivity {
     }
 
     /**
+     * 显示是否将该设备移至当前房间中
+     */
+    private void showPopupwindowConfirm(DeviceListVo.DataBean dataBean) {
+        String title = "该设备已关联到" + dataBean.getRoom_name() + "确定要移动到[" + tvName.getText().toString() + "]吗？";
+        popupWindowConfirm = new MyPopupWindowOne(this, title, "取消", "确定", new MyPopupWindowOne.IPopupWindowListener() {
+            @Override
+            public void cancel() {
+                popupWindowConfirm.dismiss();
+            }
+
+            @Override
+            public void confirm() {
+                index++;
+                dataBean.setIs_selete(true);
+                popupWindowConfirm.dismiss();
+            }
+        });
+    }
+
+
+    /**
      * 获取设备列表
      */
     public void getDeviceList() {
         Map<String, String> map = new HashMap<>();
         map.put("user_id", ConfigUtils.user_id);
-        map.put("family_id", ConfigUtils.family_id);
+        map.put("family_id", ConfigUtils.family_locate.getFamily_id());
         RetrofitService.qdoApi.getDeviceList(map)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -150,7 +174,7 @@ public class UpdateRoomDetailsActivity extends BaseActivity {
                         if (deviceListVo.getCode() == 200) {
                             if (deviceListVo.getData() != null) {
                                 for (DeviceListVo.DataBean dataBean : deviceListVo.getData()) {
-                                    list.add(new DeviceListVo.MyDataBean(dataBean, false));
+                                    list.add(dataBean);
                                 }
                                 adapter.notifyDataSetChanged();
                             }
@@ -342,10 +366,10 @@ public class UpdateRoomDetailsActivity extends BaseActivity {
     /**
      * 获取所选中的所有条目
      */
-    private List<DeviceListVo.MyDataBean> getSeleteList() {
-        List<DeviceListVo.MyDataBean> roomDeviceList = new ArrayList<>();
+    private List<DeviceListVo.DataBean> getSeleteList() {
+        List<DeviceListVo.DataBean> roomDeviceList = new ArrayList<>();
         for (int i = 0; i < adapter.getAllList().size(); i++) {
-            if (adapter.getAllList().get(i).isSelete()) {
+            if (adapter.getAllList().get(i).isIs_selete()) {
                 roomDeviceList.add(adapter.getAllList().get(i));
             }
         }

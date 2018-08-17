@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/light_background_two">
 
     <RelativeLayout
         android:id="@+id/action_bar"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/y100"
-        android:background="@color/white">
+        android:layout_height="@dimen/y100">
 
         <ImageView
             android:id="@+id/iv_device_control_goback"
@@ -17,7 +17,7 @@
             android:layout_marginLeft="@dimen/x20"
             android:contentDescription="TODO"
             android:padding="5dp"
-            android:src="@mipmap/actionbar_goback" />
+            android:src="@mipmap/actionbar_goback_white" />
 
         <TextView
             android:id="@+id/tv_device_control_title"
@@ -25,7 +25,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:text="@string/device_control_title"
-            android:textColor="@color/app_title"
+            android:textColor="@color/white"
             android:textSize="16sp" />
 
         <ImageView
@@ -37,15 +37,17 @@
             android:layout_marginRight="@dimen/x20"
             android:contentDescription="TODO"
             android:padding="5dp"
-            android:src="@mipmap/actionbar_more_details" />
+            android:src="@mipmap/actionbar_more_detail_white" />
 
     </RelativeLayout>
 
-    <com.scwang.smartrefresh.layout.SmartRefreshLayout
+    <com.scwang.smartrefresh.layout.SmartRefreshLayout xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/refreshLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/action_bar">
+        android:layout_above="@+id/rl_control"
+        android:layout_below="@+id/action_bar"
+        app:srlHeaderHeight="0dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -55,135 +57,172 @@
                 android:id="@+id/tv_timing_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="@dimen/y30"
+                android:layout_marginBottom="@dimen/y30"
                 android:text="在15点"
-                android:textColor="@color/home_setting_text_two"
+                android:textColor="@color/white"
                 android:textSize="13sp"
                 android:visibility="gone" />
 
             <RelativeLayout
-                android:layout_width="wrap_content"
+                android:layout_width="@dimen/x350"
                 android:layout_height="match_parent"
-                android:layout_above="@+id/rl_test"
-                android:layout_below="@+id/tv_timing_text"
-                android:layout_marginBottom="@dimen/y100"
-                android:layout_marginLeft="@dimen/x100">
+                android:layout_marginBottom="@dimen/y100">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_above="@+id/iv_light_one"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginBottom="@dimen/y50"
+                    android:layout_marginTop="@dimen/y50"
                     android:text="电灯一"
-                    android:textColor="@color/home_setting_text_two"
+                    android:textColor="@color/white"
                     android:textSize="14sp" />
 
                 <ImageView
                     android:id="@+id/iv_light_one"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
+                    android:layout_width="@dimen/x300"
+                    android:layout_height="@dimen/y400"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="@dimen/y100"
                     android:src="@mipmap/device_light_off" />
 
-                <TextView
+                <ImageView
                     android:id="@+id/iv_switch_one"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/iv_light_one"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="@dimen/y50"
-                    android:background="@drawable/device_switch_control_selector"
-                    android:clickable="true"
-                    android:padding="20dp" />
+                    android:src="@mipmap/device_switch_off" />
             </RelativeLayout>
 
             <RelativeLayout
-                android:layout_width="wrap_content"
+                android:layout_width="@dimen/x350"
                 android:layout_height="match_parent"
-                android:layout_above="@id/rl_test"
                 android:layout_alignParentRight="true"
-                android:layout_below="@+id/tv_timing_text"
-                android:layout_marginBottom="@dimen/y100"
-                android:layout_marginRight="@dimen/x100">
+                android:layout_marginBottom="@dimen/y100">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_above="@+id/iv_light_two"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginBottom="@dimen/y50"
+                    android:layout_marginTop="@dimen/y50"
                     android:text="电灯二"
-                    android:textColor="@color/home_setting_text_two"
+                    android:textColor="@color/white"
                     android:textSize="14sp" />
 
                 <ImageView
                     android:id="@+id/iv_light_two"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
+                    android:layout_width="@dimen/x300"
+                    android:layout_height="@dimen/y400"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="@dimen/y100"
                     android:src="@mipmap/device_light_off" />
 
-                <TextView
+                <ImageView
                     android:id="@+id/iv_switch_two"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/iv_light_two"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="@dimen/y50"
-                    android:background="@drawable/device_switch_control_selector"
-                    android:clickable="true"
-                    android:padding="20dp" />
+                    android:src="@mipmap/device_switch_off" />
 
 
             </RelativeLayout>
 
-            <LinearLayout
-                android:id="@+id/rl_test"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_above="@+id/iv_sound"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/tv_total"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:textSize="14sp" />
-
-                <TextView
-                    android:id="@+id/tv_two"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:textSize="14sp" />
-
-            </LinearLayout>
-
-
-            <ImageView
-                android:visibility="gone"
-                android:id="@+id/iv_sound"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_above="@+id/coordinatorLayout"
-                android:layout_centerHorizontal="true"
-                android:layout_marginBottom="@dimen/y50"
-                android:src="@mipmap/voice_empty" />
-
-            <android.support.design.widget.CoordinatorLayout
-                android:id="@+id/coordinatorLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true">
-
-            </android.support.design.widget.CoordinatorLayout>
-
         </RelativeLayout>
 
     </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/rl_control"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y200"
+        android:layout_alignParentBottom="true">
+
+        <RelativeLayout
+            android:id="@+id/rl_log"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/x50">
+
+            <ImageView
+                android:id="@+id/iv_log"
+                android:layout_width="@dimen/x100"
+                android:layout_height="@dimen/y100"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="@dimen/y20"
+                android:src="@mipmap/device_log_pic" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="@dimen/y30"
+                android:text="日志"
+                android:textColor="@color/white"
+                android:textSize="14sp" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_timing"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/x50">
+
+            <ImageView
+                android:id="@+id/iv_timing"
+                android:layout_width="@dimen/x100"
+                android:layout_height="@dimen/y100"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="@dimen/y20"
+                android:src="@mipmap/device_timing_pic" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="@dimen/y30"
+                android:text="定时"
+                android:textColor="@color/white"
+                android:textSize="14sp" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_sound"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true">
+
+            <ImageView
+                android:id="@+id/iv_sound"
+                android:layout_width="@dimen/x100"
+                android:layout_height="@dimen/y100"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="@dimen/y20"
+                android:src="@mipmap/device_switch_pic" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="@dimen/y30"
+                android:text="开关"
+                android:textColor="@color/white"
+                android:textSize="14sp" />
+
+        </RelativeLayout>
+
+    </RelativeLayout>
 
 
 </RelativeLayout>

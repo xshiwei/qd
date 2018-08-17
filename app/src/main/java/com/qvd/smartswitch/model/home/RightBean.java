@@ -3,18 +3,30 @@ package com.qvd.smartswitch.model.home;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-/**
- * Created by fatchao
- * 日期  2017-07-24.
- * 邮箱  fat_chao@163.com
- */
-
 public class RightBean implements Parcelable {
     private String name;
     private String titleName;
     private String tag;
     private boolean isTitle;
     private String imgsrc;
+    private String deviceNo;
+    private int connectType;
+
+    public int getConnectType() {
+        return connectType;
+    }
+
+    public void setConnectType(int connectType) {
+        this.connectType = connectType;
+    }
+
+    public String getDeviceNo() {
+        return deviceNo;
+    }
+
+    public void setDeviceNo(String deviceNo) {
+        this.deviceNo = deviceNo;
+    }
 
     public RightBean(String name) {
         this.name = name;
@@ -92,5 +104,7 @@ public class RightBean implements Parcelable {
         dest.writeString(tag);
         dest.writeByte((byte) (isTitle ? 1 : 0));
         dest.writeString(imgsrc);
+        dest.writeString(deviceNo);
+        dest.writeInt(connectType);
     }
 }

@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.qvd.smartswitch.R;
+import com.qvd.smartswitch.model.device.CommonDeviceListVo;
 import com.qvd.smartswitch.model.home.Test2Vo;
 
 import java.util.List;
@@ -18,9 +19,9 @@ import java.util.List;
 
 public class HomeContentTwoAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private Context context;
-    private List<Test2Vo> data;
+    private List<CommonDeviceListVo.DataBean> data;
 
-    public HomeContentTwoAdapter(Context context, List<Test2Vo> data) {
+    public HomeContentTwoAdapter(Context context, List<CommonDeviceListVo.DataBean> data) {
         this.context = context;
         this.data = data;
     }
@@ -67,7 +68,7 @@ public class HomeContentTwoAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                     }
                 });
             }
-            ((MyViewHolder) holder).tv_environment.setText(data.get(position).getTest());
+            ((MyViewHolder) holder).tv_environment.setText(data.get(position).getDevice_name());
         }
     }
 

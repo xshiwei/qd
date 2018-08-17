@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.qvd.smartswitch.R;
+import com.qvd.smartswitch.model.device.RoomDeviceListVo;
 import com.qvd.smartswitch.model.home.Test1Vo;
 
 import java.util.List;
@@ -18,9 +19,9 @@ import java.util.List;
 
 public class HomeContentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private Context context;
-    private List<Test1Vo> data;
+    private List<RoomDeviceListVo.DataBean> data;
 
-    public HomeContentAdapter(Context context, List<Test1Vo> data) {
+    public HomeContentAdapter(Context context, List<RoomDeviceListVo.DataBean> data) {
         this.context = context;
         this.data = data;
     }
@@ -49,7 +50,7 @@ public class HomeContentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof ViewHolderContent) {
-            ((ViewHolderContent) holder).tv_text.setText(data.get(position).getText());
+            ((ViewHolderContent) holder).tv_text.setText(data.get(position).getDevice_name());
             if (onItemClickListener != null) {
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
 

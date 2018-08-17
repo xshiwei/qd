@@ -20,7 +20,7 @@ public class MqttUtils {
     private static final String TAG = "MqttUtils";
     private static MqttUtils mqttUtils;
     public static final String TOPIC_ONE = "/app/smart-wifi/mqtt";
-    public static final String TOPIC_TWO = "/app/smart-wifi/mqtt_notify";
+    public static final String TOPIC_TWO = "/device/smart-wifi/mqtt_notify";
 
     private IMqttResultListener listener;
 
@@ -50,7 +50,6 @@ public class MqttUtils {
                                 .setClientId(CommonUtils.getIMEI(MyApplication.getContext()))
                                 .setServer("119.29.105.91")
                                 .setPort(1883)
-                                //.setUserNameAndPassword("admin", "password")
                                 .setKeepAlive(30)
                                 .setTimeout(10)
                                 .setCleanSession(true)

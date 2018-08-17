@@ -75,9 +75,9 @@ public class EmptyLayout extends LinearLayout {
     // default values
     // ---------------------------
     private int mEmptyType = TYPE_LOADING;
-    private int mErrorDrawable = R.mipmap.error;
+    private int mErrorDrawable = R.mipmap.home_error;
     private int mEmptyDrawable = R.mipmap.empty;
-    private int mLoadingDrawable = R.mipmap.loading;
+    private int mLoadingDrawable = R.mipmap.home_loading;
 
     private String mErrorMessage = "哎呀！发生了一些错误";
     private String mEmptyMessage = "暂无内容";

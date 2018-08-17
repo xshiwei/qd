@@ -3,23 +3,28 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/content"
     android:layout_width="@dimen/x180"
-    android:layout_height="@dimen/y180"
-    android:gravity="center"
+    android:layout_height="@dimen/y230"
     android:orientation="vertical">
 
     <ImageView
+        android:layout_gravity="center_horizontal"
         android:id="@+id/ivAvatar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/y30"
         android:src="@mipmap/qvedo_app_icon" />
 
     <TextView
+        android:layout_gravity="center_horizontal"
+        android:padding="5dp"
+        android:ellipsize="end"
+        android:maxLines="2"
         android:id="@+id/tvCity"
-        android:layout_width="@dimen/x120"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/y10"
+        android:layout_marginBottom="@dimen/y30"
+        android:layout_marginTop="@dimen/y15"
         android:gravity="center"
-        android:maxLines="1"
         android:text="分类名称"
         android:textColor="@color/add_device_content_text"
         android:textSize="11sp" />

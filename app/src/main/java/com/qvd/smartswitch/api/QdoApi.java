@@ -1,13 +1,20 @@
 package com.qvd.smartswitch.api;
 
 import com.qvd.smartswitch.model.device.AddDeviceListVo;
+import com.qvd.smartswitch.model.device.AddQS02Vo;
+import com.qvd.smartswitch.model.device.CommonDeviceListVo;
+import com.qvd.smartswitch.model.device.IsWifiNetWorkVo;
+import com.qvd.smartswitch.model.device.RoomDeviceListVo;
+import com.qvd.smartswitch.model.home.DefaultRoomVo;
 import com.qvd.smartswitch.model.home.DeviceListVo;
 import com.qvd.smartswitch.model.home.HomeDetailsVo;
+import com.qvd.smartswitch.model.home.HomeLeftListVo;
 import com.qvd.smartswitch.model.home.HomeListVo;
 import com.qvd.smartswitch.model.home.RoomListVo;
 import com.qvd.smartswitch.model.home.RoomPicListVo;
 import com.qvd.smartswitch.model.login.LoginVo;
 import com.qvd.smartswitch.model.login.MessageVo;
+import com.qvd.smartswitch.model.login.RegisterVo;
 
 import java.util.Map;
 
@@ -33,14 +40,23 @@ public interface QdoApi {
     Observable<MessageVo> isSameUserName(@Query("username") String username);
 
     /**
-     * 验证邮箱是否发送验证信息
+     * 发送邮箱或者手机号验证信息
      *
-     * @param username
-     * @param identity_type
      * @return
      */
     @POST("user/UsernameValidation")
-    Observable<MessageVo> isUsernameValidation(@Query("username") String username, @Query("identity_type") String identity_type);
+    Observable<MessageVo> isUsernameValidation(@QueryMap Map<String, Object> map);
+
+
+    /**
+     * 匹配账号和验证码
+     *
+     * @param username
+     * @param verification_code
+     * @return
+     */
+    @GET("match/verification_code")
+    Observable<MessageVo> isVerificationCode(@Query("username") String username, @Query("verification_code") String verification_code);
 
     /**
      * 用户注册
@@ -52,7 +68,7 @@ public interface QdoApi {
      * @return
      */
     @POST("user/register")
-    Observable<MessageVo> register(@Query("username") String username, @Query("password") String password, @Query("password2") String password2, @Query("identity_type") String identity_type);
+    Observable<RegisterVo> register(@Query("username") String username, @Query("password") String password, @Query("password2") String password2, @Query("identity_type") String identity_type);
 
     /**
      * 用户登录
@@ -182,7 +198,7 @@ public interface QdoApi {
      * @return
      */
     @POST("add/device")
-    Observable<MessageVo> addDevice(@QueryMap Map<String, String> map);
+    Observable<MessageVo> addDevice(@QueryMap Map<String, Object> map);
 
     /**
      * 修改设备
@@ -235,5 +251,127 @@ public interface QdoApi {
      */
     @GET("get/qevdo_device_type_list")
     Observable<AddDeviceListVo> getAddDeviceList();
+
+    /**
+     * 添加QS02设备
+     *
+     * @param map
+     * @return
+     */
+    @POST("add/device_qs02")
+    Observable<AddQS02Vo> addDeviceQS02(@QueryMap Map<String, String> map);
+
+    /**
+     * 更新设备名称
+     *
+     * @param device_id
+     * @param device_name
+     * @return
+     */
+    @POST("update/specific_device_name")
+    Observable<MessageVo> updateSpecificDeviceName(@Query("device_id") String device_id, @Query("device_name") String device_name, @Query("table_type") String table_type);
+
+    /**
+     * 设置和取消常用
+     *
+     * @param device_id
+     * @return
+     */
+    @POST("set/common_device")
+    Observable<MessageVo> setCommonDevice(@Query("device_id") String device_id, @Query("is_common") int is_common);
+
+
+    /**
+     * 更新设备房间
+     *
+     * @param device_id
+     * @param room_id
+     * @return
+     */
+    @POST("update/device_room")
+    Observable<MessageVo> updateDeviceRoom(@Query("device_id") String device_id, @Query("room_id") String room_id);
+
+    /**
+     * 获取首页左侧列表
+     *
+     * @param family_id
+     * @param user_id
+     * @return
+     */
+    @GET("get/home_room_list")
+    Observable<HomeLeftListVo> getHomeLeftList(@Query("family_id") String family_id, @Query("user_id") String user_id);
+
+    /**
+     * 获取默认房间id
+     *
+     * @param family_id
+     * @return
+     */
+    @GET("get/default_room_id")
+    Observable<DefaultRoomVo> getDefaultRoomId(@Query("family_id") String family_id);
+
+
+    /**
+     * 在wifi配对之前先提交信息
+     *
+     * @param user_id
+     * @param room_id
+     * @param family_id
+     * @param device_mac
+     * @return
+     */
+    @POST("add/temp_id_data")
+    Observable<MessageVo> addTempIdData(@Query("user_id") String user_id, @Query("room_id") String room_id, @Query("family_id") String family_id, @Query("device_mac") String device_mac);
+
+    /**
+     * 判断wifi设备有无配网成功
+     *
+     * @param device_mac
+     * @param table_type
+     * @return
+     */
+    @GET("match/wifi_device_is_networking")
+    Observable<IsWifiNetWorkVo> getIsWifiNetWorking(@Query("device_mac") String device_mac, @Query("table_type") String table_type);
+
+    /**
+     * 取消设备配网
+     *
+     * @param device_mac
+     * @return
+     */
+    @POST("delete/temp_id_data")
+    Observable<MessageVo> cancelWifiNetwork(@Query("device_mac") String device_mac);
+
+
+    /**
+     * 获取常用设备列表
+     *
+     * @param user_id
+     * @param family_id
+     * @return
+     */
+    @GET("get/common_device_list")
+    Observable<CommonDeviceListVo> getCommonDeviceList(@Query("user_id") String user_id, @Query("family_id") String family_id);
+
+
+    /**
+     * 获取房间设备列表
+     *
+     * @param user_id
+     * @param room_id
+     * @return
+     */
+    @GET("get/devices_in_room")
+    Observable<RoomDeviceListVo> getRoomDeviceList(@Query("user_id") String user_id, @Query("room_id") String room_id);
+
+    /**
+     * 判断设备是否被绑定
+     *
+     * @param user_id
+     * @param device_mac
+     * @return
+     */
+    @GET("get/device_is_binding")
+    Observable<MessageVo> isDeviceBinding(@Query("user_id") String user_id, @Query("device_mac") String device_mac);
 
 }

@@ -30,24 +30,34 @@
             android:textSize="14sp" />
 
         <ImageView
+            android:id="@+id/iv_add_room"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/x30"
+            android:padding="5dp"
             android:src="@mipmap/capacity_add" />
 
     </RelativeLayout>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerview"
+    <com.qvd.smartswitch.widget.EmptyLayout
+        android:layout_marginTop="@dimen/y20"
+        android:id="@+id/emptylayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/rl_add"
-        android:layout_below="@+id/tv_text"
-        android:layout_marginBottom="@dimen/y30"
-        android:layout_marginTop="@dimen/y25">
+        android:layout_height="match_parent">
 
-    </android.support.v7.widget.RecyclerView>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/rl_add"
+            android:layout_below="@+id/tv_text"
+            android:layout_marginBottom="@dimen/y30"
+            android:layout_marginTop="@dimen/y25">
+
+        </android.support.v7.widget.RecyclerView>
+
+    </com.qvd.smartswitch.widget.EmptyLayout>
 
 </LinearLayout>

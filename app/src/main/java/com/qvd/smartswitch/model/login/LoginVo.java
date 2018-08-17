@@ -1,10 +1,11 @@
 package com.qvd.smartswitch.model.login;
 
 public class LoginVo {
+
     /**
      * code : 200
      * message : ok
-     * data : {"create_time":"2018-07-11 10:04:16.000000","password":"0b30e02434ce51ac34087101374ea6e9","update_time":"2018-07-11 10:04:16.000000","user_account":"9574968766","user_avatar":"https://www.qq745.com/uploads/allimg/141009/1-14100ZT451-51.jpg","user_id":"c0f3e214be19d22a4c10c052983f8a24","user_name":"1105943292@qq.com","user_phone":""}
+     * data : {"create_time":"2018-08-14 15:32:57.000000","password":"202cb962ac59075b964b07152d234b70","update_time":"2018-08-14 15:32:57.000000","user_account":"4070145813","user_avatar":"https://www.qq745.com/uploads/allimg/141009/1-14100ZT451-51.jpg","user_id":"32947a727127cebbec5295bc445a8eab","identifier":"xiongtony007@gmail.com","user_phone":""}
      */
 
     private int code;
@@ -37,13 +38,13 @@ public class LoginVo {
 
     public static class DataBean {
         /**
-         * create_time : 2018-07-11 10:04:16.000000
-         * password : 0b30e02434ce51ac34087101374ea6e9
-         * update_time : 2018-07-11 10:04:16.000000
-         * user_account : 9574968766
+         * create_time : 2018-08-14 15:32:57.000000
+         * password : 202cb962ac59075b964b07152d234b70
+         * update_time : 2018-08-14 15:32:57.000000
+         * user_account : 4070145813
          * user_avatar : https://www.qq745.com/uploads/allimg/141009/1-14100ZT451-51.jpg
-         * user_id : c0f3e214be19d22a4c10c052983f8a24
-         * user_name : 1105943292@qq.com
+         * user_id : 32947a727127cebbec5295bc445a8eab
+         * identifier : xiongtony007@gmail.com
          * user_phone :
          */
 
@@ -53,7 +54,7 @@ public class LoginVo {
         private String user_account;
         private String user_avatar;
         private String user_id;
-        private String user_name;
+        private String identifier;
         private String user_phone;
 
         public String getCreate_time() {
@@ -104,12 +105,12 @@ public class LoginVo {
             this.user_id = user_id;
         }
 
-        public String getUser_name() {
-            return user_name;
+        public String getIdentifier() {
+            return identifier;
         }
 
-        public void setUser_name(String user_name) {
-            this.user_name = user_name;
+        public void setIdentifier(String identifier) {
+            this.identifier = identifier;
         }
 
         public String getUser_phone() {

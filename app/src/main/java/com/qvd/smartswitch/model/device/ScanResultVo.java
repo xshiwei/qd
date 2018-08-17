@@ -3,8 +3,11 @@ package com.qvd.smartswitch.model.device;
 import java.io.Serializable;
 
 public class ScanResultVo implements Serializable {
+    //设备型号
     private String deviceNo;
+    //设备名字
     private String deviceName;
+    //设备mac地址
     private String deviceMac;
     /**
      * 设备连接类型 1表示蓝牙 2表示wifi

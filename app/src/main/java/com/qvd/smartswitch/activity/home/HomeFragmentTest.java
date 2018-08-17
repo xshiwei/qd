@@ -21,37 +21,47 @@ import com.melnykov.fab.FloatingActionButton;
 import com.orhanobut.logger.Logger;
 import com.qvd.smartswitch.R;
 import com.qvd.smartswitch.activity.base.BaseFragment;
+import com.qvd.smartswitch.activity.device.DeviceControlTwoActivity;
+import com.qvd.smartswitch.activity.login.LoginTestActivity;
 import com.qvd.smartswitch.activity.wifi.DeviceWifiControlActivity;
-import com.qvd.smartswitch.activity.wifi.MqttTestActivity;
 import com.qvd.smartswitch.adapter.HomeContentAdapter;
 import com.qvd.smartswitch.adapter.HomeContentTwoAdapter;
 import com.qvd.smartswitch.adapter.HomeListAdapter;
 import com.qvd.smartswitch.adapter.HomeMenuAdapter;
 import com.qvd.smartswitch.api.RetrofitService;
+import com.qvd.smartswitch.model.device.CommonDeviceListVo;
+import com.qvd.smartswitch.model.device.RoomDeviceListVo;
+import com.qvd.smartswitch.model.device.ScanResultVo;
+import com.qvd.smartswitch.model.home.DefaultRoomVo;
+import com.qvd.smartswitch.model.home.HomeLeftListVo;
 import com.qvd.smartswitch.model.home.HomeListVo;
 import com.qvd.smartswitch.model.home.Test1Vo;
 import com.qvd.smartswitch.model.home.Test2Vo;
-import com.qvd.smartswitch.model.home.TestVo;
 import com.qvd.smartswitch.model.login.MessageVo;
+import com.qvd.smartswitch.utils.CommonUtils;
 import com.qvd.smartswitch.utils.ConfigUtils;
 import com.qvd.smartswitch.utils.PermissionUtils;
-import com.qvd.smartswitch.utils.SnackbarUtils;
+import com.qvd.smartswitch.utils.SharedPreferencesUtil;
 import com.qvd.smartswitch.utils.ToastUtil;
+import com.qvd.smartswitch.widget.RecycleViewDivider;
 import com.qvd.smartswitch.widget.EmptyLayout;
 import com.scwang.smartrefresh.header.MaterialHeader;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.tandong.sa.zUImageLoader.utils.L;
 import com.yanzhenjie.permission.Permission;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.Unbinder;
+import io.reactivex.ObservableSource;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
+import io.reactivex.functions.Predicate;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -92,6 +102,10 @@ public class HomeFragmentTest extends BaseFragment {
     RelativeLayout rlList;
     @BindView(R.id.emptylayout)
     EmptyLayout emptylayout;
+    @BindView(R.id.emptylayout_content)
+    EmptyLayout emptyLayoutContent;
+    @BindView(R.id.rl_content)
+    RelativeLayout rlContent;
 
 
     public static int mPosition = 0; //通过这个位置来设置当前的图片类型和文字颜色
@@ -102,7 +116,7 @@ public class HomeFragmentTest extends BaseFragment {
     /**
      * 列表数据源
      */
-    private List<TestVo> list = new ArrayList<>();
+    private List<HomeLeftListVo.DataBean> list = new ArrayList<>();
     /**
      * 常用内容适配器
      */
@@ -110,7 +124,7 @@ public class HomeFragmentTest extends BaseFragment {
     /**
      * 常用内容数据源
      */
-    private List<Test2Vo> listContent2 = new ArrayList<>();
+    private List<CommonDeviceListVo.DataBean> listContent2 = new ArrayList<>();
     /**
      * 房间点击后设备适配器
      */
@@ -119,7 +133,7 @@ public class HomeFragmentTest extends BaseFragment {
     /**
      * 服务器获取的设备数据源
      */
-    private List<Test1Vo> contentList = new ArrayList<>();
+    private List<RoomDeviceListVo.DataBean> contentList = new ArrayList<>();
     /**
      * 点击设置后显示弹窗
      */
@@ -132,6 +146,7 @@ public class HomeFragmentTest extends BaseFragment {
      * menu数据适配器
      */
     private HomeMenuAdapter menuAdapter;
+    private String userID;
 
     public static HomeFragmentTest newInstance(String param1) {
         HomeFragmentTest fragment = new HomeFragmentTest();
@@ -157,10 +172,15 @@ public class HomeFragmentTest extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        initEvent();
-        setMenuOnClick();
+        userID = SharedPreferencesUtil.getString(getActivity(), SharedPreferencesUtil.USER_ID);
+        if (CommonUtils.isEmptyString(userID)) {
+            //展示需要登录的界面
+            tvSceneSetting.setText("立即登录");
+            emptylayout.showEmpty();
+        } else {
+            initEvent();
+        }
     }
-
 
     /**
      * 设置菜单点击事件
@@ -173,33 +193,15 @@ public class HomeFragmentTest extends BaseFragment {
                 //获取当前位置
                 mPosition = position;
                 listAdapter.notifyDataSetChanged();
-                //根据当前获取的位置对应的类别请求数据并显示数据。
+                //根据当前获取的位置对应的类别请求数据并显示数据。type = 1表示常用，type=2表示房间
                 if (list.get(position).getType() == 1) {
-                    twoAdapter = new HomeContentTwoAdapter(getActivity(), listContent2);
-                    rvContentTwo.setLayoutManager(new GridLayoutManager(getActivity(), 2, LinearLayoutManager.VERTICAL, false));
-                    rvContentTwo.setAdapter(twoAdapter);
-                    twoAdapter.notifyDataSetChanged();
+                    getCommonDevice();
                     rvContentTwo.setVisibility(View.VISIBLE);
                     rvContent.setVisibility(View.GONE);
                 } else if (list.get(position).getType() == 2) {
-                    contentAdapter = new HomeContentAdapter(getActivity(), contentList);
-                    rvContent.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-                    rvContent.setAdapter(contentAdapter);
-                    contentAdapter.notifyDataSetChanged();
+                    getRoomListDevice(list.get(position).getRoom_id());
                     rvContentTwo.setVisibility(View.GONE);
                     rvContent.setVisibility(View.VISIBLE);
-                    //家庭内容区域设备点击事件
-                    contentAdapter.setOnItemClickListener(new HomeContentAdapter.OnItemClickListener() {
-                        @Override
-                        public void onItemClick(View view, int position) {
-                            //ToastUtil.showToast("点击了。。。" + footer.getDevice());
-                        }
-
-                        @Override
-                        public void onItemLongClickListener(View view, int position) {
-
-                        }
-                    });
                 }
             }
 
@@ -212,102 +214,43 @@ public class HomeFragmentTest extends BaseFragment {
 
 
     /**
-     * 初始化加载界面
+     * 获取房间设备
      */
-    private void initEvent() {
-        rlList.setVisibility(View.VISIBLE);
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                rvContentTwo.setVisibility(View.VISIBLE);
-            }
-        }, 1500);
-        //获取左侧list列表数据
-        list.clear();
-        list.add(new TestVo("常用", 1));
-        list.add(new TestVo("常用", 2));
-        list.add(new TestVo("常用", 1));
-
-        //获取右侧常用内容数据
-        listContent2.clear();
-        for (int i = 0; i < 2; i++) {
-            listContent2.add(new Test2Vo("电动牙刷"));
-            listContent2.add(new Test2Vo("电动牙刷"));
-        }
-        //获取右侧家庭设备数据
+    private void getRoomListDevice(String roomid) {
+        emptyLayoutContent.hide();
         contentList.clear();
-        for (int i = 0; i < 2; i++) {
-            contentList.add(new Test1Vo("办公室"));
-        }
-
-        //获取menu列表数据
-        getHomeMenuList();
-
-        //设置左侧列表
-        listAdapter = new HomeListAdapter(getActivity(), list);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false) {
-            @Override
-            public boolean canScrollVertically() {
-                return false;
-            }
-        };
-        rvList.setLayoutManager(layoutManager);
-        rvList.setAdapter(listAdapter);
-
-        //设置常用列表,默认进入首页显示该列表
-        twoAdapter = new HomeContentTwoAdapter(getActivity(), listContent2);
-        rvContentTwo.setLayoutManager(new GridLayoutManager(getActivity(), 2, LinearLayoutManager.VERTICAL, false));
-        rvContentTwo.setAdapter(twoAdapter);
-
-        //设置刷新控件头部高度
-        refreshLayout.setHeaderHeight(100);
-        refreshLayout.setEnableLoadmoreWhenContentNotFull(true);//是否在列表不满一页时候开启上拉加载功能
-        //设置头部样式
-        refreshLayout.setRefreshHeader(new MaterialHeader(getActivity()));
-
-        //设置FloatingActionButton
-        fab.attachToRecyclerView(rvContent);
-        fab.attachToRecyclerView(rvContentTwo);
-    }
-
-    /**
-     * 获取家庭列表
-     */
-    private void getHomeMenuList() {
-        RetrofitService.qdoApi.getFamilyList(ConfigUtils.user_id)
+        RetrofitService.qdoApi.getRoomDeviceList(ConfigUtils.user_id, roomid)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<HomeListVo>() {
+                .subscribe(new Observer<RoomDeviceListVo>() {
                     @Override
                     public void onSubscribe(Disposable d) {
 
                     }
 
                     @Override
-                    public void onNext(HomeListVo homeListVo) {
-                        if (homeListVo != null) {
-                            if (homeListVo.getCode() == 200) {
-                                menuList.clear();
-                                for (HomeListVo.DataBean dataBean : homeListVo.getData()) {
-                                    if (dataBean.getIs_opened() == 1) {
-                                        tvSceneSetting.setText(dataBean.getFamily_name());
-                                        ConfigUtils.family_locate = dataBean;
-                                    }
-                                    menuList.add(dataBean);
-                                    emptylayout.hide();
+                    public void onNext(RoomDeviceListVo roomDeviceListVo) {
+                        if (roomDeviceListVo != null) {
+                            if (roomDeviceListVo.getCode() == 200) {
+                                if (roomDeviceListVo.getData() != null && roomDeviceListVo.getData().size() > 0) {
+                                    //获取右侧家庭设备数据
+                                    contentList.addAll(roomDeviceListVo.getData());
+                                    contentAdapter = new HomeContentAdapter(getActivity(), contentList);
+                                    rvContent.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+                                    rvContent.setAdapter(contentAdapter);
+                                    contentAdapter.notifyDataSetChanged();
+                                } else {
+                                    emptyLayoutContent.showEmpty();
                                 }
-                            } else if (homeListVo.getCode() == 400) {
-                                emptylayout.showError();
-                                SnackbarUtils.Short(mRootView, "获取失败").show();
                             } else {
-                                SnackbarUtils.Short(mRootView, "连接超时").show();
+                                emptyLayoutContent.showError();
                             }
                         }
                     }
 
                     @Override
                     public void onError(Throwable e) {
-
+                        emptyLayoutContent.showError();
                     }
 
                     @Override
@@ -317,6 +260,256 @@ public class HomeFragmentTest extends BaseFragment {
                 });
     }
 
+
+    /**
+     * 获取常用设备
+     */
+    private void getCommonDevice() {
+        emptyLayoutContent.hide();
+        listContent2.clear();
+        RetrofitService.qdoApi.getCommonDeviceList(ConfigUtils.user_id, ConfigUtils.family_locate.getFamily_id())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<CommonDeviceListVo>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(CommonDeviceListVo commonDeviceListVo) {
+                        if (commonDeviceListVo != null) {
+                            if (commonDeviceListVo.getCode() == 200) {
+                                if (commonDeviceListVo.getData() != null && commonDeviceListVo.getData().size() > 0) {
+                                    listContent2.addAll(commonDeviceListVo.getData());
+                                    //设置常用列表,默认进入首页显示该列表
+                                    twoAdapter = new HomeContentTwoAdapter(getActivity(), listContent2);
+                                    rvContentTwo.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+                                    rvContentTwo.addItemDecoration(new RecycleViewDivider(getActivity()));
+                                    rvContentTwo.setAdapter(twoAdapter);
+                                    //家庭内容区域设备点击事件
+                                    contentAdapter.setOnItemClickListener(new HomeContentAdapter.OnItemClickListener() {
+                                        @Override
+                                        public void onItemClick(View view, int position) {
+                                            CommonDeviceListVo.DataBean dataBean = listContent2.get(position);
+                                            switch (dataBean.getDevice_no()) {
+                                                case "qs02":
+                                                    startActivity(new Intent(getActivity(), DeviceControlTwoActivity.class)
+                                                            .putExtra("scanResult", new ScanResultVo(dataBean.getDevice_no(),
+                                                                    CommonUtils.getDeviceName(dataBean.getDevice_no()), dataBean.getDevice_mac(),
+                                                                    dataBean.getConnect_type()))
+                                                            .putExtra("isFirstConnect", dataBean.getIs_first_connect()));
+                                                    getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+                                                    break;
+                                                case "qs03":
+                                                    startActivity(new Intent(getActivity(), DeviceWifiControlActivity.class)
+                                                            .putExtra("isFirstConnect", 1));
+                                                    getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+                                                    break;
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onItemLongClickListener(View view, int position) {
+
+                                        }
+                                    });
+                                } else {
+                                    emptyLayoutContent.showEmpty();
+                                }
+                            } else {
+                                emptyLayoutContent.showError();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        emptyLayoutContent.showError();
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
+
+    /**
+     * 初始化加载界面
+     */
+    private void initEvent() {
+        //获取首页数据
+        getHomeMenuList();
+        //设置刷新控件头部高度
+        refreshLayout.setHeaderHeight(100);
+        refreshLayout.setFooterHeight(1);
+        refreshLayout.setDragRate(0.15f);
+        refreshLayout.setEnableHeaderTranslationContent(false);//是否上拉Footer的时候向上平移列表或者内容
+        //设置头部样式
+        refreshLayout.setRefreshHeader(new MaterialHeader(getActivity()));
+
+        //设置FloatingActionButton
+        fab.attachToRecyclerView(rvContent);
+        fab.attachToRecyclerView(rvContentTwo);
+    }
+
+    /**
+     * 获取首页数据
+     */
+    private void getHomeMenuList() {
+        RetrofitService.qdoApi.getFamilyList(ConfigUtils.user_id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnNext(new Consumer<HomeListVo>() {
+                    @Override
+                    public void accept(HomeListVo homeListVo) throws Exception {
+                        if (homeListVo != null) {
+                            menuList.clear();
+                            if (homeListVo.getCode() == 200) {
+                                for (HomeListVo.DataBean dataBean : homeListVo.getData()) {
+                                    if (dataBean.getIs_opened() == 1) {
+                                        tvSceneSetting.setText(dataBean.getFamily_name());
+                                        ConfigUtils.family_locate = dataBean;
+                                    }
+                                    menuList.add(dataBean);
+                                }
+                            } else if (homeListVo.getCode() == 400) {
+                                emptylayout.showError();
+                                tvSceneSetting.setText("获取失败");
+                            }
+                        }
+                    }
+                })
+                .observeOn(Schedulers.io())
+                .filter(new Predicate<HomeListVo>() {
+                    @Override
+                    public boolean test(HomeListVo homeListVo) throws Exception {
+                        return homeListVo.getCode() == 200;
+                    }
+                })
+                .observeOn(Schedulers.io())
+                .concatMap(new Function<HomeListVo, ObservableSource<HomeLeftListVo>>() {
+                    @Override
+                    public ObservableSource<HomeLeftListVo> apply(HomeListVo homeListVo) throws Exception {
+                        return RetrofitService.qdoApi.getHomeLeftList(ConfigUtils.family_locate.getFamily_id(), ConfigUtils.user_id);
+                    }
+                })
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnNext(new Consumer<HomeLeftListVo>() {
+                    @Override
+                    public void accept(HomeLeftListVo homeLeftListVo) throws Exception {
+                        if (homeLeftListVo.getCode() == 200) {
+                            new Handler().postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    rlList.setVisibility(View.VISIBLE);
+                                }
+                            }, 1000);
+                            list.clear();
+                            list.addAll(homeLeftListVo.getData());
+                            //设置左侧列表
+                            listAdapter = new HomeListAdapter(getActivity(), list);
+                            LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false) {
+                                @Override
+                                public boolean canScrollVertically() {
+                                    return true;
+                                }
+                            };
+                            rvList.setLayoutManager(layoutManager);
+                            rvList.setAdapter(listAdapter);
+                            setMenuOnClick();
+                        } else {
+                            emptylayout.showError();
+                        }
+                    }
+                })
+                .observeOn(Schedulers.io())
+                .filter(new Predicate<HomeLeftListVo>() {
+                    @Override
+                    public boolean test(HomeLeftListVo homeLeftListVo) throws Exception {
+                        return homeLeftListVo.getCode() == 200;
+                    }
+                })
+                .observeOn(Schedulers.io())
+                .concatMap(new Function<HomeLeftListVo, ObservableSource<DefaultRoomVo>>() {
+                    @Override
+                    public ObservableSource<DefaultRoomVo> apply(HomeLeftListVo homeLeftListVo) throws Exception {
+                        return RetrofitService.qdoApi.getDefaultRoomId(ConfigUtils.family_locate.getFamily_id());
+                    }
+                })
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnNext(new Consumer<DefaultRoomVo>() {
+                    @Override
+                    public void accept(DefaultRoomVo defaultRoomVo) throws Exception {
+                        if (defaultRoomVo.getCode() == 200) {
+                            ConfigUtils.defaultRoomId = defaultRoomVo.getRoom_id();
+                        } else {
+                            emptylayout.showError();
+                        }
+                    }
+                })
+                .observeOn(Schedulers.io())
+                .filter(new Predicate<DefaultRoomVo>() {
+                    @Override
+                    public boolean test(DefaultRoomVo defaultRoomVo) throws Exception {
+                        return defaultRoomVo.getCode() == 200;
+                    }
+                })
+                .observeOn(Schedulers.io())
+                .concatMap(new Function<DefaultRoomVo, ObservableSource<CommonDeviceListVo>>() {
+                    @Override
+                    public ObservableSource<CommonDeviceListVo> apply(DefaultRoomVo defaultRoomVo) throws Exception {
+                        return RetrofitService.qdoApi.getCommonDeviceList(ConfigUtils.user_id, ConfigUtils.family_locate.getFamily_id());
+                    }
+                })
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<CommonDeviceListVo>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(CommonDeviceListVo commonDeviceListVo) {
+                        if (commonDeviceListVo != null) {
+                            if (commonDeviceListVo.getCode() == 200) {
+                                if (commonDeviceListVo.getData() != null && commonDeviceListVo.getData().size() > 0) {
+                                    new Handler().postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            rlContent.setVisibility(View.VISIBLE);
+                                        }
+                                    }, 2000);
+                                    listContent2.clear();
+                                    listContent2.addAll(commonDeviceListVo.getData());
+                                    //设置常用列表,默认进入首页显示该列表
+                                    twoAdapter = new HomeContentTwoAdapter(getActivity(), listContent2);
+                                    rvContentTwo.setLayoutManager(new GridLayoutManager(getActivity(), 2));
+                                    rvContentTwo.addItemDecoration(new RecycleViewDivider(getActivity()));
+                                    rvContentTwo.setAdapter(twoAdapter);
+                                } else {
+                                    emptyLayoutContent.showEmpty();
+                                }
+                            } else {
+                                emptylayout.showError();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        emptylayout.showError();
+                        tvSceneSetting.setText("获取失败");
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        emptylayout.hide();
+                    }
+                });
+    }
 
     /**
      * 显示popupwindow
@@ -376,7 +569,7 @@ public class HomeFragmentTest extends BaseFragment {
                     public void onNext(MessageVo messageVo) {
                         if (messageVo != null) {
                             if (messageVo.getCode() == 200) {
-                                emptylayout.showLoading(R.layout.view_loading, getString(R.string.device_scaning));
+                                emptylayout.showLoading(R.layout.view_loading_two, getString(R.string.device_scaning));
                                 initEvent();
                             } else {
                                 ToastUtil.showToast("切换失败");
@@ -402,18 +595,32 @@ public class HomeFragmentTest extends BaseFragment {
         switch (view.getId()) {
             case R.id.iv_menu:
                 //添加设备
-                startActivity(new Intent(getActivity(), AddDeviceActivity.class));
-                getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+                if (CommonUtils.isEmptyString(userID)) {
+                    startActivity(new Intent(getActivity(), LoginTestActivity.class));
+                    getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+                } else {
+                    startActivity(new Intent(getActivity(), AddDeviceActivity.class));
+                    getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+                }
                 break;
             case R.id.home_setting:
                 //房间管理
-                startActivity(new Intent(getActivity(), RoomManageActivity.class).putExtra("family_id", ConfigUtils.family_locate.getFamily_id()));
-                getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+                if (ConfigUtils.family_locate == null) {
+                    ToastUtil.showToast("网络连接失败");
+                } else {
+                    startActivity(new Intent(getActivity(), RoomManageActivity.class).putExtra("family_id", ConfigUtils.family_locate.getFamily_id()));
+                    getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+                }
                 break;
             case R.id.tv_scene_setting:
                 //用户注册后默认是有一个房间的，不存在为空。
-                shouPopupwindow();
-                popupWindow.showAsDropDown(tvSceneSetting, 30, 0);
+                if (CommonUtils.isEmptyString(userID)) {
+                    startActivity(new Intent(getActivity(), LoginTestActivity.class));
+                    getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+                } else {
+                    shouPopupwindow();
+                    popupWindow.showAsDropDown(tvSceneSetting, 30, 0);
+                }
                 break;
             case R.id.fab:
                 //声音控制界面
@@ -422,7 +629,8 @@ public class HomeFragmentTest extends BaseFragment {
 //                startActivity(new Intent(getActivity(), MqttTestActivity.class));
 //                startActivity(new Intent(getActivity(), DeviceWifiControlActivity.class));
 //                startActivity(new Intent(getActivity(), DeviceConnectActivity.class));
-                startActivity(new Intent(getActivity(), SetDeviceToRoomActivity.class));
+//                startActivity(new Intent(getActivity(), SetDeviceToRoomActivity.class));
+                startActivity(new Intent(getActivity(), DeviceControlTwoActivity.class));
                 getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
                 break;
         }

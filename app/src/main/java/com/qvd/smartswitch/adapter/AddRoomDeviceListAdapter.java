@@ -23,15 +23,15 @@ import java.util.List;
 
 public class AddRoomDeviceListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private Context context;
-    private List<DeviceListVo.MyDataBean> data;
+    private List<DeviceListVo.DataBean> data;
     private OnItemClickListener onItemClickListener;
 
-    public AddRoomDeviceListAdapter(Context context, List<DeviceListVo.MyDataBean> data) {
+    public AddRoomDeviceListAdapter(Context context, List<DeviceListVo.DataBean> data) {
         this.context = context;
         this.data = data;
     }
 
-    public List<DeviceListVo.MyDataBean> getAllList() {
+    public List<DeviceListVo.DataBean> getAllList() {
         if (data == null) {
             data = new ArrayList<>();
         }
@@ -43,7 +43,7 @@ public class AddRoomDeviceListAdapter extends RecyclerView.Adapter<RecyclerView.
     }
 
     public interface OnItemClickListener {
-        void onItemClickListener(int pos, List<DeviceListVo.MyDataBean> myLiveList);
+        void onItemClickListener(int pos, List<DeviceListVo.DataBean> myLiveList);
     }
 
 
@@ -66,13 +66,14 @@ public class AddRoomDeviceListAdapter extends RecyclerView.Adapter<RecyclerView.
                     }
                 });
             }
-            if (data.get(position).isSelete()) {
+            if (data.get(position).isIs_selete()) {
                 ((MyViewHolder) holder).iv_item_device_selete.setImageResource(R.mipmap.device_log_selete);
             } else {
                 ((MyViewHolder) holder).iv_item_device_selete.setImageResource(R.mipmap.device_log_not_selete);
             }
-            Picasso.with(context).load(data.get(position).getBean().getDevice_pic()).into(((MyViewHolder) holder).iv_pic);
-            ((MyViewHolder) holder).tv_text.setText(data.get(position).getBean().getDevice_name());
+            Picasso.with(context).load(data.get(position).getDevice_pic()).into(((MyViewHolder) holder).iv_pic);
+            ((MyViewHolder) holder).tv_text.setText(data.get(position).getDevice_name());
+            ((MyViewHolder) holder).tv_room.setText(data.get(position).getRoom_name());
         }
     }
 

@@ -1,5 +1,6 @@
 package com.qvd.smartswitch.activity.home;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.support.design.widget.Snackbar;
 import android.support.v7.widget.GridLayoutManager;
@@ -10,10 +11,13 @@ import android.widget.TextView;
 
 import com.qvd.smartswitch.R;
 import com.qvd.smartswitch.activity.base.BaseFragment;
+import com.qvd.smartswitch.activity.wifi.ConfirmLightFlickerActivity;
 import com.qvd.smartswitch.adapter.ClassifyDetailAdapter;
 import com.qvd.smartswitch.adapter.AddDeviceListener;
+import com.qvd.smartswitch.model.device.AddDeviceListVo;
 import com.qvd.smartswitch.model.home.RightBean;
 import com.qvd.smartswitch.model.home.SortBean;
+import com.qvd.smartswitch.utils.ToastUtil;
 import com.qvd.smartswitch.widget.CheckListener;
 import com.qvd.smartswitch.widget.ItemHeaderDecoration;
 
@@ -21,7 +25,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-
 
 
 public class SortDetailFragment extends BaseFragment implements CheckListener {
@@ -57,22 +60,15 @@ public class SortDetailFragment extends BaseFragment implements CheckListener {
         mAdapter = new ClassifyDetailAdapter(getActivity(), mDatas, new AddDeviceListener() {
             @Override
             public void onItemClick(int id, int position) {
-                String content = "";
                 switch (id) {
                     case R.id.root:
-                        content = "title";
                         break;
                     case R.id.content:
-                        content = "content";
+                        String deviceNo = mDatas.get(position).getDeviceNo();
+                        switchToActivity(deviceNo, mDatas.get(position).getConnectType());
                         break;
                 }
-                Snackbar snackbar = Snackbar.make(mRv, "当前点击的是" + content + ":" + mDatas.get(position).getName(), Snackbar.LENGTH_SHORT);
-                View mView = snackbar.getView();
-                mView.setBackgroundColor(Color.BLUE);
-                TextView text = (TextView) mView.findViewById(android.support.design.R.id.snackbar_text);
-                text.setTextColor(Color.WHITE);
-                text.setTextSize(25);
-                snackbar.show();
+
             }
         });
 
@@ -81,26 +77,47 @@ public class SortDetailFragment extends BaseFragment implements CheckListener {
         mRv.addItemDecoration(mDecoration);
         mDecoration.setCheckListener(checkListener);
 
-        ArrayList<SortBean.CategoryOneArrayBean> rightList = getArguments().getParcelableArrayList("right");
+        AddDeviceListVo addDeviceListVo = (AddDeviceListVo) getArguments().getSerializable("right");
+        List<AddDeviceListVo.DataBean> rightList = addDeviceListVo.getData();
         for (int i = 0; i < rightList.size(); i++) {
-            RightBean head = new RightBean(rightList.get(i).getName());
+            RightBean head = new RightBean(rightList.get(i).getDevice_type());
             //头部设置为true
             head.setTitle(true);
-            head.setTitleName(rightList.get(i).getName());
+            head.setTitleName(rightList.get(i).getDevice_type());
             head.setTag(String.valueOf(i));
             mDatas.add(head);
-            List<SortBean.CategoryOneArrayBean.CategoryTwoArrayBean> categoryTwoArray = rightList.get(i).getCategoryTwoArray();
+            List<AddDeviceListVo.DataBean.DeviceDetailListBean> categoryTwoArray = rightList.get(i).getDevice_detail_list();
             for (int j = 0; j < categoryTwoArray.size(); j++) {
-                RightBean body = new RightBean(categoryTwoArray.get(j).getName());
+                RightBean body = new RightBean(categoryTwoArray.get(j).getDevice_name());
                 body.setTag(String.valueOf(i));
-                String name = rightList.get(i).getName();
+                String name = rightList.get(i).getDevice_type();
                 body.setTitleName(name);
+                body.setDeviceNo(categoryTwoArray.get(j).getDevice_no());
+                body.setConnectType(categoryTwoArray.get(j).getConnect_type());
+                body.setImgsrc(categoryTwoArray.get(j).getDevice_pic());
                 mDatas.add(body);
             }
         }
-
         mAdapter.notifyDataSetChanged();
         mDecoration.setData(mDatas);
+    }
+
+    /**
+     * 根据选择的产品跳转到对应的activity
+     */
+    private void switchToActivity(String deviceNo, int type) {
+        switch (type) {
+            case 1:
+                startActivity(new Intent(getActivity(), SearchBleDeviceActivity.class)
+                        .putExtra("deviceNo", deviceNo));
+                getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+                break;
+            case 2:
+                startActivity(new Intent(getActivity(), ConfirmLightFlickerActivity.class)
+                        .putExtra("wifi_ssid", deviceNo));
+                getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+                break;
+        }
     }
 
     public void setData(int n) {

@@ -3,24 +3,16 @@ package com.qvd.smartswitch.model.home;
 import java.util.List;
 
 public class DeviceListVo {
+
+
     /**
      * code : 200
      * message : ok
-     * data : [{"add_time":"2018-07-26 21:34:07.000000","capacity_id":null,"car_device_id":null,"connect_type":0,"delete_time":null,"device_id":"D2223981588","device_mac":"c0f3e214be19d22a4c10c052983f8a24","device_name":"QS01 智能开关","device_no":"QS01","device_pic":"https://www.qq745.com/uploads/allimg/141009/1-14100ZT451-51.jpg","device_version":"nil","family_id":"F866612178","id":14,"is_common":1,"is_delete":null,"is_first_connect":0,"is_share":0,"person_device_id":null,"room_id":"R5206417693","share_object":"nil","type":0,"type_name":"智能开关","update_time":null,"user_id":"32947a727127cebbec5295bc445a8eab"},{"add_time":"2018-07-27 11:38:40.000000","capacity_id":null,"car_device_id":null,"connect_type":0,"delete_time":null,"device_id":"D6560121857","device_mac":"c0f3e214be19d22a4c10c052983f8a24","device_name":"QP01汽车空气净化器","device_no":"QP01","device_pic":"https://www.qq745.com/uploads/allimg/141009/1-14100ZT451-51.jpg","device_version":"nil","family_id":"F866612178","id":21,"is_common":1,"is_delete":null,"is_first_connect":0,"is_share":0,"person_device_id":null,"room_id":"R3024730165","share_object":"nil","type":1,"type_name":"汽车空气净化器","update_time":null,"user_id":"32947a727127cebbec5295bc445a8eab"},{"add_time":"2018-07-27 11:39:19.000000","capacity_id":null,"car_device_id":null,"connect_type":0,"delete_time":null,"device_id":"D9725917305","device_mac":"c0f3e214be19d22a4c10c052983f8a24","device_name":"摩托车蓝牙对讲机","device_no":"QTA35","device_pic":"https://www.qq745.com/uploads/allimg/141009/1-14100ZT451-51.jpg","device_version":"nil","family_id":"F866612178","id":22,"is_common":1,"is_delete":null,"is_first_connect":0,"is_share":0,"person_device_id":null,"room_id":"R3024730165","share_object":"nil","type":1,"type_name":"摩托车蓝牙对讲机","update_time":null,"user_id":"32947a727127cebbec5295bc445a8eab"},{"add_time":"2018-07-26 11:40:03.000000","capacity_id":null,"car_device_id":null,"connect_type":2,"delete_time":null,"device_id":"D8344958162","device_mac":"fdgdfhrtythgjgfjfgj","device_name":"WIFI 智能开关 双模开关","device_no":"QS02","device_pic":"https://www.qq745.com/uploads/allimg/141009/1-14100ZT451-51.jpg","device_version":"243546546546","family_id":"F866612178","id":23,"is_common":1,"is_delete":null,"is_first_connect":1,"is_share":0,"person_device_id":null,"room_id":"R5206417693","share_object":"yy","type":1,"type_name":"WIFI 智能开关 双模开关","update_time":"2018-07-27 11:45:25.000000","user_id":"32947a727127cebbec5295bc445a8eab"}]
+     * data : [{"add_time":"2018-08-16 12:13:50.000000","connect_type":1,"device_id":"13474a9f61516b586818321e0ae68395","device_mac":"60:01:94:79:ff:13","device_name":"蓝牙智能开关","device_no":"qs02","device_pic":"http://pckgfzc5s.bkt.clouddn.com/p.png","device_type":"智能开关","device_version":"v1.0","family_id":"F1373184712","family_name":"13631787352","firmware_address":"","firmware_version":"","is_common":0,"is_first_connect":1,"room_id":"R3899180352","room_name":"default room","table_type":"qs02","update_time":"","user_id":"4de218dada69be49d44a7d34922fa95a"}]
      */
 
     private int code;
     private String message;
-    private List<MyDataBean> dataBeans;
-
-    public List<MyDataBean> getDataBeans() {
-        return dataBeans;
-    }
-
-    public void setDataBeans(List<MyDataBean> dataBeans) {
-        this.dataBeans = dataBeans;
-    }
-
     private List<DataBean> data;
 
     public int getCode() {
@@ -47,84 +39,59 @@ public class DeviceListVo {
         this.data = data;
     }
 
-    public static class MyDataBean {
-        public MyDataBean(DataBean bean, boolean isSelete) {
-            this.bean = bean;
-            this.isSelete = isSelete;
-        }
-
-        private DataBean bean;
-        private boolean isSelete;
-
-        public DataBean getBean() {
-            return bean;
-        }
-
-        public void setBean(DataBean bean) {
-            this.bean = bean;
-        }
-
-        public boolean isSelete() {
-            return isSelete;
-        }
-
-        public void setSelete(boolean selete) {
-            isSelete = selete;
-        }
-    }
-
     public static class DataBean {
         /**
-         * add_time : 2018-07-26 21:34:07.000000
-         * capacity_id : null
-         * car_device_id : null
-         * connect_type : 0
-         * delete_time : null
-         * device_id : D2223981588
-         * device_mac : c0f3e214be19d22a4c10c052983f8a24
-         * device_name : QS01 智能开关
-         * device_no : QS01
-         * device_pic : https://www.qq745.com/uploads/allimg/141009/1-14100ZT451-51.jpg
-         * device_version : nil
-         * family_id : F866612178
-         * id : 14
-         * is_common : 1
-         * is_delete : null
-         * is_first_connect : 0
-         * is_share : 0
-         * person_device_id : null
-         * room_id : R5206417693
-         * share_object : nil
-         * type : 0
-         * type_name : 智能开关
-         * update_time : null
-         * user_id : 32947a727127cebbec5295bc445a8eab
+         * add_time : 2018-08-16 12:13:50.000000
+         * connect_type : 1
+         * device_id : 13474a9f61516b586818321e0ae68395
+         * device_mac : 60:01:94:79:ff:13
+         * device_name : 蓝牙智能开关
+         * device_no : qs02
+         * device_pic : http://pckgfzc5s.bkt.clouddn.com/p.png
+         * device_type : 智能开关
+         * device_version : v1.0
+         * family_id : F1373184712
+         * family_name : 13631787352
+         * firmware_address :
+         * firmware_version :
+         * is_common : 0
+         * is_first_connect : 1
+         * room_id : R3899180352
+         * room_name : default room
+         * table_type : qs02
+         * update_time :
+         * user_id : 4de218dada69be49d44a7d34922fa95a
          */
 
         private String add_time;
-        private Object capacity_id;
-        private Object car_device_id;
         private int connect_type;
-        private Object delete_time;
         private String device_id;
         private String device_mac;
         private String device_name;
         private String device_no;
         private String device_pic;
+        private String device_type;
         private String device_version;
         private String family_id;
-        private int id;
+        private String family_name;
+        private String firmware_address;
+        private String firmware_version;
         private int is_common;
-        private Object is_delete;
         private int is_first_connect;
-        private int is_share;
-        private Object person_device_id;
         private String room_id;
-        private String share_object;
-        private int type;
-        private String type_name;
-        private Object update_time;
+        private String room_name;
+        private String table_type;
+        private String update_time;
         private String user_id;
+        private boolean is_selete;
+
+        public boolean isIs_selete() {
+            return is_selete;
+        }
+
+        public void setIs_selete(boolean is_selete) {
+            this.is_selete = is_selete;
+        }
 
         public String getAdd_time() {
             return add_time;
@@ -134,36 +101,12 @@ public class DeviceListVo {
             this.add_time = add_time;
         }
 
-        public Object getCapacity_id() {
-            return capacity_id;
-        }
-
-        public void setCapacity_id(Object capacity_id) {
-            this.capacity_id = capacity_id;
-        }
-
-        public Object getCar_device_id() {
-            return car_device_id;
-        }
-
-        public void setCar_device_id(Object car_device_id) {
-            this.car_device_id = car_device_id;
-        }
-
         public int getConnect_type() {
             return connect_type;
         }
 
         public void setConnect_type(int connect_type) {
             this.connect_type = connect_type;
-        }
-
-        public Object getDelete_time() {
-            return delete_time;
-        }
-
-        public void setDelete_time(Object delete_time) {
-            this.delete_time = delete_time;
         }
 
         public String getDevice_id() {
@@ -206,6 +149,14 @@ public class DeviceListVo {
             this.device_pic = device_pic;
         }
 
+        public String getDevice_type() {
+            return device_type;
+        }
+
+        public void setDevice_type(String device_type) {
+            this.device_type = device_type;
+        }
+
         public String getDevice_version() {
             return device_version;
         }
@@ -222,12 +173,28 @@ public class DeviceListVo {
             this.family_id = family_id;
         }
 
-        public int getId() {
-            return id;
+        public String getFamily_name() {
+            return family_name;
         }
 
-        public void setId(int id) {
-            this.id = id;
+        public void setFamily_name(String family_name) {
+            this.family_name = family_name;
+        }
+
+        public String getFirmware_address() {
+            return firmware_address;
+        }
+
+        public void setFirmware_address(String firmware_address) {
+            this.firmware_address = firmware_address;
+        }
+
+        public String getFirmware_version() {
+            return firmware_version;
+        }
+
+        public void setFirmware_version(String firmware_version) {
+            this.firmware_version = firmware_version;
         }
 
         public int getIs_common() {
@@ -238,36 +205,12 @@ public class DeviceListVo {
             this.is_common = is_common;
         }
 
-        public Object getIs_delete() {
-            return is_delete;
-        }
-
-        public void setIs_delete(Object is_delete) {
-            this.is_delete = is_delete;
-        }
-
         public int getIs_first_connect() {
             return is_first_connect;
         }
 
         public void setIs_first_connect(int is_first_connect) {
             this.is_first_connect = is_first_connect;
-        }
-
-        public int getIs_share() {
-            return is_share;
-        }
-
-        public void setIs_share(int is_share) {
-            this.is_share = is_share;
-        }
-
-        public Object getPerson_device_id() {
-            return person_device_id;
-        }
-
-        public void setPerson_device_id(Object person_device_id) {
-            this.person_device_id = person_device_id;
         }
 
         public String getRoom_id() {
@@ -278,35 +221,27 @@ public class DeviceListVo {
             this.room_id = room_id;
         }
 
-        public String getShare_object() {
-            return share_object;
+        public String getRoom_name() {
+            return room_name;
         }
 
-        public void setShare_object(String share_object) {
-            this.share_object = share_object;
+        public void setRoom_name(String room_name) {
+            this.room_name = room_name;
         }
 
-        public int getType() {
-            return type;
+        public String getTable_type() {
+            return table_type;
         }
 
-        public void setType(int type) {
-            this.type = type;
+        public void setTable_type(String table_type) {
+            this.table_type = table_type;
         }
 
-        public String getType_name() {
-            return type_name;
-        }
-
-        public void setType_name(String type_name) {
-            this.type_name = type_name;
-        }
-
-        public Object getUpdate_time() {
+        public String getUpdate_time() {
             return update_time;
         }
 
-        public void setUpdate_time(Object update_time) {
+        public void setUpdate_time(String update_time) {
             this.update_time = update_time;
         }
 

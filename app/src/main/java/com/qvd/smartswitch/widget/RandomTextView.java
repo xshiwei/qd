@@ -40,8 +40,8 @@ public class RandomTextView extends FrameLayout
     private int width;
     private int height;
     private int mode = RippleView.MODE_OUT;
-    private int fontColor = 0xff0000ff;
-    private int shadowColor = 0xdd696969;
+    private int fontColor = 0xffF8FCFB;
+    private int shadowColor = 0xddF8FCFB;
 
     public interface OnRippleViewClickListener {
         void onRippleViewClicked(int position);

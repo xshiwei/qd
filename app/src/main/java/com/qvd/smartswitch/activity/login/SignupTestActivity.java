@@ -1,6 +1,7 @@
 package com.qvd.smartswitch.activity.login;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -19,7 +20,11 @@ import com.qvd.smartswitch.utils.CommonUtils;
 import com.qvd.smartswitch.utils.RegexpUtils;
 import com.qvd.smartswitch.utils.SnackbarUtils;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.ObservableSource;
 import io.reactivex.Observer;
@@ -71,10 +76,18 @@ public class SignupTestActivity extends BaseActivity {
     TextView tvEmailError;
     @BindView(R.id.tv_phone_error)
     TextView tvPhoneError;
+    @BindView(R.id.et_input_email_code)
+    EditText etInputEmailCode;
 
     private final PhoneCountDownTimer phoneCountDownTimer = new PhoneCountDownTimer(60000, 1000);//60000
 
     private final EmailCountDownTimer emailCountDownTimer = new EmailCountDownTimer(60000, 1000);
+
+
+    /**
+     * 表示是手机号注册还是邮箱注册（1表示邮箱，2表示手机号）
+     */
+    private String identity_type;
 
 
     @Override
@@ -153,9 +166,7 @@ public class SignupTestActivity extends BaseActivity {
                     SnackbarUtils.Short(btnPhoneNext, "手机号或验证码不能为空").show();
                     return;
                 }
-                startActivity(new Intent(this, SetPasswordActivity.class).putExtra("userName", etInputPhone.getText().toString().trim())
-                        .putExtra("identity_type", "2"));
-                overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+                isVerificationCode(2, etInputPhone.getText().toString(), etInputCode.getText().toString());
                 break;
             case R.id.tv_email_code:
                 //邮箱验证码
@@ -167,9 +178,7 @@ public class SignupTestActivity extends BaseActivity {
                     SnackbarUtils.Short(btnEmailNext, "邮箱不能为空").show();
                     return;
                 }
-                startActivity(new Intent(this, SetPasswordActivity.class).putExtra("userName", etInputEmail.getText().toString().trim())
-                        .putExtra("identity_type", "1"));
-                overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+                isVerificationCode(1, etInputEmail.getText().toString(), etInputEmailCode.getText().toString());
                 break;
             case R.id.tv_phone_code:
                 //手机验证码
@@ -184,18 +193,59 @@ public class SignupTestActivity extends BaseActivity {
         }
     }
 
+
+    /**
+     * 判断账号和验证码是否匹配
+     */
+    private void isVerificationCode(int type, String username, String code) {
+        RetrofitService.qdoApi.isVerificationCode(username, code)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<MessageVo>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(MessageVo messageVo) {
+                        if (messageVo != null) {
+                            if (messageVo.getCode() == 200) {
+                                if (type == 1) {
+                                    startActivity(new Intent(SignupTestActivity.this, SetPasswordActivity.class).putExtra("userName", etInputEmail.getText().toString().trim())
+                                            .putExtra("identity_type", "1"));
+                                    overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+                                } else {
+                                    startActivity(new Intent(SignupTestActivity.this, SetPasswordActivity.class).putExtra("userName", etInputPhone.getText().toString().trim())
+                                            .putExtra("identity_type", "2"));
+                                    overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+                                }
+                            } else {
+                                SnackbarUtils.Short(btnEmailNext, "验证码与账号不匹配");
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        SnackbarUtils.Short(btnEmailNext, "网络连接失败");
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
     /**
      * 获取手机验证码
      */
     private void getPhoneCode() {
         if (!validatePhone()) {
             return;
-        } else if (isSameUserName(etInputPhone.getText().toString().trim())) {
-            tvPhoneError.setVisibility(View.VISIBLE);
-            tvEmailError.setText("该手机号已被注册");
-            return;
         }
-        phoneCountDownTimer.start();
+        isEmailValidation(2, etInputPhone.getText().toString());
     }
 
     /**
@@ -205,22 +255,27 @@ public class SignupTestActivity extends BaseActivity {
         if (!validateEmail()) {
             return;
         }
-        isEmailValidation();
+        isEmailValidation(1, etInputEmail.getText().toString());
     }
 
     /**
-     * 判断邮箱验证短信是否发送
+     * 判断验证短信是否发送
      */
-    private void isEmailValidation() {
-        RetrofitService.qdoApi.isSameUserName(etInputEmail.getText().toString().trim())
+    private void isEmailValidation(int type, String username) {
+        RetrofitService.qdoApi.isSameUserName(username)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnNext(new Consumer<MessageVo>() {
                     @Override
                     public void accept(MessageVo messageVo) throws Exception {
                         if (messageVo.getCode() == 200) {
-                            tvEmailError.setVisibility(View.VISIBLE);
-                            tvEmailError.setText("该邮箱已被注册");
+                            if (type == 1) {
+                                tvEmailError.setVisibility(View.VISIBLE);
+                                tvEmailError.setText("该邮箱已被注册");
+                            } else {
+                                tvPhoneError.setVisibility(View.VISIBLE);
+                                tvPhoneError.setText("该手机号已被注册");
+                            }
                         }
                     }
                 })
@@ -234,7 +289,20 @@ public class SignupTestActivity extends BaseActivity {
                 .concatMap(new Function<MessageVo, ObservableSource<MessageVo>>() {
                     @Override
                     public ObservableSource<MessageVo> apply(MessageVo messageVo) throws Exception {
-                        return RetrofitService.qdoApi.isUsernameValidation(etInputEmail.getText().toString().trim(), "1");
+                        if (type == 1) {
+                            //表示邮箱获取验证码
+                            Map<String, Object> map = new HashMap<>();
+                            map.put("username", username);
+                            map.put("identity_type", "1");
+                            return RetrofitService.qdoApi.isUsernameValidation(map);
+                        } else {
+                            //表示手机号获取验证码
+                            Map<String, Object> map = new HashMap<>();
+                            map.put("username", username);
+                            map.put("identity_type", "2");
+                            map.put("sms_type", 0);
+                            return RetrofitService.qdoApi.isUsernameValidation(map);
+                        }
                     }
                 })
                 .observeOn(AndroidSchedulers.mainThread())
@@ -247,12 +315,16 @@ public class SignupTestActivity extends BaseActivity {
                     @Override
                     public void onNext(MessageVo messageVo) {
                         if (messageVo.getCode() == 200) {
-                            emailCountDownTimer.start();
-                            SnackbarUtils.Short(btnEmailNext, "验证邮件发送成功").show();
+                            if (type == 1) {
+                                emailCountDownTimer.start();
+                            } else {
+                                phoneCountDownTimer.start();
+                            }
+                            SnackbarUtils.Short(btnEmailNext, "验证码发送成功").show();
                         } else if (messageVo.getCode() == 400) {
-                            SnackbarUtils.Short(btnEmailNext, "验证邮件发送失败").show();
+                            SnackbarUtils.Short(btnEmailNext, "验证码发送失败").show();
                         } else if (messageVo.getCode() == 405) {
-                            SnackbarUtils.Short(btnEmailNext, "重复发送").show();
+                            SnackbarUtils.Short(btnEmailNext, "验证码不能重复发送").show();
                         } else {
                             SnackbarUtils.Short(btnEmailNext, "网络连接超时").show();
                         }
@@ -260,7 +332,7 @@ public class SignupTestActivity extends BaseActivity {
 
                     @Override
                     public void onError(Throwable e) {
-                        Logger.e("isEmailValidation->" + e.getMessage());
+                        SnackbarUtils.Short(btnEmailNext, "网络连接失败");
                     }
 
                     @Override
@@ -303,7 +375,7 @@ public class SignupTestActivity extends BaseActivity {
     }
 
     /**
-     * 验证手机号
+     * 验证邮箱
      */
     private boolean validateEmail() {
         boolean valid = true;
@@ -321,46 +393,6 @@ public class SignupTestActivity extends BaseActivity {
         }
         return valid;
     }
-
-    /**
-     * 判断该账号是否被注册
-     *
-     * @param userName
-     * @return
-     */
-    private boolean isSameUserName(String userName) {
-        final boolean[] t = {false};
-        RetrofitService.qdoApi.isSameUserName(userName)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<MessageVo>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-
-                    }
-
-                    @Override
-                    public void onNext(MessageVo messageVo) {
-                        if (messageVo.getCode() == 200) {
-                            t[0] = true;
-                        } else {
-                            t[0] = false;
-                        }
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Logger.e(e.getMessage());
-                    }
-
-                    @Override
-                    public void onComplete() {
-
-                    }
-                });
-        return t[0];
-    }
-
 
     /**
      * 创建手机号验证码定时器

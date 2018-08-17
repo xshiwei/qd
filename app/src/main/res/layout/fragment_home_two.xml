@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     android:background="@mipmap/home_background">
 
-
     <RelativeLayout
         android:id="@+id/rl_actionbar"
         android:layout_width="match_parent"
@@ -22,7 +21,6 @@
             android:drawableRight="@mipmap/home_right_details"
             android:gravity="center"
             android:paddingTop="@dimen/y30"
-            android:text="纯粹慵懒的家"
             android:textColor="@color/white"
             android:textSize="13sp"
             android:textStyle="normal" />
@@ -38,12 +36,13 @@
             android:src="@mipmap/home_add" />
     </RelativeLayout>
 
-
-    <com.scwang.smartrefresh.layout.SmartRefreshLayout
+    <com.scwang.smartrefresh.layout.SmartRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/refreshLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/rl_actionbar">
+
 
         <com.qvd.smartswitch.widget.EmptyLayout
             android:id="@+id/emptylayout"
@@ -161,12 +160,11 @@
                     android:layout_width="@dimen/x90"
                     android:layout_height="match_parent"
                     android:layout_below="@+id/ll_outdoor"
-                    android:layout_marginBottom="@dimen/y10"
                     android:layout_marginLeft="@dimen/x10"
                     android:layout_marginTop="@dimen/y80"
                     android:alpha="0.95"
                     android:background="@drawable/home_shape"
-                    android:visibility="gone">
+                    android:visibility="visible">
 
                     <android.support.v7.widget.RecyclerView
                         android:id="@+id/rv_list"
@@ -197,31 +195,43 @@
 
                 </RelativeLayout>
 
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/rv_content_two"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/ll_outdoor"
-                    android:layout_marginBottom="@dimen/x10"
-                    android:layout_marginRight="@dimen/x10"
-                    android:layout_marginTop="@dimen/y80"
-                    android:layout_toRightOf="@+id/rl_list"
-                    android:visibility="gone"></android.support.v7.widget.RecyclerView>
 
-
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/rv_content"
+                <com.qvd.smartswitch.widget.EmptyLayout
+                    android:id="@+id/emptylayout_content"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_below="@+id/ll_outdoor"
-                    android:layout_marginBottom="@dimen/x10"
                     android:layout_marginLeft="@dimen/x10"
-                    android:layout_marginRight="@dimen/x10"
                     android:layout_marginTop="@dimen/y80"
                     android:layout_toRightOf="@+id/rl_list"
-                    android:alpha="0.95"
-                    android:background="@drawable/home_null_shape"
-                    android:visibility="gone"></android.support.v7.widget.RecyclerView>
+                    android:alpha="0.9"
+                    android:background="@color/white">
+
+                    <RelativeLayout
+                        android:id="@+id/rl_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:visibility="gone">
+
+                        <android.support.v7.widget.RecyclerView
+                            android:id="@+id/rv_content_two"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:alpha="0.95"></android.support.v7.widget.RecyclerView>
+
+
+                        <android.support.v7.widget.RecyclerView
+                            android:id="@+id/rv_content"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginRight="@dimen/x10"
+                            android:alpha="0.95"
+                            android:background="@drawable/home_null_shape"
+                            android:visibility="gone"></android.support.v7.widget.RecyclerView>
+
+                    </RelativeLayout>
+
+                </com.qvd.smartswitch.widget.EmptyLayout>
 
                 <com.melnykov.fab.FloatingActionButton
                     android:id="@+id/fab"
@@ -244,3 +254,4 @@
 
 
 </RelativeLayout>
+

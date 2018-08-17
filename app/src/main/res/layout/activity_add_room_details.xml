@@ -119,12 +119,12 @@
 
 
         <RelativeLayout
-            android:background="@color/popupwindow_edittext"
             android:layout_width="@dimen/x70"
             android:layout_height="@dimen/y70"
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/x20"
-            android:layout_toLeftOf="@+id/iv_more_two">
+            android:layout_toLeftOf="@+id/iv_more_two"
+            android:background="@color/popupwindow_edittext">
 
             <ImageView
                 android:id="@+id/iv_pic"
@@ -156,37 +156,44 @@
         android:textColor="@color/home_setting_text_three"
         android:textSize="12sp" />
 
-    <RelativeLayout
+    <com.qvd.smartswitch.widget.EmptyLayout
+        android:id="@+id/emptylayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_below="@+id/tv_text"
         android:layout_marginTop="@dimen/y25">
 
-        <TextView
-            android:id="@+id/tv_home_name"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/y80"
-            android:background="@color/white"
-            android:gravity="center_vertical"
-            android:paddingLeft="@dimen/x30"
-            android:text="纯粹慵懒的家"
-            android:textColor="@color/home_setting_text_three"
-            android:textSize="14sp" />
+            android:layout_height="match_parent">
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:layout_below="@+id/tv_home_name"
-            android:layout_marginLeft="@dimen/x20"
-            android:background="@color/black_16" />
+            <TextView
+                android:id="@+id/tv_home_name"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/y80"
+                android:background="@color/white"
+                android:gravity="center_vertical"
+                android:paddingLeft="@dimen/x30"
+                android:text="纯粹慵懒的家"
+                android:textColor="@color/home_setting_text_three"
+                android:textSize="14sp" />
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recyclerview"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/tv_home_name"></android.support.v7.widget.RecyclerView>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:layout_below="@+id/tv_home_name"
+                android:layout_marginLeft="@dimen/x20"
+                android:background="@color/black_16" />
 
-    </RelativeLayout>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_home_name"></android.support.v7.widget.RecyclerView>
+
+        </RelativeLayout>
+
+    </com.qvd.smartswitch.widget.EmptyLayout>
 
 
 </RelativeLayout>

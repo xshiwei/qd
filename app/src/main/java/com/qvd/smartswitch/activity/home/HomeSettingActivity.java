@@ -263,7 +263,6 @@ public class HomeSettingActivity extends BaseActivity {
         mPicker.setOnCityItemClickListener(new OnCityItemClickListener() {
             @Override
             public void onSelected(ProvinceBean province, CityBean city, DistrictBean district) {
-
                 //省份
                 if (province != null) {
                     provinceName = province.getName();

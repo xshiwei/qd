@@ -7,14 +7,20 @@ import android.widget.TextView;
 
 import com.qvd.smartswitch.R;
 import com.qvd.smartswitch.model.home.RightBean;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
 
 public class ClassifyDetailAdapter extends AddDeviceAdapter<RightBean> {
 
+    private Context context;
+    private List<RightBean> list;
+
     public ClassifyDetailAdapter(Context context, List<RightBean> list, AddDeviceListener listener) {
         super(context, list, listener);
+        this.context = context;
+        this.list = list;
     }
 
 
@@ -60,6 +66,7 @@ public class ClassifyDetailAdapter extends AddDeviceAdapter<RightBean> {
                     tvTitle.setText(sortBean.getName());
                     break;
                 case 1:
+                    Picasso.with(context).load(sortBean.getImgsrc()).into(avatar);
                     tvCity.setText(sortBean.getName());
                     break;
             }

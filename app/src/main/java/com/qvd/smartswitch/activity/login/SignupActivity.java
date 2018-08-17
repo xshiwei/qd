@@ -76,8 +76,6 @@ public class SignupActivity extends BaseActivity {
         String name = inputName.getText().toString();
         String code = inputCode.getText().toString();
 
-        // TODO: Implement your own signup logic here.
-
         new Handler().postDelayed(
                 new Runnable() {
                     public void run() {

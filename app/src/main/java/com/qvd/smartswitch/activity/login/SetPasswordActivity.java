@@ -1,5 +1,6 @@
 package com.qvd.smartswitch.activity.login;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -14,8 +15,12 @@ import com.qvd.smartswitch.activity.MainActivity;
 import com.qvd.smartswitch.activity.base.BaseActivity;
 import com.qvd.smartswitch.api.RetrofitService;
 import com.qvd.smartswitch.model.login.MessageVo;
+import com.qvd.smartswitch.model.login.RegisterVo;
 import com.qvd.smartswitch.utils.CommonUtils;
+import com.qvd.smartswitch.utils.ConfigUtils;
+import com.qvd.smartswitch.utils.SharedPreferencesUtil;
 import com.qvd.smartswitch.utils.SnackbarUtils;
+import com.qvd.smartswitch.widget.MyProgressDialog;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -61,7 +66,7 @@ public class SetPasswordActivity extends BaseActivity {
     @Override
     protected void initImmersionBar() {
         super.initImmersionBar();
-        mImmersionBar.fitsSystemWindows(true).statusBarColor(R.color.add_home_background).init();
+        mImmersionBar.fitsSystemWindows(true).statusBarColor(R.color.white).init();
     }
 
     @Override
@@ -123,27 +128,42 @@ public class SetPasswordActivity extends BaseActivity {
      * 注册
      */
     private void register() {
+        final MyProgressDialog progressDialog = MyProgressDialog.createProgressDialog(this, 5000,
+                new MyProgressDialog.OnTimeOutListener() {
+                    @Override
+                    public void onTimeOut(ProgressDialog dialog) {
+                        dialog.dismiss();
+                        SnackbarUtils.Short(tvPasswordError, "登录失败,请重试");
+                    }
+                });
+        progressDialog.setMessage("登录中");
+        progressDialog.show();
         RetrofitService.qdoApi.register(userName, etPassword.getText().toString().trim(), etRepassword.getText().toString().trim(), identity_type)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<MessageVo>() {
+                .subscribe(new Observer<RegisterVo>() {
                     @Override
                     public void onSubscribe(Disposable d) {
 
                     }
 
                     @Override
-                    public void onNext(MessageVo messageVo) {
-                        if (messageVo.getCode() == 200) {
-                            startActivity(new Intent(SetPasswordActivity.this, MainActivity.class));
-                            overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
-                            SnackbarUtils.Short(btnComplete, "注册成功").show();
-                        } else if (messageVo.getCode() == 400) {
-                            SnackbarUtils.Short(btnComplete, "注册失败").show();
-                        } else if (messageVo.getCode() == 800) {
-                            SnackbarUtils.Short(btnComplete, "连接超时").show();
-                        } else if (messageVo.getCode() == 402) {
-                            SnackbarUtils.Short(btnComplete, "您当前邮箱未验证").show();
+                    public void onNext(RegisterVo messageVo) {
+                        if (messageVo != null) {
+                            if (messageVo.getMap_string() != null && messageVo.getCode() == 200) {
+                                SharedPreferencesUtil.putString(SetPasswordActivity.this, SharedPreferencesUtil.USER_ID, messageVo.getMap_string().getUser_id());
+                                SharedPreferencesUtil.putString(SetPasswordActivity.this, SharedPreferencesUtil.IDENTIFIER, messageVo.getMap_string().getIdentifier());
+                                SharedPreferencesUtil.putString(SetPasswordActivity.this, SharedPreferencesUtil.PASSWORD, messageVo.getMap_string().getPassword());
+                                ConfigUtils.user_id = messageVo.getMap_string().getUser_id();
+                                startActivity(new Intent(SetPasswordActivity.this, MainActivity.class));
+                                overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+                            } else if (messageVo.getCode() == 400) {
+                                SnackbarUtils.Short(btnComplete, "注册失败").show();
+                            } else if (messageVo.getCode() == 800) {
+                                SnackbarUtils.Short(btnComplete, "连接超时").show();
+                            } else if (messageVo.getCode() == 402) {
+                                SnackbarUtils.Short(btnComplete, "您当前邮箱未验证").show();
+                            }
                         }
                     }
 

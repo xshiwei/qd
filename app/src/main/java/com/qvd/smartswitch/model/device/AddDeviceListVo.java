@@ -1,12 +1,14 @@
 package com.qvd.smartswitch.model.device;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class AddDeviceListVo {
+public class AddDeviceListVo implements Serializable {
+
     /**
      * code : 200
      * message : ok
-     * data : [{"device_detail_list":[{"add_time":"2018-08-07 09:25:48.000000","device_name":"车载空气净化器","device_no":"QP01","device_pic":"https://www.qq745.com/uploads/allimg/141009/1-14100ZT451-51.jpg","device_version":"v1.0","update_time":null}],"type":3,"type_name":"air cleaner"},{"device_detail_list":[{"add_time":"2018-08-07 09:24:47.000000","device_name":"蓝牙智能对讲机","device_no":"QTAE5","device_pic":"https://www.qq745.com/uploads/allimg/141009/1-14100ZT451-51.jpg","device_version":"v1.0","update_time":"2018-08-07 09:33:40.000000"},{"add_time":"2018-08-07 09:27:10.000000","device_name":"蓝牙智能耳机","device_no":"QTAE6","device_pic":"https://www.qq745.com/uploads/allimg/141009/1-14100ZT451-51.jpg","device_version":"v1.0","update_time":null}],"type":2,"type_name":"Headse"},{"device_detail_list":[{"add_time":"2018-08-07 09:21:39.000000","device_name":"蓝牙智能开关","device_no":"QS02","device_pic":"https://www.qq745.com/uploads/allimg/141009/1-14100ZT451-51.jpg","device_version":"v1.0","update_time":null},{"add_time":"2018-08-07 09:23:16.000000","device_name":"Wi-fi 智能开关","device_no":"QS03","device_pic":"https://www.qq745.com/uploads/allimg/141009/1-14100ZT451-51.jpg","device_version":"v1.0","update_time":null}],"type":1,"type_name":"Smart switch"}]
+     * data : [{"device_detail_list":[{"add_time":"2018-08-13 12:20:43.000000","connect_type":0,"device_name":"车载净化器","device_no":"qp01","device_pic":"https://www.qq745.com/uploads/allimg/141009/1-14100ZT451-51.jpg","device_version":"v1.0","firmware_address":"https://www.qq745.com/uploads/allimg/141009/1-14100ZT451-51.jpg","firmware_version":"1.0","update_time":null}],"device_type":"Car device"},{"device_detail_list":[{"add_time":"2018-08-13 12:21:58.000000","connect_type":1,"device_name":"蓝牙智能耳机","device_no":"qta35","device_pic":"https://www.qq745.com/uploads/allimg/141009/1-14100ZT451-51.jpg","device_version":"v1.0","firmware_address":"https://www.qq745.com/uploads/allimg/141009/1-14100ZT451-51.jpg","firmware_version":"1.0","update_time":null},{"add_time":"2018-08-13 12:22:17.000000","connect_type":1,"device_name":"蓝牙智能对讲耳机","device_no":"qtae6","device_pic":"https://www.qq745.com/uploads/allimg/141009/1-14100ZT451-51.jpg","device_version":"v1.0","firmware_address":"https://www.qq745.com/uploads/allimg/141009/1-14100ZT451-51.jpg","firmware_version":"1.0","update_time":null}],"device_type":"Smart headset"},{"device_detail_list":[{"add_time":"2018-08-13 12:16:26.000000","connect_type":1,"device_name":"蓝牙智能开关","device_no":"qs02","device_pic":"https://www.qq745.com/uploads/allimg/141009/1-14100ZT451-51.jpg","device_version":"v1.0","firmware_address":"https://www.qq745.com/uploads/allimg/141009/1-14100ZT451-51.jpg","firmware_version":"1.0","update_time":null},{"add_time":"2018-08-13 12:16:47.000000","connect_type":2,"device_name":"Wifi 智能开关","device_no":"qs03","device_pic":"https://www.qq745.com/uploads/allimg/141009/1-14100ZT451-51.jpg","device_version":"v1.0","firmware_address":"https://www.qq745.com/uploads/allimg/141009/1-14100ZT451-51.jpg","firmware_version":"1.0","update_time":null}],"device_type":"Smart switch"}]
      */
 
     private int code;
@@ -37,31 +39,21 @@ public class AddDeviceListVo {
         this.data = data;
     }
 
-    public static class DataBean {
+    public static class DataBean implements Serializable {
         /**
-         * device_detail_list : [{"add_time":"2018-08-07 09:25:48.000000","device_name":"车载空气净化器","device_no":"QP01","device_pic":"https://www.qq745.com/uploads/allimg/141009/1-14100ZT451-51.jpg","device_version":"v1.0","update_time":null}]
-         * type : 3
-         * type_name : air cleaner
+         * device_detail_list : [{"add_time":"2018-08-13 12:20:43.000000","connect_type":0,"device_name":"车载净化器","device_no":"qp01","device_pic":"https://www.qq745.com/uploads/allimg/141009/1-14100ZT451-51.jpg","device_version":"v1.0","firmware_address":"https://www.qq745.com/uploads/allimg/141009/1-14100ZT451-51.jpg","firmware_version":"1.0","update_time":null}]
+         * device_type : Car device
          */
 
-        private int type;
-        private String type_name;
+        private String device_type;
         private List<DeviceDetailListBean> device_detail_list;
 
-        public int getType() {
-            return type;
+        public String getDevice_type() {
+            return device_type;
         }
 
-        public void setType(int type) {
-            this.type = type;
-        }
-
-        public String getType_name() {
-            return type_name;
-        }
-
-        public void setType_name(String type_name) {
-            this.type_name = type_name;
+        public void setDevice_type(String device_type) {
+            this.device_type = device_type;
         }
 
         public List<DeviceDetailListBean> getDevice_detail_list() {
@@ -72,21 +64,27 @@ public class AddDeviceListVo {
             this.device_detail_list = device_detail_list;
         }
 
-        public static class DeviceDetailListBean {
+        public static class DeviceDetailListBean implements Serializable {
             /**
-             * add_time : 2018-08-07 09:25:48.000000
-             * device_name : 车载空气净化器
-             * device_no : QP01
+             * add_time : 2018-08-13 12:20:43.000000
+             * connect_type : 0
+             * device_name : 车载净化器
+             * device_no : qp01
              * device_pic : https://www.qq745.com/uploads/allimg/141009/1-14100ZT451-51.jpg
              * device_version : v1.0
+             * firmware_address : https://www.qq745.com/uploads/allimg/141009/1-14100ZT451-51.jpg
+             * firmware_version : 1.0
              * update_time : null
              */
 
             private String add_time;
+            private int connect_type;
             private String device_name;
             private String device_no;
             private String device_pic;
             private String device_version;
+            private String firmware_address;
+            private String firmware_version;
             private Object update_time;
 
             public String getAdd_time() {
@@ -95,6 +93,14 @@ public class AddDeviceListVo {
 
             public void setAdd_time(String add_time) {
                 this.add_time = add_time;
+            }
+
+            public int getConnect_type() {
+                return connect_type;
+            }
+
+            public void setConnect_type(int connect_type) {
+                this.connect_type = connect_type;
             }
 
             public String getDevice_name() {
@@ -127,6 +133,22 @@ public class AddDeviceListVo {
 
             public void setDevice_version(String device_version) {
                 this.device_version = device_version;
+            }
+
+            public String getFirmware_address() {
+                return firmware_address;
+            }
+
+            public void setFirmware_address(String firmware_address) {
+                this.firmware_address = firmware_address;
+            }
+
+            public String getFirmware_version() {
+                return firmware_version;
+            }
+
+            public void setFirmware_version(String firmware_version) {
+                this.firmware_version = firmware_version;
             }
 
             public Object getUpdate_time() {

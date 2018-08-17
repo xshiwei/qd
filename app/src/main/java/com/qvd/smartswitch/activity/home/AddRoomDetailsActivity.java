@@ -1,6 +1,7 @@
 package com.qvd.smartswitch.activity.home;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -17,12 +18,12 @@ import com.qvd.smartswitch.activity.base.BaseActivity;
 import com.qvd.smartswitch.adapter.AddRoomDeviceListAdapter;
 import com.qvd.smartswitch.api.RetrofitService;
 import com.qvd.smartswitch.model.home.DeviceListVo;
-import com.qvd.smartswitch.model.home.RoomDeviceVo;
 import com.qvd.smartswitch.model.login.MessageVo;
 import com.qvd.smartswitch.utils.CommonUtils;
 import com.qvd.smartswitch.utils.ConfigUtils;
 import com.qvd.smartswitch.utils.SnackbarUtils;
 import com.qvd.smartswitch.utils.ToastUtil;
+import com.qvd.smartswitch.widget.EmptyLayout;
 import com.qvd.smartswitch.widget.MyPopupWindowOne;
 import com.qvd.smartswitch.widget.MyPopupWindowThree;
 import com.qvd.smartswitch.widget.MyPopupWindowTwo;
@@ -34,6 +35,7 @@ import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -65,8 +67,10 @@ public class AddRoomDetailsActivity extends BaseActivity {
     TextView tvHomeName;
     @BindView(R.id.recyclerview)
     RecyclerView recyclerview;
+    @BindView(R.id.emptylayout)
+    EmptyLayout emptylayout;
 
-    private List<DeviceListVo.MyDataBean> list = new ArrayList<>();
+    private List<DeviceListVo.DataBean> list = new ArrayList<>();
     private AddRoomDeviceListAdapter adapter;
 
     /**
@@ -98,6 +102,9 @@ public class AddRoomDetailsActivity extends BaseActivity {
      * 确定移动设备
      */
     private MyPopupWindowOne popupWindowConfirm;
+    /**
+     * 家庭id
+     */
     private String family_id;
 
     @Override
@@ -117,22 +124,21 @@ public class AddRoomDetailsActivity extends BaseActivity {
         name = getIntent().getStringExtra("name");
         pic = getIntent().getStringExtra("pic");
         family_id = getIntent().getStringExtra("family_id");
+        tvHomeName.setText(ConfigUtils.family_locate.getFamily_name());
         Picasso.with(this).load(pic).into(ivPic);
         getDeviceList();
         recyclerview.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         adapter = new AddRoomDeviceListAdapter(this, list);
         recyclerview.setAdapter(adapter);
         adapter.setOnItemClickListener((pos, myLiveList) -> {
-            DeviceListVo.MyDataBean bean = myLiveList.get(pos);
-            boolean selete = bean.isSelete();
+            DeviceListVo.DataBean bean = myLiveList.get(pos);
+            boolean selete = bean.isIs_selete();
             if (!selete) {
                 showPopupwindowConfirm(bean);
                 popupWindowConfirm.showPopupWindow(tvCommonActionbarTitle);
-                //index++;
-                //bean.setSelete(true);
             } else {
                 index--;
-                bean.setSelete(false);
+                bean.setIs_selete(false);
             }
             tvText.setText("已选中" + index + "个设备");
             adapter.notifyDataSetChanged();
@@ -143,8 +149,9 @@ public class AddRoomDetailsActivity extends BaseActivity {
     /**
      * 显示是否将该设备移至当前房间中
      */
-    private void showPopupwindowConfirm(DeviceListVo.MyDataBean dataBean) {
-        popupWindowConfirm = new MyPopupWindowOne(this, "该设备已关联到[客厅]确定要移动到[书房]吗？", "取消", "确定", new MyPopupWindowOne.IPopupWindowListener() {
+    private void showPopupwindowConfirm(DeviceListVo.DataBean dataBean) {
+        String title = "该设备已关联到" + dataBean.getRoom_name() + "确定要移动到[" + tvName.getText().toString() + "]吗？";
+        popupWindowConfirm = new MyPopupWindowOne(this, title, "取消", "确定", new MyPopupWindowOne.IPopupWindowListener() {
             @Override
             public void cancel() {
                 popupWindowConfirm.dismiss();
@@ -153,7 +160,7 @@ public class AddRoomDetailsActivity extends BaseActivity {
             @Override
             public void confirm() {
                 index++;
-                dataBean.setSelete(true);
+                dataBean.setIs_selete(true);
                 popupWindowConfirm.dismiss();
             }
         });
@@ -165,7 +172,7 @@ public class AddRoomDetailsActivity extends BaseActivity {
     public void getDeviceList() {
         Map<String, String> map = new HashMap<>();
         map.put("user_id", ConfigUtils.user_id);
-        map.put("family_id", ConfigUtils.family_id);
+        map.put("family_id", family_id);
         RetrofitService.qdoApi.getDeviceList(map)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -180,7 +187,7 @@ public class AddRoomDetailsActivity extends BaseActivity {
                         if (deviceListVo.getCode() == 200) {
                             if (deviceListVo.getData() != null) {
                                 for (DeviceListVo.DataBean dataBean : deviceListVo.getData()) {
-                                    list.add(new DeviceListVo.MyDataBean(dataBean, false));
+                                    list.add(dataBean);
                                 }
                                 adapter.notifyDataSetChanged();
                             }
@@ -193,7 +200,7 @@ public class AddRoomDetailsActivity extends BaseActivity {
 
                     @Override
                     public void onError(Throwable e) {
-                        Logger.e(e.getMessage());
+                        ToastUtil.showToast("网络连接错误");
                     }
 
                     @Override
@@ -244,7 +251,6 @@ public class AddRoomDetailsActivity extends BaseActivity {
                     public void onSubscribe(Disposable d) {
 
                     }
-
                     @Override
                     public void onNext(MessageVo messageVo) {
                         if (messageVo.getCode() == 200) {
@@ -356,10 +362,10 @@ public class AddRoomDetailsActivity extends BaseActivity {
     /**
      * 获取所选中的所有条目
      */
-    private List<DeviceListVo.MyDataBean> getSeleteList() {
-        List<DeviceListVo.MyDataBean> roomDeviceList = new ArrayList<>();
+    private List<DeviceListVo.DataBean> getSeleteList() {
+        List<DeviceListVo.DataBean> roomDeviceList = new ArrayList<>();
         for (int i = 0; i < adapter.getAllList().size(); i++) {
-            if (adapter.getAllList().get(i).isSelete()) {
+            if (adapter.getAllList().get(i).isIs_selete()) {
                 roomDeviceList.add(adapter.getAllList().get(i));
             }
         }

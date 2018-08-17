@@ -38,7 +38,7 @@ public class BleManageUtils {
     /**
      * 设置扫描规则
      */
-    public void setScanRule() {
+    public void setScanRule(String str_name) {
         String[] uuids;
         String str_uuid = "";
         if (TextUtils.isEmpty(str_uuid)) {
@@ -61,7 +61,6 @@ public class BleManageUtils {
         }
 
         String[] names;
-        String str_name = "SimpleBLEPeripheral,Qevdo,QS,Qevdo-QS02";
         if (TextUtils.isEmpty(str_name)) {
             names = null;
         } else {

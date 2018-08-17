@@ -1,6 +1,8 @@
 package com.qvd.smartswitch.activity.home;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -16,6 +18,8 @@ import com.qvd.smartswitch.model.home.HomeListVo;
 import com.qvd.smartswitch.model.home.Test2Vo;
 import com.qvd.smartswitch.utils.ConfigUtils;
 import com.qvd.smartswitch.utils.SnackbarUtils;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,7 +51,6 @@ public class HomeManageActivity extends BaseActivity {
     private List<HomeListVo.DataBean> list = new ArrayList<>();
     private HomeManageListAdapter adapter;
 
-
     @Override
     protected int setLayoutId() {
         return R.layout.activity_home_manage;
@@ -63,6 +66,11 @@ public class HomeManageActivity extends BaseActivity {
     protected void initData() {
         super.initData();
         tvCommonActionbarTitle.setText("家庭管理");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         getHomeList();
         recyclerview.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         adapter = new HomeManageListAdapter(this, list);

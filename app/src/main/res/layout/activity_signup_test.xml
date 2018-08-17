@@ -217,7 +217,6 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="@dimen/x30"
-                android:layout_toLeftOf="@+id/tv_email_code"
                 android:layout_toRightOf="@+id/iv_email"
                 android:background="@null"
                 android:hint="邮箱"
@@ -225,20 +224,6 @@
                 android:textColor="@color/home_manage_text"
                 android:textSize="13sp" />
 
-            <TextView
-                android:id="@+id/tv_email_code"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:gravity="center"
-                android:paddingBottom="@dimen/y10"
-                android:paddingLeft="@dimen/x30"
-                android:paddingRight="@dimen/x30"
-                android:paddingTop="@dimen/y10"
-                android:text="发送验证邮件"
-                android:textColor="@color/orangered"
-                android:textSize="13sp" />
         </RelativeLayout>
 
         <TextView
@@ -253,18 +238,54 @@
             android:textSize="12sp"
             android:visibility="gone" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <RelativeLayout
+            android:background="@drawable/login_edittext_shape"
+            android:id="@+id/rl_input_email_code"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/y80"
             android:layout_below="@+id/tv_email_error"
-            android:layout_marginLeft="@dimen/x60"
-            android:layout_marginRight="@dimen/x60"
-            android:layout_marginTop="@dimen/y60"
-            android:padding="5dp"
-            android:text="您已经收到验证邮件，并且确认点击验证链接才能继续下一步？"
-            android:textColor="@color/home_setting_text_three"
-            android:textSize="16sp" />
+            android:layout_marginLeft="@dimen/x30"
+            android:layout_marginRight="@dimen/x30"
+            android:layout_marginTop="@dimen/y30">
 
+            <ImageView
+                android:id="@+id/iv_email_code"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/x40"
+                android:src="@mipmap/login_user_unselete" />
+
+            <EditText
+                android:id="@+id/et_input_email_code"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/x30"
+                android:layout_toLeftOf="@+id/tv_email_code"
+                android:layout_toRightOf="@+id/iv_email_code"
+                android:background="@null"
+                android:hint="验证码"
+                android:inputType="number"
+                android:textColor="@color/home_manage_text"
+                android:textSize="13sp" />
+
+            <TextView
+                android:id="@+id/tv_email_code"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:gravity="center"
+                android:paddingBottom="@dimen/y10"
+                android:paddingLeft="@dimen/x30"
+                android:paddingRight="@dimen/x30"
+                android:paddingTop="@dimen/y10"
+                android:text="发送验证码"
+                android:textColor="@color/orangered"
+                android:textSize="13sp" />
+
+        </RelativeLayout>
 
         <TextView
             android:id="@+id/btn_email_next"
@@ -275,7 +296,7 @@
             android:layout_marginLeft="@dimen/x70"
             android:layout_marginRight="@dimen/x70"
             android:layout_marginTop="@dimen/y120"
-            android:background="@drawable/login_background_selector"
+            android:background="@drawable/login_text_selector"
             android:clickable="true"
             android:gravity="center"
             android:text="下一步"

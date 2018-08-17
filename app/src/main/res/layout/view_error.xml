@@ -6,23 +6,15 @@
     android:padding="16dp" >
 
     <TextView
-        android:textColor="@color/black6"
-        android:textSize="14sp"
+        android:textColor="@color/home_setting_text_two"
+        android:textSize="12sp"
         android:id="@+id/textViewMessage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="@string/error_view_message"
-        android:drawableTop="@mipmap/error"
+        android:drawableTop="@mipmap/home_error"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:gravity="center_horizontal" />
-
-    <Button
-        android:id="@+id/buttonError"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:text="@string/error_view_button"
-        android:layout_marginTop="16dp" />
 
 </LinearLayout>

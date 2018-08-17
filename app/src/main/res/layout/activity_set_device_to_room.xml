@@ -63,6 +63,13 @@
             android:layout_marginRight="@dimen/x30"
             android:src="@mipmap/device_more_details" />
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="@dimen/x50"
+            android:background="@color/black_16" />
+
     </RelativeLayout>
 
     <RelativeLayout
@@ -70,7 +77,6 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/y100"
         android:layout_below="@+id/rl_device_name"
-        android:layout_marginTop="@dimen/y20"
         android:background="@drawable/layout_seletor"
         android:clickable="true">
 
@@ -80,7 +86,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:paddingLeft="@dimen/x30"
-            android:text="选择设备所在房间"
+            android:text="选择设备所在位置"
             android:textColor="@color/app_title"
             android:textSize="14sp" />
 
@@ -95,6 +101,7 @@
             android:layout_toRightOf="@+id/tv_selete_room_title"
             android:gravity="right|center"
             android:padding="5dp"
+            android:text="默认房间"
             android:textColor="@color/home_setting_text_two"
             android:textSize="14sp" />
 
@@ -107,6 +114,13 @@
             android:layout_marginRight="@dimen/x30"
             android:src="@mipmap/device_more_details" />
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="@dimen/x50"
+            android:background="@color/black_16" />
+
     </RelativeLayout>
 
 
@@ -115,7 +129,6 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/y100"
         android:layout_below="@+id/rl_selete_room"
-        android:layout_marginTop="@dimen/y20"
         android:background="@color/white">
 
         <TextView
@@ -128,13 +141,21 @@
             android:textSize="14sp" />
 
         <ImageView
+            android:padding="5dp"
             android:id="@+id/iv_set_common"
-            android:layout_width="@dimen/x50"
-            android:layout_height="@dimen/y50"
+            android:layout_width="@dimen/x60"
+            android:layout_height="@dimen/y60"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="@dimen/x30"
-            android:src="@drawable/register_image_selete" />
+            android:layout_marginRight="@dimen/x20"
+            android:src="@mipmap/register_unselete" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="@dimen/x50"
+            android:background="@color/black_16" />
 
     </RelativeLayout>
 

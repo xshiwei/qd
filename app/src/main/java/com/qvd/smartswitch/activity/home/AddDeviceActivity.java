@@ -9,6 +9,7 @@ import android.net.wifi.ScanResult;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
@@ -33,10 +34,14 @@ import com.qvd.smartswitch.R;
 import com.qvd.smartswitch.activity.base.BaseActivity;
 import com.qvd.smartswitch.activity.wifi.DeviceWifiSettingActivity;
 import com.qvd.smartswitch.adapter.AddDeviceSortAdapter;
+import com.qvd.smartswitch.api.RetrofitService;
+import com.qvd.smartswitch.model.device.AddDeviceListVo;
 import com.qvd.smartswitch.model.device.ScanResultVo;
 import com.qvd.smartswitch.model.home.SortBean;
+import com.qvd.smartswitch.model.login.MessageVo;
 import com.qvd.smartswitch.utils.BleManageUtils;
 import com.qvd.smartswitch.utils.CommonUtils;
+import com.qvd.smartswitch.utils.ConfigUtils;
 import com.qvd.smartswitch.utils.PermissionUtils;
 import com.qvd.smartswitch.utils.ToastUtil;
 import com.qvd.smartswitch.widget.CheckListener;
@@ -53,6 +58,10 @@ import java.util.Vector;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by Administrator on 2018/6/11 0011.
@@ -96,7 +105,7 @@ public class AddDeviceActivity extends BaseActivity implements CheckListener {
     /**
      * 后台数据实体类
      */
-    private SortBean mSortBean;
+    private AddDeviceListVo mSortBean;
 
     /**
      * wifi控制实例
@@ -123,6 +132,15 @@ public class AddDeviceActivity extends BaseActivity implements CheckListener {
             }
         }
     };
+
+    /**
+     * 左侧数据集合
+     */
+    private List<AddDeviceListVo.DataBean> categoryOneArray;
+    /**
+     * 打开GPS
+     */
+    private MyPopupWindowOne myPopupWindowOne;
 
     @Override
     protected int setLayoutId() {
@@ -154,9 +172,36 @@ public class AddDeviceActivity extends BaseActivity implements CheckListener {
             startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
         }
         initWifi();
-        PermissionUtils.requestPermission(this, Permission.Group.LOCATION);
         initNearby();
         initManual();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        checkPermission();
+        startScanWifi();
+    }
+
+    /**
+     * 打开GPS
+     */
+    private void showPopupWindowOpenGPS() {
+        myPopupWindowOne = new MyPopupWindowOne(this, "检测到您的GPS未打开，可能导致搜索不到设备,是否去打开？", "取消", "确认", new MyPopupWindowOne.IPopupWindowListener() {
+            @Override
+            public void cancel() {
+                myPopupWindowOne.dismiss();
+            }
+
+            @Override
+            public void confirm() {
+                // 转到手机设置界面，用户设置GPS
+                Intent intent = new Intent(
+                        Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                startActivityForResult(intent, REQUEST_CODE_OPEN_GPS);
+                myPopupWindowOne.dismiss();
+            }
+        });
     }
 
     /**
@@ -168,13 +213,14 @@ public class AddDeviceActivity extends BaseActivity implements CheckListener {
         randomTextview.setOnRippleViewClickListener(position -> {
             //搜索的设备跳转到连接页面
             ScanResultVo resultVo = randomTextview.getKeyWords().get(position);
-            switch (resultVo.getDeviceNo()) {
-                case "qevdo_qs03":
+            switch (resultVo.getConnectType()) {
+                case 1:
                     startActivity(new Intent(AddDeviceActivity.this, DeviceConnectActivity.class)
                             .putExtra("ScanResultVo", resultVo));
                     break;
-                case "QS02":
-                    startActivity(new Intent(AddDeviceActivity.this, DeviceWifiSettingActivity.class));
+                case 2:
+                    startActivity(new Intent(AddDeviceActivity.this, DeviceWifiSettingActivity.class)
+                            .putExtra("wifi_ssid", resultVo.getDeviceNo()));
                     break;
             }
             overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
@@ -185,6 +231,12 @@ public class AddDeviceActivity extends BaseActivity implements CheckListener {
      * 开始获得扫描设备
      */
     private void getNearByData() {
+        PermissionUtils.requestPermission(this, Permission.Group.LOCATION);
+        //判断用户是否打开GPS
+        if (!BleManageUtils.getInstance().checkGPSIsOpen(this)) {
+            showPopupWindowOpenGPS();
+            myPopupWindowOne.showPopupWindow(randomTextview);
+        }
         checkPermission();
         startScanWifi();
     }
@@ -218,7 +270,7 @@ public class AddDeviceActivity extends BaseActivity implements CheckListener {
             public void retrievedNearbyAccessPoints(List<ScanResult> list) {
                 for (ScanResult result : list) {
                     switch (result.SSID) {
-                        case "qevdo_qs03":
+                        case "qs03":
                             ScanResultVo resultVo = new ScanResultVo(result.SSID, CommonUtils.getDeviceName(result.SSID), result.BSSID, 2);
                             randomTextview.addKeyWord(resultVo);
                             handler.sendEmptyMessage(1);
@@ -264,7 +316,7 @@ public class AddDeviceActivity extends BaseActivity implements CheckListener {
             Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
         } else {
-            BleManageUtils.getInstance().setScanRule();
+            BleManageUtils.getInstance().setScanRule("SimpleBLEPeripheral,QS,qs,Qevdo-QS02");
             startScan();
         }
     }
@@ -273,6 +325,7 @@ public class AddDeviceActivity extends BaseActivity implements CheckListener {
      * 开始扫描
      */
     private void startScan() {
+        randomTextview.removeKeyWords();
         BleManager.getInstance().scan(new BleScanCallback() {
             @Override
             public void onScanStarted(boolean success) {
@@ -281,9 +334,7 @@ public class AddDeviceActivity extends BaseActivity implements CheckListener {
 
             @Override
             public void onScanning(BleDevice bleDevice) {
-                ScanResultVo resultVo = new ScanResultVo(bleDevice.getName(), CommonUtils.getDeviceName(bleDevice.getName()), bleDevice.getMac(), 1);
-                randomTextview.addKeyWord(resultVo);
-                handler.sendEmptyMessage(1);
+                IsDeviceBinding(bleDevice);
             }
 
             @Override
@@ -293,13 +344,47 @@ public class AddDeviceActivity extends BaseActivity implements CheckListener {
         });
     }
 
+    /**
+     * 判断当前设备是否被当前用户绑定
+     */
+    private void IsDeviceBinding(BleDevice bleDevice) {
+        RetrofitService.qdoApi.isDeviceBinding(ConfigUtils.user_id, bleDevice.getMac())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<MessageVo>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(MessageVo messageVo) {
+                        if (messageVo != null) {
+                            if (messageVo.getCode() == 400) {
+                                ScanResultVo resultVo = new ScanResultVo(bleDevice.getName(), CommonUtils.getDeviceName(bleDevice.getName()), bleDevice.getMac(), 1);
+                                randomTextview.addKeyWord(resultVo);
+                                handler.sendEmptyMessage(1);
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_CODE_OPEN_GPS) {
             if (BleManageUtils.getInstance().checkGPSIsOpen(this)) {
-                BleManageUtils.getInstance().setScanRule();
-                startScan();
+                getNearByData();
             }
         }
     }
@@ -310,53 +395,57 @@ public class AddDeviceActivity extends BaseActivity implements CheckListener {
     private void initManual() {
         mLinearLayoutManager = new LinearLayoutManager(this);
         rvSort.setLayoutManager(mLinearLayoutManager);
-
-        //获取asset目录下的资源文件
-        String assetsData = getAssetsData("sort.json");
-        Gson gson = new Gson();
-        mSortBean = gson.fromJson(assetsData, SortBean.class);
-        List<SortBean.CategoryOneArrayBean> categoryOneArray = mSortBean.getCategoryOneArray();
-        List<String> list = new ArrayList<>();
-        //初始化左侧列表数据
-        for (int i = 0; i < categoryOneArray.size(); i++) {
-            list.add(categoryOneArray.get(i).getName());
-        }
-        mAddDeviceSortAdapter = new AddDeviceSortAdapter(this, list, (id, position) -> {
-            if (mSortDetailFragment != null) {
-                isMoved = true;
-                targetPosition = position;
-                setChecked(position, true);
-            }
-        });
-        rvSort.setAdapter(mAddDeviceSortAdapter);
-        createFragment();
+        getAddDeviceList();
     }
 
     /**
-     * 从资源文件中获取分类json
-     *
-     * @param path
-     * @return
+     * 获取数据
      */
-    private String getAssetsData(String path) {
-        String result = "";
-        try {
-            //获取输入流
-            InputStream mAssets = getAssets().open(path);
-            //获取文件的字节数
-            int lenght = mAssets.available();
-            //创建byte数组
-            byte[] buffer = new byte[lenght];
-            //将文件中的数据写入到字节数组中
-            mAssets.read(buffer);
-            mAssets.close();
-            result = new String(buffer);
-            return result;
-        } catch (IOException e) {
-            e.printStackTrace();
-            Log.e("fuck", e.getMessage());
-            return result;
-        }
+    private void getAddDeviceList() {
+        RetrofitService.qdoApi.getAddDeviceList()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<AddDeviceListVo>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(AddDeviceListVo addDeviceListVo) {
+                        if (addDeviceListVo != null) {
+                            if (addDeviceListVo.getCode() == 200) {
+                                mSortBean = addDeviceListVo;
+                                categoryOneArray = mSortBean.getData();
+                                List<String> list = new ArrayList<>();
+                                //初始化左侧列表数据
+                                for (int i = 0; i < categoryOneArray.size(); i++) {
+                                    list.add(categoryOneArray.get(i).getDevice_type());
+                                }
+                                //设置左侧列表适配器
+                                mAddDeviceSortAdapter = new AddDeviceSortAdapter(AddDeviceActivity.this, list, (id, position) -> {
+                                    if (mSortDetailFragment != null) {
+                                        isMoved = true;
+                                        targetPosition = position;
+                                        setChecked(position, true);
+                                    }
+                                });
+                                rvSort.setAdapter(mAddDeviceSortAdapter);
+                                createFragment();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
     }
 
     /**
@@ -366,7 +455,7 @@ public class AddDeviceActivity extends BaseActivity implements CheckListener {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         mSortDetailFragment = new SortDetailFragment();
         Bundle bundle = new Bundle();
-        bundle.putParcelableArrayList("right", mSortBean.getCategoryOneArray());
+        bundle.putSerializable("right", mSortBean);
         mSortDetailFragment.setArguments(bundle);
         mSortDetailFragment.setListener(this);
         fragmentTransaction.add(R.id.lin_fragment, mSortDetailFragment);
@@ -385,7 +474,7 @@ public class AddDeviceActivity extends BaseActivity implements CheckListener {
             //此处的位置需要根据每个分类的集合来进行计算
             int count = 0;
             for (int i = 0; i < position; i++) {
-                count += mSortBean.getCategoryOneArray().get(i).getCategoryTwoArray().size();
+                count += mSortBean.getData().get(i).getDevice_detail_list().size();
             }
             count += position;
             mSortDetailFragment.setData(count);
@@ -440,10 +529,14 @@ public class AddDeviceActivity extends BaseActivity implements CheckListener {
         }
     }
 
-
     @Override
     public void check(int position, boolean isScroll) {
         setChecked(position, isScroll);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        BleManageUtils.getInstance().DestroyBleManage();
+    }
 }

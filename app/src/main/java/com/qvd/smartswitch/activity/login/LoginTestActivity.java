@@ -16,6 +16,8 @@ import com.qvd.smartswitch.api.RetrofitService;
 import com.qvd.smartswitch.model.login.LoginVo;
 import com.qvd.smartswitch.model.login.MessageVo;
 import com.qvd.smartswitch.utils.CommonUtils;
+import com.qvd.smartswitch.utils.ConfigUtils;
+import com.qvd.smartswitch.utils.SharedPreferencesUtil;
 import com.qvd.smartswitch.utils.SnackbarUtils;
 import com.qvd.smartswitch.widget.MyProgressDialog;
 
@@ -156,13 +158,19 @@ public class LoginTestActivity extends BaseActivity {
 
                     @Override
                     public void onNext(LoginVo messageVo) {
-                        if (messageVo.getCode() == 200) {
-                            onLoginSuccess();
-                            progressDialog.dismiss();
-                        } else if (messageVo.getCode() == 400) {
-                            SnackbarUtils.Short(btnLogin, "登录失败");
-                        } else {
-                            SnackbarUtils.Short(btnLogin, "连接超时");
+                        if (messageVo != null) {
+                            if (messageVo.getData() != null && messageVo.getCode() == 200) {
+                                SharedPreferencesUtil.putString(LoginTestActivity.this, SharedPreferencesUtil.USER_ID, messageVo.getData().getUser_id());
+                                SharedPreferencesUtil.putString(LoginTestActivity.this, SharedPreferencesUtil.IDENTIFIER, messageVo.getData().getIdentifier());
+                                SharedPreferencesUtil.putString(LoginTestActivity.this, SharedPreferencesUtil.PASSWORD, messageVo.getData().getPassword());
+                                ConfigUtils.user_id = messageVo.getData().getUser_id();
+                                onLoginSuccess();
+                                progressDialog.dismiss();
+                            } else if (messageVo.getCode() == 400) {
+                                SnackbarUtils.Short(btnLogin, "登录失败");
+                            } else {
+                                SnackbarUtils.Short(btnLogin, "连接超时");
+                            }
                         }
                     }
 

@@ -12,6 +12,10 @@ import com.qvd.smartswitch.R;
 import com.qvd.smartswitch.activity.login.LoginActivity;
 import com.qvd.smartswitch.activity.login.LoginTestActivity;
 import com.qvd.smartswitch.activity.login.WelcomeGuideActivity;
+import com.qvd.smartswitch.api.RetrofitService;
+import com.qvd.smartswitch.model.login.LoginVo;
+import com.qvd.smartswitch.utils.CommonUtils;
+import com.qvd.smartswitch.utils.ConfigUtils;
 import com.qvd.smartswitch.utils.RxHelper;
 import com.qvd.smartswitch.utils.SharedPreferencesUtil;
 import com.qvd.smartswitch.utils.SysApplication;
@@ -21,7 +25,9 @@ import com.yanzhenjie.permission.Permission;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by Administrator on 2018/4/25 0025.
@@ -29,9 +35,7 @@ import io.reactivex.disposables.Disposable;
 
 public class SplashActivity extends AppCompatActivity {
 
-    private boolean mIsSkip = false;
-    private SharedPreferences sp;
-    private SharedPreferences.Editor editor;
+
     private SimpleButton sbSkip;
 
     @Override
@@ -51,8 +55,58 @@ public class SplashActivity extends AppCompatActivity {
         }
         setContentView(R.layout.activity_splash);
         ButterKnife.bind(this);
+        AutoLogin();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         initData();
     }
+
+    /**
+     * 自动登录
+     */
+    private void AutoLogin() {
+        String password = SharedPreferencesUtil.getString(this, SharedPreferencesUtil.PASSWORD);
+        String identifier = SharedPreferencesUtil.getString(this, SharedPreferencesUtil.IDENTIFIER);
+//        String password = "25f9e794323b453885f5181f1b624d0b";
+//        String identifier = "1105943292@qq.com";
+        if (!CommonUtils.isEmptyString(password) && !CommonUtils.isEmptyString(identifier)) {
+            RetrofitService.qdoApi.login(identifier, password)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Observer<LoginVo>() {
+                        @Override
+                        public void onSubscribe(Disposable d) {
+
+                        }
+
+                        @Override
+                        public void onNext(LoginVo loginVo) {
+                            if (loginVo != null) {
+                                if (loginVo.getData() != null && loginVo.getCode() == 200) {
+                                    SharedPreferencesUtil.putString(SplashActivity.this, SharedPreferencesUtil.USER_ID, loginVo.getData().getUser_id());
+                                    SharedPreferencesUtil.putString(SplashActivity.this, SharedPreferencesUtil.IDENTIFIER, loginVo.getData().getIdentifier());
+                                    SharedPreferencesUtil.putString(SplashActivity.this, SharedPreferencesUtil.PASSWORD, loginVo.getData().getPassword());
+                                    ConfigUtils.user_id = loginVo.getData().getUser_id();
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+
+                        }
+
+                        @Override
+                        public void onComplete() {
+
+                        }
+                    });
+        }
+    }
+
 
     protected void initData() {
         sbSkip = findViewById(R.id.sb_skip);
@@ -80,13 +134,9 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     private void _doSkip() {
-        if (!mIsSkip) {
-            mIsSkip = true;
-            //自动登录，判断跳到主页还是登录页。
-            startActivity(new Intent(SplashActivity.this, LoginTestActivity.class));
-            overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
-            finish();
-        }
+        startActivity(new Intent(SplashActivity.this, MainActivity.class));
+        overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+        finish();
     }
 
     @Override
