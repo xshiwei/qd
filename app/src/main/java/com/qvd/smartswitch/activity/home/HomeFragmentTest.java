@@ -5,6 +5,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,6 +18,8 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.melnykov.fab.FloatingActionButton;
 import com.orhanobut.logger.Logger;
 import com.qvd.smartswitch.R;
@@ -25,18 +28,14 @@ import com.qvd.smartswitch.activity.device.DeviceControlTwoActivity;
 import com.qvd.smartswitch.activity.login.LoginTestActivity;
 import com.qvd.smartswitch.activity.wifi.DeviceWifiControlActivity;
 import com.qvd.smartswitch.adapter.HomeContentAdapter;
-import com.qvd.smartswitch.adapter.HomeContentTwoAdapter;
 import com.qvd.smartswitch.adapter.HomeListAdapter;
 import com.qvd.smartswitch.adapter.HomeMenuAdapter;
 import com.qvd.smartswitch.api.RetrofitService;
-import com.qvd.smartswitch.model.device.CommonDeviceListVo;
 import com.qvd.smartswitch.model.device.RoomDeviceListVo;
 import com.qvd.smartswitch.model.device.ScanResultVo;
 import com.qvd.smartswitch.model.home.DefaultRoomVo;
 import com.qvd.smartswitch.model.home.HomeLeftListVo;
 import com.qvd.smartswitch.model.home.HomeListVo;
-import com.qvd.smartswitch.model.home.Test1Vo;
-import com.qvd.smartswitch.model.home.Test2Vo;
 import com.qvd.smartswitch.model.login.MessageVo;
 import com.qvd.smartswitch.utils.CommonUtils;
 import com.qvd.smartswitch.utils.ConfigUtils;
@@ -47,7 +46,6 @@ import com.qvd.smartswitch.widget.RecycleViewDivider;
 import com.qvd.smartswitch.widget.EmptyLayout;
 import com.scwang.smartrefresh.header.MaterialHeader;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
-import com.tandong.sa.zUImageLoader.utils.L;
 import com.yanzhenjie.permission.Permission;
 
 import java.util.ArrayList;
@@ -88,8 +86,6 @@ public class HomeFragmentTest extends BaseFragment {
     RecyclerView rvContent;     //家庭，个人，车载那里显示这个
     @BindView(R.id.refreshLayout)
     SmartRefreshLayout refreshLayout;
-    @BindView(R.id.rv_content_two)
-    RecyclerView rvContentTwo;    //常用和全部那里显示这个
     @BindView(R.id.iv_menu)
     ImageView ivMenu;
     @BindView(R.id.tv_scene_setting)
@@ -104,8 +100,6 @@ public class HomeFragmentTest extends BaseFragment {
     EmptyLayout emptylayout;
     @BindView(R.id.emptylayout_content)
     EmptyLayout emptyLayoutContent;
-    @BindView(R.id.rl_content)
-    RelativeLayout rlContent;
 
 
     public static int mPosition = 0; //通过这个位置来设置当前的图片类型和文字颜色
@@ -117,14 +111,6 @@ public class HomeFragmentTest extends BaseFragment {
      * 列表数据源
      */
     private List<HomeLeftListVo.DataBean> list = new ArrayList<>();
-    /**
-     * 常用内容适配器
-     */
-    private HomeContentTwoAdapter twoAdapter;
-    /**
-     * 常用内容数据源
-     */
-    private List<CommonDeviceListVo.DataBean> listContent2 = new ArrayList<>();
     /**
      * 房间点击后设备适配器
      */
@@ -196,12 +182,8 @@ public class HomeFragmentTest extends BaseFragment {
                 //根据当前获取的位置对应的类别请求数据并显示数据。type = 1表示常用，type=2表示房间
                 if (list.get(position).getType() == 1) {
                     getCommonDevice();
-                    rvContentTwo.setVisibility(View.VISIBLE);
-                    rvContent.setVisibility(View.GONE);
                 } else if (list.get(position).getType() == 2) {
                     getRoomListDevice(list.get(position).getRoom_id());
-                    rvContentTwo.setVisibility(View.GONE);
-                    rvContent.setVisibility(View.VISIBLE);
                 }
             }
 
@@ -266,32 +248,31 @@ public class HomeFragmentTest extends BaseFragment {
      */
     private void getCommonDevice() {
         emptyLayoutContent.hide();
-        listContent2.clear();
         RetrofitService.qdoApi.getCommonDeviceList(ConfigUtils.user_id, ConfigUtils.family_locate.getFamily_id())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<CommonDeviceListVo>() {
+                .subscribe(new Observer<RoomDeviceListVo>() {
                     @Override
                     public void onSubscribe(Disposable d) {
 
                     }
 
                     @Override
-                    public void onNext(CommonDeviceListVo commonDeviceListVo) {
+                    public void onNext(RoomDeviceListVo commonDeviceListVo) {
                         if (commonDeviceListVo != null) {
                             if (commonDeviceListVo.getCode() == 200) {
                                 if (commonDeviceListVo.getData() != null && commonDeviceListVo.getData().size() > 0) {
-                                    listContent2.addAll(commonDeviceListVo.getData());
-                                    //设置常用列表,默认进入首页显示该列表
-                                    twoAdapter = new HomeContentTwoAdapter(getActivity(), listContent2);
-                                    rvContentTwo.setLayoutManager(new GridLayoutManager(getActivity(), 2));
-                                    rvContentTwo.addItemDecoration(new RecycleViewDivider(getActivity()));
-                                    rvContentTwo.setAdapter(twoAdapter);
+                                    //获取右侧家庭设备数据
+                                    contentList.addAll(commonDeviceListVo.getData());
+                                    contentAdapter = new HomeContentAdapter(getActivity(), contentList);
+                                    rvContent.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+                                    rvContent.setAdapter(contentAdapter);
+                                    contentAdapter.notifyDataSetChanged();
                                     //家庭内容区域设备点击事件
                                     contentAdapter.setOnItemClickListener(new HomeContentAdapter.OnItemClickListener() {
                                         @Override
                                         public void onItemClick(View view, int position) {
-                                            CommonDeviceListVo.DataBean dataBean = listContent2.get(position);
+                                            RoomDeviceListVo.DataBean dataBean = contentList.get(position);
                                             switch (dataBean.getDevice_no()) {
                                                 case "qs02":
                                                     startActivity(new Intent(getActivity(), DeviceControlTwoActivity.class)
@@ -341,7 +322,13 @@ public class HomeFragmentTest extends BaseFragment {
      */
     private void initEvent() {
         //获取首页数据
-        getHomeMenuList();
+//        getHomeMenuList();
+        for (int i = 0; i < 10; i++) {
+            contentList.add(new RoomDeviceListVo.DataBean());
+        }
+        contentAdapter = new HomeContentAdapter(getActivity(), contentList);
+        rvContent.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+        rvContent.setAdapter(contentAdapter);
         //设置刷新控件头部高度
         refreshLayout.setHeaderHeight(100);
         refreshLayout.setFooterHeight(1);
@@ -350,9 +337,9 @@ public class HomeFragmentTest extends BaseFragment {
         //设置头部样式
         refreshLayout.setRefreshHeader(new MaterialHeader(getActivity()));
 
+
         //设置FloatingActionButton
         fab.attachToRecyclerView(rvContent);
-        fab.attachToRecyclerView(rvContentTwo);
     }
 
     /**
@@ -458,37 +445,57 @@ public class HomeFragmentTest extends BaseFragment {
                     }
                 })
                 .observeOn(Schedulers.io())
-                .concatMap(new Function<DefaultRoomVo, ObservableSource<CommonDeviceListVo>>() {
+                .concatMap(new Function<DefaultRoomVo, ObservableSource<RoomDeviceListVo>>() {
                     @Override
-                    public ObservableSource<CommonDeviceListVo> apply(DefaultRoomVo defaultRoomVo) throws Exception {
+                    public ObservableSource<RoomDeviceListVo> apply(DefaultRoomVo defaultRoomVo) throws Exception {
                         return RetrofitService.qdoApi.getCommonDeviceList(ConfigUtils.user_id, ConfigUtils.family_locate.getFamily_id());
                     }
                 })
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<CommonDeviceListVo>() {
+                .subscribe(new Observer<RoomDeviceListVo>() {
                     @Override
                     public void onSubscribe(Disposable d) {
 
                     }
 
                     @Override
-                    public void onNext(CommonDeviceListVo commonDeviceListVo) {
+                    public void onNext(RoomDeviceListVo commonDeviceListVo) {
                         if (commonDeviceListVo != null) {
                             if (commonDeviceListVo.getCode() == 200) {
                                 if (commonDeviceListVo.getData() != null && commonDeviceListVo.getData().size() > 0) {
-                                    new Handler().postDelayed(new Runnable() {
+                                    //获取右侧家庭设备数据
+                                    contentList.addAll(commonDeviceListVo.getData());
+                                    contentAdapter = new HomeContentAdapter(getActivity(), contentList);
+                                    rvContent.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+                                    rvContent.setAdapter(contentAdapter);
+                                    contentAdapter.notifyDataSetChanged();
+                                    //家庭内容区域设备点击事件
+                                    contentAdapter.setOnItemClickListener(new HomeContentAdapter.OnItemClickListener() {
                                         @Override
-                                        public void run() {
-                                            rlContent.setVisibility(View.VISIBLE);
+                                        public void onItemClick(View view, int position) {
+                                            RoomDeviceListVo.DataBean dataBean = contentList.get(position);
+                                            switch (dataBean.getDevice_no()) {
+                                                case "qs02":
+                                                    startActivity(new Intent(getActivity(), DeviceControlTwoActivity.class)
+                                                            .putExtra("scanResult", new ScanResultVo(dataBean.getDevice_no(),
+                                                                    CommonUtils.getDeviceName(dataBean.getDevice_no()), dataBean.getDevice_mac(),
+                                                                    dataBean.getConnect_type()))
+                                                            .putExtra("isFirstConnect", dataBean.getIs_first_connect()));
+                                                    getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+                                                    break;
+                                                case "qs03":
+                                                    startActivity(new Intent(getActivity(), DeviceWifiControlActivity.class)
+                                                            .putExtra("isFirstConnect", 1));
+                                                    getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+                                                    break;
+                                            }
                                         }
-                                    }, 2000);
-                                    listContent2.clear();
-                                    listContent2.addAll(commonDeviceListVo.getData());
-                                    //设置常用列表,默认进入首页显示该列表
-                                    twoAdapter = new HomeContentTwoAdapter(getActivity(), listContent2);
-                                    rvContentTwo.setLayoutManager(new GridLayoutManager(getActivity(), 2));
-                                    rvContentTwo.addItemDecoration(new RecycleViewDivider(getActivity()));
-                                    rvContentTwo.setAdapter(twoAdapter);
+
+                                        @Override
+                                        public void onItemLongClickListener(View view, int position) {
+
+                                        }
+                                    });
                                 } else {
                                     emptyLayoutContent.showEmpty();
                                 }
@@ -630,10 +637,31 @@ public class HomeFragmentTest extends BaseFragment {
 //                startActivity(new Intent(getActivity(), DeviceWifiControlActivity.class));
 //                startActivity(new Intent(getActivity(), DeviceConnectActivity.class));
 //                startActivity(new Intent(getActivity(), SetDeviceToRoomActivity.class));
-                startActivity(new Intent(getActivity(), DeviceControlTwoActivity.class));
-                getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+//                startActivity(new Intent(getActivity(), DeviceControlTwoActivity.class));
+//                getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+                showDialog();
                 break;
         }
+    }
+
+    private void showDialog() {
+        new MaterialDialog.Builder(getActivity())
+                .content("检测到您的GPS未打开，可能导致搜索不到设备,是否去打开？")
+                .negativeText("取消")
+                .positiveText("确定")
+                .onNegative(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                    }
+                })
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                    }
+                })
+                .show();
     }
 
 }

@@ -2,11 +2,11 @@ apply plugin: 'com.android.application'
 apply plugin: 'org.greenrobot.greendao'
 
 android {
-    compileSdkVersion 27
+    compileSdkVersion 28
     defaultConfig {
         applicationId "com.qvd.smartswitch"
         minSdkVersion 18
-        targetSdkVersion 27
+        targetSdkVersion 28
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -43,65 +43,104 @@ greendao {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
+
     //noinspection GradleCompatible
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     testImplementation 'junit:junit:4.12'
+
+    //noinspection GradleCompatible
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
     implementation 'com.ashokvarma.android:bottom-navigation-bar:1.2.0'
+
     //底部导航栏
     implementation 'com.jakewharton:butterknife:8.8.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+
     //沉浸式状态栏
     implementation 'com.gyf.barlibrary:barlibrary:2.3.0'
+
     //noinspection GradleCompatible
     implementation 'com.android.support:appcompat-v7:27.1.1'
+
+    //noinspection GradleCompatible
     implementation 'com.android.support:design:27.1.1'
     implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.0.4-7'
+
     //上拉加载下拉刷新
     implementation 'com.scwang.smartrefresh:SmartRefreshHeader:1.0.4-7'
     implementation files('libs/SmartAndroid2.0.jar')
     implementation 'com.orhanobut:logger:1.15'
+
     //日志
     implementation 'com.yanzhenjie:permission:2.0.0-rc5'
+
     //动态权限
     implementation 'com.amap.api:location:latest.integration'
+
     //高德地图定位
     implementation 'com.amap.api:search:latest.integration'
+
     //高德地图搜索天气
+
     // rxjava
     implementation 'com.trello.rxlifecycle2:rxlifecycle-components:2.2.1'
     implementation 'io.reactivex.rxjava2:rxjava:2.1.6'
     implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
     implementation 'com.github.VictorAlbertos.RxCache:runtime:1.8.3-2.x'
     implementation 'com.github.VictorAlbertos.Jolyglot:gson:0.0.4'
+
     // retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.2.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.1.0'
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.2.0'
     implementation 'com.squareup.picasso:picasso:2.5.2'
+
     //greenDao
     implementation 'org.greenrobot:greendao:3.2.2'
     implementation 'de.hdodenhof:circleimageview:2.2.0'
+
     //圆形头像
     implementation 'com.hyman:flowlayout-lib:1.1.2'
+
     //流式布局
     implementation 'com.clj.fastble:FastBleLib:2.3.2'
     implementation files('libs/Msc.jar')
+
     //解决64k方法过多
     implementation 'com.android.support:multidex:1.0.1'
     implementation files('libs/Sunflower.jar')
+
     //floatingactionbutton第三方库
     implementation 'com.melnykov:floatingactionbutton:1.3.0'
     implementation project(':citypickerview')
+
     //滚动选择器
     implementation 'cn.carbswang.android:NumberPickerView:1.1.1'
+
     //时间轴
     implementation 'com.vivian.widgets:TimeLineItemDecoration:1.3'
+
     //wifi控制库
     implementation files('libs/wisefy-2.1.0-BETA1.aar')
+
     //mqtt库
     implementation 'top.fighter-lee:mqttlibs:1.0.1'
+
     //加载特效库
     implementation 'com.wang.avi:library:2.1.3'
+
+    //对话框
+    implementation 'com.afollestad.material-dialogs:core:0.9.6.0'
+    implementation 'com.afollestad.material-dialogs:core:0.9.6.0'
+
+    //switch_button
+    implementation 'com.zcw:togglebutton-library:1.0.0'
+
+    //水波纹
+    compile 'com.github.traex.rippleeffect:library:1.3'
+    //TabLayout
+    compile 'com.ogaclejapan.smarttablayout:library:1.6.1@aar'
+    compile 'com.ogaclejapan.smarttablayout:utils-v4:1.6.1@aar'
+    compile 'com.ogaclejapan.smarttablayout:utils-v13:1.6.1@aar'
 }

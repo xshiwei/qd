@@ -83,9 +83,6 @@ public class EmptyLayout extends LinearLayout {
     private String mEmptyMessage = "暂无内容";
     private String mLoadingMessage = "请等一等啦ლ(╹◡╹ლ)";
 
-    private int mLoadingViewButtonId = R.id.buttonLoading;
-    private int mErrorViewButtonId = R.id.buttonError;
-    private int mEmptyViewButtonId = R.id.buttonEmpty;
     private boolean mShowEmptyButton = true;
     private boolean mShowLoadingButton = true;
     private boolean mShowErrorButton = true;
@@ -437,59 +434,6 @@ public class EmptyLayout extends LinearLayout {
         this.mShowErrorButton = showErrorButton;
     }
 
-    /**
-     * Gets the ID of the button in the loading view
-     *
-     * @return the ID of the button in the loading view
-     */
-    public int getmLoadingViewButtonId() {
-        return mLoadingViewButtonId;
-    }
-
-    /**
-     * Sets the ID of the button in the loading view. This ID is required if you want the button the loading view to be click-able.
-     *
-     * @param loadingViewButtonId the ID of the button in the loading view
-     */
-    public void setLoadingViewButtonId(int loadingViewButtonId) {
-        this.mLoadingViewButtonId = loadingViewButtonId;
-    }
-
-    /**
-     * Gets the ID of the button in the error view
-     *
-     * @return the ID of the button in the error view
-     */
-    public int getErrorViewButtonId() {
-        return mErrorViewButtonId;
-    }
-
-    /**
-     * Sets the ID of the button in the error view. This ID is required if you want the button the error view to be click-able.
-     *
-     * @param errorViewButtonId the ID of the button in the error view
-     */
-    public void setErrorViewButtonId(int errorViewButtonId) {
-        this.mErrorViewButtonId = errorViewButtonId;
-    }
-
-    /**
-     * Gets the ID of the button in the empty view
-     *
-     * @return the ID of the button in the empty view
-     */
-    public int getEmptyViewButtonId() {
-        return mEmptyViewButtonId;
-    }
-
-    /**
-     * Sets the ID of the button in the empty view. This ID is required if you want the button the empty view to be click-able.
-     *
-     * @param emptyViewButtonId the ID of the button in the empty view
-     */
-    public void setEmptyViewButtonId(int emptyViewButtonId) {
-        this.mEmptyViewButtonId = emptyViewButtonId;
-    }
 
 
     public int getErrorDrawable() {
@@ -751,45 +695,15 @@ public class EmptyLayout extends LinearLayout {
         if (mEmptyView == null) {
             mEmptyView = (ViewGroup) mInflater.inflate(R.layout.view_empty, null);
             if (!(mEmptyMessageViewId > 0)) mEmptyMessageViewId = R.id.textViewMessage;
-            if (mShowEmptyButton && mEmptyViewButtonId > 0 && mEmptyButtonClickListener != null) {
-                View emptyViewButton = mEmptyView.findViewById(mEmptyViewButtonId);
-                if (emptyViewButton != null) {
-                    emptyViewButton.setOnClickListener(mEmptyButtonClickListener);
-                    emptyViewButton.setVisibility(View.VISIBLE);
-                }
-            } else if (mEmptyViewButtonId > 0) {
-                View emptyViewButton = mEmptyView.findViewById(mEmptyViewButtonId);
-                emptyViewButton.setVisibility(View.GONE);
-            }
         }
         if (mLoadingView == null) {
             mLoadingView = (ViewGroup) mInflater.inflate(R.layout.view_loading, null);
             mLoadingAnimationViewId = R.id.imageViewLoading;
             if (!(mLoadingMessageViewId > 0)) mLoadingMessageViewId = R.id.textViewMessage;
-            if (mShowLoadingButton && mLoadingViewButtonId > 0 && mLoadingButtonClickListener != null) {
-                View loadingViewButton = mLoadingView.findViewById(mLoadingViewButtonId);
-                if (loadingViewButton != null) {
-                    loadingViewButton.setOnClickListener(mLoadingButtonClickListener);
-                    loadingViewButton.setVisibility(View.VISIBLE);
-                }
-            } else if (mLoadingViewButtonId > 0) {
-                View loadingViewButton = mLoadingView.findViewById(mLoadingViewButtonId);
-                loadingViewButton.setVisibility(View.GONE);
-            }
         }
         if (mErrorView == null) {
             mErrorView = (ViewGroup) mInflater.inflate(R.layout.view_error, null);
             if (!(mErrorMessageViewId > 0)) mErrorMessageViewId = R.id.textViewMessage;
-            if (mShowErrorButton && mErrorViewButtonId > 0 && mErrorButtonClickListener != null) {
-                View errorViewButton = mErrorView.findViewById(mErrorViewButtonId);
-                if (errorViewButton != null) {
-                    errorViewButton.setOnClickListener(mErrorButtonClickListener);
-                    errorViewButton.setVisibility(View.VISIBLE);
-                }
-            } else if (mErrorViewButtonId > 0) {
-                View errorViewButton = mErrorView.findViewById(mErrorViewButtonId);
-                errorViewButton.setVisibility(View.GONE);
-            }
         }
     }
 

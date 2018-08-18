@@ -3,6 +3,7 @@ package com.qvd.smartswitch.activity.home;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
+import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -19,6 +20,8 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.lljjcoder.Interface.OnCityItemClickListener;
 import com.lljjcoder.bean.CityBean;
 import com.lljjcoder.bean.DistrictBean;
@@ -37,8 +40,6 @@ import com.qvd.smartswitch.model.login.MessageVo;
 import com.qvd.smartswitch.utils.CommonUtils;
 import com.qvd.smartswitch.utils.ConfigUtils;
 import com.qvd.smartswitch.utils.SnackbarUtils;
-import com.qvd.smartswitch.utils.ToastUtil;
-import com.qvd.smartswitch.widget.MyPopupWindowOne;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -79,16 +80,6 @@ public class HomeSettingActivity extends BaseActivity {
      */
     private List<HomeBackgroundVo> list = new ArrayList<>();
     private HomeSettingPicAdapter adapter;
-
-    /**
-     * 更改名称的popupwindow
-     */
-    private PopupWindow popupWindowName;
-
-    /**
-     * 删除家庭的popupwindow
-     */
-    private MyPopupWindowOne popupwindowDelete;
 
     /**
      * 获取名称
@@ -204,7 +195,6 @@ public class HomeSettingActivity extends BaseActivity {
             case R.id.rl_home_name:
                 //更改家庭的名字
                 showPopupwindowName();
-                popupWindowName.showAtLocation(view, Gravity.BOTTOM, 0, 20);
                 break;
             case R.id.rl_home_location:
                 //更改家庭的位置
@@ -213,7 +203,6 @@ public class HomeSettingActivity extends BaseActivity {
             case R.id.rl_delete:
                 //删除家庭
                 showPopupwindowDelete();
-                popupwindowDelete.showPopupWindow(view);
                 break;
         }
     }
@@ -292,18 +281,23 @@ public class HomeSettingActivity extends BaseActivity {
      * 显示删除家庭的popupwindow
      */
     private void showPopupwindowDelete() {
-        popupwindowDelete = new MyPopupWindowOne(this, "删除家庭后，所有已设置的信息将全部清除，不可恢复。是否确认删除家庭?", "取消", "确定", new MyPopupWindowOne.IPopupWindowListener() {
-            @Override
-            public void cancel() {
-                popupwindowDelete.dismiss();
-            }
+        new MaterialDialog.Builder(this)
+                .content("删除家庭后，所有已设置的信息将全部清除，不可恢复。是否确认删除家庭?")
+                .negativeText("取消")
+                .positiveText("取消")
+                .onNegative(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-            @Override
-            public void confirm() {
-                deleteFamily();
-                popupwindowDelete.dismiss();
-            }
-        });
+                    }
+                })
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        deleteFamily();
+                    }
+                })
+                .show();
     }
 
     /**
@@ -353,95 +347,31 @@ public class HomeSettingActivity extends BaseActivity {
      * 显示更换名字的popupwindow
      */
     private void showPopupwindowName() {
-        LayoutInflater inflater = LayoutInflater.from(this);
-        View view = inflater.inflate(R.layout.popupwindow_edittext, null, false);
-        popupWindowName = new PopupWindow(view, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
-        popupWindowName.setBackgroundDrawable(new ColorDrawable());
-        popupWindowName.setAnimationStyle(R.style.AnimBottom);
-        popupWindowName.setOutsideTouchable(true);
-        popupWindowName.setFocusable(true);
-        CommonUtils.setBackgroundAlpha(this, 0.5f);
-        popupWindowName.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
-        popupWindowName.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+        new MaterialDialog.Builder(this)
+                .title("设置家庭名称")
+                .negativeText("取消")
+                .positiveText("确定")
+                .inputRange(1, 20, getResources().getColor(R.color.red))
+                .input(tvName.getText().toString(), null, false, new MaterialDialog.InputCallback() {
+                    @Override
+                    public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
 
-        popupWindowName.setOnDismissListener(new PopupWindow.OnDismissListener() {
-            @Override
-            public void onDismiss() {
-                CommonUtils.setBackgroundAlpha(HomeSettingActivity.this, 1.0f);
-            }
-        });
-
-        TextView title = view.findViewById(R.id.tv_title);
-        final EditText editText = view.findViewById(R.id.et_edittext);
-        ImageView delete = view.findViewById(R.id.iv_delete);
-        final TextView error = view.findViewById(R.id.tv_error);
-        TextView cancel = view.findViewById(R.id.tv_cancel);
-        final TextView confirm = view.findViewById(R.id.tv_confirm);
-
-        title.setText("设置家庭名称");
-        editText.setHint(name);
-        if (editText.getText().toString().equals(name)) {
-            confirm.setEnabled(false);
-            confirm.setTextColor(getResources().getColor(R.color.home_setting_text_three));
-        }
-        editText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if (s.toString().equals(name)) {
-                    error.setVisibility(View.VISIBLE);
-                    error.setText("不能和之前名字一致");
-                    confirm.setEnabled(false);
-                    confirm.setTextColor(getResources().getColor(R.color.home_setting_text_three));
-                } else if (s.toString().length() > 10) {
-                    error.setVisibility(View.VISIBLE);
-                    error.setText("长度超过最大");
-                    confirm.setEnabled(false);
-                    confirm.setTextColor(getResources().getColor(R.color.home_setting_text_three));
-                } else if (s.toString().length() == 0) {
-                    confirm.setEnabled(false);
-                    confirm.setTextColor(getResources().getColor(R.color.home_setting_text_three));
-                    editText.setCursorVisible(false);
-                } else {
-                    error.setVisibility(View.GONE);
-                    confirm.setEnabled(true);
-                    confirm.setTextColor(getResources().getColor(R.color.popupwindow_confirm_text));
-                }
-            }
-        });
-
-        cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                popupWindowName.dismiss();
-            }
-        });
-
-        delete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                editText.setText("");
-                editText.setCursorVisible(false);
-            }
-        });
-
-        confirm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                tvName.setText(editText.getText().toString());
-                popupWindowName.dismiss();
-            }
-        });
-
+                    }
+                })
+                .onNegative(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        CommonUtils.closeSoftKeyboard(HomeSettingActivity.this);
+                    }
+                })
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        tvName.setText(dialog.getInputEditText().getText().toString());
+                        CommonUtils.closeSoftKeyboard(HomeSettingActivity.this);
+                    }
+                })
+                .show();
     }
 
     @Override

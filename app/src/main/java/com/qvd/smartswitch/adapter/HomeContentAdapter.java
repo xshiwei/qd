@@ -1,15 +1,19 @@
 package com.qvd.smartswitch.adapter;
 
 import android.content.Context;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.qvd.smartswitch.R;
 import com.qvd.smartswitch.model.device.RoomDeviceListVo;
 import com.qvd.smartswitch.model.home.Test1Vo;
+import com.zcw.togglebutton.ToggleButton;
 
 import java.util.List;
 
@@ -47,6 +51,7 @@ public class HomeContentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         return new ViewHolderContent(view);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof ViewHolderContent) {
@@ -61,7 +66,6 @@ public class HomeContentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                     }
                 });
                 holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
-
                     @Override
                     public boolean onLongClick(View view) {
                         int position = holder.getLayoutPosition();
@@ -79,11 +83,17 @@ public class HomeContentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     }
 
     public class ViewHolderContent extends RecyclerView.ViewHolder {
-        TextView tv_text;
+        TextView tv_text, tv_state;
+        ImageView iv_pic;
+        ToggleButton btn_toggle;
+
 
         public ViewHolderContent(View itemView) {
             super(itemView);
             tv_text = itemView.findViewById(R.id.tv_text);
+            tv_state = itemView.findViewById(R.id.tv_state);
+            iv_pic = itemView.findViewById(R.id.iv_pic);
+            btn_toggle = itemView.findViewById(R.id.btn_toggle);
         }
     }
 }

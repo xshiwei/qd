@@ -4,6 +4,7 @@ package com.qvd.smartswitch.activity.device;
 import android.app.ProgressDialog;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,8 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.clj.fastble.BleManager;
 import com.clj.fastble.callback.BleWriteCallback;
 import com.clj.fastble.data.BleDevice;
@@ -27,7 +30,6 @@ import com.qvd.smartswitch.model.DeviceTimgTimeVo;
 import com.qvd.smartswitch.utils.CommonUtils;
 import com.qvd.smartswitch.utils.SnackbarUtils;
 import com.qvd.smartswitch.utils.ToastUtil;
-import com.qvd.smartswitch.widget.MyPopupWindowOne;
 import com.qvd.smartswitch.widget.MyProgressDialog;
 
 import java.util.Calendar;
@@ -104,10 +106,6 @@ public class DeviceTimingActivity extends BaseActivity {
      * 获得存储的定时信息
      */
     private DeviceTimgTimeVo timgTime;
-    /**
-     * 删除定时
-     */
-    private MyPopupWindowOne popupwindowDelete;
     private GregorianCalendar calendar;
     /**
      * 判断是否超过当天
@@ -216,27 +214,29 @@ public class DeviceTimingActivity extends BaseActivity {
                 break;
             case R.id.tv_delete_timing:
                 //取消定时
-                //showPopupwindowDelete();
-                //popupwindowDelete.showAtLocation(view, Gravity.CENTER, 0, 0);
                 show();
-                popupwindowDelete.showPopupWindow(view);
                 break;
         }
     }
 
     private void show() {
-        popupwindowDelete = new MyPopupWindowOne(this, "您确定要删除这条智能吗？", "取消", "确定", new MyPopupWindowOne.IPopupWindowListener() {
-            @Override
-            public void cancel() {
-                popupwindowDelete.dismiss();
-            }
+        new MaterialDialog.Builder(this)
+                .title("您确定要删除这条智能吗？")
+                .negativeText("取消")
+                .positiveText("确定")
+                .onNegative(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-            @Override
-            public void confirm() {
-                writeToBleCancleTiming();
-                popupwindowDelete.dismiss();
-            }
-        });
+                    }
+                })
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        writeToBleCancleTiming();
+                    }
+                })
+                .show();
     }
 
     /**

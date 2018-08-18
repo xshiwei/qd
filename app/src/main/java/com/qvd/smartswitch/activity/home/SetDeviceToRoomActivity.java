@@ -1,6 +1,7 @@
 package com.qvd.smartswitch.activity.home;
 
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -9,6 +10,8 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.qvd.smartswitch.R;
 import com.qvd.smartswitch.activity.base.BaseActivity;
 import com.qvd.smartswitch.activity.device.DeviceControlTwoActivity;
@@ -18,14 +21,7 @@ import com.qvd.smartswitch.model.device.ScanResultVo;
 import com.qvd.smartswitch.model.login.MessageVo;
 import com.qvd.smartswitch.utils.CommonUtils;
 import com.qvd.smartswitch.utils.ConfigUtils;
-import com.qvd.smartswitch.utils.SnackbarUtils;
 import com.qvd.smartswitch.utils.ToastUtil;
-import com.qvd.smartswitch.widget.MyPopupWindowLoading;
-import com.qvd.smartswitch.widget.MyPopupWindowOne;
-import com.qvd.smartswitch.widget.MyPopupWindowThree;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -59,7 +55,6 @@ public class SetDeviceToRoomActivity extends BaseActivity {
     @BindView(R.id.tv_complete)
     TextView tvComplete;
 
-    private MyPopupWindowOne mCancelPopupWindow;
 
     /**
      * 设备的device_id
@@ -78,14 +73,7 @@ public class SetDeviceToRoomActivity extends BaseActivity {
      */
     private String tableType;
 
-    /**
-     * 修改名字
-     */
-    private MyPopupWindowThree popupWindowName;
-
     private boolean isSelete = false;
-
-    private MyPopupWindowLoading myPopupWindowLoading;
 
     private ScanResultVo resultVo;
 
@@ -140,7 +128,6 @@ public class SetDeviceToRoomActivity extends BaseActivity {
                 break;
             case R.id.rl_device_name:
                 showPopupWindowName();
-                popupWindowName.showPopupWindow(view);
                 break;
             case R.id.iv_set_common:
                 if (isSelete) {
@@ -167,81 +154,55 @@ public class SetDeviceToRoomActivity extends BaseActivity {
      * 显示更换名字的popupwindow
      */
     private void showPopupWindowName() {
-        popupWindowName = new MyPopupWindowThree(this, "设置设备名称", tvName.getText().toString(), new MyPopupWindowThree.IPopupWindowListener() {
-            @Override
-            public void cancel() {
-                popupWindowName.dismiss();
-                CommonUtils.closeSoftKeyboard(SetDeviceToRoomActivity.this);
-            }
+        new MaterialDialog.Builder(this)
+                .title("设置设备名称")
+                .negativeText("取消")
+                .positiveText("确定")
+                .inputRange(1, 20, getResources().getColor(R.color.red))
+                .input(tvName.getText().toString(), null, false, new MaterialDialog.InputCallback() {
+                    @Override
+                    public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
 
-            @Override
-            public void confirm() {
-                EditText etEditText = popupWindowName.getEtEditText();
-                tvName.setText(etEditText.getText().toString());
-                popupWindowName.dismiss();
-                CommonUtils.closeSoftKeyboard(SetDeviceToRoomActivity.this);
-            }
-        });
-        final EditText etEditText = popupWindowName.getEtEditText();
-        final TextView tvConfirm = popupWindowName.getTvConfirm();
-        final TextView tvError = popupWindowName.getTvError();
-
-        if (etEditText.getText().toString().equals("")) {
-            tvConfirm.setEnabled(false);
-            tvConfirm.setTextColor(etEditText.getResources().getColor(R.color.home_setting_text_three));
-        }
-
-        //判断当前输入是否符合要求
-        etEditText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if (s.toString().length() > 20) {
-                    tvError.setVisibility(View.VISIBLE);
-                    tvError.setText("长度超过最大");
-                    tvConfirm.setEnabled(false);
-                    tvConfirm.setTextColor(getResources().getColor(R.color.home_setting_text_three));
-                } else if (s.toString().length() == 0) {
-                    tvConfirm.setEnabled(false);
-                    tvConfirm.setTextColor(getResources().getColor(R.color.home_setting_text_three));
-                    etEditText.setCursorVisible(false);
-                } else {
-                    tvError.setVisibility(View.GONE);
-                    tvConfirm.setEnabled(true);
-                    tvConfirm.setTextColor(getResources().getColor(R.color.popupwindow_confirm_text));
-                }
-            }
-        });
+                    }
+                })
+                .onNegative(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        CommonUtils.closeSoftKeyboard(SetDeviceToRoomActivity.this);
+                    }
+                })
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        tvName.setText(dialog.getInputEditText().getText().toString());
+                        CommonUtils.closeSoftKeyboard(SetDeviceToRoomActivity.this);
+                    }
+                })
+                .show();
     }
 
     /**
      * 取消的popupWindow
      */
     private void showCancelPopupWindow() {
-        mCancelPopupWindow = new MyPopupWindowOne(this, "是否保存本次修改", "取消", "保存", new MyPopupWindowOne.IPopupWindowListener() {
-            @Override
-            public void cancel() {
-                mCancelPopupWindow.dismiss();
-                finish();
-            }
+        new MaterialDialog.Builder(this)
+                .content("是否保存本次修改")
+                .negativeText("取消")
+                .positiveText("确定")
+                .onNegative(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-            @Override
-            public void confirm() {
-                mCancelPopupWindow.dismiss();
-                update(2);
-                finish();
-            }
-        });
-        mCancelPopupWindow.showPopupWindow(ivCommonActionbarGoback);
+                    }
+                })
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        update(2);
+                        finish();
+                    }
+                })
+                .show();
     }
 
 
@@ -249,8 +210,10 @@ public class SetDeviceToRoomActivity extends BaseActivity {
      * 保存
      */
     private void update(int i) {
-        myPopupWindowLoading = new MyPopupWindowLoading(this, "正在保存相关配置");
-        myPopupWindowLoading.showPopupWindow(ivCommonActionbarGoback);
+        MaterialDialog dialog = new MaterialDialog.Builder(this)
+                .content("正在保存相关配置")
+                .progress(true, 0)
+                .show();
         RetrofitService.qdoApi.updateSpecificDeviceName(device_id, tvName.getText().toString(), tableType)
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
@@ -289,7 +252,7 @@ public class SetDeviceToRoomActivity extends BaseActivity {
                     @Override
                     public void onNext(MessageVo messageVo) {
                         if (messageVo.getCode() == 200) {
-                            myPopupWindowLoading.dismiss();
+                            dialog.dismiss();
                             if (i == 1) {
                                 switch (resultVo.getDeviceNo()) {
                                     case "qs02":
@@ -317,7 +280,7 @@ public class SetDeviceToRoomActivity extends BaseActivity {
 
                     @Override
                     public void onError(Throwable e) {
-                        myPopupWindowLoading.dismiss();
+                        dialog.dismiss();
                         ToastUtil.showToast("保存失败");
                     }
 

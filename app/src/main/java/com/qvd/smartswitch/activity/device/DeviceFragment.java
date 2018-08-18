@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -24,6 +25,8 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.clj.fastble.BleManager;
 import com.clj.fastble.callback.BleGattCallback;
 import com.clj.fastble.callback.BleMtuChangedCallback;
@@ -42,7 +45,6 @@ import com.qvd.smartswitch.model.device.ScanResultVo;
 import com.qvd.smartswitch.utils.CommonUtils;
 import com.qvd.smartswitch.utils.SnackbarUtils;
 import com.qvd.smartswitch.widget.EmptyLayout;
-import com.qvd.smartswitch.widget.MyPopupWindowThree;
 import com.trello.rxlifecycle2.android.FragmentEvent;
 
 import java.util.List;
@@ -82,8 +84,6 @@ public class DeviceFragment extends BaseFragment {
 
     private BleDevice mBleDevice = null;
     private EmptyLayout emptyView;
-
-    private MyPopupWindowThree popupWindowName;
 
     private ProgressBar mProgressBar;
     private TextView mTextView;
@@ -133,11 +133,10 @@ public class DeviceFragment extends BaseFragment {
                 if (BleManager.getInstance().isConnected(bleDevice)) {
                     if (CommonUtils.isEmptyString(DeviceNickNameDaoOpe.queryOne(getActivity(), CommonUtils.getMac(bleDevice.getMac())).getDeviceNickname())) {
                         showPopupwindowName();
-                        popupWindowName.showAtLocation(mRootView, Gravity.CENTER, 0, 0);
                         mBleDevice = bleDevice;
                     } else {
                         Intent intent = new Intent(getActivity(), DeviceControlTwoActivity.class);
-                        ScanResultVo resultVo = new ScanResultVo(bleDevice.getName(),CommonUtils.getDeviceName(bleDevice.getName()),bleDevice.getMac(),1);
+                        ScanResultVo resultVo = new ScanResultVo(bleDevice.getName(), CommonUtils.getDeviceName(bleDevice.getName()), bleDevice.getMac(), 1);
                         intent.putExtra("scanResult", resultVo);
                         startActivity(intent);
                         getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
@@ -168,62 +167,36 @@ public class DeviceFragment extends BaseFragment {
      * 显示更换名字的popupwindow
      */
     private void showPopupwindowName() {
-        popupWindowName = new MyPopupWindowThree(getActivity(), "设置设备名称", "", new MyPopupWindowThree.IPopupWindowListener() {
-            @Override
-            public void cancel() {
-                popupWindowName.dismiss();
-                CommonUtils.closeSoftKeyboard(getActivity());
-            }
+        new MaterialDialog.Builder(getActivity())
+                .title("设置设备名称")
+                .inputRange(1, 20, getResources().getColor(R.color.red))
+                .input(null, null, false, new MaterialDialog.InputCallback() {
+                    @Override
+                    public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
 
-            @Override
-            public void confirm() {
-                EditText etEditText = popupWindowName.getEtEditText();
-                DeviceNickNameVo deviceNickNameVo = new DeviceNickNameVo(DeviceNickNameDaoOpe.queryOne(getActivity(), CommonUtils.getMac(mBleDevice.getMac())).getId(), CommonUtils.getMac(mBleDevice.getMac()),
-                        mBleDevice.getName(), CommonUtils.getDate(), etEditText.getText().toString().trim(), null, null);
-                DeviceNickNameDaoOpe.updateData(getActivity(), deviceNickNameVo);
-                int postion = adapter.getPostion(mBleDevice);
-                adapter.notifyItemChanged(postion);
-                popupWindowName.dismiss();
-                CommonUtils.closeSoftKeyboard(getActivity());
-            }
-        });
-        final EditText etEditText = popupWindowName.getEtEditText();
-        final TextView tvConfirm = popupWindowName.getTvConfirm();
-        final TextView tvError = popupWindowName.getTvError();
-        if (etEditText.getText().toString().equals("")) {
-            tvConfirm.setEnabled(false);
-            tvConfirm.setTextColor(etEditText.getResources().getColor(R.color.home_setting_text_three));
-        }
-
-        etEditText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if (s.toString().length() > 20) {
-                    tvError.setVisibility(View.VISIBLE);
-                    tvError.setText("长度超过最大");
-                    tvConfirm.setEnabled(false);
-                    tvConfirm.setTextColor(getResources().getColor(R.color.home_setting_text_three));
-                } else if (s.toString().length() == 0) {
-                    tvConfirm.setEnabled(false);
-                    tvConfirm.setTextColor(getResources().getColor(R.color.home_setting_text_three));
-                    etEditText.setCursorVisible(false);
-                } else {
-                    tvError.setVisibility(View.GONE);
-                    tvConfirm.setEnabled(true);
-                    tvConfirm.setTextColor(getResources().getColor(R.color.popupwindow_confirm_text));
-                }
-            }
-        });
+                    }
+                })
+                .negativeText("取消")
+                .positiveText("确定")
+                .onNegative(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        CommonUtils.closeSoftKeyboard(getActivity());
+                    }
+                })
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        EditText inputEditText = dialog.getInputEditText();
+                        DeviceNickNameVo deviceNickNameVo = new DeviceNickNameVo(DeviceNickNameDaoOpe.queryOne(getActivity(), CommonUtils.getMac(mBleDevice.getMac())).getId(), CommonUtils.getMac(mBleDevice.getMac()),
+                                mBleDevice.getName(), CommonUtils.getDate(), inputEditText.getText().toString().trim(), null, null);
+                        DeviceNickNameDaoOpe.updateData(getActivity(), deviceNickNameVo);
+                        int postion = adapter.getPostion(mBleDevice);
+                        adapter.notifyItemChanged(postion);
+                        CommonUtils.closeSoftKeyboard(getActivity());
+                    }
+                })
+                .show();
     }
 
     @Override

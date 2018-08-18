@@ -2,12 +2,15 @@ package com.qvd.smartswitch.activity.home;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.orhanobut.logger.Logger;
 import com.qvd.smartswitch.R;
 import com.qvd.smartswitch.activity.base.BaseActivity;
@@ -18,7 +21,6 @@ import com.qvd.smartswitch.model.login.MessageVo;
 import com.qvd.smartswitch.utils.SnackbarUtils;
 import com.qvd.smartswitch.utils.ToastUtil;
 import com.qvd.smartswitch.widget.EmptyLayout;
-import com.qvd.smartswitch.widget.MyPopupWindowOne;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,10 +51,6 @@ public class RoomManageActivity extends BaseActivity {
 
     private List<RoomListVo.DataBean> list = new ArrayList<>();
     private RoomManageListAdapter adapter;
-    /**
-     * 删除房间
-     */
-    private MyPopupWindowOne popupWindowDeleteRoom;
     /**
      * 家庭id
      */
@@ -95,7 +93,6 @@ public class RoomManageActivity extends BaseActivity {
             @Override
             public void onItemLongClickListener(View view, int position) {
                 showDeleteRoomPopouWindow(position);
-                popupWindowDeleteRoom.showPopupWindow(view);
             }
         });
     }
@@ -145,19 +142,23 @@ public class RoomManageActivity extends BaseActivity {
      * 显示删除房间的popupwindow
      */
     private void showDeleteRoomPopouWindow(int position) {
-        popupWindowDeleteRoom = new MyPopupWindowOne(this, "删除房间后，原房间内设备将被移入默认房间，是否确认删除？", "取消", "删除", new MyPopupWindowOne.IPopupWindowListener() {
-            @Override
-            public void cancel() {
-                popupWindowDeleteRoom.dismiss();
-            }
+        new MaterialDialog.Builder(this)
+                .content("删除房间后，原房间内设备将被移入默认房间，是否确认删除？")
+                .negativeText("取消")
+                .positiveText("确定")
+                .onNegative(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-            @Override
-            public void confirm() {
-                //删除房间
-                popupWindowDeleteRoom.dismiss();
-                deleteRoom(position);
-            }
-        });
+                    }
+                })
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        deleteRoom(position);
+                    }
+                })
+                .show();
     }
 
     /**

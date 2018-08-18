@@ -11,6 +11,7 @@ import android.net.wifi.WifiInfo;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -19,6 +20,8 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.isupatches.wisefy.WiseFy;
 import com.isupatches.wisefy.callbacks.AddWPA2NetworkCallbacks;
 import com.isupatches.wisefy.callbacks.ConnectToNetworkCallbacks;
@@ -36,7 +39,6 @@ import com.qvd.smartswitch.utils.ConfigUtils;
 import com.qvd.smartswitch.utils.PermissionUtils;
 import com.qvd.smartswitch.utils.SnackbarUtils;
 import com.qvd.smartswitch.utils.ToastUtil;
-import com.qvd.smartswitch.widget.MyPopupWindowOne;
 import com.wang.avi.AVLoadingIndicatorView;
 import com.yanzhenjie.permission.Permission;
 
@@ -57,7 +59,6 @@ import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 public class DeviceWifiSettingActivity extends BaseActivity {
@@ -94,10 +95,6 @@ public class DeviceWifiSettingActivity extends BaseActivity {
      * 当前连接的wifi
      */
     private WifiInfo currentNetwork;
-    /**
-     * 打开wifi
-     */
-    private MyPopupWindowOne popupWindowOpenWifi;
 
     /**
      * 当前路由的密码
@@ -110,10 +107,6 @@ public class DeviceWifiSettingActivity extends BaseActivity {
      * @return
      */
     private String wifiSSID;
-    /**
-     * 展现错误的popupWindow
-     */
-    private MyPopupWindowOne popupWindowFail;
 
     @SuppressLint("HandlerLeak")
     private Handler handler = new Handler() {
@@ -125,7 +118,6 @@ public class DeviceWifiSettingActivity extends BaseActivity {
                 case 0:
                     String obj = (String) msg.obj;
                     showfailPopupWindow(obj);
-                    popupWindowFail.showPopupWindow(tvBack);
                     break;
                 case 1:
                     tvFindDevice.setTextColor(getResources().getColor(R.color.room_manage_add_text));
@@ -169,7 +161,6 @@ public class DeviceWifiSettingActivity extends BaseActivity {
         } else {
             new Handler().postDelayed(() -> {
                 showOpenWifiPopupWindow();
-                popupWindowOpenWifi.showPopupWindow(tvBack);
             }, 2000);
         }
     }
@@ -209,25 +200,29 @@ public class DeviceWifiSettingActivity extends BaseActivity {
      * 展示打开Wifi的popouwindow
      */
     private void showOpenWifiPopupWindow() {
-        popupWindowOpenWifi = new MyPopupWindowOne(this, "您当前Wi-Fi网络未开启，不能进行连接设备操作,点击确定开启Wi-Fi。", "取消", "确定", new MyPopupWindowOne.IPopupWindowListener() {
-            @Override
-            public void cancel() {
-                popupWindowOpenWifi.dismiss();
-                finish();
-            }
-
-            @Override
-            public void confirm() {
-                popupWindowOpenWifi.dismiss();
-                boolean b = wiseFy.enableWifi();
-                if (b) {
-                    ToastUtil.showToast("Wi-Fi开启成功");
-                    isConnectWifi();
-                } else {
-                    ToastUtil.showToast("Wi-Fi开启失败");
-                }
-            }
-        });
+        new MaterialDialog.Builder(this)
+                .title("您当前Wi-Fi网络未开启，不能进行连接设备操作,点击确定开启Wi-Fi。")
+                .negativeText("取消")
+                .positiveText("确定")
+                .onNegative(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        finish();
+                    }
+                })
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        boolean b = wiseFy.enableWifi();
+                        if (b) {
+                            ToastUtil.showToast("Wi-Fi开启成功");
+                            isConnectWifi();
+                        } else {
+                            ToastUtil.showToast("Wi-Fi开启失败");
+                        }
+                    }
+                })
+                .show();
     }
 
     @Override
@@ -550,32 +545,35 @@ public class DeviceWifiSettingActivity extends BaseActivity {
      * 展示失败的popupWindow
      */
     private void showfailPopupWindow(String title) {
-        popupWindowFail = new MyPopupWindowOne(DeviceWifiSettingActivity.this, title, "取消", "确定", new MyPopupWindowOne.IPopupWindowListener() {
-            @Override
-            public void cancel() {
-                popupWindowFail.dismiss();
-                //取消配网
-                cancleSetNetwork();
-                wiseFy.dump();
-                finish();
-            }
-
-            @Override
-            public void confirm() {
-                popupWindowFail.dismiss();
-                tvFindDevice.setTextColor(getResources().getColor(R.color.home_manage_text));
-                tvDeviceRegister.setTextColor(getResources().getColor(R.color.home_manage_text));
-                tvDeviceInit.setTextColor(getResources().getColor(R.color.home_manage_text));
-                cancleSetNetwork();
-                if (wiseFy.isNetworkSaved(mSSID)) {
-                    searchWifi();
-                } else {
-                    addWifi();
-                }
-            }
-        });
-        popupWindowFail.setFocusable(false);
-        popupWindowFail.setOutsideTouchable(false);
+        new MaterialDialog.Builder(this)
+                .content(title)
+                .negativeText("取消")
+                .positiveText("确定")
+                .onNegative(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        //取消配网
+                        cancleSetNetwork();
+                        wiseFy.dump();
+                        finish();
+                    }
+                })
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        tvFindDevice.setTextColor(getResources().getColor(R.color.home_manage_text));
+                        tvDeviceRegister.setTextColor(getResources().getColor(R.color.home_manage_text));
+                        tvDeviceInit.setTextColor(getResources().getColor(R.color.home_manage_text));
+                        cancleSetNetwork();
+                        if (wiseFy.isNetworkSaved(mSSID)) {
+                            searchWifi();
+                        } else {
+                            addWifi();
+                        }
+                    }
+                })
+                .canceledOnTouchOutside(false)
+                .show();
     }
 
 
@@ -607,14 +605,6 @@ public class DeviceWifiSettingActivity extends BaseActivity {
 
                     }
                 });
-    }
-
-    @Override
-    public boolean dispatchTouchEvent(MotionEvent ev) {
-        if (popupWindowFail != null && popupWindowFail.isShowing()) {
-            return false;
-        }
-        return super.dispatchTouchEvent(ev);
     }
 
     @Override

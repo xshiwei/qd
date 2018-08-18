@@ -424,4 +424,5 @@
     <color name="light_background_end">#1D3158</color>
     <color name="light_background_start_two">#5EC562</color>
     <color name="light_background_end_two">#5FE075</color>
+    <color name="home_list_background">#F8F8F8</color>
 </resources>

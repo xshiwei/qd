@@ -2,6 +2,7 @@ package com.qvd.smartswitch.activity.home;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -12,6 +13,8 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.orhanobut.logger.Logger;
 import com.qvd.smartswitch.R;
 import com.qvd.smartswitch.activity.base.BaseActivity;
@@ -24,9 +27,6 @@ import com.qvd.smartswitch.utils.ConfigUtils;
 import com.qvd.smartswitch.utils.SnackbarUtils;
 import com.qvd.smartswitch.utils.ToastUtil;
 import com.qvd.smartswitch.widget.EmptyLayout;
-import com.qvd.smartswitch.widget.MyPopupWindowOne;
-import com.qvd.smartswitch.widget.MyPopupWindowThree;
-import com.qvd.smartswitch.widget.MyPopupWindowTwo;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -35,7 +35,6 @@ import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -83,10 +82,6 @@ public class AddRoomDetailsActivity extends BaseActivity {
      */
     private boolean isUpdate = true;
     /**
-     * 更换名字
-     */
-    private MyPopupWindowThree popupWindowName;
-    /**
      * 名字
      */
     private String name;
@@ -94,14 +89,7 @@ public class AddRoomDetailsActivity extends BaseActivity {
      * 图标
      */
     private String pic;
-    /**
-     * 取消
-     */
-    private MyPopupWindowTwo popupwindowDelete;
-    /**
-     * 确定移动设备
-     */
-    private MyPopupWindowOne popupWindowConfirm;
+
     /**
      * 家庭id
      */
@@ -135,7 +123,6 @@ public class AddRoomDetailsActivity extends BaseActivity {
             boolean selete = bean.isIs_selete();
             if (!selete) {
                 showPopupwindowConfirm(bean);
-                popupWindowConfirm.showPopupWindow(tvCommonActionbarTitle);
             } else {
                 index--;
                 bean.setIs_selete(false);
@@ -151,19 +138,24 @@ public class AddRoomDetailsActivity extends BaseActivity {
      */
     private void showPopupwindowConfirm(DeviceListVo.DataBean dataBean) {
         String title = "该设备已关联到" + dataBean.getRoom_name() + "确定要移动到[" + tvName.getText().toString() + "]吗？";
-        popupWindowConfirm = new MyPopupWindowOne(this, title, "取消", "确定", new MyPopupWindowOne.IPopupWindowListener() {
-            @Override
-            public void cancel() {
-                popupWindowConfirm.dismiss();
-            }
+        new MaterialDialog.Builder(this)
+                .content(title)
+                .negativeText("取消")
+                .positiveText("确定")
+                .onNegative(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-            @Override
-            public void confirm() {
-                index++;
-                dataBean.setIs_selete(true);
-                popupWindowConfirm.dismiss();
-            }
-        });
+                    }
+                })
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        index++;
+                        dataBean.setIs_selete(true);
+                    }
+                })
+                .show();
     }
 
     /**
@@ -217,7 +209,6 @@ public class AddRoomDetailsActivity extends BaseActivity {
                 //取消
                 if (isUpdate) {
                     showPopupwindowDelete();
-                    popupwindowDelete.showPopupWindow(view);
                 } else {
                     finish();
                 }
@@ -229,7 +220,6 @@ public class AddRoomDetailsActivity extends BaseActivity {
             case R.id.rl_room_name:
                 //房间名字
                 showPopupwindowName();
-                popupWindowName.showPopupWindow(view);
                 break;
             case R.id.rl_room_pic:
                 //更换图标
@@ -251,6 +241,7 @@ public class AddRoomDetailsActivity extends BaseActivity {
                     public void onSubscribe(Disposable d) {
 
                     }
+
                     @Override
                     public void onNext(MessageVo messageVo) {
                         if (messageVo.getCode() == 200) {
@@ -279,84 +270,57 @@ public class AddRoomDetailsActivity extends BaseActivity {
      * 显示删除家庭的popupwindow
      */
     private void showPopupwindowDelete() {
-        popupwindowDelete = new MyPopupWindowTwo(this, "房间编辑信息未保存", "房间被编辑还未保存，请确认是否要保存编辑信息", "取消", "确定", new MyPopupWindowTwo.IPopupWindowListener() {
-            @Override
-            public void cancel() {
-                popupwindowDelete.dismiss();
-                finish();
-            }
-
-            @Override
-            public void confirm() {
-                popupwindowDelete.dismiss();
-                SnackbarUtils.Short(tvCommonActionbarTitle, "保存成功").show();
-                finish();
-            }
-        });
+        new MaterialDialog.Builder(this)
+                .title("房间编辑信息未保存")
+                .content("房间被编辑还未保存，请确认是否要保存编辑信息")
+                .negativeText("取消")
+                .positiveText("确定")
+                .onNegative(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        finish();
+                    }
+                })
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        SnackbarUtils.Short(tvCommonActionbarTitle, "保存成功").show();
+                        finish();
+                    }
+                })
+                .show();
     }
 
     /**
      * 显示房间名字的popupwindow
      */
     private void showPopupwindowName() {
-        popupWindowName = new MyPopupWindowThree(this, "设置房间名称", tvName.getText().toString(), new MyPopupWindowThree.IPopupWindowListener() {
-            @Override
-            public void cancel() {
-                popupWindowName.dismiss();
-                CommonUtils.closeSoftKeyboard(AddRoomDetailsActivity.this);
-            }
+        new MaterialDialog.Builder(this)
+                .title("设置房间名称")
+                .negativeText("取消")
+                .positiveText("确定")
+                .inputRange(1, 20, getResources().getColor(R.color.red))
+                .input(tvName.getText().toString(), null, false, new MaterialDialog.InputCallback() {
+                    @Override
+                    public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
 
-            @Override
-            public void confirm() {
-                EditText etEditText = popupWindowName.getEtEditText();
-                isUpdate = true;
-                tvName.setText(etEditText.getText().toString());
-                popupWindowName.dismiss();
-                CommonUtils.closeSoftKeyboard(AddRoomDetailsActivity.this);
-            }
-        });
-        final EditText etEditText = popupWindowName.getEtEditText();
-        final TextView tvConfirm = popupWindowName.getTvConfirm();
-        final TextView tvError = popupWindowName.getTvError();
-
-        if (etEditText.getText().toString().equals(name)) {
-            tvConfirm.setEnabled(false);
-            tvConfirm.setTextColor(getResources().getColor(R.color.home_setting_text_three));
-        }
-        etEditText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if (s.toString().equals(name)) {
-                    tvError.setVisibility(View.VISIBLE);
-                    tvError.setText("不能和之前名字一致");
-                    tvConfirm.setEnabled(false);
-                    tvConfirm.setTextColor(getResources().getColor(R.color.home_setting_text_three));
-                } else if (s.toString().length() > 10) {
-                    tvError.setVisibility(View.VISIBLE);
-                    tvError.setText("长度超过最大");
-                    tvConfirm.setEnabled(false);
-                    tvConfirm.setTextColor(getResources().getColor(R.color.home_setting_text_three));
-                } else if (s.toString().length() == 0) {
-                    tvConfirm.setEnabled(false);
-                    tvConfirm.setTextColor(getResources().getColor(R.color.home_setting_text_three));
-                    etEditText.setCursorVisible(false);
-                } else {
-                    tvError.setVisibility(View.GONE);
-                    tvConfirm.setEnabled(true);
-                    tvConfirm.setTextColor(getResources().getColor(R.color.popupwindow_confirm_text));
-                }
-            }
-        });
+                    }
+                })
+                .onNegative(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        CommonUtils.closeSoftKeyboard(AddRoomDetailsActivity.this);
+                    }
+                })
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        tvName.setText(dialog.getInputEditText().getText().toString());
+                        isUpdate = true;
+                        CommonUtils.closeSoftKeyboard(AddRoomDetailsActivity.this);
+                    }
+                })
+                .show();
     }
 
     /**
@@ -377,7 +341,6 @@ public class AddRoomDetailsActivity extends BaseActivity {
         //取消
         if (isUpdate) {
             showPopupwindowDelete();
-            popupwindowDelete.showPopupWindow(recyclerview);
         } else {
             SnackbarUtils.Short(tvSave, "保存成功").show();
             finish();

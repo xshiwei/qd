@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
@@ -22,6 +23,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.clj.fastble.BleManager;
 import com.clj.fastble.callback.BleScanCallback;
 import com.clj.fastble.data.BleDevice;
@@ -46,15 +49,13 @@ import com.qvd.smartswitch.utils.PermissionUtils;
 import com.qvd.smartswitch.utils.ToastUtil;
 import com.qvd.smartswitch.widget.CheckListener;
 import com.qvd.smartswitch.widget.ItemHeaderDecoration;
-import com.qvd.smartswitch.widget.MyPopupWindowOne;
 import com.qvd.smartswitch.widget.RandomTextView;
 import com.yanzhenjie.permission.Permission;
 
-import java.io.IOException;
-import java.io.InputStream;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
+
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -112,7 +113,6 @@ public class AddDeviceActivity extends BaseActivity implements CheckListener {
      */
     private WiseFy wiseFy;
 
-    private MyPopupWindowOne popupWindowOpenWifi;
 
     private RandomTextView randomTextview;
 
@@ -137,10 +137,6 @@ public class AddDeviceActivity extends BaseActivity implements CheckListener {
      * 左侧数据集合
      */
     private List<AddDeviceListVo.DataBean> categoryOneArray;
-    /**
-     * 打开GPS
-     */
-    private MyPopupWindowOne myPopupWindowOne;
 
     @Override
     protected int setLayoutId() {
@@ -187,21 +183,22 @@ public class AddDeviceActivity extends BaseActivity implements CheckListener {
      * 打开GPS
      */
     private void showPopupWindowOpenGPS() {
-        myPopupWindowOne = new MyPopupWindowOne(this, "检测到您的GPS未打开，可能导致搜索不到设备,是否去打开？", "取消", "确认", new MyPopupWindowOne.IPopupWindowListener() {
-            @Override
-            public void cancel() {
-                myPopupWindowOne.dismiss();
-            }
+        new MaterialDialog.Builder(this)
+                .content("检测到您的GPS未打开，可能导致搜索不到设备,是否去打开？")
+                .negativeText("取消")
+                .positiveText("确认")
+                .onNegative(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-            @Override
-            public void confirm() {
-                // 转到手机设置界面，用户设置GPS
-                Intent intent = new Intent(
-                        Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                startActivityForResult(intent, REQUEST_CODE_OPEN_GPS);
-                myPopupWindowOne.dismiss();
-            }
-        });
+                    }
+                })
+                .onPositive((dialog, which) -> {
+                    Intent intent = new Intent(
+                            Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                    startActivityForResult(intent, REQUEST_CODE_OPEN_GPS);
+                })
+                .show();
     }
 
     /**
@@ -235,7 +232,6 @@ public class AddDeviceActivity extends BaseActivity implements CheckListener {
         //判断用户是否打开GPS
         if (!BleManageUtils.getInstance().checkGPSIsOpen(this)) {
             showPopupWindowOpenGPS();
-            myPopupWindowOne.showPopupWindow(randomTextview);
         }
         checkPermission();
         startScanWifi();
@@ -248,7 +244,6 @@ public class AddDeviceActivity extends BaseActivity implements CheckListener {
         //检查当前设备是否开启wifi
         if (!wiseFy.isWifiEnabled()) {
             showOpenWifiPopupWindow();
-            popupWindowOpenWifi.showPopupWindow(tvAddDeviceManual);
         }
     }
 
@@ -285,18 +280,23 @@ public class AddDeviceActivity extends BaseActivity implements CheckListener {
      * 展示打开Wifi的popouwindow
      */
     private void showOpenWifiPopupWindow() {
-        popupWindowOpenWifi = new MyPopupWindowOne(this, "您当前Wi-Fi网络未开启，不能扫描连接Wi_Fi设备,点击确定开启Wi-Fi。", "取消", "确定", new MyPopupWindowOne.IPopupWindowListener() {
-            @Override
-            public void cancel() {
-                popupWindowOpenWifi.dismiss();
-            }
+        new MaterialDialog.Builder(this)
+                .content("您当前Wi-Fi网络未开启，不能扫描连接Wi_Fi设备,点击确定开启Wi-Fi。")
+                .negativeText("取消")
+                .positiveText("确定")
+                .onNegative(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-            @Override
-            public void confirm() {
-                popupWindowOpenWifi.dismiss();
-                wiseFy.enableWifi();
-            }
-        });
+                    }
+                })
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        wiseFy.enableWifi();
+                    }
+                })
+                .show();
     }
 
     /**

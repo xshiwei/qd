@@ -2,7 +2,6 @@ package com.qvd.smartswitch.api;
 
 import com.qvd.smartswitch.model.device.AddDeviceListVo;
 import com.qvd.smartswitch.model.device.AddQS02Vo;
-import com.qvd.smartswitch.model.device.CommonDeviceListVo;
 import com.qvd.smartswitch.model.device.IsWifiNetWorkVo;
 import com.qvd.smartswitch.model.device.RoomDeviceListVo;
 import com.qvd.smartswitch.model.home.DefaultRoomVo;
@@ -351,7 +350,7 @@ public interface QdoApi {
      * @return
      */
     @GET("get/common_device_list")
-    Observable<CommonDeviceListVo> getCommonDeviceList(@Query("user_id") String user_id, @Query("family_id") String family_id);
+    Observable<RoomDeviceListVo> getCommonDeviceList(@Query("user_id") String user_id, @Query("family_id") String family_id);
 
 
     /**

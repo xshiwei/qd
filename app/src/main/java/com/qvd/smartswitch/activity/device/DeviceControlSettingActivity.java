@@ -3,6 +3,7 @@ package com.qvd.smartswitch.activity.device;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
@@ -16,6 +17,8 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.clj.fastble.BleManager;
 import com.clj.fastble.callback.BleWriteCallback;
 import com.clj.fastble.data.BleDevice;
@@ -32,7 +35,6 @@ import com.qvd.smartswitch.utils.CommandUtils;
 import com.qvd.smartswitch.utils.CommonUtils;
 import com.qvd.smartswitch.utils.SnackbarUtils;
 import com.qvd.smartswitch.utils.ToastUtil;
-import com.qvd.smartswitch.widget.MyPopupWindowThree;
 import com.qvd.smartswitch.widget.MyProgressDialog;
 
 import butterknife.BindView;
@@ -73,19 +75,11 @@ public class DeviceControlSettingActivity extends BaseActivity {
      * 超时dialog
      */
     private MyProgressDialog progressDialog;
-    /**
-     * 修改名称的弹出框
-     */
-    private MyPopupWindowThree popupWindowName;
 
     /**
      * 设备昵称
      */
     private String deviceNickname;
-    /**
-     * 修改密码的弹出框
-     */
-    private MyPopupWindowThree popupWindowPassword;
 
 
     @Override
@@ -139,8 +133,7 @@ public class DeviceControlSettingActivity extends BaseActivity {
                 break;
             case R.id.rl_device_setting_password:
                 //修改密码
-                showPopupwindowPassword();
-                popupWindowPassword.showPopupWindow(view);
+
                 break;
             case R.id.rl_device_setting_timing:
                 //定时
@@ -150,7 +143,6 @@ public class DeviceControlSettingActivity extends BaseActivity {
             case R.id.rl_device_setting_name:
                 //设置名称
                 showPopupwindowName();
-                popupWindowName.showPopupWindow(view);
             case R.id.rl_device_setting_pic:
                 //更换图标
                 startActivity(new Intent(this, DeviceUpdatePicActivity.class).putExtra("bledevice", bledevice));
@@ -171,130 +163,35 @@ public class DeviceControlSettingActivity extends BaseActivity {
         }
     }
 
-    /**
-     * 显示更换密码的popupwindow
-     */
-    private void showPopupwindowPassword() {
-        popupWindowPassword = new MyPopupWindowThree(this, "设置密码", "", new MyPopupWindowThree.IPopupWindowListener() {
-            @Override
-            public void cancel() {
-                popupWindowPassword.dismiss();
-                CommonUtils.closeSoftKeyboard(DeviceControlSettingActivity.this);
-            }
-
-            @Override
-            public void confirm() {
-                EditText etEditText = popupWindowPassword.getEtEditText();
-                writeToBle(etEditText.getText().toString());
-                popupWindowPassword.dismiss();
-                CommonUtils.closeSoftKeyboard(DeviceControlSettingActivity.this);
-            }
-        });
-        final EditText etEditText = popupWindowName.getEtEditText();
-        final TextView tvConfirm = popupWindowName.getTvConfirm();
-        final TextView tvError = popupWindowName.getTvError();
-
-        if (etEditText.getText().toString().equals("")) {
-            tvConfirm.setEnabled(false);
-            tvConfirm.setTextColor(etEditText.getResources().getColor(R.color.home_setting_text_three));
-        }
-
-        etEditText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if (s.toString().length() > 6) {
-                    tvError.setVisibility(View.VISIBLE);
-                    tvError.setText("长度超过最大");
-                    tvConfirm.setEnabled(false);
-                    tvConfirm.setTextColor(getResources().getColor(R.color.home_setting_text_three));
-                } else if (s.toString().length() == 0) {
-                    tvConfirm.setEnabled(false);
-                    tvConfirm.setTextColor(getResources().getColor(R.color.home_setting_text_three));
-                    etEditText.setCursorVisible(false);
-                } else if (s.length() == 6) {
-                    tvError.setVisibility(View.GONE);
-                    tvConfirm.setEnabled(true);
-                    tvConfirm.setTextColor(getResources().getColor(R.color.popupwindow_confirm_text));
-                } else {
-                    tvConfirm.setEnabled(false);
-                    tvConfirm.setTextColor(getResources().getColor(R.color.home_setting_text_three));
-                }
-            }
-        });
-    }
-
 
     /**
      * 显示更换名字的popupwindow
      */
     private void showPopupwindowName() {
-        popupWindowName = new MyPopupWindowThree(this, "设置设备名称", deviceNickname, new MyPopupWindowThree.IPopupWindowListener() {
-            @Override
-            public void cancel() {
-                popupWindowName.dismiss();
-                CommonUtils.closeSoftKeyboard(DeviceControlSettingActivity.this);
-            }
+        new MaterialDialog.Builder(this)
+                .title("设置设备名称")
+                .inputRange(1, 20, getResources().getColor(R.color.red))
+                .input(deviceNickname, null, false, new MaterialDialog.InputCallback() {
+                    @Override
+                    public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
 
-            @Override
-            public void confirm() {
-                EditText etEditText = popupWindowName.getEtEditText();
-                DeviceNickNameVo deviceNickNameVo1 = DeviceNickNameDaoOpe.queryOne(DeviceControlSettingActivity.this, CommonUtils.getMac(bledevice.getMac()));
-                DeviceNickNameVo deviceNickNameVo = new DeviceNickNameVo(deviceNickNameVo1.getId(), deviceNickNameVo1.getDeviceId()
-                        , deviceNickNameVo1.getDeviceName(), CommonUtils.getDate(), etEditText.getText().toString(), deviceNickNameVo1.getPic(), deviceNickNameVo1.getType());
-                DeviceNickNameDaoOpe.updateData(DeviceControlSettingActivity.this, deviceNickNameVo);
-                SnackbarUtils.Short(coordinatorLayout, "修改成功").show();
-                tvDeviceName.setText(etEditText.getText().toString());
-                popupWindowName.dismiss();
-                CommonUtils.closeSoftKeyboard(DeviceControlSettingActivity.this);
-            }
-        });
-        final EditText etEditText = popupWindowName.getEtEditText();
-        final TextView tvConfirm = popupWindowName.getTvConfirm();
-        final TextView tvError = popupWindowName.getTvError();
-        if (etEditText.getText().toString().equals(deviceNickname)) {
-            tvConfirm.setEnabled(false);
-            tvConfirm.setTextColor(etEditText.getResources().getColor(R.color.home_setting_text_three));
-        }
-
-        etEditText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if (s.toString().length() > 20) {
-                    tvError.setVisibility(View.VISIBLE);
-                    tvError.setText("长度超过最大");
-                    tvConfirm.setEnabled(false);
-                    tvConfirm.setTextColor(getResources().getColor(R.color.home_setting_text_three));
-                } else if (s.toString().length() == 0) {
-                    tvConfirm.setEnabled(false);
-                    tvConfirm.setTextColor(getResources().getColor(R.color.home_setting_text_three));
-                    etEditText.setCursorVisible(false);
-                } else {
-                    tvError.setVisibility(View.GONE);
-                    tvConfirm.setEnabled(true);
-                    tvConfirm.setTextColor(getResources().getColor(R.color.popupwindow_confirm_text));
-                }
-            }
-        });
+                    }
+                })
+                .negativeText("取消")
+                .positiveText("确定")
+                .onNegative(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        CommonUtils.closeSoftKeyboard(DeviceControlSettingActivity.this);
+                    }
+                })
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        //修改设备名称
+                    }
+                })
+                .show();
     }
 
     /**

@@ -59,6 +59,7 @@ public class RoomDeviceListVo {
          * user_id : c0f3e214be19d22a4c10c052983f8a24
          */
 
+
         private String add_time;
         private int connect_type;
         private String device_id;

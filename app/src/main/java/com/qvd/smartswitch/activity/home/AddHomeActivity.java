@@ -1,6 +1,7 @@
 package com.qvd.smartswitch.activity.home;
 
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -11,6 +12,8 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.lljjcoder.Interface.OnCityItemClickListener;
 import com.lljjcoder.bean.CityBean;
 import com.lljjcoder.bean.DistrictBean;
@@ -28,9 +31,6 @@ import com.qvd.smartswitch.model.login.MessageVo;
 import com.qvd.smartswitch.utils.CommonUtils;
 import com.qvd.smartswitch.utils.ConfigUtils;
 import com.qvd.smartswitch.utils.SnackbarUtils;
-import com.qvd.smartswitch.widget.MyPopupWindowOne;
-import com.qvd.smartswitch.widget.MyPopupWindowThree;
-import com.qvd.smartswitch.widget.MyPopupWindowTwo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,16 +65,6 @@ public class AddHomeActivity extends BaseActivity {
     RecyclerView recyclerview;
 
     /**
-     * 更改名称的popupwindow
-     */
-    private MyPopupWindowThree popupWindowName;
-
-    /**
-     * 删除家庭的popupwindow
-     */
-    private MyPopupWindowTwo popupwindowConfirm;
-
-    /**
      * 声明城市选择器
      */
     private CityPickerView mPicker = new CityPickerView();
@@ -87,10 +77,7 @@ public class AddHomeActivity extends BaseActivity {
      */
     private List<HomeBackgroundVo> list = new ArrayList<>();
     private HomeSettingPicAdapter adapter;
-    /**
-     * 当未保存时弹出该提示框
-     */
-    private MyPopupWindowOne popupWindowBack;
+
 
     @Override
     protected int setLayoutId() {
@@ -117,7 +104,6 @@ public class AddHomeActivity extends BaseActivity {
             case R.id.iv_common_actionbar_goback:
                 if (!CommonUtils.isEmptyString(tvName.getText().toString()) || !CommonUtils.isEmptyString(tvLocation.getText().toString())) {
                     showPopupWindowBack();
-                    popupWindowBack.showPopupWindow(tvCommonActionbarTitle);
                 } else {
                     finish();
                 }
@@ -125,7 +111,6 @@ public class AddHomeActivity extends BaseActivity {
             case R.id.rl_home_name:
                 //设置名字
                 showPopupWindowName();
-                popupWindowName.showPopupWindow(view);
                 break;
             case R.id.rl_home_location:
                 //设置位置
@@ -147,18 +132,23 @@ public class AddHomeActivity extends BaseActivity {
      * 创建退出时提示用户还未创建成功的popupwindow
      */
     private void showPopupWindowBack() {
-        popupWindowBack = new MyPopupWindowOne(this, "您当前创建的家庭还没有保存，是否放弃编辑并退出？", "继续编辑", "退出", new MyPopupWindowOne.IPopupWindowListener() {
-            @Override
-            public void cancel() {
-                popupWindowBack.dismiss();
-            }
+        new MaterialDialog.Builder(this)
+                .content("您当前创建的家庭还没有保存，是否放弃编辑并退出？")
+                .negativeText("退出")
+                .positiveText("继续编辑")
+                .onNegative(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        finish();
+                    }
+                })
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
 
-            @Override
-            public void confirm() {
-                popupWindowBack.dismiss();
-                finish();
-            }
-        });
+                    }
+                })
+                .show();
     }
 
     /**
@@ -202,7 +192,6 @@ public class AddHomeActivity extends BaseActivity {
                         //判断有没有添加成功，添加成功则跳出一个弹窗提示。
                         if (messageVo.getCode() == 200) {
                             showPopupWindowConfirm();
-                            popupwindowConfirm.showPopupWindow(tvCommonActionbarTitle);
                         } else if (messageVo.getCode() == 400) {
                             SnackbarUtils.Short(tvCommonActionbarTitle, "保存失败");
                         } else {
@@ -263,23 +252,28 @@ public class AddHomeActivity extends BaseActivity {
      * 显示popupwindow
      */
     private void showPopupWindowConfirm() {
-        popupwindowConfirm = new MyPopupWindowTwo(this, "已成功创建- 二宝", "是否现在立刻去设置新家庭", "稍后再说", "立即设置", new MyPopupWindowTwo.IPopupWindowListener() {
-            @Override
-            public void cancel() {
-                popupwindowConfirm.dismiss();
-                startActivity(new Intent(AddHomeActivity.this, MainActivity.class));
-                overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
-                finish();
-            }
-
-            @Override
-            public void confirm() {
-                popupwindowConfirm.dismiss();
-                startActivity(new Intent(AddHomeActivity.this, AddRoomListActivity.class));
-                overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
-                finish();
-            }
-        });
+        new MaterialDialog.Builder(this)
+                .title("已成功创建- 二宝")
+                .content("是否现在立刻去设置新家庭")
+                .negativeText("稍后再说")
+                .positiveText("立即设置")
+                .onNegative(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        startActivity(new Intent(AddHomeActivity.this, MainActivity.class));
+                        overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+                        finish();
+                    }
+                })
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        startActivity(new Intent(AddHomeActivity.this, AddRoomListActivity.class));
+                        overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+                        finish();
+                    }
+                })
+                .show();
     }
 
 
@@ -287,68 +281,37 @@ public class AddHomeActivity extends BaseActivity {
      * 显示更换名字的popupwindow
      */
     private void showPopupWindowName() {
+        new MaterialDialog.Builder(this)
+                .title("设置家庭名称")
+                .negativeText("取消")
+                .positiveText("确定")
+                .inputRange(1, 20, getResources().getColor(R.color.red))
+                .input(tvName.getText().toString(), null, false, new MaterialDialog.InputCallback() {
+                    @Override
+                    public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
 
-        popupWindowName = new MyPopupWindowThree(this, "设置家庭名称", tvName.getText().toString(), new MyPopupWindowThree.IPopupWindowListener() {
-            @Override
-            public void cancel() {
-                popupWindowName.dismiss();
-                CommonUtils.closeSoftKeyboard(AddHomeActivity.this);
-            }
-
-            @Override
-            public void confirm() {
-                EditText etEditText = popupWindowName.getEtEditText();
-                tvName.setText(etEditText.getText().toString());
-                popupWindowName.dismiss();
-                CommonUtils.closeSoftKeyboard(AddHomeActivity.this);
-            }
-        });
-        final EditText etEditText = popupWindowName.getEtEditText();
-        final TextView tvConfirm = popupWindowName.getTvConfirm();
-        final TextView tvError = popupWindowName.getTvError();
-
-        if (etEditText.getText().toString().equals("")) {
-            tvConfirm.setEnabled(false);
-            tvConfirm.setTextColor(etEditText.getResources().getColor(R.color.home_setting_text_three));
-        }
-
-        //判断当前输入是否符合要求
-        etEditText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if (s.toString().length() > 20) {
-                    tvError.setVisibility(View.VISIBLE);
-                    tvError.setText("长度超过最大");
-                    tvConfirm.setEnabled(false);
-                    tvConfirm.setTextColor(getResources().getColor(R.color.home_setting_text_three));
-                } else if (s.toString().length() == 0) {
-                    tvConfirm.setEnabled(false);
-                    tvConfirm.setTextColor(getResources().getColor(R.color.home_setting_text_three));
-                    etEditText.setCursorVisible(false);
-                } else {
-                    tvError.setVisibility(View.GONE);
-                    tvConfirm.setEnabled(true);
-                    tvConfirm.setTextColor(getResources().getColor(R.color.popupwindow_confirm_text));
-                }
-            }
-        });
+                    }
+                })
+                .onNegative(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        CommonUtils.closeSoftKeyboard(AddHomeActivity.this);
+                    }
+                })
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        tvName.setText(dialog.getInputEditText().getText().toString());
+                        CommonUtils.closeSoftKeyboard(AddHomeActivity.this);
+                    }
+                })
+                .show();
     }
 
     @Override
     public void onBackPressed() {
         if (!CommonUtils.isEmptyString(tvName.getText().toString()) || !CommonUtils.isEmptyString(tvLocation.getText().toString())) {
             showPopupWindowBack();
-            popupWindowBack.showPopupWindow(tvCommonActionbarTitle);
         } else {
             finish();
         }

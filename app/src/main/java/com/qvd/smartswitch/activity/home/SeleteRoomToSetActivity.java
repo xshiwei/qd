@@ -1,6 +1,7 @@
 package com.qvd.smartswitch.activity.home;
 
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -10,6 +11,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.orhanobut.logger.Logger;
 import com.qvd.smartswitch.R;
 import com.qvd.smartswitch.activity.base.BaseActivity;
@@ -21,7 +24,6 @@ import com.qvd.smartswitch.utils.CommonUtils;
 import com.qvd.smartswitch.utils.ConfigUtils;
 import com.qvd.smartswitch.utils.ToastUtil;
 import com.qvd.smartswitch.widget.EmptyLayout;
-import com.qvd.smartswitch.widget.MyPopupWindowThree;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,7 +49,6 @@ public class SeleteRoomToSetActivity extends BaseActivity {
 
     private List<RoomListVo.DataBean> list = new ArrayList<>();
     private RoomManageListAdapter adapter;
-    private MyPopupWindowThree popupWindowName;
 
     @Override
     protected int setLayoutId() {
@@ -92,7 +93,6 @@ public class SeleteRoomToSetActivity extends BaseActivity {
                 break;
             case R.id.iv_add_room:
                 showAddRoomPopupWindow();
-                popupWindowName.showPopupWindow(view);
                 break;
         }
     }
@@ -101,61 +101,32 @@ public class SeleteRoomToSetActivity extends BaseActivity {
      * 展示添加房间
      */
     private void showAddRoomPopupWindow() {
-        popupWindowName = new MyPopupWindowThree(this, "添加属于您的房间", "", new MyPopupWindowThree.IPopupWindowListener() {
-            @Override
-            public void cancel() {
-                popupWindowName.dismiss();
-                CommonUtils.closeSoftKeyboard(SeleteRoomToSetActivity.this);
-            }
+        new MaterialDialog.Builder(this)
+                .title("添加属于您的房间")
+                .negativeText("取消")
+                .positiveText("确定")
+                .inputRange(1, 20, getResources().getColor(R.color.red))
+                .input(null, null, false, new MaterialDialog.InputCallback() {
+                    @Override
+                    public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
 
-            @Override
-            public void confirm() {
-                EditText etEditText = popupWindowName.getEtEditText();
-                addRoom(etEditText.getText().toString());
-                popupWindowName.dismiss();
-                adapter.notifyDataSetChanged();
-                CommonUtils.closeSoftKeyboard(SeleteRoomToSetActivity.this);
-            }
-        });
-        final EditText etEditText = popupWindowName.getEtEditText();
-        final TextView tvConfirm = popupWindowName.getTvConfirm();
-        final TextView tvError = popupWindowName.getTvError();
-
-        if (etEditText.getText().toString().equals("")) {
-            tvConfirm.setEnabled(false);
-            tvConfirm.setTextColor(etEditText.getResources().getColor(R.color.home_setting_text_three));
-        }
-
-        //判断当前输入是否符合要求
-        etEditText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if (s.toString().length() > 20) {
-                    tvError.setVisibility(View.VISIBLE);
-                    tvError.setText("长度超过最大");
-                    tvConfirm.setEnabled(false);
-                    tvConfirm.setTextColor(getResources().getColor(R.color.home_setting_text_three));
-                } else if (s.toString().length() == 0) {
-                    tvConfirm.setEnabled(false);
-                    tvConfirm.setTextColor(getResources().getColor(R.color.home_setting_text_three));
-                    etEditText.setCursorVisible(false);
-                } else {
-                    tvError.setVisibility(View.GONE);
-                    tvConfirm.setEnabled(true);
-                    tvConfirm.setTextColor(getResources().getColor(R.color.popupwindow_confirm_text));
-                }
-            }
-        });
+                    }
+                })
+                .onNegative(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        CommonUtils.closeSoftKeyboard(SeleteRoomToSetActivity.this);
+                    }
+                })
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        addRoom(dialog.getInputEditText().getText().toString());
+                        adapter.notifyDataSetChanged();
+                        CommonUtils.closeSoftKeyboard(SeleteRoomToSetActivity.this);
+                    }
+                })
+                .show();
     }
 
 

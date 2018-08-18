@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.clj.fastble.BleManager;
 import com.clj.fastble.callback.BleGattCallback;
 import com.clj.fastble.callback.BleNotifyCallback;
@@ -25,7 +26,6 @@ import com.qvd.smartswitch.activity.MainActivity;
 import com.qvd.smartswitch.activity.base.BaseActivity;
 import com.qvd.smartswitch.model.device.ScanResultVo;
 import com.qvd.smartswitch.utils.OnMultiClickListener;
-import com.qvd.smartswitch.widget.MyPopupWindowLoading;
 import com.scwang.smartrefresh.header.MaterialHeader;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
@@ -85,12 +85,12 @@ public class DeviceControlTwoActivity extends BaseActivity {
     private BleDevice mBledevice;
 
     private ScanResultVo resultVo;
-    private MyPopupWindowLoading myPopupWindowLoading;
 
     /**
      * 是否第一次连接设备
      */
     private int isFirstConnect;
+    private MaterialDialog dialog;
 
     @Override
     protected int setLayoutId() {
@@ -103,16 +103,18 @@ public class DeviceControlTwoActivity extends BaseActivity {
     protected void initData() {
         super.initData();
         final View mView = DeviceControlTwoActivity.this.getWindow().getDecorView();
-        myPopupWindowLoading = new MyPopupWindowLoading(DeviceControlTwoActivity.this, "设备正在初始化");
         mView.post(new Runnable() {
             @Override
             public void run() {
-                if (null != myPopupWindowLoading) {
-                    myPopupWindowLoading.showPopupWindow(mView);
+                if (null != dialog) {
+                    dialog = new MaterialDialog.Builder(DeviceControlTwoActivity.this)
+                            .content("设备正在初始化")
+                            .progress(true, 0)
+                            .show();
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            myPopupWindowLoading.dismiss();
+                            dialog.dismiss();
                         }
                     }, 5000);
                 }

@@ -58,10 +58,6 @@ public class DeviceWifiControlActivity extends BaseActivity {
     ImageView ivLightTwo;
     @BindView(R.id.iv_switch_two)
     ImageView ivSwitchTwo;
-    @BindView(R.id.tv_total)
-    TextView tvTotal;
-    @BindView(R.id.rl_test)
-    LinearLayout rlTest;
     @BindView(R.id.iv_sound)
     ImageView ivSound;
     @BindView(R.id.tv_two)
@@ -136,7 +132,7 @@ public class DeviceWifiControlActivity extends BaseActivity {
                 @Override
                 public void messageArrived(String topic, MqttMessage message) {
                     if (topic.equals(MqttUtils.TOPIC_ONE)) {
-                        tvTotal.setText("messageArrived() topic:" + topic + "messageArrived() message:" + message);
+                        return;
                     } else {
                         Gson gson = new Gson();
                         WifiSmartNotifyVo wifiSmartNotifyVo = gson.fromJson(String.valueOf(message), WifiSmartNotifyVo.class);

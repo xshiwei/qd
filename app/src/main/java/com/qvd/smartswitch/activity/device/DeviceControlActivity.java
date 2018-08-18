@@ -125,8 +125,6 @@ public class DeviceControlActivity extends BaseActivity {
         bledevice = getIntent().getParcelableExtra("bledevice");
         if (bledevice != null) {
             bluetoothGatt = BleManager.getInstance().getBluetoothGatt(bledevice);
-//            bluetoothGattService = bluetoothGatt.getServices().get(3);
-//            bluetoothGattCharacteristic = bluetoothGattService.getCharacteristics().get(5);
             deviceNickname = DeviceNickNameDaoOpe.queryOne(this, CommonUtils.getMac(bledevice.getMac())).getDeviceNickname();
         }
 
@@ -135,6 +133,8 @@ public class DeviceControlActivity extends BaseActivity {
         mCloudGrammar = FucUtil.readFile(this, "grammar_sample.abnf", "utf-8");
 
         mSharedPreferences = getSharedPreferences(getPackageName(), MODE_PRIVATE);
+
+
 
         dialog = MyProgressDialog.createProgressDialog(this, 5000, new MyProgressDialog.OnTimeOutListener() {
             @Override
