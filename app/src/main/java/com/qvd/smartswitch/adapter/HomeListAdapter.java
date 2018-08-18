@@ -77,13 +77,6 @@ public class HomeListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             }
             mPosition = position;
             ((MyViewHolder) holder).tv_item_text.setText(data.get(position).getRoom_name());
-            if (position == HomeFragmentTest.mPosition) {
-                ((MyViewHolder) holder).iv_item_pic.setImageDrawable(CommonUtils.tintDrawable(((MyViewHolder) holder).iv_item_pic.getDrawable(), Color.parseColor("#F78F4F")));
-                ((MyViewHolder) holder).tv_item_text.setTextColor(context.getResources().getColor(R.color.app_color));
-            } else {
-                Picasso.with(context).load(R.mipmap.home_setting).into(((MyViewHolder) holder).iv_item_pic);
-                ((MyViewHolder) holder).tv_item_text.setTextColor(context.getResources().getColor(R.color.home_content_text));
-            }
         }
     }
 

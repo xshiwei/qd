@@ -1,5 +1,6 @@
 package com.qvd.smartswitch.activity.home;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
@@ -7,7 +8,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
-import android.support.v7.widget.GridLayoutManager;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -20,19 +21,20 @@ import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.melnykov.fab.FloatingActionButton;
+import com.kennyc.view.MultiStateView;
+import com.ogaclejapan.smarttablayout.SmartTabLayout;
+import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItem;
+import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItemAdapter;
+import com.ogaclejapan.smarttablayout.utils.v4.FragmentPagerItems;
 import com.orhanobut.logger.Logger;
 import com.qvd.smartswitch.R;
 import com.qvd.smartswitch.activity.base.BaseFragment;
-import com.qvd.smartswitch.activity.device.DeviceControlTwoActivity;
 import com.qvd.smartswitch.activity.login.LoginTestActivity;
-import com.qvd.smartswitch.activity.wifi.DeviceWifiControlActivity;
 import com.qvd.smartswitch.adapter.HomeContentAdapter;
 import com.qvd.smartswitch.adapter.HomeListAdapter;
 import com.qvd.smartswitch.adapter.HomeMenuAdapter;
 import com.qvd.smartswitch.api.RetrofitService;
 import com.qvd.smartswitch.model.device.RoomDeviceListVo;
-import com.qvd.smartswitch.model.device.ScanResultVo;
 import com.qvd.smartswitch.model.home.DefaultRoomVo;
 import com.qvd.smartswitch.model.home.HomeLeftListVo;
 import com.qvd.smartswitch.model.home.HomeListVo;
@@ -42,8 +44,6 @@ import com.qvd.smartswitch.utils.ConfigUtils;
 import com.qvd.smartswitch.utils.PermissionUtils;
 import com.qvd.smartswitch.utils.SharedPreferencesUtil;
 import com.qvd.smartswitch.utils.ToastUtil;
-import com.qvd.smartswitch.widget.RecycleViewDivider;
-import com.qvd.smartswitch.widget.EmptyLayout;
 import com.scwang.smartrefresh.header.MaterialHeader;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.yanzhenjie.permission.Permission;
@@ -68,58 +68,19 @@ import io.reactivex.schedulers.Schedulers;
 
 public class HomeFragmentTest extends BaseFragment {
 
-    @BindView(R.id.tv_temperature)
-    TextView tvTemperature;
-    @BindView(R.id.tv_city)
-    TextView tvCity;
-    @BindView(R.id.tv_outdoor_air)
-    TextView tvOutdoorAir;
-    @BindView(R.id.tv_water_quality)
-    TextView tvWaterQuality;
-    @BindView(R.id.tv_humidness)
-    TextView tvHumidness;
-    @BindView(R.id.rv_list)
-    RecyclerView rvList;
-    @BindView(R.id.home_setting)
-    ImageView homeSetting;
-    @BindView(R.id.rv_content)
-    RecyclerView rvContent;     //家庭，个人，车载那里显示这个
     @BindView(R.id.refreshLayout)
     SmartRefreshLayout refreshLayout;
     @BindView(R.id.iv_menu)
     ImageView ivMenu;
     @BindView(R.id.tv_scene_setting)
     TextView tvSceneSetting;
-    @BindView(R.id.rl_layout)
-    RelativeLayout rlLayout;
-    @BindView(R.id.fab)
-    FloatingActionButton fab;
-    @BindView(R.id.rl_list)
-    RelativeLayout rlList;
-    @BindView(R.id.emptylayout)
-    EmptyLayout emptylayout;
-    @BindView(R.id.emptylayout_content)
-    EmptyLayout emptyLayoutContent;
+    @BindView(R.id.viewpagertab)
+    SmartTabLayout viewpagertab;
+    @BindView(R.id.viewPager)
+    ViewPager viewPager;
+    @BindView(R.id.multiStateView)
+    MultiStateView multiStateView;
 
-
-    public static int mPosition = 0; //通过这个位置来设置当前的图片类型和文字颜色
-    /**
-     * 列表适配器
-     */
-    private HomeListAdapter listAdapter;
-    /**
-     * 列表数据源
-     */
-    private List<HomeLeftListVo.DataBean> list = new ArrayList<>();
-    /**
-     * 房间点击后设备适配器
-     */
-    private HomeContentAdapter contentAdapter;
-
-    /**
-     * 服务器获取的设备数据源
-     */
-    private List<RoomDeviceListVo.DataBean> contentList = new ArrayList<>();
     /**
      * 点击设置后显示弹窗
      */
@@ -162,173 +123,51 @@ public class HomeFragmentTest extends BaseFragment {
         if (CommonUtils.isEmptyString(userID)) {
             //展示需要登录的界面
             tvSceneSetting.setText("立即登录");
-            emptylayout.showEmpty();
+//            emptylayout.showEmpty();
         } else {
             initEvent();
         }
     }
 
-    /**
-     * 设置菜单点击事件
-     */
-    private void setMenuOnClick() {
-        //设置左边菜单点击事件
-        listAdapter.setOnItemClickListener(new HomeListAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                //获取当前位置
-                mPosition = position;
-                listAdapter.notifyDataSetChanged();
-                //根据当前获取的位置对应的类别请求数据并显示数据。type = 1表示常用，type=2表示房间
-                if (list.get(position).getType() == 1) {
-                    getCommonDevice();
-                } else if (list.get(position).getType() == 2) {
-                    getRoomListDevice(list.get(position).getRoom_id());
-                }
-            }
-
-            @Override
-            public void onItemLongClickListener(View view, int position) {
-
-            }
-        });
-    }
-
-
-    /**
-     * 获取房间设备
-     */
-    private void getRoomListDevice(String roomid) {
-        emptyLayoutContent.hide();
-        contentList.clear();
-        RetrofitService.qdoApi.getRoomDeviceList(ConfigUtils.user_id, roomid)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<RoomDeviceListVo>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-
-                    }
-
-                    @Override
-                    public void onNext(RoomDeviceListVo roomDeviceListVo) {
-                        if (roomDeviceListVo != null) {
-                            if (roomDeviceListVo.getCode() == 200) {
-                                if (roomDeviceListVo.getData() != null && roomDeviceListVo.getData().size() > 0) {
-                                    //获取右侧家庭设备数据
-                                    contentList.addAll(roomDeviceListVo.getData());
-                                    contentAdapter = new HomeContentAdapter(getActivity(), contentList);
-                                    rvContent.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-                                    rvContent.setAdapter(contentAdapter);
-                                    contentAdapter.notifyDataSetChanged();
-                                } else {
-                                    emptyLayoutContent.showEmpty();
-                                }
-                            } else {
-                                emptyLayoutContent.showError();
-                            }
-                        }
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        emptyLayoutContent.showError();
-                    }
-
-                    @Override
-                    public void onComplete() {
-
-                    }
-                });
-    }
-
-
-    /**
-     * 获取常用设备
-     */
-    private void getCommonDevice() {
-        emptyLayoutContent.hide();
-        RetrofitService.qdoApi.getCommonDeviceList(ConfigUtils.user_id, ConfigUtils.family_locate.getFamily_id())
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<RoomDeviceListVo>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-
-                    }
-
-                    @Override
-                    public void onNext(RoomDeviceListVo commonDeviceListVo) {
-                        if (commonDeviceListVo != null) {
-                            if (commonDeviceListVo.getCode() == 200) {
-                                if (commonDeviceListVo.getData() != null && commonDeviceListVo.getData().size() > 0) {
-                                    //获取右侧家庭设备数据
-                                    contentList.addAll(commonDeviceListVo.getData());
-                                    contentAdapter = new HomeContentAdapter(getActivity(), contentList);
-                                    rvContent.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-                                    rvContent.setAdapter(contentAdapter);
-                                    contentAdapter.notifyDataSetChanged();
-                                    //家庭内容区域设备点击事件
-                                    contentAdapter.setOnItemClickListener(new HomeContentAdapter.OnItemClickListener() {
-                                        @Override
-                                        public void onItemClick(View view, int position) {
-                                            RoomDeviceListVo.DataBean dataBean = contentList.get(position);
-                                            switch (dataBean.getDevice_no()) {
-                                                case "qs02":
-                                                    startActivity(new Intent(getActivity(), DeviceControlTwoActivity.class)
-                                                            .putExtra("scanResult", new ScanResultVo(dataBean.getDevice_no(),
-                                                                    CommonUtils.getDeviceName(dataBean.getDevice_no()), dataBean.getDevice_mac(),
-                                                                    dataBean.getConnect_type()))
-                                                            .putExtra("isFirstConnect", dataBean.getIs_first_connect()));
-                                                    getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
-                                                    break;
-                                                case "qs03":
-                                                    startActivity(new Intent(getActivity(), DeviceWifiControlActivity.class)
-                                                            .putExtra("isFirstConnect", 1));
-                                                    getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
-                                                    break;
-                                            }
-                                        }
-
-                                        @Override
-                                        public void onItemLongClickListener(View view, int position) {
-
-                                        }
-                                    });
-                                } else {
-                                    emptyLayoutContent.showEmpty();
-                                }
-                            } else {
-                                emptyLayoutContent.showError();
-                            }
-                        }
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        emptyLayoutContent.showError();
-                    }
-
-                    @Override
-                    public void onComplete() {
-
-                    }
-                });
-    }
-
+//    /**
+//     * 设置菜单点击事件
+//     */
+//    private void setMenuOnClick() {
+//        //设置左边菜单点击事件
+//        listAdapter.setOnItemClickListener(new HomeListAdapter.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(View view, int position) {
+//                //获取当前位置
+//                mPosition = position;
+//                listAdapter.notifyDataSetChanged();
+//                //根据当前获取的位置对应的类别请求数据并显示数据。type = 1表示常用，type=2表示房间
+//                if (list.get(position).getType() == 1) {
+//                    getCommonDevice();
+//                } else if (list.get(position).getType() == 2) {
+//                    getRoomListDevice(list.get(position).getRoom_id());
+//                }
+//            }
+//
+//            @Override
+//            public void onItemLongClickListener(View view, int position) {
+//
+//            }
+//        });
+//    }
 
     /**
      * 初始化加载界面
      */
     private void initEvent() {
-        //获取首页数据
-//        getHomeMenuList();
+        FragmentPagerItems.Creator items = FragmentPagerItems.with(getActivity());
+        List<String> list = new ArrayList<>();
         for (int i = 0; i < 10; i++) {
-            contentList.add(new RoomDeviceListVo.DataBean());
+            items.add("sssss", FragmentHomeDevice.class);
         }
-        contentAdapter = new HomeContentAdapter(getActivity(), contentList);
-        rvContent.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-        rvContent.setAdapter(contentAdapter);
+        FragmentPagerItemAdapter adapter = new FragmentPagerItemAdapter(getChildFragmentManager(), items.create());
+        viewPager.setAdapter(adapter);
+        viewpagertab.setViewPager(viewPager);
+//        getHomeMenuList();
         //设置刷新控件头部高度
         refreshLayout.setHeaderHeight(100);
         refreshLayout.setFooterHeight(1);
@@ -337,9 +176,6 @@ public class HomeFragmentTest extends BaseFragment {
         //设置头部样式
         refreshLayout.setRefreshHeader(new MaterialHeader(getActivity()));
 
-
-        //设置FloatingActionButton
-        fab.attachToRecyclerView(rvContent);
     }
 
     /**
@@ -363,7 +199,7 @@ public class HomeFragmentTest extends BaseFragment {
                                     menuList.add(dataBean);
                                 }
                             } else if (homeListVo.getCode() == 400) {
-                                emptylayout.showError();
+//                                emptylayout.showError();
                                 tvSceneSetting.setText("获取失败");
                             }
                         }
@@ -380,7 +216,7 @@ public class HomeFragmentTest extends BaseFragment {
                 .concatMap(new Function<HomeListVo, ObservableSource<HomeLeftListVo>>() {
                     @Override
                     public ObservableSource<HomeLeftListVo> apply(HomeListVo homeListVo) throws Exception {
-                        return RetrofitService.qdoApi.getHomeLeftList(ConfigUtils.family_locate.getFamily_id(), ConfigUtils.user_id);
+                        return RetrofitService.qdoApi.getHomeRoomList(ConfigUtils.family_locate.getFamily_id(), ConfigUtils.user_id);
                     }
                 })
                 .observeOn(AndroidSchedulers.mainThread())
@@ -388,27 +224,34 @@ public class HomeFragmentTest extends BaseFragment {
                     @Override
                     public void accept(HomeLeftListVo homeLeftListVo) throws Exception {
                         if (homeLeftListVo.getCode() == 200) {
-                            new Handler().postDelayed(new Runnable() {
+                            FragmentPagerItems.Creator items = FragmentPagerItems.with(getActivity());
+                            for (HomeLeftListVo.DataBean dataBean : homeLeftListVo.getData()) {
+                                items.add(dataBean.getRoom_name(), FragmentHomeDevice.class);
+                            }
+                            FragmentPagerItemAdapter adapter = new FragmentPagerItemAdapter(getChildFragmentManager(), items.create());
+                            viewPager.setAdapter(adapter);
+                            viewpagertab.setViewPager(viewPager);
+
+                            viewpagertab.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
                                 @Override
-                                public void run() {
-                                    rlList.setVisibility(View.VISIBLE);
+                                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
                                 }
-                            }, 1000);
-                            list.clear();
-                            list.addAll(homeLeftListVo.getData());
-                            //设置左侧列表
-                            listAdapter = new HomeListAdapter(getActivity(), list);
-                            LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false) {
+
                                 @Override
-                                public boolean canScrollVertically() {
-                                    return true;
+                                public void onPageSelected(int position) {
+                                    Logger.e("activity" + position);
+                                    FragmentHomeDevice pager = (FragmentHomeDevice) adapter.getPage(position);
+
                                 }
-                            };
-                            rvList.setLayoutManager(layoutManager);
-                            rvList.setAdapter(listAdapter);
-                            setMenuOnClick();
+
+                                @Override
+                                public void onPageScrollStateChanged(int state) {
+
+                                }
+                            });
                         } else {
-                            emptylayout.showError();
+//                            emptylayout.showError();
                         }
                     }
                 })
@@ -433,7 +276,7 @@ public class HomeFragmentTest extends BaseFragment {
                         if (defaultRoomVo.getCode() == 200) {
                             ConfigUtils.defaultRoomId = defaultRoomVo.getRoom_id();
                         } else {
-                            emptylayout.showError();
+//                            emptylayout.showError();
                         }
                     }
                 })
@@ -463,57 +306,57 @@ public class HomeFragmentTest extends BaseFragment {
                         if (commonDeviceListVo != null) {
                             if (commonDeviceListVo.getCode() == 200) {
                                 if (commonDeviceListVo.getData() != null && commonDeviceListVo.getData().size() > 0) {
-                                    //获取右侧家庭设备数据
-                                    contentList.addAll(commonDeviceListVo.getData());
-                                    contentAdapter = new HomeContentAdapter(getActivity(), contentList);
-                                    rvContent.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-                                    rvContent.setAdapter(contentAdapter);
-                                    contentAdapter.notifyDataSetChanged();
-                                    //家庭内容区域设备点击事件
-                                    contentAdapter.setOnItemClickListener(new HomeContentAdapter.OnItemClickListener() {
-                                        @Override
-                                        public void onItemClick(View view, int position) {
-                                            RoomDeviceListVo.DataBean dataBean = contentList.get(position);
-                                            switch (dataBean.getDevice_no()) {
-                                                case "qs02":
-                                                    startActivity(new Intent(getActivity(), DeviceControlTwoActivity.class)
-                                                            .putExtra("scanResult", new ScanResultVo(dataBean.getDevice_no(),
-                                                                    CommonUtils.getDeviceName(dataBean.getDevice_no()), dataBean.getDevice_mac(),
-                                                                    dataBean.getConnect_type()))
-                                                            .putExtra("isFirstConnect", dataBean.getIs_first_connect()));
-                                                    getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
-                                                    break;
-                                                case "qs03":
-                                                    startActivity(new Intent(getActivity(), DeviceWifiControlActivity.class)
-                                                            .putExtra("isFirstConnect", 1));
-                                                    getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
-                                                    break;
-                                            }
-                                        }
-
-                                        @Override
-                                        public void onItemLongClickListener(View view, int position) {
-
-                                        }
-                                    });
+//                                    //获取右侧家庭设备数据
+//                                    contentList.addAll(commonDeviceListVo.getData());
+//                                    contentAdapter = new HomeContentAdapter(getActivity(), contentList);
+//                                    rvContent.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+//                                    rvContent.setAdapter(contentAdapter);
+//                                    contentAdapter.notifyDataSetChanged();
+//                                    //家庭内容区域设备点击事件
+//                                    contentAdapter.setOnItemClickListener(new HomeContentAdapter.OnItemClickListener() {
+//                                        @Override
+//                                        public void onItemClick(View view, int position) {
+//                                            RoomDeviceListVo.DataBean dataBean = contentList.get(position);
+//                                            switch (dataBean.getDevice_no()) {
+//                                                case "qs02":
+//                                                    startActivity(new Intent(getActivity(), DeviceControlTwoActivity.class)
+//                                                            .putExtra("scanResult", new ScanResultVo(dataBean.getDevice_no(),
+//                                                                    CommonUtils.getDeviceName(dataBean.getDevice_no()), dataBean.getDevice_mac(),
+//                                                                    dataBean.getConnect_type()))
+//                                                            .putExtra("isFirstConnect", dataBean.getIs_first_connect()));
+//                                                    getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+//                                                    break;
+//                                                case "qs03":
+//                                                    startActivity(new Intent(getActivity(), DeviceWifiControlActivity.class)
+//                                                            .putExtra("isFirstConnect", 1));
+//                                                    getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+//                                                    break;
+//                                            }
+//                                        }
+//
+//                                        @Override
+//                                        public void onItemLongClickListener(View view, int position) {
+//
+//                                        }
+//                                    });
                                 } else {
-                                    emptyLayoutContent.showEmpty();
+//                                    emptyLayoutContent.showEmpty();
                                 }
                             } else {
-                                emptylayout.showError();
+//                                emptylayout.showError();
                             }
                         }
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        emptylayout.showError();
-                        tvSceneSetting.setText("获取失败");
+//                        emptylayout.showError();
+//                        tvSceneSetting.setText("获取失败");
                     }
 
                     @Override
                     public void onComplete() {
-                        emptylayout.hide();
+//                        emptylayout.hide();
                     }
                 });
     }
@@ -576,7 +419,7 @@ public class HomeFragmentTest extends BaseFragment {
                     public void onNext(MessageVo messageVo) {
                         if (messageVo != null) {
                             if (messageVo.getCode() == 200) {
-                                emptylayout.showLoading(R.layout.view_loading_two, getString(R.string.device_scaning));
+//                                emptylayout.showLoading(R.layout.view_loading_two, getString(R.string.device_scaning));
                                 initEvent();
                             } else {
                                 ToastUtil.showToast("切换失败");
@@ -597,7 +440,7 @@ public class HomeFragmentTest extends BaseFragment {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    @OnClick({R.id.iv_menu, R.id.home_setting, R.id.tv_scene_setting, R.id.fab})
+    @OnClick({R.id.iv_menu, R.id.tv_scene_setting, R.id.fab})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_menu:
@@ -607,15 +450,6 @@ public class HomeFragmentTest extends BaseFragment {
                     getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
                 } else {
                     startActivity(new Intent(getActivity(), AddDeviceActivity.class));
-                    getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
-                }
-                break;
-            case R.id.home_setting:
-                //房间管理
-                if (ConfigUtils.family_locate == null) {
-                    ToastUtil.showToast("网络连接失败");
-                } else {
-                    startActivity(new Intent(getActivity(), RoomManageActivity.class).putExtra("family_id", ConfigUtils.family_locate.getFamily_id()));
                     getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
                 }
                 break;
@@ -663,5 +497,4 @@ public class HomeFragmentTest extends BaseFragment {
                 })
                 .show();
     }
-
 }

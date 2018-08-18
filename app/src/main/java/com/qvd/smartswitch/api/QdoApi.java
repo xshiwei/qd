@@ -298,7 +298,7 @@ public interface QdoApi {
      * @return
      */
     @GET("get/home_room_list")
-    Observable<HomeLeftListVo> getHomeLeftList(@Query("family_id") String family_id, @Query("user_id") String user_id);
+    Observable<HomeLeftListVo> getHomeRoomList(@Query("family_id") String family_id, @Query("user_id") String user_id);
 
     /**
      * 获取默认房间id
