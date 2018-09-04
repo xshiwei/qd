@@ -78,6 +78,15 @@ public class RoomDeviceListVo {
         private String table_type;
         private String update_time;
         private String user_id;
+        private Boolean is_selete;
+
+        public Boolean getIs_selete() {
+            return is_selete;
+        }
+
+        public void setIs_selete(Boolean is_selete) {
+            this.is_selete = is_selete;
+        }
 
         public String getAdd_time() {
             return add_time;

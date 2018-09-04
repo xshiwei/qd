@@ -6,7 +6,8 @@
     android:orientation="vertical">
 
 
-    <include layout="@layout/common_actionbar" />
+    <include
+        layout="@layout/common_actionbar" />
 
     <ScrollView
         android:layout_width="match_parent"

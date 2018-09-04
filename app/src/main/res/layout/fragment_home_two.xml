@@ -1,102 +1,300 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<com.scwang.smartrefresh.layout.SmartRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/refreshLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@mipmap/home_background">
+    android:background="@mipmap/home_background"
+    app:srlHeaderHeight="0dp">
 
-    <RelativeLayout
-        android:id="@+id/rl_actionbar"
+    <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/y150">
+        android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/tv_scene_setting"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/x30"
-            android:drawablePadding="@dimen/x5"
-            android:drawableRight="@mipmap/home_right_details"
-            android:gravity="center"
-            android:paddingTop="@dimen/y30"
-            android:textColor="@color/white"
-            android:textSize="13sp"
-            android:textStyle="normal" />
-
-        <ImageView
-            android:id="@+id/iv_menu"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="@dimen/x30"
-            android:paddingTop="@dimen/y30"
-            android:src="@mipmap/home_add" />
-    </RelativeLayout>
-
-    <com.scwang.smartrefresh.layout.SmartRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/refreshLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/rl_actionbar"
-        app:srlHeaderHeight="0dp">
-
-        <com.kennyc.view.MultiStateView xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/multiStateView"
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/materialup_appbar"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:msv_emptyView="@layout/view_empty"
-            app:msv_errorView="@layout/view_error"
-            app:msv_loadingView="@layout/view_loading">
+            android:layout_height="@dimen/y370"
+            android:background="@android:color/transparent"
+            android:theme="@style/Theme.AppCompat.NoActionBar"
+            app:elevation="0dp">
 
-            <RelativeLayout
+            <android.support.design.widget.CollapsingToolbarLayout
+                android:id="@+id/main_collapsing"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/white">
+                app:contentScrim="@color/add_capacity_text_two"
+                app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
-                <com.ogaclejapan.smarttablayout.SmartTabLayout
-                    android:id="@+id/viewpagertab"
+                <android.support.v7.widget.Toolbar
+                    android:id="@+id/toolbar"
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:background="#F00"
-                    app:stl_defaultTabTextColor="#FFF"
-                    app:stl_defaultTabTextHorizontalPadding="24dp"
-                    app:stl_indicatorColor="#fF0F"
-                    app:stl_indicatorInterpolation="linear"
-                    app:stl_indicatorThickness="3dp"
-                    app:stl_underlineThickness="1dp">
+                    android:layout_height="?attr/actionBarSize"
+                    android:layout_marginTop="@dimen/y60"
+                    android:elevation="4dp"
+                    android:theme="@style/Widget.AppCompat.ActionBar"
+                    app:layout_collapseMode="pin">
 
-                </com.ogaclejapan.smarttablayout.SmartTabLayout>
+                    <TextView
+                        android:id="@+id/tv_scene_setting"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawablePadding="@dimen/x5"
+                        android:drawableRight="@mipmap/home_right_details"
+                        android:padding="5dp"
+                        android:textColor="@color/white"
+                        android:textSize="16sp" />
 
-                <android.support.v4.view.ViewPager
-                    android:id="@+id/viewPager"
+                </android.support.v7.widget.Toolbar>
+
+                <ImageView
+                    android:id="@+id/iv_menu"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:layout_marginRight="@dimen/x30"
+                    android:layout_marginTop="@dimen/y85"
+                    android:src="@mipmap/home_add_pic"
+                    android:visibility="gone" />
+
+                <LinearLayout
+                    android:id="@+id/ll_weather"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_below="@+id/viewpagertab">
+                    android:layout_marginTop="@dimen/y140">
 
-                </android.support.v4.view.ViewPager>
+                    <com.wang.avi.AVLoadingIndicatorView
+                        style="@style/AVLoadingIndicatorView.Large"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        app:indicatorColor="@color/white"
+                        app:indicatorName="PacmanIndicator" />
 
+                    <TextView
+                        android:id="@+id/tv_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="@dimen/x30"
+                        android:text="正在加载天气信息..."
+                        android:textColor="@color/white"
+                        android:textSize="16sp" />
+
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:id="@+id/rl_weather"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="@dimen/y140"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:id="@+id/tv_temperature"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/x30"
+                        android:layout_marginTop="@dimen/y30"
+                        android:gravity="center"
+                        android:textColor="@color/home_text"
+                        android:textSize="50sp"
+                        android:textStyle="normal" />
+
+                    <TextView
+                        android:id="@+id/tv_temperature_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignBottom="@+id/tv_temperature"
+                        android:layout_toRightOf="@+id/tv_temperature"
+                        android:paddingBottom="@dimen/y20"
+                        android:paddingLeft="@dimen/x10"
+                        android:textColor="@color/white_home_text"
+                        android:textSize="13sp"
+                        android:textStyle="normal" />
+
+                    <TextView
+                        android:id="@+id/tv_city"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@+id/tv_temperature"
+                        android:layout_toRightOf="@+id/tv_temperature_title"
+                        android:paddingLeft="@dimen/x20"
+                        android:paddingTop="@dimen/y40"
+                        android:textColor="@color/white_home_text"
+                        android:textSize="13sp"
+                        android:textStyle="normal" />
+
+                    <TextView
+                        android:id="@+id/tv_day"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignBottom="@+id/tv_temperature_title"
+                        android:layout_alignLeft="@+id/tv_city"
+                        android:paddingBottom="@dimen/y20"
+                        android:paddingLeft="@dimen/x20"
+                        android:textColor="@color/white_home_text"
+                        android:textSize="13sp"
+                        android:textStyle="normal" />
+
+                    <LinearLayout
+                        android:id="@+id/ll_outdoor"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tv_temperature"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+
+                        <TextView
+                            android:id="@+id/tv_outdoor_air"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/x30"
+                            android:textColor="@color/white_home_text"
+                            android:textSize="13sp"
+                            android:textStyle="normal" />
+
+                        <View
+                            android:layout_width="1dp"
+                            android:layout_height="@dimen/y25"
+                            android:layout_marginLeft="@dimen/x15"
+                            android:background="@color/white" />
+
+                        <TextView
+                            android:id="@+id/tv_water_quality"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/x15"
+                            android:textColor="@color/white_home_text"
+                            android:textSize="13sp"
+                            android:textStyle="normal" />
+
+                        <View
+                            android:layout_width="1dp"
+                            android:layout_height="@dimen/y25"
+                            android:layout_marginLeft="@dimen/x15"
+                            android:background="@color/white" />
+
+                        <TextView
+                            android:id="@+id/tv_humidness"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/x15"
+                            android:textColor="@color/white_home_text"
+                            android:textSize="13sp"
+                            android:textStyle="normal" />
+
+                    </LinearLayout>
+
+                </RelativeLayout>
+
+
+            </android.support.design.widget.CollapsingToolbarLayout>
+
+        </android.support.design.widget.AppBarLayout>
+
+        <android.support.v4.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/y20"
+            android:fillViewport="true"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <RelativeLayout
+                android:id="@+id/rl_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/x10">
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rv_list"
+                    android:layout_width="@dimen/y90"
+                    android:layout_height="match_parent"
+                    android:alpha="0.85"
+                    android:background="@drawable/circle_white_five"
+                    android:nestedScrollingEnabled="false">
+
+                </android.support.v7.widget.RecyclerView>
+
+                <LinearLayout
+                    android:id="@+id/ll_add_device"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/y150"
+                    android:layout_marginLeft="@dimen/x10"
+                    android:layout_marginRight="@dimen/x20"
+                    android:layout_toRightOf="@+id/rv_list"
+                    android:alpha="0.85"
+                    android:background="@drawable/circle_white_five"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@mipmap/home_add_pic_black" />
+
+                    <TextView
+                        android:id="@+id/tv_add_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="5dp"
+                        android:text="添加设备"
+                        android:textColor="@color/black6"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rv_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/x10"
+                    android:layout_marginRight="@dimen/x10"
+                    android:layout_toRightOf="@+id/rv_list"
+                    android:alpha="0.75"
+                    android:nestedScrollingEnabled="false"
+                    android:visibility="visible"></android.support.v7.widget.RecyclerView>
             </RelativeLayout>
-
-        </com.kennyc.view.MultiStateView>
-
-    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+        </android.support.v4.widget.NestedScrollView>
 
 
-    <com.melnykov.fab.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginBottom="@dimen/y40"
-        android:layout_marginRight="@dimen/x40"
-        android:src="@mipmap/home_voice"
-        app:fab_colorNormal="@color/home_voice_normal"
-        app:fab_colorPressed="@color/add_device_background"
-        app:fab_type="normal" />
-</RelativeLayout>
+        <com.nightonke.boommenu.BoomMenuButton
+            android:id="@+id/bmb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_gravity="bottom|right|end"
+            android:layout_marginBottom="@dimen/y30"
+            android:layout_marginRight="@dimen/x30"
+            android:visibility="gone"
+            app:bmb_buttonEnum="textOutsideCircle"
+            app:bmb_buttonPlaceEnum="buttonPlace_sc_2_1"
+            app:bmb_dotRadius="0dp"
+            app:bmb_normalColor="@color/room_manage_add_text"
+            app:bmb_piecePlaceEnum="piecePlace_dot_2_1">
 
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@mipmap/home_add_pic" />
+        </com.nightonke.boommenu.BoomMenuButton>
+
+        <com.melnykov.fab.FloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right|end"
+            android:layout_margin="@dimen/x30"
+            android:src="@mipmap/home_add_pic"
+            android:visibility="visible"
+            app:fab_colorNormal="@color/home_voice_normal"
+            app:fab_colorPressed="@color/add_device_background"
+            app:fab_type="normal" />
+
+    </android.support.design.widget.CoordinatorLayout>
+
+</com.scwang.smartrefresh.layout.SmartRefreshLayout>

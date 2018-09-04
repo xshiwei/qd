@@ -1,143 +1,271 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.scwang.smartrefresh.layout.SmartRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/smart_refresh"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true">
+    app:srlHeaderHeight="0dp">
 
-    <LinearLayout
-        android:focusableInTouchMode="true"
+    <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-
-        <FrameLayout
-            android:id="@+id/app_bar"
+        <android.support.design.widget.AppBarLayout
+            android:id="@+id/materialup_appbar"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/y565"
-            android:orientation="vertical"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+            ​
 
-            <ImageView
-                android:id="@+id/iv_home_head"
+            <android.support.design.widget.CollapsingToolbarLayout
+                android:id="@+id/main_collapsing"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:contentDescription="TODO"
-                android:scaleType="centerCrop" />
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/y100"
-                android:layout_marginTop="@dimen/y60">
+                android:layout_height="@dimen/y400"
+                app:contentScrim="@color/white"
+                app:expandedTitleMarginEnd="64dp"
+                app:expandedTitleMarginStart="48dp"
+                app:layout_scrollFlags="scroll|exitUntilCollapsed">
+                ​
 
                 <ImageView
-                    android:id="@+id/iv_home_location"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="@dimen/x30"
-                    android:contentDescription="TODO"
-                    android:src="@mipmap/home_location" />
+                    android:id="@+id/materialup_profile_backdrop"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:src="@mipmap/example"
+                    android:visibility="visible"
+                    app:layout_collapseMode="pin" />
 
-                <TextView
-                    android:id="@+id/tv_home_city"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="@dimen/x15"
-                    android:layout_toRightOf="@+id/iv_home_location"
-                    android:textColor="@color/white"
-                    android:textSize="16sp" />
-
-                <ImageView
-                    android:id="@+id/iv_home_add"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="@dimen/x30"
-                    android:contentDescription="TODO"
-                    android:src="@mipmap/home_menu_add"
-                    android:visibility="gone" />
-            </RelativeLayout>
+            </android.support.design.widget.CollapsingToolbarLayout>
+            ​
 
             <LinearLayout
+                android:id="@+id/materialup_title_container"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:orientation="horizontal">
+                android:layout_height="0dp"
+                android:layout_marginTop="@dimen/y80"
+                android:orientation="horizontal"
+                app:layout_scrollFlags="scroll|enterAlways|snap"></LinearLayout>
+            ​
 
-                <RelativeLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1">
+            <android.support.design.widget.TabLayout
+                android:id="@+id/materialup_tabs"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/y96"
+                android:layout_marginTop="@dimen/y20"
+                android:background="@color/white"
+                app:tabGravity="fill"
+                app:tabIndicatorColor="@color/app_red_color"
+                app:tabIndicatorHeight="1dp"
+                app:tabMode="scrollable"
+                app:tabSelectedTextColor="@color/app_red_color"
+                app:tabTextColor="@color/home_setting_text_two" />
+        </android.support.design.widget.AppBarLayout>
+        ​
 
-                    <TextView
-                        android:id="@+id/tv_home_temperature"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:textColor="@color/white"
-                        android:textSize="40sp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/y60"
-                        android:layout_toRightOf="@+id/tv_home_temperature"
-                        android:paddingLeft="@dimen/x5"
-                        android:text="@string/home_degree"
-                        android:textColor="@color/white"
-                        android:textSize="20sp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/tv_home_temperature"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginTop="@dimen/y50"
-                        android:paddingLeft="@dimen/x30"
-                        android:paddingRight="@dimen/x30"
-                        android:text="@string/home_temperature"
-                        android:textColor="@color/white"
-                        android:textSize="16sp" />
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1">
-
-                    <TextView
-                        android:id="@+id/tv_home_air_quality"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:textColor="@color/white"
-                        android:textSize="40sp" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/tv_home_air_quality"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginTop="@dimen/y50"
-                        android:paddingLeft="@dimen/x30"
-                        android:paddingRight="@dimen/x30"
-                        android:text="@string/home_humidity"
-                        android:textColor="@color/white"
-                        android:textSize="16sp" />
-                </RelativeLayout>
-            </LinearLayout>
-
-        </FrameLayout>
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/home_recycleview"
+        <android.support.v4.view.ViewPager
+            android:id="@+id/materialup_viewpager"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+        <RelativeLayout
+            android:id="@+id/rl_login"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:alpha="0.9"
+            android:background="@color/white"
+            android:visibility="gone"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <ImageView
+                android:id="@+id/iv_login_pic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="@dimen/y150"
+                android:src="@mipmap/home_not_login_pic" />
+
+            <TextView
+                android:id="@+id/tv_login_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/iv_login_pic"
+                android:layout_centerHorizontal="true"
+                android:text="您还未登录，现在去"
+                android:textColor="@color/home_setting_text_two"
+                android:textSize="13sp" />
+
+            <TextView
+                android:id="@+id/tv_login_two"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/iv_login_pic"
+                android:layout_toRightOf="@+id/tv_login_text"
+                android:text="登录"
+                android:textColor="@color/app_red_color"
+                android:textSize="13sp" />
+        </RelativeLayout>
+        ​
+
+        <com.melnykov.fab.FloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right|end"
+            android:layout_margin="@dimen/x30"
+            android:elevation="8dp"
+            android:src="@mipmap/home_voice"
+            android:visibility="gone"
+            app:fab_colorNormal="@color/home_voice_normal"
+            app:fab_colorPressed="@color/add_device_background"
+            app:fab_type="normal" />
 
 
-    </LinearLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/y350"
+            android:layout_gravity="center_horizontal"
+            app:layout_anchor="@id/materialup_title_container"
+            app:layout_anchorGravity="top|center_horizontal">
 
-</android.support.v4.widget.NestedScrollView>
+
+            <RelativeLayout
+                android:id="@+id/rl"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/y300"
+                android:layout_alignParentBottom="true"
+                android:layout_marginLeft="@dimen/x30"
+                android:layout_marginRight="@dimen/x30"
+                android:alpha="0.95"
+                android:background="@drawable/circle_white_five">
+
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/x30"
+                    android:layout_marginTop="@dimen/y20"
+                    android:layout_toRightOf="@+id/iv_pic"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:src="@mipmap/home_family_pic" />
+
+                    <TextView
+                        android:id="@+id/tv_family"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:paddingLeft="@dimen/x20"
+                        android:text="subtitle_mup"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Widget.ActionBar.Subtitle"
+                        android:textColor="@color/home_setting_text"
+                        android:textSize="16sp" />
+
+                </LinearLayout>
+
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/y150"
+                    android:layout_above="@+id/tv_add_device"
+                    android:layout_toRightOf="@+id/iv_pic">
+
+                    <TextView
+                        android:id="@+id/tv_temperature"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/x30"
+                        android:layout_marginTop="@dimen/y25"
+                        android:gravity="center"
+                        android:text="温度: NUll"
+                        android:textColor="@color/app_red_color"
+                        android:textSize="16sp"
+                        android:textStyle="italic" />
+
+                    <TextView
+                        android:id="@+id/tv_weather"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginBottom="@dimen/y25"
+                        android:layout_marginLeft="@dimen/x30"
+                        android:text="天气: NUll"
+                        android:textColor="@color/app_red_color"
+                        android:textSize="16sp"
+                        android:textStyle="italic" />
+
+
+                    <TextView
+                        android:id="@+id/tv_city"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="@dimen/y25"
+                        android:text="位置: NULL"
+                        android:textColor="@color/app_red_color"
+                        android:textSize="16sp"
+                        android:textStyle="italic" />
+
+                    <TextView
+                        android:id="@+id/tv_day"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="@dimen/x30"
+                        android:layout_marginTop="@dimen/y25"
+                        android:gravity="left"
+                        android:text="日期:NULL"
+                        android:textColor="@color/app_red_color"
+                        android:textSize="16sp"
+                        android:textStyle="italic" />
+
+                    <TextView
+                        android:id="@+id/tv_humidity"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginBottom="@dimen/y25"
+                        android:text="湿度: NULL"
+                        android:textColor="@color/app_red_color"
+                        android:textSize="16sp"
+                        android:textStyle="italic" />
+
+                    <TextView
+                        android:id="@+id/tv_wind"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginBottom="@dimen/y25"
+                        android:layout_marginRight="@dimen/x30"
+                        android:text="风向:NULL"
+                        android:textColor="@color/app_red_color"
+                        android:textSize="16sp"
+                        android:textStyle="italic" />
+
+                </RelativeLayout>
+
+                <TextView
+                    android:id="@+id/tv_add_device"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/y80"
+                    android:layout_alignParentBottom="true"
+                    android:background="@color/home_voice_normal"
+                    android:gravity="center"
+                    android:text="添加设备"
+                    android:textColor="@color/white" />
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+    </android.support.design.widget.CoordinatorLayout>
+
+</com.scwang.smartrefresh.layout.SmartRefreshLayout>

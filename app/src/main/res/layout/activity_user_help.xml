@@ -80,62 +80,65 @@
 
         <RelativeLayout
             android:id="@+id/rl_experience"
-            android:layout_marginTop="@dimen/y30"
-            android:layout_marginLeft="@dimen/x55"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/x55"
+            android:layout_marginTop="@dimen/y30">
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:layout_width="@dimen/x160"
                 android:layout_height="@dimen/y160"
                 android:src="@color/red" />
+
             <TextView
-                android:layout_marginBottom="@dimen/y60"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
-                android:text="应用体验"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_marginBottom="@dimen/y60"
+                android:text="应用体验" />
         </RelativeLayout>
 
         <RelativeLayout
             android:id="@+id/rl_capacity"
-            android:layout_marginTop="@dimen/y30"
-            android:layout_marginLeft="@dimen/x80"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/x80"
+            android:layout_marginTop="@dimen/y30">
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:layout_width="@dimen/x160"
                 android:layout_height="@dimen/y160"
                 android:src="@color/red" />
+
             <TextView
-                android:layout_marginBottom="@dimen/y60"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
-                android:text="智能"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_marginBottom="@dimen/y60"
+                android:text="智能" />
         </RelativeLayout>
 
         <RelativeLayout
             android:id="@+id/rl_other"
-            android:layout_marginTop="@dimen/y30"
-            android:layout_marginLeft="@dimen/x80"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/x80"
+            android:layout_marginTop="@dimen/y30">
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:layout_width="@dimen/x160"
                 android:layout_height="@dimen/y160"
                 android:src="@color/red" />
+
             <TextView
-                android:layout_marginBottom="@dimen/y60"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
-                android:text="其他"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_marginBottom="@dimen/y60"
+                android:text="其他" />
         </RelativeLayout>
 
     </LinearLayout>

@@ -3,9 +3,32 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <include
+    <RelativeLayout
         android:id="@+id/action_bar"
-        layout="@layout/common_actionbar" />
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y80"
+        android:background="@color/home_list_background">
+
+        <ImageView
+            android:id="@+id/iv_common_actionbar_goback"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/x20"
+            android:contentDescription="TODO"
+            android:padding="5dp"
+            android:src="@mipmap/actionbar_goback" />
+
+        <TextView
+            android:text="设备设置"
+            android:id="@+id/tv_common_actionbar_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:textColor="@color/app_title"
+            android:textSize="14sp" />
+
+    </RelativeLayout>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -16,13 +39,12 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/home_background"
+            android:background="@color/white"
             android:orientation="vertical">
-
 
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/y90"
+                android:layout_height="@dimen/y100"
                 android:gravity="center|left"
                 android:paddingLeft="@dimen/x50"
                 android:text="@string/device_control_setting_function"
@@ -38,9 +60,9 @@
                 android:background="@color/black_16" />
 
             <RelativeLayout
-                android:id="@+id/rl_device_setting_log"
+                android:id="@+id/rl_novice_guide"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/y90">
+                android:layout_height="@dimen/y100">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -70,9 +92,9 @@
             </RelativeLayout>
 
             <RelativeLayout
-                android:id="@+id/rl_device_setting_password"
+                android:id="@+id/rl_quick_tour"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/y90">
+                android:layout_height="@dimen/y100">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -102,9 +124,9 @@
             </RelativeLayout>
 
             <RelativeLayout
-                android:id="@+id/rl_device_setting_timing"
+                android:id="@+id/rl_health_knowledge"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/y90">
+                android:layout_height="@dimen/y100">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -134,9 +156,9 @@
             </RelativeLayout>
 
             <RelativeLayout
-                android:id="@+id/rl_device_setting_name"
+                android:id="@+id/rl_common_question"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/y90">
+                android:layout_height="@dimen/y100">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -145,7 +167,7 @@
                     android:paddingLeft="@dimen/x50"
                     android:text="常见问题"
                     android:textColor="@color/black"
-                    android:textSize="14sp" />
+                    android:textSize="13sp" />
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -167,9 +189,9 @@
             </RelativeLayout>
 
             <RelativeLayout
-                android:id="@+id/rl_device_setting_pic"
+                android:id="@+id/rl_item_and_privacy"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/y90">
+                android:layout_height="@dimen/y100">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -201,8 +223,9 @@
             </RelativeLayout>
 
             <RelativeLayout
+                android:id="@+id/rl_feedback"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/y90">
+                android:layout_height="@dimen/y100">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -234,8 +257,9 @@
             </RelativeLayout>
 
             <RelativeLayout
+                android:id="@+id/rl_about"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/y90">
+                android:layout_height="@dimen/y100">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -268,7 +292,7 @@
 
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/y90"
+                android:layout_height="@dimen/y100"
                 android:gravity="center|left"
                 android:paddingLeft="@dimen/x50"
                 android:text="通用设置"
@@ -285,9 +309,9 @@
 
 
             <RelativeLayout
-                android:id="@+id/rl_device_setting_type"
+                android:id="@+id/rl_retry_name"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/y90">
+                android:layout_height="@dimen/y100">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -317,9 +341,9 @@
             </RelativeLayout>
 
             <RelativeLayout
-                android:id="@+id/rl_device_setting_update"
+                android:id="@+id/rl_device_share"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/y90">
+                android:layout_height="@dimen/y100">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -350,8 +374,10 @@
             </RelativeLayout>
 
             <RelativeLayout
+                android:id="@+id/rl_location_manager"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/y90">
+                android:layout_height="@dimen/y100"
+                android:visibility="gone">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -383,8 +409,9 @@
 
 
             <RelativeLayout
+                android:id="@+id/rl_check_update"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/y90">
+                android:layout_height="@dimen/y100">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -415,9 +442,9 @@
             </RelativeLayout>
 
             <RelativeLayout
-                android:id="@+id/rl_device_setting_delete"
+                android:id="@+id/rl_device_delete"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/y90"
+                android:layout_height="@dimen/y100"
                 android:layout_marginBottom="@dimen/y20">
 
                 <TextView
@@ -448,15 +475,8 @@
 
             </RelativeLayout>
 
-
         </LinearLayout>
 
     </ScrollView>
-
-    <android.support.design.widget.CoordinatorLayout
-        android:id="@+id/coordinatorLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"></android.support.design.widget.CoordinatorLayout>
 
 </RelativeLayout>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/y220"
+    android:layout_marginBottom="@dimen/y10"
+    android:layout_marginLeft="@dimen/x5"
+    android:layout_marginRight="@dimen/x5">
+
+    <ImageView
+        android:id="@+id/iv_device_pic"
+        android:layout_width="@dimen/x60"
+        android:layout_height="@dimen/y80"
+        android:layout_marginLeft="@dimen/x20"
+        android:layout_marginTop="@dimen/y20"
+        android:src="@mipmap/qstwo_light_pic" />
+
+    <TextView
+        android:id="@+id/tv_device_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/iv_device_pic"
+        android:layout_marginLeft="@dimen/x20"
+        android:layout_marginTop="@dimen/y20"
+        android:ellipsize="end"
+        android:lines="1"
+        android:text="蓝牙智能开关"
+        android:textColor="@color/white"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/tv_device_state"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_device_name"
+        android:layout_marginLeft="@dimen/x20"
+        android:layout_marginTop="@dimen/y10"
+        android:text="设备未连接"
+        android:textColor="@color/home_list_background"
+        android:textSize="12sp" />
+
+    <com.zcw.togglebutton.ToggleButton xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/togglebutton"
+        android:layout_width="@dimen/x60"
+        android:layout_height="@dimen/y30"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="@dimen/y20"
+        android:layout_marginRight="@dimen/x20"
+        android:visibility="gone"
+        app:tbAnimate="true"
+        app:tbOffBorderColor="@color/home_setting_text_two"
+        app:tbOffColor="@color/home_setting_text_two"
+        app:tbOnColor="@color/red"
+        app:tbSpotColor="@color/white" />
+</RelativeLayout>

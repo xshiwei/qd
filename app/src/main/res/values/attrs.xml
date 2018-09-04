@@ -56,4 +56,6 @@
         <attr name="tailColor" format="color"/>
     </declare-styleable>
 
+
+
 </resources>

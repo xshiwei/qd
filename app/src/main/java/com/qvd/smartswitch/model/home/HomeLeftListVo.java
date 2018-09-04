@@ -1,13 +1,15 @@
 package com.qvd.smartswitch.model.home;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class HomeLeftListVo {
+public class HomeLeftListVo implements Serializable {
+
 
     /**
      * code : 200
      * message : ok
-     * data : [{"room_name":"Common device","rooom_id":"","type":1},{"room_id":"R9102879504","room_name":"default room","type":2},{"room_id":"R613045395","room_name":"你好","type":2},{"room_id":"R1165081998","room_name":"卧室","type":2},{"room_id":"R4745233804","room_name":"垃圾","type":2},{"room_id":"R3800558144","room_name":"最初","type":2},{"room_id":"R1775192314","room_name":"珊珊","type":2},{"room_id":"R552109384","room_name":"贪生","type":2}]
+     * data : [{"room_name":"常用设备","room_pic":"http://pckgfzc5s.bkt.clouddn.com/a.png","rooom_id":"","type":1},{"room_id":"R1165081998","room_name":"卧室","room_pic":"http://pckgfzc5s.bkt.clouddn.com/b.png","type":2},{"room_id":"R613045395","room_name":"你好","room_pic":"http://pckgfzc5s.bkt.clouddn.com/j.png","type":2},{"room_id":"R1775192314","room_name":"珊珊","room_pic":"http://pckgfzc5s.bkt.clouddn.com/j.png","type":2},{"room_id":"R4745233804","room_name":"垃圾","room_pic":"http://pckgfzc5s.bkt.clouddn.com/j.png","type":2},{"room_id":"R3800558144","room_name":"最初","room_pic":"http://pckgfzc5s.bkt.clouddn.com/j.png","type":2},{"room_id":"R552109384","room_name":"贪生","room_pic":"http://pckgfzc5s.bkt.clouddn.com/h.png","type":2},{"room_id":"R1633697338","room_name":"bedroom","room_pic":"http://pckgfzc5s.bkt.clouddn.com/b.png","type":2},{"room_id":"R7699338800","room_name":"kitchenRoom","room_pic":"http://pckgfzc5s.bkt.clouddn.com/b.png","type":2}]
      */
 
     private int code;
@@ -38,15 +40,17 @@ public class HomeLeftListVo {
         this.data = data;
     }
 
-    public static class DataBean {
+    public static class DataBean implements Serializable {
         /**
-         * room_name : Common device
+         * room_name : 常用设备
+         * room_pic : http://pckgfzc5s.bkt.clouddn.com/a.png
          * rooom_id :
          * type : 1
-         * room_id : R9102879504
+         * room_id : R1165081998
          */
 
         private String room_name;
+        private String room_pic;
         private String rooom_id;
         private int type;
         private String room_id;
@@ -57,6 +61,14 @@ public class HomeLeftListVo {
 
         public void setRoom_name(String room_name) {
             this.room_name = room_name;
+        }
+
+        public String getRoom_pic() {
+            return room_pic;
+        }
+
+        public void setRoom_pic(String room_pic) {
+            this.room_pic = room_pic;
         }
 
         public String getRooom_id() {

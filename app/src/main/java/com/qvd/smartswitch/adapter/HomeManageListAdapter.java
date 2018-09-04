@@ -69,6 +69,8 @@ public class HomeManageListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                 });
             }
             ((MyViewHolder) holder).tv_home.setText(data.get(position).getFamily_name());
+            ((MyViewHolder) holder).tv_device_num.setText(data.get(position).getDevice_count()+"个设备");
+            ((MyViewHolder) holder).tv_room_num.setText(data.get(position).getRoom_count()+"个房间");
         }
     }
 
@@ -80,11 +82,13 @@ public class HomeManageListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
 
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView tv_home;
+        TextView tv_home, tv_room_num, tv_device_num;
 
         public MyViewHolder(View itemView) {
             super(itemView);
             tv_home = itemView.findViewById(R.id.tv_home);
+            tv_room_num = itemView.findViewById(R.id.tv_room_num);
+            tv_device_num = itemView.findViewById(R.id.tv_device_num);
         }
     }
 }

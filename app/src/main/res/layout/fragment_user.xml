@@ -2,36 +2,111 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/home_manage_backgroud"
     android:orientation="vertical">
 
-    <RelativeLayout
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="@dimen/y80"
         android:background="@color/white">
 
+        <ImageView
+            android:id="@+id/iv_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/x30"
+            android:contentDescription="TODO"
+            android:src="@mipmap/user_message" />
+
         <TextView
+            android:id="@+id/tv_common_actionbar_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="@string/user_setting"
+            android:text="我的"
             android:textColor="@color/app_title"
-            android:textSize="16sp" />
+            android:textSize="14sp" />
 
     </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/rl_user_handbook"
+        android:id="@+id/rl_portrait"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/y90"
-        android:background="@color/white">
+        android:layout_height="@dimen/y200"
+        android:layout_marginTop="@dimen/y30"
+        android:background="@drawable/layout_seletor"
+        android:clickable="true">
+
+        <ImageView
+            android:id="@+id/iv_portrait"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/x60"
+            android:src="@mipmap/user_portrait" />
+
+        <TextView
+            android:id="@+id/tv_nickname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/x30"
+            android:layout_marginTop="@dimen/y60"
+            android:layout_toRightOf="@+id/iv_portrait"
+            android:textColor="@color/home_setting_text"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tv_num"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="@dimen/y60"
+            android:layout_marginLeft="@dimen/x30"
+            android:layout_toRightOf="@+id/iv_portrait"
+            android:textColor="@color/home_setting_text_three"
+            android:textSize="12sp" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/x30"
+            android:src="@mipmap/home_manage_right" />
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/black_16" />
+
+    <RelativeLayout
+        android:id="@+id/rl_family"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y100"
+        android:layout_marginTop="@dimen/y30"
+        android:background="@drawable/layout_seletor"
+        android:clickable="true">
+
+        <ImageView
+            android:id="@+id/iv_family"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/x30"
+            android:src="@mipmap/user_message" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:paddingLeft="@dimen/x30"
-            android:text="@string/user_notebook"
-            android:textColor="@color/black"
+            android:layout_marginLeft="@dimen/x30"
+            android:layout_toRightOf="@+id/iv_family"
+            android:text="我的家庭"
+            android:textColor="@color/home_setting_text"
             android:textSize="14sp" />
 
         <ImageView
@@ -40,32 +115,39 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/x30"
-            android:contentDescription="TODO"
-            android:src="@mipmap/user_more_details" />
+            android:src="@mipmap/home_manage_right" />
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="0.1dp"
+            android:layout_height="1px"
             android:layout_alignParentBottom="true"
             android:layout_marginLeft="@dimen/x30"
-            android:layout_marginRight="@dimen/x30"
             android:background="@color/black_16" />
-
     </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/rl_user_faq"
+        android:id="@+id/rl_share"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/y90"
-        android:background="@color/white">
+        android:layout_height="@dimen/y100"
+        android:background="@drawable/layout_seletor"
+        android:clickable="true">
+
+        <ImageView
+            android:id="@+id/iv_device_share"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/x30"
+            android:src="@mipmap/user_message" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:paddingLeft="@dimen/x30"
-            android:text="@string/user_faq"
-            android:textColor="@color/black"
+            android:layout_marginLeft="@dimen/x30"
+            android:layout_toRightOf="@+id/iv_device_share"
+            android:text="设备共享"
+            android:textColor="@color/home_setting_text"
             android:textSize="14sp" />
 
         <ImageView
@@ -74,32 +156,39 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/x30"
-            android:contentDescription="TODO"
-            android:src="@mipmap/user_more_details" />
+            android:src="@mipmap/home_manage_right" />
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="0.1dp"
+            android:layout_height="1px"
             android:layout_alignParentBottom="true"
             android:layout_marginLeft="@dimen/x30"
-            android:layout_marginRight="@dimen/x30"
             android:background="@color/black_16" />
-
     </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/rl_user_about_company"
+        android:id="@+id/rl_help"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/y90"
-        android:background="@color/white">
+        android:layout_height="@dimen/y100"
+        android:background="@drawable/layout_seletor"
+        android:clickable="true">
+
+        <ImageView
+            android:id="@+id/iv_help"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/x30"
+            android:src="@mipmap/user_message" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:paddingLeft="@dimen/x30"
-            android:text="@string/user_about_company"
-            android:textColor="@color/black"
+            android:layout_marginLeft="@dimen/x30"
+            android:layout_toRightOf="@+id/iv_help"
+            android:text="帮助与反馈"
+            android:textColor="@color/home_setting_text"
             android:textSize="14sp" />
 
         <ImageView
@@ -108,77 +197,39 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/x30"
-            android:contentDescription="TODO"
-            android:src="@mipmap/user_more_details" />
+            android:src="@mipmap/home_manage_right" />
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="0.1dp"
+            android:layout_height="1px"
             android:layout_alignParentBottom="true"
             android:layout_marginLeft="@dimen/x30"
-            android:layout_marginRight="@dimen/x30"
             android:background="@color/black_16" />
-
     </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/rl_user_clear_cache"
+        android:id="@+id/rl_setting"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/y90"
-        android:background="@color/white">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:paddingLeft="@dimen/x30"
-            android:text="@string/user_clear_cache"
-            android:textColor="@color/black"
-            android:textSize="14sp" />
-
-        <TextView
-            android:id="@+id/tv_user_cache"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_toLeftOf="@+id/iv_user_cache_more"
-            android:paddingRight="@dimen/x10"
-            android:textColor="@color/black"
-            android:textSize="14sp" />
+        android:layout_height="@dimen/y100"
+        android:background="@drawable/layout_seletor"
+        android:clickable="true">
 
         <ImageView
-            android:id="@+id/iv_user_cache_more"
+            android:id="@+id/iv_setting"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="@dimen/x30"
-            android:contentDescription="TODO"
-            android:src="@mipmap/user_more_details" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.1dp"
-            android:layout_alignParentBottom="true"
             android:layout_marginLeft="@dimen/x30"
-            android:layout_marginRight="@dimen/x30"
-            android:background="@color/black_16" />
-
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/rl_user_setting"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/y90"
-        android:background="@color/white">
+            android:src="@mipmap/user_message" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:paddingLeft="@dimen/x30"
-            android:text="个人中心"
-            android:textColor="@color/black"
+            android:layout_marginLeft="@dimen/x30"
+            android:layout_toRightOf="@+id/iv_setting"
+            android:text="设置"
+            android:textColor="@color/home_setting_text"
             android:textSize="14sp" />
 
         <ImageView
@@ -187,51 +238,7 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/x30"
-            android:contentDescription="TODO"
-            android:src="@mipmap/user_more_details" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.1dp"
-            android:layout_alignParentBottom="true"
-            android:layout_marginLeft="@dimen/x30"
-            android:layout_marginRight="@dimen/x30"
-            android:background="@color/black_16" />
-
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:visibility="gone"
-        android:id="@+id/rl_sound_control"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/y90"
-        android:background="@color/white">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:paddingLeft="@dimen/x30"
-            android:text="语音控制"
-            android:textColor="@color/black"
-            android:textSize="14sp" />
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="@dimen/x30"
-            android:contentDescription="TODO"
-            android:src="@mipmap/user_more_details" />
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.1dp"
-            android:layout_alignParentBottom="true"
-            android:layout_marginLeft="@dimen/x30"
-            android:layout_marginRight="@dimen/x30"
-            android:background="@color/black_16" />
+            android:src="@mipmap/home_manage_right" />
 
     </RelativeLayout>
 

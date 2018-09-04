@@ -1,55 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/device_background_four">
 
-
-    <RelativeLayout
-        android:id="@+id/actionbar_device_log"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/y100"
-        android:background="@color/white">
-
-        <ImageView
-            android:padding="5dp"
-            android:id="@+id/iv_common_actionbar_goback"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/x20"
-            android:contentDescription="TODO"
-            android:src="@mipmap/actionbar_goback" />
-
-        <TextView
-            android:id="@+id/tv_common_actionbar_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:textColor="@color/app_title"
-            android:textSize="16sp" />
-
-        <TextView
-            android:id="@+id/tv_device_log_edit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:paddingRight="@dimen/x20"
-            android:text="@string/device_log_edit"
-            android:textColor="@color/app_title"
-            android:textSize="16sp" />
-
-    </RelativeLayout>
+    <include
+        android:id="@+id/action_bar"
+        layout="@layout/common_actionbar" />
 
     <com.qvd.smartswitch.widget.EmptyLayout
-        android:id="@+id/empty_view"
+        android:id="@+id/emptylayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/actionbar_device_log">
-
+        android:layout_below="@+id/action_bar"
+        android:layout_marginBottom="@dimen/y10"
+        android:layout_marginTop="@dimen/y10">
 
         <com.scwang.smartrefresh.layout.SmartRefreshLayout
-            android:id="@+id/refreshLayout"
+            android:id="@+id/smart_refresh"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
@@ -57,82 +26,33 @@
                 android:id="@+id/recyclerview"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/white1"
-                android:overScrollMode="never" />
+                android:scrollbars="vertical">
+
+            </android.support.v7.widget.RecyclerView>
 
         </com.scwang.smartrefresh.layout.SmartRefreshLayout>
 
     </com.qvd.smartswitch.widget.EmptyLayout>
 
-    <LinearLayout
-        android:id="@+id/ll_device_log_bottom"
+    <android.support.design.widget.CoordinatorLayout
+        android:id="@+id/coordinatorLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:background="#e6e6e6"
-        android:orientation="vertical"
-        android:visibility="gone">
+        android:layout_alignParentBottom="true">
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1px"
-            android:background="#e5e5e5" />
+        <com.melnykov.fab.FloatingActionButton
+            android:visibility="gone"
+            android:id="@+id/fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_marginBottom="@dimen/y40"
+            android:layout_marginRight="@dimen/x40"
+            android:src="@mipmap/home_setting_delete"
+            app:fab_colorNormal="@color/white"
+            app:fab_colorPressed="@color/add_device_background"
+            app:fab_type="normal" />
 
-        <RelativeLayout
-
-            android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:background="#ffffff">
-
-            <TextView
-                android:id="@+id/tv_device_log_bottom_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="15dp"
-                android:text="@string/device_log_bottom_selete"
-                android:textColor="#1A1A1A"
-                android:textSize="14sp" />
-
-            <TextView
-                android:id="@+id/tv_device_log_bottom_select_num"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="9dp"
-                android:layout_toRightOf="@+id/tv_device_log_bottom_text"
-                android:text="0"
-                android:textColor="#1A1A1A"
-                android:textSize="14sp" />
-
-            <Button
-                android:id="@+id/btn_device_log_bottom_delete"
-                android:layout_width="80dp"
-                android:layout_height="33dp"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="15dp"
-                android:background="@drawable/circle_white_five"
-                android:gravity="center"
-                android:text="@string/device_log_bottom_delete"
-                android:textColor="#b7b8bd"
-                android:textSize="14sp" />
-
-            <Button
-                android:id="@+id/select_device_log_bottom_all"
-                android:layout_width="80dp"
-                android:layout_height="33dp"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="15dp"
-                android:layout_toLeftOf="@+id/btn_device_log_bottom_delete"
-                android:background="@drawable/circle_white_five"
-                android:gravity="center"
-                android:text="@string/device_log_bottom_allselete"
-                android:textColor="#000001"
-                android:textSize="14sp" />
-
-        </RelativeLayout>
-    </LinearLayout>
-
+    </android.support.design.widget.CoordinatorLayout>
 
 </RelativeLayout>

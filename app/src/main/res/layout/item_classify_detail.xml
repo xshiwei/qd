@@ -9,8 +9,8 @@
     <ImageView
         android:layout_gravity="center_horizontal"
         android:id="@+id/ivAvatar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/x70"
+        android:layout_height="@dimen/y70"
         android:layout_marginTop="@dimen/y30"
         android:src="@mipmap/qvedo_app_icon" />
 

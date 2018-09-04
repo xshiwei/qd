@@ -2,20 +2,51 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/home_manage_backgroud">
+    android:background="@drawable/device_background_four">
 
-    <include
-        android:id="@+id/action_bar"
-        layout="@layout/common_actionbar" />
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_marginTop="@dimen/y60"
+        android:layout_height="@dimen/y80">
 
-    <TextView
-        android:id="@+id/tv_confirm_light"
+        <ImageView
+            android:padding="5dp"
+            android:layout_marginLeft="@dimen/x20"
+            android:id="@+id/iv_common_actionbar_goback"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:contentDescription="TODO"
+            android:src="@mipmap/actionbar_goback_white" />
+
+        <TextView
+            android:text="确认设备"
+            android:id="@+id/tv_common_actionbar_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
+
+    </RelativeLayout>
+
+    <com.andexert.library.RippleView
+        rv_centered="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:background="@drawable/selete_background"
-        android:padding="5dp"
-        android:text="确认指示灯在闪烁"
-        android:textSize="18sp" />
+        android:layout_margin="5dp">
+
+        <TextView
+            android:id="@+id/tv_confirm_light"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/login_button_shape"
+            android:padding="10dp"
+            android:text="确认指示灯处于红灯常亮"
+            android:textColor="@color/white"
+            android:textSize="18sp" />
+
+    </com.andexert.library.RippleView>
 
 </RelativeLayout>

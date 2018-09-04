@@ -63,7 +63,7 @@
         android:layout_centerVertical="true"
         android:layout_marginRight="@dimen/x10"
         android:layout_toLeftOf="@+id/iv_item_device_more"
-        android:background="@drawable/circle_orange_five"
+        android:background="@drawable/circle_orange_ten"
         android:gravity="center"
         android:text="断开连接"
         android:textColor="@color/white"

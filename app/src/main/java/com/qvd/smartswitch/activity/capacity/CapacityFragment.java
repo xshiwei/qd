@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import com.qvd.smartswitch.R;
 import com.qvd.smartswitch.activity.base.BaseFragment;
 import com.qvd.smartswitch.adapter.TabLayoutAdapter;
+import com.qvd.smartswitch.utils.ToastUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -97,7 +98,8 @@ public class CapacityFragment extends BaseFragment {
 
     @OnClick(R.id.iv_capacity_add)
     public void onViewClicked() {
-        startActivity(new Intent(getActivity(),AddCapacityActivity.class));
-        getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+        ToastUtil.showToast("此功能正在开发中，请期待。。。");
+//        startActivity(new Intent(getActivity(),AddCapacityActivity.class));
+//        getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
     }
 }

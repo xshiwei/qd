@@ -90,7 +90,7 @@ public class RetrofitService {
             Request request = chain.request();
             if (!NetUtil.isNetworkAvalible(MyApplication.getContext())) {
                 request = request.newBuilder().cacheControl(CacheControl.FORCE_CACHE).build();
-                ToastUtil.showToast("网络未连接");
+                ToastUtil.showToast("网络未连接，请检查网络后再试");
             }
             Response originalResponse = chain.proceed(request);
 

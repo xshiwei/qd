@@ -1,16 +1,14 @@
 package com.qvd.smartswitch.model.home;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import java.io.Serializable;
 import java.util.List;
 
 public class RoomListVo implements Serializable {
+
     /**
      * code : 200
      * message : ok
-     * data : [{"create_time":"2018-07-26 11:09:30.000000","delete_time":null,"device_num":0,"family_id":"F00000006","id":8,"room_delete":null,"room_id":"R3024730165","room_name":"kitchen","room_pic":"https://www.qq745.com/uploads/allimg/141009/1-14100ZT451-51.jpg","update_time":null}]
+     * data : [{"create_time":"2018-08-08 17:22:58.000000","device_count":0,"family_id":"F9575990794","is_default":1,"room_id":"R9102879504","room_name":"default room","room_pic":"http://pckgfzc5s.bkt.clouddn.com/a.png"},{"create_time":"2018-08-08 18:26:14.000000","device_count":0,"family_id":"F9575990794","is_default":0,"room_id":"R613045395","room_name":"你好","room_pic":"http://pckgfzc5s.bkt.clouddn.com/j.png"},{"create_time":"2018-08-08 18:08:49.000000","device_count":2,"family_id":"F9575990794","is_default":0,"room_id":"R1165081998","room_name":"卧室","room_pic":"http://pckgfzc5s.bkt.clouddn.com/b.png"},{"create_time":"2018-08-10 11:38:20.000000","device_count":0,"family_id":"F9575990794","is_default":0,"room_id":"R4745233804","room_name":"垃圾","room_pic":"ssss"},{"create_time":"2018-08-10 13:08:27.000000","device_count":0,"family_id":"F9575990794","is_default":0,"room_id":"R3800558144","room_name":"最初","room_pic":"http://pckgfzc5s.bkt.clouddn.com/j.png"},{"create_time":"2018-08-10 11:16:01.000000","device_count":0,"family_id":"F9575990794","is_default":0,"room_id":"R1775192314","room_name":"珊珊","room_pic":"ssss"},{"create_time":"2018-08-10 13:08:39.000000","device_count":0,"family_id":"F9575990794","is_default":0,"room_id":"R552109384","room_name":"贪生","room_pic":"http://pckgfzc5s.bkt.clouddn.com/h.png"}]
      */
 
     private int code;
@@ -43,28 +41,22 @@ public class RoomListVo implements Serializable {
 
     public static class DataBean implements Serializable {
         /**
-         * create_time : 2018-07-26 11:09:30.000000
-         * delete_time : null
-         * device_num : 0
-         * family_id : F00000006
-         * id : 8
-         * room_delete : null
-         * room_id : R3024730165
-         * room_name : kitchen
-         * room_pic : https://www.qq745.com/uploads/allimg/141009/1-14100ZT451-51.jpg
-         * update_time : null
+         * create_time : 2018-08-08 17:22:58.000000
+         * device_count : 0
+         * family_id : F9575990794
+         * is_default : 1
+         * room_id : R9102879504
+         * room_name : default room
+         * room_pic : http://pckgfzc5s.bkt.clouddn.com/a.png
          */
 
         private String create_time;
-        private Object delete_time;
-        private int device_num;
+        private int device_count;
         private String family_id;
-        private int id;
-        private Object room_delete;
+        private int is_default;
         private String room_id;
         private String room_name;
         private String room_pic;
-        private Object update_time;
 
         public String getCreate_time() {
             return create_time;
@@ -74,20 +66,12 @@ public class RoomListVo implements Serializable {
             this.create_time = create_time;
         }
 
-        public Object getDelete_time() {
-            return delete_time;
+        public int getDevice_count() {
+            return device_count;
         }
 
-        public void setDelete_time(Object delete_time) {
-            this.delete_time = delete_time;
-        }
-
-        public int getDevice_num() {
-            return device_num;
-        }
-
-        public void setDevice_num(int device_num) {
-            this.device_num = device_num;
+        public void setDevice_count(int device_count) {
+            this.device_count = device_count;
         }
 
         public String getFamily_id() {
@@ -98,20 +82,12 @@ public class RoomListVo implements Serializable {
             this.family_id = family_id;
         }
 
-        public int getId() {
-            return id;
+        public int getIs_default() {
+            return is_default;
         }
 
-        public void setId(int id) {
-            this.id = id;
-        }
-
-        public Object getRoom_delete() {
-            return room_delete;
-        }
-
-        public void setRoom_delete(Object room_delete) {
-            this.room_delete = room_delete;
+        public void setIs_default(int is_default) {
+            this.is_default = is_default;
         }
 
         public String getRoom_id() {
@@ -137,14 +113,5 @@ public class RoomListVo implements Serializable {
         public void setRoom_pic(String room_pic) {
             this.room_pic = room_pic;
         }
-
-        public Object getUpdate_time() {
-            return update_time;
-        }
-
-        public void setUpdate_time(Object update_time) {
-            this.update_time = update_time;
-        }
-
     }
 }

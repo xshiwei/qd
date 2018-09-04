@@ -1,43 +1,42 @@
 package com.qvd.smartswitch.activity.device;
 
-
-import android.graphics.Color;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.clj.fastble.BleManager;
-import com.clj.fastble.data.BleDevice;
+import com.melnykov.fab.FloatingActionButton;
+import com.orhanobut.logger.Logger;
 import com.qvd.smartswitch.R;
 import com.qvd.smartswitch.activity.base.BaseActivity;
-import com.qvd.smartswitch.adapter.DeviceLogListAdapter;
-import com.qvd.smartswitch.db.DeviceDaoOpe;
-import com.qvd.smartswitch.model.DeviceLogVo;
-import com.qvd.smartswitch.utils.CommonUtils;
+import com.qvd.smartswitch.adapter.LogDeviceListAdapter;
+import com.qvd.smartswitch.api.RetrofitService;
+import com.qvd.smartswitch.model.device.DeviceLogVo;
+import com.qvd.smartswitch.utils.ToastUtil;
 import com.qvd.smartswitch.widget.EmptyLayout;
+import com.scwang.smartrefresh.header.MaterialHeader;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.constant.SpinnerStyle;
 import com.scwang.smartrefresh.layout.footer.BallPulseFooter;
-import com.scwang.smartrefresh.layout.header.ClassicsHeader;
 import com.scwang.smartrefresh.layout.listener.OnLoadmoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
+import com.vivian.timelineitemdecoration.itemdecoration.DotItemDecoration;
+import com.vivian.timelineitemdecoration.itemdecoration.SpanIndexListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-
-/**
- * Created by Administrator on 2018/4/13 0013.
- */
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 public class DeviceLogActivity extends BaseActivity {
     @BindView(R.id.iv_common_actionbar_goback)
@@ -46,38 +45,93 @@ public class DeviceLogActivity extends BaseActivity {
     TextView tvCommonActionbarTitle;
     @BindView(R.id.recyclerview)
     RecyclerView recyclerview;
-    @BindView(R.id.refreshLayout)
-    SmartRefreshLayout refreshLayout;
-    @BindView(R.id.tv_device_log_edit)
-    TextView tvDeviceLogEdit;
-    @BindView(R.id.tv_device_log_bottom_select_num)
-    TextView tvDeviceLogBottomSelectNum;
-    @BindView(R.id.btn_device_log_bottom_delete)
-    Button btnDeviceLogBottomDelete;
-    @BindView(R.id.select_device_log_bottom_all)
-    Button selectDeviceLogBottomAll;
-    @BindView(R.id.ll_device_log_bottom)
-    LinearLayout llDeviceLogBottom;
+    @BindView(R.id.fab)
+    FloatingActionButton fab;
+    @BindView(R.id.coordinatorLayout)
+    CoordinatorLayout coordinatorLayout;
+    @BindView(R.id.smart_refresh)
+    SmartRefreshLayout smartRefresh;
+    @BindView(R.id.emptylayout)
+    EmptyLayout emptylayout;
 
-    private EmptyLayout emptyLayout;
-    private BleDevice bledevice;
-    private List<DeviceLogVo> list = new ArrayList<>();
-    private List<DeviceLogVo> addMessageList = new ArrayList<>();
-    private DeviceLogListAdapter adapter;
-    private int page = 0;
-    private int pageNum = 10;
+    private List<DeviceLogVo.DataBean> list = new ArrayList<>();
+    private List<DeviceLogVo.DataBean> addMoreList = new ArrayList<>();
+    private LogDeviceListAdapter adapter;
+    private DotItemDecoration mItemDecoration;
+
+    /**
+     * 设备ID
+     */
+    private String deviceId;
+
+    /**
+     * 记录分页的数据位置
+     */
     private int position;
-
-    private static final int MYLIVE_MODE_CHECK = 0;
-    private static final int MYLIVE_MODE_EDIT = 1;
-    private int mEditMode = MYLIVE_MODE_CHECK;
-    private boolean isSelectAll = false;
-    private boolean editorStatus = false;
-    private int index = 0;
+    /**
+     * 页数
+     */
+    private int page = 1;
+    /**
+     * 设备类型
+     */
+    private String device_type;
 
     @Override
     protected int setLayoutId() {
         return R.layout.activity_device_log;
+    }
+
+    @Override
+    protected void initData() {
+        super.initData();
+        tvCommonActionbarTitle.setText("操作日志");
+        deviceId = getIntent().getStringExtra("device_id");
+        device_type = getIntent().getStringExtra("device_type");
+        getfirstData();
+        fab.attachToRecyclerView(recyclerview);
+        smartRefresh.setHeaderHeight(100);
+        smartRefresh.setFooterHeight(100);
+        smartRefresh.setEnableLoadmoreWhenContentNotFull(true);//是否在列表不满一页时候开启上拉加载功能
+        smartRefresh.setRefreshHeader(new MaterialHeader(this).setShowBezierWave(true));
+        smartRefresh.setRefreshFooter(new BallPulseFooter(this).setSpinnerStyle(SpinnerStyle.Scale));
+
+
+        refreshlayout();
+    }
+
+    private void initMode() {
+        mItemDecoration = new DotItemDecoration
+                .Builder(this)
+                .setOrientation(DotItemDecoration.VERTICAL) //设置方向
+                .setItemStyle(DotItemDecoration.STYLE_DRAW)
+                .setTopDistance(20)//设置距离顶部高度
+                .setItemInterVal(10)
+                .setItemPaddingLeft(10)
+                .setItemPaddingRight(10)
+                .setDotColor(getResources().getColor(R.color.capacity_tablayout_text_two))
+                .setDotRadius(5)  //设置圆点的半径
+                .setDotPaddingTop(20)//设置第一个点距离上部高度
+                .setDotInItemOrientationCenter(false)
+                .setLineColor(getResources().getColor(R.color.home_setting_text_two))
+                .setLineWidth(1)//设置线的宽度
+                .setEndText("END")  //设置结尾的文字
+                .setTextColor(getResources().getColor(R.color.home_content_text_two))
+                .setTextSize(10)//设置结尾文字大小
+                .setDotPaddingText(2)
+                .setBottomDistance(40)//结尾线的高度
+                .create();
+
+        mItemDecoration.setSpanIndexListener(new SpanIndexListener() {
+            @Override
+            public void onSpanIndexChange(View view, int spanIndex) {
+                view.setBackgroundResource(spanIndex == 0 ? R.drawable.device_log_left : R.drawable.device_log_right);
+            }
+        });
+        recyclerview.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
+        recyclerview.addItemDecoration(mItemDecoration);
+        adapter = new LogDeviceListAdapter(DeviceLogActivity.this, list);
+        recyclerview.setAdapter(adapter);
     }
 
     @Override
@@ -87,21 +141,8 @@ public class DeviceLogActivity extends BaseActivity {
     }
 
     @Override
-    protected void initData() {
-        super.initData();
-        tvCommonActionbarTitle.setText(R.string.device_log_title);
-        bledevice = getIntent().getParcelableExtra("bledevice");
-        recyclerview.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new DeviceLogListAdapter(this, list);
-        recyclerview.setAdapter(adapter);
-        refreshLayout.setHeaderHeight(100);
-        refreshLayout.setFooterHeight(100);
-        refreshLayout.setEnableLoadmoreWhenContentNotFull(true);//是否在列表不满一页时候开启上拉加载功能
-        refreshLayout.setRefreshHeader(new ClassicsHeader(this));
-        refreshLayout.setRefreshFooter(new BallPulseFooter(this).setSpinnerStyle(SpinnerStyle.Scale));
-        refreshlayout();
-       //CommonUtils.getNotify(this, bledevice, "0000fff0-0000-1000-8000-00805f9b34fb", "0000fff6-0000-1000-8000-00805f9b34fb");
-         CommonUtils.getConnectNotify(this, bledevice, btnDeviceLogBottomDelete);
+    protected void onResume() {
+        super.onResume();
     }
 
     /**
@@ -109,22 +150,23 @@ public class DeviceLogActivity extends BaseActivity {
      */
     private void refreshlayout() {
         //刷新数据
-        refreshLayout.setOnRefreshListener(new OnRefreshListener() {
+        smartRefresh.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(RefreshLayout refreshlayout) {
                 //传入true表示刷新成功，false表示刷新失败
                 if (list.size() > 0) {
                     list.clear();
-                    page = 0;
-                    getData();
+                    page = 1;
+                    getlastData();
                 }
                 refreshlayout.finishRefresh(2000, true);
             }
         });
         //加载数据
-        refreshLayout.setOnLoadmoreListener(new OnLoadmoreListener() {
+        smartRefresh.setOnLoadmoreListener(new OnLoadmoreListener() {
             @Override
             public void onLoadmore(RefreshLayout refreshlayout) {
+                //传入true表示刷新成功，false表示刷新失败
                 page++;
                 getMoreData();
                 refreshlayout.finishLoadmore(2000, true);
@@ -132,211 +174,159 @@ public class DeviceLogActivity extends BaseActivity {
         });
     }
 
-
     /**
-     * 加载更多
+     * 获取加载数据
      */
     private void getMoreData() {
-        List<DeviceLogVo> deviceLogVos = DeviceDaoOpe.queryPaging(page, pageNum, this, CommonUtils.getMac(bledevice.getMac()));
-        if (deviceLogVos == null || deviceLogVos.size() <= 0) {
-            refreshLayout.finishLoadmoreWithNoMoreData();//完成加载并标记没有更多数据
-        } else {
-            addMessageList.clear();
-            addMessageList.addAll(deviceLogVos);
-            position = list.size();
-            list.addAll(position, addMessageList);
-            adapter.notifyItemInserted(position);
-            emptyLayout.hide();
-        }
-    }
+        Map<String, Object> map = new HashMap<>();
+        map.put("device_id", deviceId);
+        map.put("device_type", device_type);
+        map.put("current_page", page);
+        map.put("per_page_count", 10);
 
-    @Override
-    protected void getData() {
-        super.getData();
-        List<DeviceLogVo> deviceLogVos = DeviceDaoOpe.queryPaging(page, pageNum, this, CommonUtils.getMac(bledevice.getMac()));
-        if (deviceLogVos != null && deviceLogVos.size() > 0) {
-            list.clear();
-            list.addAll(deviceLogVos);
-            adapter.notifyAdapter(list, false);
-            emptyLayout.hide();
-        } else {
-            emptyLayout.showEmpty();
-        }
+        RetrofitService.qdoApi.getDeviceLog(map)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<DeviceLogVo>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(DeviceLogVo deviceLogVo) {
+                        if (deviceLogVo.getData() == null) {
+                            smartRefresh.finishLoadmoreWithNoMoreData();
+                        } else {
+                            addMoreList.clear();
+                            addMoreList.addAll(deviceLogVo.getData());
+                            position = list.size();
+                            list.addAll(position, addMoreList);
+                            adapter.notifyItemInserted(position);
+                            emptylayout.hide();
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Logger.e(e.getMessage());
+                        ToastUtil.showToast("加载失败");
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
     }
 
     /**
-     * 根据选择的数量是否为0来判断按钮的是否可点击.
-     *
-     * @param size
+     * 获取刷新数据
      */
-    private void setBtnBackground(int size) {
-        if (size != 0) {
-            btnDeviceLogBottomDelete.setBackgroundResource(R.drawable.circle_orange_five);
-            btnDeviceLogBottomDelete.setEnabled(true);
-            btnDeviceLogBottomDelete.setTextColor(Color.WHITE);
-        } else {
-            btnDeviceLogBottomDelete.setBackgroundResource(R.drawable.circle_white_five);
-            btnDeviceLogBottomDelete.setEnabled(false);
-            btnDeviceLogBottomDelete.setTextColor(ContextCompat.getColor(this, R.color.app_color));
-        }
-    }
+    private void getfirstData() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("device_id", deviceId);
+        map.put("device_type", device_type);
+        map.put("current_page", page);
+        map.put("per_page_count", 10);
+        RetrofitService.qdoApi.getDeviceLog(map)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<DeviceLogVo>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
 
-
-    @Override
-    protected void initView() {
-        super.initView();
-        emptyLayout = findViewById(R.id.empty_view);
-        adapter.setOnItemClickListener(new DeviceLogListAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClickListener(int pos, List<DeviceLogVo> deviceLogVoList) {
-                if (editorStatus) {
-                    DeviceLogVo deviceLogVo = deviceLogVoList.get(pos);
-                    boolean isSelect = deviceLogVo.isSelete();
-                    if (!isSelect) {
-                        index++;
-                        deviceLogVo.setSelete(true);
-                        if (index == deviceLogVoList.size()) {
-                            isSelectAll = true;
-                            selectDeviceLogBottomAll.setText(R.string.device_log_cancle_allselete);
-                        }
-                    } else {
-                        deviceLogVo.setSelete(false);
-                        index--;
-                        isSelectAll = false;
-                        selectDeviceLogBottomAll.setText(R.string.device_log_allselete);
                     }
-                    setBtnBackground(index);
-                    tvDeviceLogBottomSelectNum.setText(String.valueOf(index));
-                    adapter.notifyDataSetChanged();
-                }
-            }
-        });
+
+                    @Override
+                    public void onNext(DeviceLogVo deviceLogVo) {
+                        if (deviceLogVo != null) {
+                            if (deviceLogVo.getData() != null && deviceLogVo.getCode() == 200) {
+                                list.clear();
+                                list.addAll(deviceLogVo.getData());
+                                initMode();
+                                adapter.notifyDataSetChanged();
+                                emptylayout.hide();
+                            } else {
+                                emptylayout.showEmpty();
+                            }
+                        } else {
+                            emptylayout.showError();
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Logger.e(e.getMessage());
+                        emptylayout.showError();
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
     }
 
 
-    @OnClick({R.id.iv_common_actionbar_goback, R.id.tv_device_log_edit, R.id.btn_device_log_bottom_delete, R.id.select_device_log_bottom_all})
+    /**
+     * 获取刷新数据
+     */
+    private void getlastData() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("device_id", deviceId);
+        map.put("device_type", device_type);
+        map.put("current_page", page);
+        map.put("per_page_count", 10);
+        RetrofitService.qdoApi.getDeviceLog(map)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<DeviceLogVo>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(DeviceLogVo deviceLogVo) {
+                        if (deviceLogVo != null) {
+                            if (deviceLogVo.getData() != null && deviceLogVo.getCode() == 200) {
+                                list.clear();
+                                list.addAll(deviceLogVo.getData());
+                                adapter.notifyDataSetChanged();
+                                emptylayout.hide();
+                            } else {
+                                emptylayout.showEmpty();
+                            }
+                        } else {
+                            emptylayout.showError();
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Logger.e(e.getMessage());
+                        emptylayout.showError();
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
+
+    @OnClick({R.id.iv_common_actionbar_goback, R.id.fab})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_common_actionbar_goback:
                 finish();
                 break;
-            case R.id.tv_device_log_edit:
-                updataEditMode();
-                break;
-            case R.id.btn_device_log_bottom_delete:
-                deleteVideo();
-                break;
-            case R.id.select_device_log_bottom_all:
-                selectAllMain();
+            case R.id.fab:
                 break;
         }
     }
 
-    /**
-     * 全选和反选
-     */
-    private void selectAllMain() {
-        if (adapter == null) return;
-        if (!isSelectAll) {
-            for (int i = 0, j = adapter.getMyLiveList().size(); i < j; i++) {
-                adapter.getMyLiveList().get(i).setSelete(true);
-            }
-            index = adapter.getMyLiveList().size();
-            btnDeviceLogBottomDelete.setEnabled(true);
-            selectDeviceLogBottomAll.setText(R.string.device_log_cancle_allselete);
-            isSelectAll = true;
-        } else {
-            for (int i = 0, j = adapter.getMyLiveList().size(); i < j; i++) {
-                adapter.getMyLiveList().get(i).setSelete(false);
-            }
-            index = 0;
-            btnDeviceLogBottomDelete.setEnabled(false);
-            selectDeviceLogBottomAll.setText(R.string.device_log_allselete);
-            isSelectAll = false;
-        }
-        adapter.notifyDataSetChanged();
-        setBtnBackground(index);
-        tvDeviceLogBottomSelectNum.setText(String.valueOf(index));
-    }
-
-    /**
-     * 删除逻辑
-     */
-    private void deleteVideo() {
-        if (index == 0) {
-            btnDeviceLogBottomDelete.setEnabled(false);
-            return;
-        }
-        final AlertDialog builder = new AlertDialog.Builder(this)
-                .create();
-        builder.show();
-        if (builder.getWindow() == null) return;
-        builder.getWindow().setContentView(R.layout.popuwindow_device_log);//设置弹出框加载的布局
-        TextView msg = (TextView) builder.findViewById(R.id.tv_msg);
-        Button cancle = (Button) builder.findViewById(R.id.btn_cancle);
-        Button sure = (Button) builder.findViewById(R.id.btn_sure);
-        if (msg == null || cancle == null || sure == null) return;
-        if (index == 1) {
-            msg.setText(R.string.device_log_delete_one);
-        } else {
-            msg.setText(getString(R.string.device_log_delete_all_one) + index + getString(R.string.device_log_delete_all_two));
-        }
-        cancle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                builder.dismiss();
-            }
-        });
-        sure.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                for (int i = adapter.getMyLiveList().size(), j = 0; i > j; i--) {
-                    DeviceLogVo myLive = adapter.getMyLiveList().get(i - 1);
-                    if (myLive.isSelete()) {
-                        adapter.getMyLiveList().remove(myLive);
-                        index--;
-                        DeviceDaoOpe.deleteData(DeviceLogActivity.this, myLive);
-                    }
-                }
-                index = 0;
-                tvDeviceLogBottomSelectNum.setText(String.valueOf(0));
-                setBtnBackground(index);
-                if (adapter.getMyLiveList().size() == 0) {
-                    llDeviceLogBottom.setVisibility(View.GONE);
-                }
-                adapter.notifyDataSetChanged();
-                builder.dismiss();
-            }
-        });
-    }
-
-    private void updataEditMode() {
-        mEditMode = mEditMode == MYLIVE_MODE_CHECK ? MYLIVE_MODE_EDIT : MYLIVE_MODE_CHECK;
-        if (mEditMode == MYLIVE_MODE_EDIT) {
-            tvDeviceLogEdit.setText(R.string.device_log_cancle);
-            llDeviceLogBottom.setVisibility(View.VISIBLE);
-            editorStatus = true;
-        } else {
-            tvDeviceLogEdit.setText(R.string.device_log_edit);
-            llDeviceLogBottom.setVisibility(View.GONE);
-            editorStatus = false;
-            clearAll();
-        }
-        adapter.setEditMode(mEditMode);
-    }
-
-
-    private void clearAll() {
-        tvDeviceLogBottomSelectNum.setText(String.valueOf(0));
-        isSelectAll = false;
-        selectDeviceLogBottomAll.setText(R.string.device_log_allselete);
-        setBtnBackground(0);
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        BleManager.getInstance().stopNotify(bledevice, "0000fff0-0000-1000-8000-00805f9b34fb", "0000fff6-0000-1000-8000-00805f9b34fb");
-    }
 
 }

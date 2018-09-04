@@ -2,17 +2,17 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/viewfinder_frame">
+    android:background="@drawable/device_background_four">
 
     <TextView
         android:id="@+id/tv_back"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/x30"
-        android:layout_marginTop="@dimen/y30"
+        android:layout_marginTop="@dimen/y60"
         android:padding="5dp"
         android:text="取消"
-        android:textColor="@color/home_setting_text_two"
+        android:textColor="@color/white"
         android:textSize="14sp" />
 
     <RelativeLayout
@@ -22,7 +22,7 @@
         android:layout_centerInParent="true"
         android:layout_marginLeft="@dimen/x80"
         android:layout_marginRight="@dimen/x80"
-        android:background="@color/white"
+        android:background="@drawable/circle_white_five"
         android:visibility="visible">
 
         <TextView
@@ -33,7 +33,7 @@
             android:layout_marginTop="@dimen/y50"
             android:padding="5dp"
             android:text="输入家中的Wi-Fi密码"
-            android:textColor="@color/app_title"
+            android:textColor="@color/home_setting_text"
             android:textSize="16sp"
             android:textStyle="bold" />
 
@@ -121,7 +121,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="@dimen/y30"
         android:text="仅支持2.4G Wi-Fi网络"
-        android:textColor="@color/home_setting_text_two" />
+        android:textColor="@color/white" />
 
     <RelativeLayout
         android:id="@+id/rl_device_connect"
@@ -130,7 +130,7 @@
         android:layout_centerInParent="true"
         android:layout_marginLeft="@dimen/x80"
         android:layout_marginRight="@dimen/x80"
-        android:background="@color/white"
+        android:background="@drawable/circle_white_five"
         android:visibility="gone">
 
         <TextView
@@ -141,7 +141,7 @@
             android:layout_marginTop="@dimen/y50"
             android:padding="5dp"
             android:text="正在连接"
-            android:textColor="@color/app_title"
+            android:textColor="@color/home_setting_text"
             android:textSize="16sp"
             android:textStyle="bold" />
 

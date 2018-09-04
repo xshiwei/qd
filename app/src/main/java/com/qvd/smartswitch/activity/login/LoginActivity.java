@@ -1,34 +1,60 @@
 package com.qvd.smartswitch.activity.login;
 
-
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import com.orhanobut.logger.Logger;
 import com.qvd.smartswitch.R;
 import com.qvd.smartswitch.activity.MainActivity;
 import com.qvd.smartswitch.activity.base.BaseActivity;
+import com.qvd.smartswitch.api.RetrofitService;
+import com.qvd.smartswitch.model.login.LoginVo;
+import com.qvd.smartswitch.utils.CommonUtils;
+import com.qvd.smartswitch.utils.ConfigUtils;
+import com.qvd.smartswitch.utils.SharedPreferencesUtil;
+import com.qvd.smartswitch.utils.SnackbarUtils;
 import com.qvd.smartswitch.widget.MyProgressDialog;
 
 import butterknife.BindView;
+import butterknife.OnClick;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
+
+/**
+ * Created by Administrator on 2018-7-7.
+ */
 
 public class LoginActivity extends BaseActivity {
-    private static final String TAG = "LoginActivity";
-    private static final int REQUEST_SIGNUP = 0;
-
-    @BindView(R.id.input_email)
-    EditText _emailText;
-    @BindView(R.id.input_password)
-    EditText _passwordText;
+    @BindView(R.id.tv_country)
+    TextView tvCountry;
+    @BindView(R.id.iv_user)
+    ImageView ivUser;
+    @BindView(R.id.et_account)
+    EditText etAccount;
+    @BindView(R.id.iv_password)
+    ImageView ivPassword;
+    @BindView(R.id.et_password)
+    EditText etPassword;
     @BindView(R.id.btn_login)
-    TextView _loginButton;
-    @BindView(R.id.link_signup)
-    TextView _signupLink;
-    private Drawable dr;
+    TextView btnLogin;
+    @BindView(R.id.tv_forget_password)
+    TextView tvForgetPassword;
+    @BindView(R.id.view_line)
+    View viewLine;
+    @BindView(R.id.tv_register)
+    TextView tvRegister;
+    @BindView(R.id.iv_wechat)
+    ImageView ivWechat;
+    @BindView(R.id.iv_qq)
+    ImageView ivQq;
+    @BindView(R.id.iv_weibo)
+    ImageView ivWeibo;
 
     @Override
     protected int setLayoutId() {
@@ -36,44 +62,74 @@ public class LoginActivity extends BaseActivity {
     }
 
     @Override
-    protected void initData() {
-        super.initData();
-        _loginButton.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                login();
-            }
-        });
-
-        _signupLink.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                // Start the Signup activity
-                Intent intent = new Intent(getApplicationContext(), SignupActivity.class);
-                startActivityForResult(intent, REQUEST_SIGNUP);
-                finish();
-                overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
-            }
-        });
-        dr = getResources().getDrawable(R.mipmap.edittext_error);
-        dr.setBounds(0, 0, dr.getIntrinsicWidth(), dr.getIntrinsicHeight());
+    protected void initImmersionBar() {
+        super.initImmersionBar();
+        mImmersionBar.fitsSystemWindows(false).transparentBar().init();
     }
 
     @Override
-    protected void initImmersionBar() {
-        super.initImmersionBar();
-        mImmersionBar.init();
+    protected void initData() {
+        super.initData();
+        etAccount.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    ivUser.setBackgroundResource(R.mipmap.login_user_selete);
+                } else {
+                    ivUser.setBackgroundResource(R.mipmap.login_user_unselete);
+                }
+            }
+        });
+
+        etPassword.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    ivPassword.setBackgroundResource(R.mipmap.login_password_selete);
+                } else {
+                    ivPassword.setBackgroundResource(R.mipmap.login_password_unselete);
+                }
+            }
+        });
     }
 
-    public void login() {
-//        if (!validate()) {
-//            onLoginFailed();
-//            return;
-//        }
+    @OnClick({R.id.tv_country, R.id.btn_login, R.id.tv_forget_password, R.id.tv_register, R.id.iv_wechat, R.id.iv_qq, R.id.iv_weibo})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.tv_country:
+                //国家地区
+                break;
+            case R.id.btn_login:
+                //登录
+                login();
+                break;
+            case R.id.tv_forget_password:
+                //忘记密码
+                break;
+            case R.id.tv_register:
+                //立刻注册
+                startActivity(new Intent(this, SignupActivity.class));
+                overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+                break;
+            case R.id.iv_wechat:
+                //微信登录
+                break;
+            case R.id.iv_qq:
+                //qq登录
+                break;
+            case R.id.iv_weibo:
+                //微博登录
+                break;
+        }
+    }
 
-        _loginButton.setEnabled(false);
+    /**
+     * 登录
+     */
+    private void login() {
+        if (!validate()) {
+            return;
+        }
 
         final MyProgressDialog progressDialog = MyProgressDialog.createProgressDialog(this, 5000,
                 new MyProgressDialog.OnTimeOutListener() {
@@ -83,78 +139,80 @@ public class LoginActivity extends BaseActivity {
                         onLoginFailed();
                     }
                 });
-        progressDialog.setMessage("Authenticating...");
+        progressDialog.setMessage("登录中");
         progressDialog.show();
 
-        String email = _emailText.getText().toString();
-        String password = _passwordText.getText().toString();
+        //调用接口登录，登陆成功关闭progressDialog
+        RetrofitService.qdoApi.login(etAccount.getText().toString().trim(), etPassword.getText().toString().trim())
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<LoginVo>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
 
-        // TODO: Implement your own authentication logic here.
-
-        new android.os.Handler().postDelayed(
-                new Runnable() {
-                    public void run() {
-                        // On complete call either onLoginSuccess or onLoginFailed
-                        onLoginSuccess();
-                        // onLoginFailed();
-                        progressDialog.dismiss();
                     }
-                }, 3000);
+
+                    @Override
+                    public void onNext(LoginVo messageVo) {
+                        if (messageVo != null) {
+                            if (messageVo.getData() != null && messageVo.getCode() == 200) {
+                                SharedPreferencesUtil.putString(LoginActivity.this, SharedPreferencesUtil.USER_ID, messageVo.getData().getUser_id());
+                                SharedPreferencesUtil.putString(LoginActivity.this, SharedPreferencesUtil.IDENTIFIER, messageVo.getData().getIdentifier());
+                                SharedPreferencesUtil.putString(LoginActivity.this, SharedPreferencesUtil.PASSWORD, messageVo.getData().getPassword());
+                                ConfigUtils.user_id = messageVo.getData().getUser_id();
+                                onLoginSuccess();
+                                progressDialog.dismiss();
+                            } else if (messageVo.getCode() == 400) {
+                                SnackbarUtils.Short(btnLogin, "登录失败");
+                            } else {
+                                SnackbarUtils.Short(btnLogin, "连接超时");
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Logger.e("login->" + e.getMessage());
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
     }
 
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == REQUEST_SIGNUP) {
-            if (resultCode == RESULT_OK) {
-                // TODO: Implement successful signup logic here
-                // By default we just finish the Activity and log them in automatically
-                this.finish();
-            }
+    /**
+     * 验证账号密码
+     *
+     * @return
+     */
+    private boolean validate() {
+        boolean valid = true;
+        if (CommonUtils.isEmptyString(etAccount.getText().toString().trim()) || CommonUtils.isEmptyString(etPassword.getText().toString().trim())) {
+            valid = false;
+            SnackbarUtils.Short(btnLogin, "密码或账号不能为空").show();
+        } else if (etPassword.length() < 6 || etPassword.length() > 16) {
+            valid = false;
+            SnackbarUtils.Short(btnLogin, "密码长度不规范").show();
         }
+        return valid;
     }
 
-    @Override
-    public void onBackPressed() {
-        // Disable going back to the MainActivity
-        moveTaskToBack(true);
-    }
 
+    /**
+     * 登录成功
+     */
     public void onLoginSuccess() {
-        _loginButton.setEnabled(true);
         startActivity(new Intent(this, MainActivity.class));
         finish();
         overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
     }
 
-    public void onLoginFailed() {
-        Toast.makeText(getBaseContext(), "Login failed", Toast.LENGTH_LONG).show();
-        _loginButton.setEnabled(true);
-    }
-
     /**
-     * 验证输入
-     *
-     * @return
+     * 登录失败
      */
-    public boolean validate() {
-        boolean valid = true;
-        String email = _emailText.getText().toString();
-        String password = _passwordText.getText().toString();
-
-        if (email.isEmpty() || !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            _emailText.setError("enter a valid email address", dr);
-            valid = false;
-        } else {
-            _emailText.setError(null);
-        }
-
-        if (password.isEmpty() || password.length() < 4 || password.length() > 10) {
-            _passwordText.setError("between 4 and 10 alphanumeric characters", dr);
-            valid = false;
-        } else {
-            _passwordText.setError(null);
-        }
-        return valid;
+    private void onLoginFailed() {
+        SnackbarUtils.Short(btnLogin, "登录失败").show();
     }
 }

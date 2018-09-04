@@ -22,7 +22,8 @@
             android:textSize="14sp" />
     </LinearLayout>
 
-    <LinearLayout
+    <com.qvd.smartswitch.widget.EmptyLayout
+        android:id="@+id/emptylayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/white">
@@ -34,7 +35,7 @@
 
         </android.support.v7.widget.RecyclerView>
 
-    </LinearLayout>
+    </com.qvd.smartswitch.widget.EmptyLayout>
 
 
 </LinearLayout>

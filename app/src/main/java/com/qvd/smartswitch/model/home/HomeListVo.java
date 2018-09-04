@@ -4,10 +4,11 @@ import java.util.List;
 
 public class HomeListVo {
 
+
     /**
      * code : 200
      * message : ok
-     * data : [{"create_time":"2018-07-24 19:30:20.000000","delete_time":null,"family_background":"https://www.qq745.com/uploads/allimg/141009/1-14100ZT451-51.jpg","family_id":"F00000005","family_location":" 浙江省 杭州市 滨江区","family_name":"人生","id":13,"is_delete":0,"is_opened":0,"update_time":null,"user_id":"c0f3e214be19d22a4c10c052983f8a24"},{"create_time":"2018-07-24 19:16:18.000000","delete_time":null,"family_background":"https://www.qq745.com/uploads/allimg/141009/1-14100ZT451-51.jpg","family_id":"F00000003","family_location":" 浙江省 杭州市 滨江区","family_name":"你好","id":11,"is_delete":0,"is_opened":0,"update_time":null,"user_id":"c0f3e214be19d22a4c10c052983f8a24"},{"create_time":"2018-07-24 19:27:43.000000","delete_time":null,"family_background":"https://www.qq745.com/uploads/allimg/141009/1-14100ZT451-51.jpg","family_id":"F00000004","family_location":" 浙江省 杭州市 滨江区","family_name":"你好","id":12,"is_delete":0,"is_opened":0,"update_time":null,"user_id":"c0f3e214be19d22a4c10c052983f8a24"},{"create_time":"2018-07-24 19:43:19.000000","delete_time":null,"family_background":"https://www.qq745.com/uploads/allimg/141009/1-14100ZT451-51.jpg","family_id":"F00000007","family_location":" 浙江省 杭州市 滨江区","family_name":"好","id":20,"is_delete":0,"is_opened":0,"update_time":null,"user_id":"c0f3e214be19d22a4c10c052983f8a24"}]
+     * data : [{"create_time":"2018-08-08 17:22:58.000000","device_count":2,"family_background":"https://www.qq745.com/uploads/allimg/141009/1-14100ZT451-51.jpg","family_id":"F9575990794","family_location":"Beijing","family_name":"1105943292@qq.com","is_opened":1,"room_count":7},{"create_time":"2018-08-13 15:45:05.000000","device_count":0,"family_background":"https://www.qq745.com/uploads/allimg/141009/1-14100ZT451-51.jpg","family_id":"F7199558263","family_location":" 浙江省 杭州市 滨江区","family_name":"喜欢","is_opened":0,"room_count":1}]
      */
 
     private int code;
@@ -40,30 +41,24 @@ public class HomeListVo {
 
     public static class DataBean {
         /**
-         * create_time : 2018-07-24 19:30:20.000000
-         * delete_time : null
+         * create_time : 2018-08-08 17:22:58.000000
+         * device_count : 2
          * family_background : https://www.qq745.com/uploads/allimg/141009/1-14100ZT451-51.jpg
-         * family_id : F00000005
-         * family_location :  浙江省 杭州市 滨江区
-         * family_name : 人生
-         * id : 13
-         * is_delete : 0
-         * is_opened : 0
-         * update_time : null
-         * user_id : c0f3e214be19d22a4c10c052983f8a24
+         * family_id : F9575990794
+         * family_location : Beijing
+         * family_name : 1105943292@qq.com
+         * is_opened : 1
+         * room_count : 7
          */
 
         private String create_time;
-        private Object delete_time;
+        private int device_count;
         private String family_background;
         private String family_id;
         private String family_location;
         private String family_name;
-        private int id;
-        private int is_delete;
         private int is_opened;
-        private Object update_time;
-        private String user_id;
+        private int room_count;
 
         public String getCreate_time() {
             return create_time;
@@ -73,12 +68,12 @@ public class HomeListVo {
             this.create_time = create_time;
         }
 
-        public Object getDelete_time() {
-            return delete_time;
+        public int getDevice_count() {
+            return device_count;
         }
 
-        public void setDelete_time(Object delete_time) {
-            this.delete_time = delete_time;
+        public void setDevice_count(int device_count) {
+            this.device_count = device_count;
         }
 
         public String getFamily_background() {
@@ -113,22 +108,6 @@ public class HomeListVo {
             this.family_name = family_name;
         }
 
-        public int getId() {
-            return id;
-        }
-
-        public void setId(int id) {
-            this.id = id;
-        }
-
-        public int getIs_delete() {
-            return is_delete;
-        }
-
-        public void setIs_delete(int is_delete) {
-            this.is_delete = is_delete;
-        }
-
         public int getIs_opened() {
             return is_opened;
         }
@@ -137,20 +116,12 @@ public class HomeListVo {
             this.is_opened = is_opened;
         }
 
-        public Object getUpdate_time() {
-            return update_time;
+        public int getRoom_count() {
+            return room_count;
         }
 
-        public void setUpdate_time(Object update_time) {
-            this.update_time = update_time;
-        }
-
-        public String getUser_id() {
-            return user_id;
-        }
-
-        public void setUser_id(String user_id) {
-            this.user_id = user_id;
+        public void setRoom_count(int room_count) {
+            this.room_count = room_count;
         }
     }
 }

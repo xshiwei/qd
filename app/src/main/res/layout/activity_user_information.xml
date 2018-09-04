@@ -74,12 +74,12 @@
             android:textSize="14sp" />
 
         <TextView
+            android:id="@+id/tv_account"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/x40"
-            android:text="1105943292"
             android:textColor="@color/home_setting_text_three"
             android:textSize="14sp" />
 
@@ -93,26 +93,29 @@
     </RelativeLayout>
 
     <RelativeLayout
+        android:id="@+id/rl_name"
         android:layout_width="match_parent"
         android:layout_height="@dimen/y100"
         android:background="@color/white">
 
         <TextView
+            android:id="@+id/tv_nickname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/x30"
-            android:text="姓名"
+            android:text="名称"
             android:textColor="@color/home_setting_text"
             android:textSize="14sp" />
 
         <TextView
+            android:textSize="14sp"
+            android:id="@+id/tv_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/x10"
             android:layout_toLeftOf="@+id/iv_two"
-            android:text="纯粹慵懒"
             android:textColor="@color/home_setting_text_three" />
 
         <ImageView
@@ -138,6 +141,7 @@
         android:textSize="12sp" />
 
     <RelativeLayout
+        android:id="@+id/rl_phone"
         android:layout_width="match_parent"
         android:layout_height="@dimen/y100"
         android:layout_marginTop="@dimen/y25"
@@ -153,15 +157,25 @@
             android:textSize="14sp" />
 
         <TextView
+            android:id="@+id/tv_phone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/x10"
+            android:layout_toLeftOf="@+id/iv_three"
+            android:hint="绑定手机号"
+            android:inputType="phone"
+            android:textColor="@color/home_setting_text_three"
+            android:textSize="14sp" />
+
+        <ImageView
+            android:id="@+id/iv_three"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="@dimen/x40"
-            android:inputType=""
-            android:text="1105943292"
-            android:textColor="@color/home_setting_text_three"
-            android:textSize="14sp" />
+            android:layout_marginRight="@dimen/x30"
+            android:src="@mipmap/home_manage_right" />
 
         <View
             android:layout_width="match_parent"
@@ -173,9 +187,11 @@
     </RelativeLayout>
 
     <RelativeLayout
+        android:id="@+id/rl_update_password"
         android:layout_width="match_parent"
         android:layout_height="@dimen/y100"
-        android:background="@color/white">
+        android:background="@color/white"
+        android:visibility="gone">
 
         <TextView
             android:layout_width="wrap_content"
@@ -202,7 +218,6 @@
         android:layout_height="match_parent">
 
         <TextView
-            android:clickable="true"
             android:id="@+id/tv_logout"
             android:layout_width="match_parent"
             android:layout_height="@dimen/y90"
@@ -211,6 +226,7 @@
             android:layout_marginLeft="@dimen/x60"
             android:layout_marginRight="@dimen/x60"
             android:background="@drawable/user_message_selector"
+            android:clickable="true"
             android:gravity="center"
             android:text="注 销"
             android:textColor="@color/home_setting_text"

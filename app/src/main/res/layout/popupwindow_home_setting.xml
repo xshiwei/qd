@@ -46,7 +46,7 @@
             android:layout_centerVertical="true"
             android:layout_toRightOf="@+id/iv_home"
             android:padding="5dp"
-            android:text="家庭管理"
+            android:text="家庭房间管理"
             android:textColor="@color/white"
             android:textSize="11sp" />
 

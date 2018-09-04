@@ -98,12 +98,39 @@
 
     </RelativeLayout>
 
+    <RelativeLayout
+        android:id="@+id/rl_room_manage"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y100"
+        android:layout_below="@+id/rl_home_location"
+        android:layout_marginTop="@dimen/y5"
+        android:background="@color/white">
+
+        <TextView
+            android:id="@+id/tv_room_manage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:paddingLeft="@dimen/x30"
+            android:text="房间管理"
+            android:textColor="@color/home_setting_text"
+            android:textSize="14sp" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/x30"
+            android:src="@mipmap/device_more_details" />
+
+    </RelativeLayout>
 
     <TextView
         android:id="@+id/tv_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/rl_home_location"
+        android:layout_below="@+id/rl_room_manage"
         android:layout_marginLeft="@dimen/x30"
         android:layout_marginTop="@dimen/y40"
         android:text="主题壁纸"

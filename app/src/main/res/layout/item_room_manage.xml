@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:clickable="true"
+    android:layout_height="@dimen/y130"
     android:background="@drawable/layout_seletor"
-    android:layout_height="@dimen/y130">
+    android:clickable="true">
 
     <ImageView
         android:id="@+id/iv_pic"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/x60"
+        android:layout_height="@dimen/y60"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="@dimen/x60"
+        android:layout_marginLeft="@dimen/x30"
         android:src="@mipmap/home_setting" />
 
     <TextView
@@ -50,8 +50,6 @@
         android:layout_height="1px"
         android:layout_alignParentBottom="true"
         android:background="@color/black_16" />
-
-
 
 
 </RelativeLayout>

@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.gyf.barlibrary.ImmersionBar;
+import com.qvd.smartswitch.receiver.NetBroadcastReceiver;
 import com.trello.rxlifecycle2.components.support.RxFragment;
 
 
@@ -44,14 +45,13 @@ public abstract class BaseFragment extends RxFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mRootView = inflater.inflate(setLayoutId(), container, false);
-
         return mRootView;
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        unbinder = ButterKnife.bind(this, mRootView);
+        unbinder = ButterKnife.bind(this, view);
         if (isImmersionBarEnabled())
             initImmersionBar();
         initData();

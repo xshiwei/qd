@@ -15,23 +15,24 @@ import com.orhanobut.logger.Logger;
 import com.qvd.smartswitch.R;
 import com.qvd.smartswitch.activity.base.BaseActivity;
 import com.qvd.smartswitch.adapter.RoomManageListAdapter;
+import com.qvd.smartswitch.api.CacheSetting;
 import com.qvd.smartswitch.api.RetrofitService;
 import com.qvd.smartswitch.model.home.RoomListVo;
 import com.qvd.smartswitch.model.login.MessageVo;
 import com.qvd.smartswitch.utils.SnackbarUtils;
-import com.qvd.smartswitch.utils.ToastUtil;
 import com.qvd.smartswitch.widget.EmptyLayout;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
+import io.rx_cache2.DynamicKey;
+import io.rx_cache2.EvictDynamicKey;
 
 /**
  * Created by Administrator on 2018/6/13 0013.
@@ -51,6 +52,8 @@ public class RoomManageActivity extends BaseActivity {
 
     private List<RoomListVo.DataBean> list = new ArrayList<>();
     private RoomManageListAdapter adapter;
+
+    private boolean isRoom = false;
     /**
      * 家庭id
      */
@@ -85,7 +88,7 @@ public class RoomManageActivity extends BaseActivity {
             public void onItemClick(View view, int position) {
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("room", list.get(position));
-                startActivity(new Intent(RoomManageActivity.this, UpdateRoomDetailsActivity.class)
+                startActivity(new Intent(RoomManageActivity.this, RoomUpdateDetailsActivity.class)
                         .putExtra("bundle", bundle));
                 overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
             }
@@ -97,11 +100,23 @@ public class RoomManageActivity extends BaseActivity {
         });
     }
 
+    @Override
+    public void onNetChange(int netMobile) {
+        super.onNetChange(netMobile);
+        if (netMobile == -1) {
+            isRoom = false;
+        } else {
+            isRoom = true;
+            getRoomList();
+        }
+    }
+
     /**
      * 获取房间列表
      */
     private void getRoomList() {
-        RetrofitService.qdoApi.getRoomList(family_id)
+        CacheSetting.getCache().getRoomManger(RetrofitService.qdoApi.getRoomList(family_id),
+                new DynamicKey(family_id), new EvictDynamicKey(isRoom))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<RoomListVo>() {
@@ -114,21 +129,21 @@ public class RoomManageActivity extends BaseActivity {
                     public void onNext(RoomListVo roomListVo) {
                         if (roomListVo != null) {
                             if (roomListVo.getCode() == 200) {
-                                emptylayout.hide();
-                                list.clear();
-                                list.addAll(roomListVo.getData());
-                                adapter.notifyDataSetChanged();
-                            } else if (roomListVo.getCode() == 400) {
-                                emptylayout.showEmpty();
+                                if (roomListVo.getData() != null) {
+                                    emptylayout.hide();
+                                    list.clear();
+                                    list.addAll(roomListVo.getData());
+                                    adapter.notifyDataSetChanged();
+                                }
                             } else {
-                                emptylayout.showEmpty();
+                                emptylayout.showError();
                             }
                         }
                     }
 
                     @Override
                     public void onError(Throwable e) {
-
+                        emptylayout.showError();
                     }
 
                     @Override
@@ -205,7 +220,7 @@ public class RoomManageActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.tv_add_room:
-                startActivity(new Intent(this, AddRoomListActivity.class).putExtra("family_id", family_id));
+                startActivity(new Intent(this, RoomAddListActivity.class).putExtra("family_id", family_id));
                 overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
                 break;
         }

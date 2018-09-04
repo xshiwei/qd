@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -10,12 +11,12 @@
         android:background="@color/white">
 
         <ImageView
-            android:padding="5dp"
-            android:layout_marginLeft="@dimen/x20"
             android:id="@+id/iv_add_device_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/x20"
+            android:padding="5dp"
             android:src="@mipmap/actionbar_goback" />
 
         <TextView
@@ -40,50 +41,75 @@
             android:textSize="14sp" />
 
         <ImageView
-            android:visibility="gone"
             android:id="@+id/iv_add_device_search"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/x20"
-            android:src="@mipmap/home_search" />
+            android:src="@mipmap/home_search"
+            android:visibility="gone" />
 
     </RelativeLayout>
 
     <RelativeLayout
-        android:background="@color/white"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@color/white">
 
         <View
-            android:paddingBottom="@dimen/y10"
-            android:paddingTop="@dimen/y10"
             android:layout_width="match_parent"
             android:layout_height="1px"
-            android:background="@color/black_16" />
+            android:background="@color/black_16"
+            android:paddingBottom="@dimen/y10"
+            android:paddingTop="@dimen/y10" />
 
     </RelativeLayout>
 
-
-    <RelativeLayout
-        android:id="@+id/rl_add_device_nearby"
+    <com.scwang.smartrefresh.layout.SmartRefreshLayout
+        android:id="@+id/smart_refresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/add_device_background"
-        android:visibility="gone">
+        android:visibility="gone"
+        app:srlHeaderHeight="0dp">
 
-        <com.qvd.smartswitch.widget.RadarScanView
+        <RelativeLayout
+            android:id="@+id/rl_add_device_nearby"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:background="@color/white">
 
-        <com.qvd.smartswitch.widget.RandomTextView
-            android:id="@+id/random_textview"
-            android:layout_width="@dimen/x700"
-            android:layout_height="@dimen/y880"
-            android:layout_centerInParent="true"></com.qvd.smartswitch.widget.RandomTextView>
+            <com.dingmouren.fallingview.FallingView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:fallingDelay="10"
+                app:flakeDensity="100"
+                app:flakeScale="2"
+                app:flakeSrc="@mipmap/add_device_background_pic"></com.dingmouren.fallingview.FallingView>
 
-    </RelativeLayout>
+            <com.qvd.smartswitch.widget.RadarScanView
+                android:id="@+id/radar_scanview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <com.qvd.smartswitch.widget.RandomTextView
+                android:id="@+id/random_textview"
+                android:layout_width="@dimen/x700"
+                android:layout_height="@dimen/y880"
+                android:layout_centerInParent="true"></com.qvd.smartswitch.widget.RandomTextView>
+
+            <TextView
+                android:id="@+id/tv_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:text="下拉可以重新扫描"
+                android:textColor="@color/home_setting_text_two"
+                android:textSize="16sp"
+                android:visibility="gone" />
+
+        </RelativeLayout>
+    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
 
 
     <LinearLayout

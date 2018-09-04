@@ -86,11 +86,18 @@ public class DeviceSoundControlActivity extends BaseActivity {
         super.initData();
         // 初始化识别对象
         bledevice = getIntent().getParcelableExtra("bledevice");
+        if (bledevice != null) {
+            CommonUtils.getConnectNotify(this, bledevice, tvText);
+        }
         mAsr = SpeechRecognizer.createRecognizer(this, mInitListener);
         mCloudGrammar = FucUtil.readFile(this, "grammar_sample.abnf", "utf-8");
         mSharedPreferences = getSharedPreferences(getPackageName(), MODE_PRIVATE);
-        //CommonUtils.getNotify(this, bledevice, "0000fff0-0000-1000-8000-00805f9b34fb", "0000fff6-0000-1000-8000-00805f9b34fb");
-        CommonUtils.getConnectNotify(this, bledevice, tvText);
+    }
+
+    @Override
+    protected void initImmersionBar() {
+        super.initImmersionBar();
+        mImmersionBar.statusBarDarkFont(false);
     }
 
     @OnClick({R.id.iv_topic, R.id.iv_sound, R.id.iv_close})
@@ -273,12 +280,7 @@ public class DeviceSoundControlActivity extends BaseActivity {
 
         @Override
         public void onEvent(int eventType, int arg1, int arg2, Bundle obj) {
-            // 以下代码用于获取与云端的会话id，当业务出错时将会话id提供给技术支持人员，可用于查询会话日志，定位出错原因
-            // 若使用本地能力，会话id为null
-            //	if (SpeechEvent.EVENT_SESSION_ID == eventType) {
-            //		String sid = obj.getString(SpeechEvent.KEY_EVENT_SESSION_ID);
-            //		Log.d(TAG, "session id =" + sid);
-            //	}
+
         }
 
     };

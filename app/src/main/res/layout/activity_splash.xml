@@ -8,7 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
-        android:src="@color/white" />
+        android:src="@mipmap/home_splash" />
 
     <com.qvd.smartswitch.widget.SimpleButton
         android:id="@+id/sb_skip"
@@ -18,8 +18,8 @@
         android:layout_marginRight="20dp"
         android:layout_marginTop="30dp"
         app:sb_auto_check="false"
-        app:sb_bg_color="#aaFF4081"
-        app:sb_border_color="#aaFF4081"
+        app:sb_bg_color="@color/room_manage_add_text"
+        app:sb_border_color="@color/black6"
         app:sb_shape="arc"
         app:sb_text="跳过 3"
         app:sb_text_color="@android:color/white" />

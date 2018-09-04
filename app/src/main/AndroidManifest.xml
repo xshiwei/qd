@@ -46,16 +46,15 @@
     <application
         android:name=".MyApplication"
         android:allowBackup="true"
-        android:icon="@mipmap/qvedo_app_icon"
         android:label="@string/app_name"
+        android:icon="@mipmap/qvedo_app_icon"
         android:roundIcon="@mipmap/qvedo_app_icon"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/MyTheme">
         <activity
             android:name=".activity.SplashActivity"
             android:launchMode="singleInstance"
-            android:screenOrientation="portrait"
-            android:theme="@style/Appwelcome"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
             android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -65,265 +64,277 @@
         </activity>
 
         <activity
+            android:name=".activity.login.WelcomeActivity"
+            android:theme="@style/SampleWelcomeScreenTheme" />
+
+        <activity
             android:name=".activity.MainActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:launchMode="standard"
-            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan" />
 
         <activity
-            android:name=".activity.login.LoginActivity"
+            android:name=".activity.qsOne.QsOneControlActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleTop"
             android:windowSoftInputMode="adjustPan" />
 
         <activity
-            android:name=".activity.login.SignupActivity"
+            android:name=".activity.device.DeviceSettingActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:windowSoftInputMode="adjustPan" />
-
-        <activity
-            android:name=".activity.device.DeviceControlActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:windowSoftInputMode="adjustPan" />
-
-        <activity
-            android:name=".activity.device.DeviceControlSettingActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleTop"
             android:windowSoftInputMode="adjustPan|stateHidden" />
 
         <activity
             android:name=".activity.user.AboutCompanyActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleTop"
             android:windowSoftInputMode="adjustPan" />
 
         <activity
-            android:name=".activity.device.DeviceLogActivity"
+            android:name=".activity.qsTwo.QsTwoTimingActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleTop"
             android:windowSoftInputMode="adjustPan" />
 
         <activity
-            android:name=".activity.device.DeviceUpdatePicActivity"
+            android:name=".activity.device.DeviceAddActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleTop"
             android:windowSoftInputMode="adjustPan" />
 
         <activity
-            android:name=".activity.device.DeviceSetTypeActivity"
+            android:name=".activity.device.Ble.DeviceBleConnectActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:windowSoftInputMode="adjustPan" />
-
-        <activity
-            android:name=".activity.device.DeviceTimingActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:windowSoftInputMode="adjustPan" />
-
-        <activity
-            android:name=".activity.user.SoundControlActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:windowSoftInputMode="adjustPan" />
-
-        <activity
-            android:name=".activity.home.AddDeviceActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:windowSoftInputMode="adjustPan" />
-
-        <activity
-            android:name=".activity.home.DeviceConnectActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleTop"
             android:windowSoftInputMode="adjustPan" />
 
         <activity
             android:name=".activity.home.HomeSettingActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleTop"
             android:windowSoftInputMode="adjustPan" />
 
         <activity
             android:name=".activity.home.SpaceManageActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleTop"
             android:windowSoftInputMode="adjustPan" />
 
         <activity
-            android:name=".activity.home.AddHomeActivity"
+            android:name=".activity.home.HomeAddActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleTop"
             android:windowSoftInputMode="adjustPan" />
 
         <activity
-            android:name=".activity.home.AddRoomListActivity"
+            android:name=".activity.home.RoomAddListActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleTop"
             android:windowSoftInputMode="adjustPan" />
 
         <activity
-            android:name=".activity.home.AddRoomDetailsActivity"
+            android:name=".activity.home.RoomAddDetailsActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleTop"
             android:windowSoftInputMode="adjustPan" />
 
         <activity
             android:name=".activity.home.RoomManageActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleTop"
             android:windowSoftInputMode="adjustPan" />
 
         <activity
-            android:name=".activity.home.UpdateRoomDetailsActivity"
+            android:name=".activity.home.RoomUpdateDetailsActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleTop"
             android:windowSoftInputMode="adjustPan" />
 
         <activity
             android:name=".activity.user.UserSettingActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleTop"
             android:windowSoftInputMode="adjustPan" />
 
         <activity
             android:name=".activity.user.UserInformationActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleTop"
             android:windowSoftInputMode="adjustPan" />
 
         <activity
             android:name=".activity.user.UserFamilyActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleTop"
             android:windowSoftInputMode="adjustPan" />
 
         <activity
             android:name=".activity.user.UserShareActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleTop"
             android:windowSoftInputMode="adjustPan" />
 
         <activity
             android:name=".activity.user.UserHelpActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleTop"
             android:windowSoftInputMode="adjustPan" />
 
         <activity
             android:name=".activity.user.UserQuestionActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleTop"
             android:windowSoftInputMode="adjustPan" />
 
         <activity
             android:name=".activity.user.UserFeedbackActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleTop"
             android:windowSoftInputMode="adjustPan" />
 
         <activity
             android:name=".activity.user.UserFeedbackListActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleTop"
             android:windowSoftInputMode="adjustPan" />
 
         <activity
             android:name=".activity.capacity.ManuallyCapacityActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleTop"
             android:windowSoftInputMode="adjustPan" />
 
         <activity
             android:name=".activity.capacity.WeatherCapacityActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleTop"
             android:windowSoftInputMode="adjustPan" />
 
         <activity
             android:name=".activity.capacity.AddCapacityActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleTop"
             android:windowSoftInputMode="adjustPan" />
 
         <activity
             android:name=".activity.capacity.WeatherCapacityListActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleTop"
             android:windowSoftInputMode="adjustPan" />
 
         <activity
             android:name=".activity.capacity.WeatherCapacityDetailsActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleTop"
             android:windowSoftInputMode="adjustPan" />
 
         <activity
             android:name=".activity.capacity.TimingCapacityActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleTop"
             android:windowSoftInputMode="adjustPan" />
 
         <activity
             android:name=".activity.capacity.DelayCapacityActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleTop"
             android:windowSoftInputMode="adjustPan" />
 
         <activity
             android:name=".activity.capacity.NotificationCapacityActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleTop"
             android:windowSoftInputMode="adjustPan" />
 
         <activity
             android:name=".activity.capacity.OpenOrCloseCapacityActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleTop"
             android:windowSoftInputMode="adjustPan" />
 
         <activity
-            android:name=".activity.device.DeviceControlTwoActivity"
+            android:name=".activity.qsTwo.QsTwoControlActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleTop"
             android:windowSoftInputMode="adjustPan" />
 
         <activity
-            android:name=".activity.login.LoginTestActivity"
+            android:name=".activity.login.LoginActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleTop"
             android:windowSoftInputMode="adjustPan" />
 
         <activity
-            android:name=".activity.login.SignupTestActivity"
+            android:name=".activity.login.SignupActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleTop"
             android:windowSoftInputMode="adjustPan" />
 
         <activity
             android:name=".activity.login.SetPasswordActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleTop"
             android:windowSoftInputMode="adjustPan" />
 
         <activity
             android:name=".activity.device.DeviceSoundControlActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleTop"
             android:windowSoftInputMode="adjustPan" />
 
         <activity
             android:name=".activity.home.HomeManageActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleTop"
             android:windowSoftInputMode="adjustPan" />
 
         <activity
-            android:name=".activity.wifi.DeviceWifiSettingActivity"
+            android:name=".activity.device.wifi.DeviceWifiSettingActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleTop"
             android:windowSoftInputMode="adjustPan" />
 
         <activity
-            android:name=".activity.wifi.ConfirmLightFlickerActivity"
+            android:name=".activity.device.wifi.ConfirmLightFlickerActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleTop"
             android:windowSoftInputMode="adjustPan" />
 
         <activity
-            android:name=".activity.wifi.MqttTestActivity"
+            android:name=".activity.qsThree.QsThreeControlActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:windowSoftInputMode="adjustPan" />
-
-        <activity
-            android:name=".activity.wifi.DeviceWifiControlActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleTop"
             android:windowSoftInputMode="adjustPan" />
 
         <activity
             android:name=".activity.home.RoomPicListActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleTop"
             android:windowSoftInputMode="adjustPan" />
 
         <activity
-            android:name=".activity.login.WelcomeGuideActivity"
+            android:name=".activity.device.DeviceSetRoomActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleTop"
             android:windowSoftInputMode="adjustPan" />
 
         <activity
-            android:name=".activity.home.SetDeviceToRoomActivity"
+            android:name=".activity.device.Ble.DeviceSearchBleActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleTop"
             android:windowSoftInputMode="adjustPan" />
 
         <activity
-            android:name=".activity.home.SearchBleDeviceActivity"
+            android:name=".activity.home.RoomListSeleteActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleTop"
             android:windowSoftInputMode="adjustPan" />
 
         <activity
-            android:name=".activity.home.SeleteRoomToSetActivity"
+            android:name=".activity.device.DeviceLogActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleTop"
             android:windowSoftInputMode="adjustPan" />
 
 

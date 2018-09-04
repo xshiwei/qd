@@ -73,7 +73,7 @@ public class BleManageUtils {
                 .setDeviceName(true, names)   // 只扫描指定广播名的设备，可选
                 .setDeviceMac(mac)                  // 只扫描指定mac的设备，可选
                 .setAutoConnect(true)      // 连接时的autoConnect参数，可选，默认false
-                .setScanTimeOut(6000)              // 扫描超时时间，可选，默认10秒
+                .setScanTimeOut(5000)              // 扫描超时时间，可选，默认10秒
                 .build();
         BleManager.getInstance().initScanRule(scanRuleConfig);
     }
@@ -94,7 +94,7 @@ public class BleManageUtils {
     /**
      * 销毁BleManage
      */
-    public void DestroyBleManage(){
+    public void DestroyBleManage() {
         BleManager.getInstance().disconnectAllDevice();
         BleManager.getInstance().destroy();
     }

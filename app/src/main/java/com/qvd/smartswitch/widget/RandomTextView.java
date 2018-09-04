@@ -91,7 +91,11 @@ public class RandomTextView extends FrameLayout
     }
 
     public Vector<ScanResultVo> getKeyWords() {
-        return vecKeywords;
+        if (vecKeywords != null && vecKeywords.size() > 0) {
+            return vecKeywords;
+        } else {
+            return null;
+        }
     }
 
     public void removeKeyWords() {

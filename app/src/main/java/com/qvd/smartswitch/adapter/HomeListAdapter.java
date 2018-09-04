@@ -26,13 +26,17 @@ import java.util.List;
 public class HomeListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private Context context;
     private List<HomeLeftListVo.DataBean> data;
-    public static int mPosition;
+    private int mPosition;
+
+    public void setCheckedPosition(int checkedPosition) {
+        this.mPosition = checkedPosition;
+        notifyDataSetChanged();
+    }
 
     public HomeListAdapter(Context context, List<HomeLeftListVo.DataBean> data) {
         this.context = context;
         this.data = data;
     }
-
 
     public interface OnItemClickListener {
         void onItemClick(View view, int position);
@@ -75,8 +79,13 @@ public class HomeListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
                     }
                 });
             }
-            mPosition = position;
+            Picasso.with(context).load(data.get(position).getRoom_pic()).into(((MyViewHolder) holder).iv_item_pic);
             ((MyViewHolder) holder).tv_item_text.setText(data.get(position).getRoom_name());
+            if (mPosition == position) {
+                ((MyViewHolder) holder).tv_item_text.setTextColor(context.getResources().getColor(R.color.add_device_selete));
+            } else {
+                ((MyViewHolder) holder).tv_item_text.setTextColor(context.getResources().getColor(R.color.home_content_text));
+            }
         }
     }
 

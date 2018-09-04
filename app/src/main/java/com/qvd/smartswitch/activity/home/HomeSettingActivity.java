@@ -39,7 +39,9 @@ import com.qvd.smartswitch.model.home.HomeDetailsVo;
 import com.qvd.smartswitch.model.login.MessageVo;
 import com.qvd.smartswitch.utils.CommonUtils;
 import com.qvd.smartswitch.utils.ConfigUtils;
+import com.qvd.smartswitch.utils.SharedPreferencesUtil;
 import com.qvd.smartswitch.utils.SnackbarUtils;
+import com.qvd.smartswitch.utils.ToastUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,6 +76,8 @@ public class HomeSettingActivity extends BaseActivity {
     RelativeLayout rlDelete;
     @BindView(R.id.rl_layout)
     RelativeLayout rlLayout;
+    @BindView(R.id.rl_room_manage)
+    RelativeLayout rlRoomManage;
 
     /**
      * 图片集合
@@ -117,7 +121,7 @@ public class HomeSettingActivity extends BaseActivity {
         super.initData();
         family_id = getIntent().getStringExtra("family_id");
         family_num = getIntent().getIntExtra("family_num", -1);
-        tvCommonActionbarTitle.setText("家庭管理");
+        tvCommonActionbarTitle.setText("家庭设置");
         getFamilyData();
         setRecycleView();
         //初始化数据
@@ -184,7 +188,7 @@ public class HomeSettingActivity extends BaseActivity {
     }
 
     @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-    @OnClick({R.id.iv_common_actionbar_goback, R.id.rl_home_name, R.id.rl_home_location, R.id.rl_delete})
+    @OnClick({R.id.iv_common_actionbar_goback, R.id.rl_home_name, R.id.rl_home_location, R.id.rl_delete, R.id.rl_room_manage})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_common_actionbar_goback:
@@ -203,6 +207,10 @@ public class HomeSettingActivity extends BaseActivity {
             case R.id.rl_delete:
                 //删除家庭
                 showPopupwindowDelete();
+                break;
+            case R.id.rl_room_manage:
+                startActivity(new Intent(this, RoomManageActivity.class)
+                        .putExtra("family_id", family_id));
                 break;
         }
     }
@@ -284,7 +292,7 @@ public class HomeSettingActivity extends BaseActivity {
         new MaterialDialog.Builder(this)
                 .content("删除家庭后，所有已设置的信息将全部清除，不可恢复。是否确认删除家庭?")
                 .negativeText("取消")
-                .positiveText("取消")
+                .positiveText("确定")
                 .onNegative(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
@@ -320,7 +328,12 @@ public class HomeSettingActivity extends BaseActivity {
                         public void onNext(MessageVo messageVo) {
                             if (messageVo.getCode() == 200) {
                                 startActivity(new Intent(HomeSettingActivity.this, MainActivity.class));
-                                overridePendingTransition(R.anim.push_left_out, R.anim.push_bottom_in);
+                                overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+                                try {
+                                    Thread.sleep(500);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
                                 finish();
                             } else if (messageVo.getCode() == 400) {
                                 SnackbarUtils.Short(tvCommonActionbarTitle, "删除失败").show();

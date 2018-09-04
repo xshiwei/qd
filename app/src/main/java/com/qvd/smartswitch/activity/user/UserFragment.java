@@ -1,44 +1,59 @@
 package com.qvd.smartswitch.activity.user;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.qvd.smartswitch.MyApplication;
 import com.qvd.smartswitch.R;
 import com.qvd.smartswitch.activity.base.BaseFragment;
-import com.qvd.smartswitch.utils.CacheUtils;
-import com.qvd.smartswitch.utils.SnackbarUtils;
+import com.qvd.smartswitch.activity.login.LoginActivity;
+import com.qvd.smartswitch.api.CacheSetting;
+import com.qvd.smartswitch.api.RetrofitService;
+import com.qvd.smartswitch.model.user.UserInfoVo;
+import com.qvd.smartswitch.utils.CommonUtils;
+import com.qvd.smartswitch.utils.ConfigUtils;
+import com.qvd.smartswitch.utils.SharedPreferencesUtil;
+import com.qvd.smartswitch.utils.ToastUtil;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
+import io.rx_cache2.DynamicKey;
+import io.rx_cache2.EvictDynamicKey;
 
 /**
- * Created by Administrator on 2018/4/2.
+ * Created by Administrator on 2018/6/14 0014.
  */
 
 public class UserFragment extends BaseFragment {
 
-    @BindView(R.id.rl_user_handbook)
-    RelativeLayout rlUserHandbook;
-    @BindView(R.id.rl_user_faq)
-    RelativeLayout rlUserFaq;
-    @BindView(R.id.rl_user_about_company)
-    RelativeLayout rlUserAboutCompany;
-    @BindView(R.id.rl_user_clear_cache)
-    RelativeLayout rlUserClearCache;
-    @BindView(R.id.tv_user_cache)
-    TextView tvUserCache;
-    @BindView(R.id.rl_sound_control)
-    RelativeLayout rlSoundControl;
-    Unbinder unbinder;
+    @BindView(R.id.iv_message)
+    ImageView ivMessage;
+    @BindView(R.id.iv_portrait)
+    ImageView ivPortrait;
+    @BindView(R.id.tv_nickname)
+    TextView tvNickname;
+    @BindView(R.id.tv_num)
+    TextView tvNum;
+    @BindView(R.id.rl_portrait)
+    RelativeLayout rlPortrait;
+    @BindView(R.id.rl_family)
+    RelativeLayout rlFamily;
+    @BindView(R.id.rl_share)
+    RelativeLayout rlShare;
+    @BindView(R.id.rl_help)
+    RelativeLayout rlHelp;
+    @BindView(R.id.rl_setting)
+    RelativeLayout rlSetting;
+    private String userId;
+
 
     public static UserFragment newInstance(String param1) {
         UserFragment fragment = new UserFragment();
@@ -48,60 +63,102 @@ public class UserFragment extends BaseFragment {
         return fragment;
     }
 
-
     @Override
     protected int setLayoutId() {
         return R.layout.fragment_user;
     }
 
-
     @Override
-    protected void initData() {
-        super.initData();
-        try {
-            tvUserCache.setText(CacheUtils.getTotalCacheSize(MyApplication.getContext()));
-        } catch (Exception e) {
-            e.printStackTrace();
+    public void onResume() {
+        super.onResume();
+        userId = SharedPreferencesUtil.getString(getActivity(), SharedPreferencesUtil.USER_ID);
+        if (CommonUtils.isEmptyString(userId)) {
+            tvNickname.setText("未登录，点击立即去登录");
+            tvNum.setVisibility(View.GONE);
+        } else {
+            getUserInfo();
         }
     }
 
+    private void getUserInfo() {
+        CacheSetting.getCache().getUserInfo(RetrofitService.qdoApi.getUserInfo(ConfigUtils.user_id),
+                new DynamicKey(userId), new EvictDynamicKey(false))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<UserInfoVo>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
 
-    @OnClick({R.id.rl_user_handbook, R.id.rl_user_faq, R.id.rl_user_about_company, R.id.rl_user_clear_cache, R.id.rl_sound_control})
-    public void onViewClicked(View view) {
-        switch (view.getId()) {
-            case R.id.rl_user_handbook:
-                //进入用户手册
-                break;
-            case R.id.rl_user_faq:
-                //FAQ
-                break;
-            case R.id.rl_user_about_company:
-                //关于科微多
-                startActivity(new Intent(getActivity(), AboutCompanyActivity.class));
-                getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
-                break;
-            case R.id.rl_user_clear_cache:
-                //清除缓存
-                new AlertDialog.Builder(getActivity())
-                        .setMessage(R.string.user_delete_cache_title)
-                        .setPositiveButton(R.string.dialog_confirm, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                CacheUtils.clearAllCache(MyApplication.getContext());
-                                SnackbarUtils.Short(rlUserClearCache, "缓存已清理").show();
-                                try {
-                                    tvUserCache.setText(CacheUtils.getTotalCacheSize(MyApplication.getContext()));
-                                } catch (Exception e) {
-                                    e.printStackTrace();
+                    }
+
+                    @Override
+                    public void onNext(UserInfoVo userInfoVo) {
+                        if (userInfoVo != null) {
+                            if (userInfoVo.getCode() == 200) {
+                                if (userInfoVo.getData() != null) {
+                                    tvNickname.setText(userInfoVo.getData().getUser_name());
+                                    tvNum.setText("设备数量: " + userInfoVo.getData().getDevices_count());
+                                } else {
+                                    tvNickname.setText("名称为空");
+                                    tvNum.setText("设备数量: 0");
                                 }
                             }
-                        }).setNegativeButton(R.string.dialog_cancle, null).create().show();
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
+
+    @OnClick({R.id.iv_message, R.id.rl_portrait, R.id.rl_family, R.id.rl_share, R.id.rl_help, R.id.rl_setting})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.iv_message:
+                //消息中心
+                ToastUtil.showToast("功能开发中。请期待");
                 break;
-            case R.id.rl_sound_control:
-                //进入语音识别界面
-                startActivity(new Intent(getActivity(), SoundControlActivity.class));
+            case R.id.rl_portrait:
+                //头像
+                if (CommonUtils.isEmptyString(userId)) {
+                    startActivity(new Intent(mActivity, LoginActivity.class));
+                    getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+                } else {
+                    startActivity(new Intent(getActivity(), UserInformationActivity.class));
+                    getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+                }
+                break;
+            case R.id.rl_family:
+                //我的家庭
+                ToastUtil.showToast("功能开发中。请期待");
+//                startActivity(new Intent(getActivity(), UserFamilyActivity.class));
+//                getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+                break;
+            case R.id.rl_share:
+                //共享设备
+                ToastUtil.showToast("功能开发中。请期待");
+//                startActivity(new Intent(getActivity(),UserShareActivity.class));
+                break;
+            case R.id.rl_help:
+                //反馈帮助
+                ToastUtil.showToast("功能开发中。请期待");
+//                startActivity(new Intent(getActivity(), UserHelpActivity.class));
+//                getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+                break;
+            case R.id.rl_setting:
+                //设置
+                ToastUtil.showToast("功能开发中。请期待");
+//                startActivity(new Intent(getActivity(), UserSettingActivity.class));
+//                getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
                 break;
         }
     }
-
 }

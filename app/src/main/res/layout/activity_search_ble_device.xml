@@ -25,33 +25,4 @@
 
     </com.qvd.smartswitch.widget.EmptyLayout>
 
-
-    <com.wang.avi.AVLoadingIndicatorView xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/avi_loading"
-        style="@style/AVLoadingIndicatorView.Large"
-        android:layout_width="@dimen/x100"
-        android:layout_height="@dimen/y100"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_gravity="center"
-        android:layout_marginBottom="@dimen/y30"
-        android:layout_marginLeft="@dimen/x50"
-        android:visibility="visible"
-        app:indicatorColor="@color/add_device_selete"
-        app:indicatorName="BallSpinFadeLoaderIndicator" />
-
-    <TextView
-        android:id="@+id/tv_retry_scan"
-        android:layout_width="@dimen/x160"
-        android:layout_height="@dimen/y80"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="@dimen/y30"
-        android:background="@drawable/circle_blue_five"
-        android:gravity="center"
-        android:text="重新扫描"
-        android:textColor="@color/white"
-        android:textSize="14sp"
-        android:visibility="gone" />
-
 </RelativeLayout>

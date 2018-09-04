@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/light_background_two">
 
     <RelativeLayout
+        android:layout_marginTop="@dimen/y60"
         android:id="@+id/action_bar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/y100">
@@ -45,7 +47,7 @@
         android:id="@+id/refreshLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/rl_control"
+        android:layout_above="@+id/bmb"
         android:layout_below="@+id/action_bar"
         app:srlHeaderHeight="0dp">
 
@@ -57,9 +59,8 @@
                 android:id="@+id/tv_timing_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
-                android:layout_marginBottom="@dimen/y30"
+                android:layout_marginTop="@dimen/y30"
                 android:text="在15点"
                 android:textColor="@color/white"
                 android:textSize="13sp"
@@ -68,13 +69,16 @@
             <RelativeLayout
                 android:layout_width="@dimen/x350"
                 android:layout_height="match_parent"
-                android:layout_marginBottom="@dimen/y100">
+                android:layout_below="@+id/tv_timing_text"
+                android:layout_marginBottom="@dimen/y100"
+                android:layout_marginTop="@dimen/y30">
 
                 <TextView
+                    android:id="@+id/tv_one"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginTop="@dimen/y50"
+                    android:layout_marginTop="@dimen/y100"
                     android:text="电灯一"
                     android:textColor="@color/white"
                     android:textSize="14sp" />
@@ -83,8 +87,9 @@
                     android:id="@+id/iv_light_one"
                     android:layout_width="@dimen/x300"
                     android:layout_height="@dimen/y400"
+                    android:layout_below="@+id/tv_one"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginTop="@dimen/y100"
+                    android:layout_marginTop="@dimen/y50"
                     android:src="@mipmap/device_light_off" />
 
                 <ImageView
@@ -101,13 +106,16 @@
                 android:layout_width="@dimen/x350"
                 android:layout_height="match_parent"
                 android:layout_alignParentRight="true"
-                android:layout_marginBottom="@dimen/y100">
+                android:layout_below="@+id/tv_timing_text"
+                android:layout_marginBottom="@dimen/y100"
+                android:layout_marginTop="@dimen/y30">
 
                 <TextView
+                    android:id="@+id/tv_two"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginTop="@dimen/y50"
+                    android:layout_marginTop="@dimen/y100"
                     android:text="电灯二"
                     android:textColor="@color/white"
                     android:textSize="14sp" />
@@ -116,8 +124,9 @@
                     android:id="@+id/iv_light_two"
                     android:layout_width="@dimen/x300"
                     android:layout_height="@dimen/y400"
+                    android:layout_below="@+id/tv_two"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginTop="@dimen/y100"
+                    android:layout_marginTop="@dimen/y50"
                     android:src="@mipmap/device_light_off" />
 
                 <ImageView
@@ -136,93 +145,29 @@
 
     </com.scwang.smartrefresh.layout.SmartRefreshLayout>
 
+    <com.nightonke.boommenu.BoomMenuButton
+        android:id="@+id/bmb"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/y170"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="@dimen/y50"
+        android:layout_marginRight="@dimen/x30"
+        app:bmb_buttonBottomMargin="@dimen/y100"
+        app:bmb_buttonEnum="textOutsideCircle"
+        app:bmb_normalColor="@color/notification_text"
+        app:bmb_buttonPlaceAlignmentEnum="buttonPlaceAlignment_bottom"
+        app:bmb_buttonPlaceEnum="buttonPlace_sc_3_4"
+        app:bmb_piecePlaceEnum="piecePlace_dot_3_1">
 
-    <RelativeLayout
-        android:id="@+id/rl_control"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/y200"
-        android:layout_alignParentBottom="true">
-
-        <RelativeLayout
-            android:id="@+id/rl_log"
+        <TextView
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="@dimen/x50">
-
-            <ImageView
-                android:id="@+id/iv_log"
-                android:layout_width="@dimen/x100"
-                android:layout_height="@dimen/y100"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="@dimen/y20"
-                android:src="@mipmap/device_log_pic" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
-                android:layout_marginBottom="@dimen/y30"
-                android:text="日志"
-                android:textColor="@color/white"
-                android:textSize="14sp" />
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/rl_timing"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="@dimen/x50">
-
-            <ImageView
-                android:id="@+id/iv_timing"
-                android:layout_width="@dimen/x100"
-                android:layout_height="@dimen/y100"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="@dimen/y20"
-                android:src="@mipmap/device_timing_pic" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
-                android:layout_marginBottom="@dimen/y30"
-                android:text="定时"
-                android:textColor="@color/white"
-                android:textSize="14sp" />
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/rl_sound"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_centerInParent="true">
-
-            <ImageView
-                android:id="@+id/iv_sound"
-                android:layout_width="@dimen/x100"
-                android:layout_height="@dimen/y100"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="@dimen/y20"
-                android:src="@mipmap/device_switch_pic" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
-                android:layout_marginBottom="@dimen/y30"
-                android:text="开关"
-                android:textColor="@color/white"
-                android:textSize="14sp" />
-
-        </RelativeLayout>
-
-    </RelativeLayout>
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center_horizontal"
+            android:text="功能选择"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
+    </com.nightonke.boommenu.BoomMenuButton>
 
 
 </RelativeLayout>

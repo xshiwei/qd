@@ -1,28 +1,25 @@
 package com.qvd.smartswitch.activity;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.view.Window;
 import android.view.WindowManager;
 
 import com.qvd.smartswitch.R;
-import com.qvd.smartswitch.activity.login.LoginActivity;
-import com.qvd.smartswitch.activity.login.LoginTestActivity;
-import com.qvd.smartswitch.activity.login.WelcomeGuideActivity;
+import com.qvd.smartswitch.activity.base.BaseActivity;
 import com.qvd.smartswitch.api.RetrofitService;
 import com.qvd.smartswitch.model.login.LoginVo;
 import com.qvd.smartswitch.utils.CommonUtils;
 import com.qvd.smartswitch.utils.ConfigUtils;
+import com.qvd.smartswitch.utils.PermissionUtils;
 import com.qvd.smartswitch.utils.RxHelper;
 import com.qvd.smartswitch.utils.SharedPreferencesUtil;
 import com.qvd.smartswitch.utils.SysApplication;
 import com.qvd.smartswitch.widget.SimpleButton;
+import com.wenming.library.LogReport;
 import com.yanzhenjie.permission.Permission;
 
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -33,7 +30,7 @@ import io.reactivex.schedulers.Schedulers;
  * Created by Administrator on 2018/4/25 0025.
  */
 
-public class SplashActivity extends AppCompatActivity {
+public class SplashActivity extends BaseActivity {
 
 
     private SimpleButton sbSkip;
@@ -43,19 +40,15 @@ public class SplashActivity extends AppCompatActivity {
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);//去掉标题栏
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);//去掉信息栏
         super.onCreate(savedInstanceState);
+        //开启日志
+        LogReport.getInstance().upload(this);
         SysApplication.getInstance().addActivity(this);
-        // 判断是否是第一次开启应用
-        boolean isFirstOpen = SharedPreferencesUtil.getBoolean(this, SharedPreferencesUtil.FIRST_OPEN, true);
-        // 如果是第一次启动，则先进入功能引导页
-        if (isFirstOpen) {
-            Intent intent = new Intent(this, WelcomeGuideActivity.class);
-            startActivity(intent);
-            finish();
-            return;
-        }
-        setContentView(R.layout.activity_splash);
-        ButterKnife.bind(this);
         AutoLogin();
+    }
+
+    @Override
+    protected int setLayoutId() {
+        return R.layout.activity_splash;
     }
 
     @Override
@@ -70,8 +63,6 @@ public class SplashActivity extends AppCompatActivity {
     private void AutoLogin() {
         String password = SharedPreferencesUtil.getString(this, SharedPreferencesUtil.PASSWORD);
         String identifier = SharedPreferencesUtil.getString(this, SharedPreferencesUtil.IDENTIFIER);
-//        String password = "25f9e794323b453885f5181f1b624d0b";
-//        String identifier = "1105943292@qq.com";
         if (!CommonUtils.isEmptyString(password) && !CommonUtils.isEmptyString(identifier)) {
             RetrofitService.qdoApi.login(identifier, password)
                     .subscribeOn(Schedulers.io())
@@ -144,7 +135,6 @@ public class SplashActivity extends AppCompatActivity {
         // 不响应后退键
         return;
     }
-
 
     @OnClick(R.id.sb_skip)
     public void onViewClicked() {

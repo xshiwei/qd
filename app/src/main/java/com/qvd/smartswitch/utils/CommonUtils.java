@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothGatt;
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
 import android.hardware.input.InputManager;
 import android.os.Build;
@@ -15,6 +16,7 @@ import android.support.annotation.RequiresPermission;
 import android.support.v4.graphics.drawable.DrawableCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.TelephonyManager;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -27,6 +29,9 @@ import com.clj.fastble.data.BleDevice;
 import com.clj.fastble.exception.BleException;
 import com.clj.fastble.utils.HexUtil;
 import com.orhanobut.logger.Logger;
+import com.qvd.smartswitch.R;
+import com.qvd.smartswitch.api.RetrofitService;
+import com.qvd.smartswitch.model.login.MessageVo;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 
@@ -38,6 +43,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
+import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
@@ -291,6 +297,70 @@ public class CommonUtils {
                 break;
         }
         return newName;
+    }
+
+
+    /**
+     * 给设备添加操作日志
+     *
+     * @param device_id
+     * @param device_type
+     * @param log_content
+     */
+    public static void addDeviceLog(String device_id, String device_type, String log_content) {
+        RetrofitService.qdoApi.addDeviceLog(device_id, device_type, log_content)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<MessageVo>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(MessageVo messageVo) {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
+
+    /**
+     * 获取今天星期几
+     *
+     * @return
+     */
+    public static String getWeek() {
+        Calendar cal = Calendar.getInstance();
+        int i = cal.get(Calendar.DAY_OF_WEEK);
+        switch (i) {
+            case 1:
+                return "星期日";
+            case 2:
+                return "星期一";
+            case 3:
+                return "星期二";
+            case 4:
+                return "星期三";
+            case 5:
+                return "星期四";
+            case 6:
+                return "星期五";
+            case 7:
+                return "星期六";
+            default:
+                return "";
+        }
     }
 
 }

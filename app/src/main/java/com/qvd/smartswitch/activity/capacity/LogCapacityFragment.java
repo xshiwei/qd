@@ -4,7 +4,9 @@ import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 
 import com.melnykov.fab.FloatingActionButton;
 import com.qvd.smartswitch.R;
@@ -12,6 +14,7 @@ import com.qvd.smartswitch.activity.base.BaseFragment;
 import com.qvd.smartswitch.adapter.LogCapacityListAdapter;
 import com.qvd.smartswitch.model.home.Test2Vo;
 import com.qvd.smartswitch.utils.SnackbarUtils;
+import com.qvd.smartswitch.widget.EmptyLayout;
 import com.vivian.timelineitemdecoration.itemdecoration.DotItemDecoration;
 import com.vivian.timelineitemdecoration.itemdecoration.SpanIndexListener;
 
@@ -19,7 +22,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.Unbinder;
 
 /**
  * Created by Administrator on 2018/6/14 0014.
@@ -33,6 +38,8 @@ public class LogCapacityFragment extends BaseFragment {
     FloatingActionButton fab;
     @BindView(R.id.coordinatorLayout)
     CoordinatorLayout coordinatorLayout;
+    @BindView(R.id.emptylayout)
+    EmptyLayout emptylayout;
 
     private List<Test2Vo> list = new ArrayList<>();
     private LogCapacityListAdapter adapter;
@@ -54,6 +61,7 @@ public class LogCapacityFragment extends BaseFragment {
     @Override
     protected void initData() {
         super.initData();
+        emptylayout.showEmpty(R.mipmap.home_empty,"此功能正在开发中...");
         for (int i = 0; i < 6; i++) {
             list.add(new Test2Vo("2018/6/20 6:23"));
         }
@@ -82,7 +90,7 @@ public class LogCapacityFragment extends BaseFragment {
         mItemDecoration.setSpanIndexListener(new SpanIndexListener() {
             @Override
             public void onSpanIndexChange(View view, int spanIndex) {
-                view.setBackgroundResource(spanIndex == 0 ? R.drawable.log_left : R.drawable.log_right);
+                view.setBackgroundResource(spanIndex == 0 ? R.drawable.device_log_left : R.drawable.device_log_right);
             }
         });
         recyclerview.addItemDecoration(mItemDecoration);
@@ -95,5 +103,4 @@ public class LogCapacityFragment extends BaseFragment {
     public void onViewClicked() {
         SnackbarUtils.Short(coordinatorLayout, "删除全部").show();
     }
-
 }

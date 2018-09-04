@@ -10,11 +10,10 @@ import android.content.SharedPreferences;
 public class SharedPreferencesUtil {
 
     private static final String spFileName = "qevdo_sp";
-
-    public static final String FIRST_OPEN = "first_open";
     public static final String USER_ID = "user_id";
     public static final String IDENTIFIER = "identifier";
     public static final String PASSWORD = "password";
+    public static final String IS_HOME = "is_home";
 
     /**
      * 获取是否第一次进入app

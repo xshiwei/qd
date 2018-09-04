@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.qvd.smartswitch.R;
 import com.qvd.smartswitch.model.home.RoomListVo;
 import com.qvd.smartswitch.model.home.Test2Vo;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -70,6 +71,8 @@ public class RoomManageListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
                 });
             }
             ((MyViewHolder) holder).tv_text.setText(data.get(position).getRoom_name());
+            ((MyViewHolder) holder).tv_device_num.setText(data.get(position).getDevice_count() + "个设备");
+            Picasso.with(context).load(data.get(position).getRoom_pic()).into(((MyViewHolder) holder).iv_pic);
         }
     }
 

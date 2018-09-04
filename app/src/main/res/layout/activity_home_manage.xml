@@ -19,8 +19,8 @@
         android:textColor="@color/home_setting_text_three"
         android:textSize="12sp" />
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerview"
+    <com.qvd.smartswitch.widget.EmptyLayout
+        android:id="@+id/emptylayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/rl_add"
@@ -28,7 +28,14 @@
         android:layout_marginBottom="@dimen/y30"
         android:layout_marginTop="@dimen/y25">
 
-    </android.support.v7.widget.RecyclerView>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </android.support.v7.widget.RecyclerView>
+
+    </com.qvd.smartswitch.widget.EmptyLayout>
 
 
     <RelativeLayout

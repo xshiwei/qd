@@ -2,8 +2,11 @@ package com.qvd.smartswitch.api;
 
 import com.qvd.smartswitch.model.device.AddDeviceListVo;
 import com.qvd.smartswitch.model.device.AddQS02Vo;
+import com.qvd.smartswitch.model.device.DeviceLogVo;
 import com.qvd.smartswitch.model.device.IsWifiNetWorkVo;
 import com.qvd.smartswitch.model.device.RoomDeviceListVo;
+import com.qvd.smartswitch.model.home.AddHomeVo;
+import com.qvd.smartswitch.model.home.AddRomeVo;
 import com.qvd.smartswitch.model.home.DefaultRoomVo;
 import com.qvd.smartswitch.model.home.DeviceListVo;
 import com.qvd.smartswitch.model.home.HomeDetailsVo;
@@ -14,11 +17,15 @@ import com.qvd.smartswitch.model.home.RoomPicListVo;
 import com.qvd.smartswitch.model.login.LoginVo;
 import com.qvd.smartswitch.model.login.MessageVo;
 import com.qvd.smartswitch.model.login.RegisterVo;
+import com.qvd.smartswitch.model.user.UserInfoVo;
 
 import java.util.Map;
 
 import io.reactivex.Observable;
+import okhttp3.RequestBody;
+import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
@@ -80,6 +87,25 @@ public interface QdoApi {
     Observable<LoginVo> login(@Query("username") String username, @Query("password") String password);
 
     /**
+     * 获取个人信息
+     *
+     * @param user_id
+     * @return
+     */
+    @GET("user/get_userInfo_detail")
+    Observable<UserInfoVo> getUserInfo(@Query("user_id") String user_id);
+
+    /**
+     * 更新用户信息
+     * @param user_id
+     * @param user_name
+     * @param user_phone
+     * @return
+     */
+    @POST("update/userInfo")
+    Observable<MessageVo> updateuserInfo(@Query("user_id") String user_id, @Query("user_name") String user_name, @Query("user_phone") String user_phone);
+
+    /**
      * 添加新的家庭
      *
      * @param family_name
@@ -89,7 +115,7 @@ public interface QdoApi {
      * @return
      */
     @POST("add/family")
-    Observable<MessageVo> addFamily(@Query("family_name") String family_name, @Query("family_location") String family_location,
+    Observable<AddHomeVo> addFamily(@Query("family_name") String family_name, @Query("family_location") String family_location,
                                     @Query("user_id") String user_id, @Query("family_background") String family_background);
 
     /**
@@ -152,7 +178,7 @@ public interface QdoApi {
      * @return
      */
     @POST("add/room")
-    Observable<MessageVo> addRoom(@Query("room_name") String room_name, @Query("room_pic") String room_pic, @Query("family_id") String family_id);
+    Observable<AddRomeVo> addRoom(@Query("room_name") String room_name, @Query("room_pic") String room_pic, @Query("family_id") String family_id);
 
     /**
      * 更新房间
@@ -190,23 +216,6 @@ public interface QdoApi {
     @GET("get/roomList")
     Observable<RoomListVo> getRoomList(@Query("family_id") String family_id);
 
-    /**
-     * 添加设备
-     *
-     * @param map
-     * @return
-     */
-    @POST("add/device")
-    Observable<MessageVo> addDevice(@QueryMap Map<String, Object> map);
-
-    /**
-     * 修改设备
-     *
-     * @param map
-     * @return
-     */
-    @POST("update/device")
-    Observable<MessageVo> updateDevice(@QueryMap Map<String, String> map);
 
     /**
      * 删除设备
@@ -227,12 +236,12 @@ public interface QdoApi {
     Observable<MessageVo> getDevice(@Query("device_id") String device_id);
 
     /**
-     * 获取用户所拥有的所有设备列表
+     * 获取当前家庭所拥有的所有设备列表
      *
      * @param map
      * @return
      */
-    @GET("get/deviceList")
+    @GET("get/devices_in_family")
     Observable<DeviceListVo> getDeviceList(@QueryMap Map<String, String> map);
 
     /**
@@ -279,16 +288,14 @@ public interface QdoApi {
     @POST("set/common_device")
     Observable<MessageVo> setCommonDevice(@Query("device_id") String device_id, @Query("is_common") int is_common);
 
-
     /**
      * 更新设备房间
      *
-     * @param device_id
-     * @param room_id
      * @return
      */
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
     @POST("update/device_room")
-    Observable<MessageVo> updateDeviceRoom(@Query("device_id") String device_id, @Query("room_id") String room_id);
+    Observable<MessageVo> updateDeviceRoom(@Body RequestBody body);
 
     /**
      * 获取首页左侧列表
@@ -308,7 +315,6 @@ public interface QdoApi {
      */
     @GET("get/default_room_id")
     Observable<DefaultRoomVo> getDefaultRoomId(@Query("family_id") String family_id);
-
 
     /**
      * 在wifi配对之前先提交信息
@@ -373,4 +379,20 @@ public interface QdoApi {
     @GET("get/device_is_binding")
     Observable<MessageVo> isDeviceBinding(@Query("user_id") String user_id, @Query("device_mac") String device_mac);
 
+    /**
+     * 获取设备日志列表
+     *
+     * @param map
+     * @return
+     */
+    @GET("get/device_log")
+    Observable<DeviceLogVo> getDeviceLog(@QueryMap Map<String, Object> map);
+
+    /**
+     * 添加设备日志消息
+     *
+     * @return
+     */
+    @POST("add/device_log")
+    Observable<MessageVo> addDeviceLog(@Query("device_id") String device_id, @Query("device_type") String device_type, @Query("log_content") String log_content);
 }

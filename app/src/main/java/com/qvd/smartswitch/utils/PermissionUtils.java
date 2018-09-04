@@ -29,13 +29,12 @@ public class PermissionUtils {
                 .onGranted(new Action<List<String>>() {
                     @Override
                     public void onAction(List<String> permissions) {
-                        //Logger.e("授权成功");
+
                     }
                 })
                 .onDenied(new Action<List<String>>() {
                     @Override
                     public void onAction(@NonNull List<String> permissions) {
-                        //Logger.e("授权失败");
                         if (AndPermission.hasAlwaysDeniedPermission(context, permissions)) {
                             showSettingDialog(context, permissions);
                         }

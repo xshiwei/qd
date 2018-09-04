@@ -148,7 +148,7 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/x20"
-            android:src="@mipmap/register_unselete" />
+            android:src="@mipmap/register_selete" />
 
         <View
             android:layout_width="match_parent"

@@ -81,5 +81,6 @@ public class UserShareActivity extends BaseActivity {
 
     @OnClick(R.id.iv_common_actionbar_goback)
     public void onViewClicked() {
+        finish();
     }
 }

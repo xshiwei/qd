@@ -13,7 +13,6 @@ import com.qvd.smartswitch.activity.base.BaseActivity;
 import com.qvd.smartswitch.adapter.SpaceManageListAdapter;
 import com.qvd.smartswitch.api.RetrofitService;
 import com.qvd.smartswitch.model.home.HomeListVo;
-import com.qvd.smartswitch.model.home.Test2Vo;
 import com.qvd.smartswitch.utils.ConfigUtils;
 import com.qvd.smartswitch.utils.SnackbarUtils;
 
@@ -46,7 +45,6 @@ public class SpaceManageActivity extends BaseActivity {
      */
     private List<HomeListVo.DataBean> list = new ArrayList<>();
     private SpaceManageListAdapter adapter;
-
 
     @Override
     protected int setLayoutId() {
@@ -136,7 +134,7 @@ public class SpaceManageActivity extends BaseActivity {
                 break;
             case R.id.rl_add:
                 //添加家庭
-                startActivity(new Intent(this, AddHomeActivity.class));
+                startActivity(new Intent(this, HomeAddActivity.class));
                 overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
                 break;
         }

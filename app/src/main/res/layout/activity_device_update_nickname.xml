@@ -38,7 +38,7 @@
         android:layout_height="@dimen/y80"
         android:layout_centerInParent="true"
         android:layout_marginTop="@dimen/y100"
-        android:background="@drawable/circle_orange_five"
+        android:background="@drawable/circle_orange_ten"
         android:gravity="center"
         android:text="@string/device_update_nickname_confirm"
         android:textColor="@color/white"
