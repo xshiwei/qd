@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.clj.fastble.BleManager;
 import com.google.gson.Gson;
 import com.nightonke.boommenu.BoomButtons.OnBMClickListener;
 import com.nightonke.boommenu.BoomButtons.TextOutsideCircleButton;
@@ -20,19 +21,29 @@ import com.qvd.smartswitch.R;
 import com.qvd.smartswitch.activity.MainActivity;
 import com.qvd.smartswitch.activity.base.BaseActivity;
 import com.qvd.smartswitch.activity.device.DeviceLogActivity;
-import com.qvd.smartswitch.activity.device.DeviceSettingActivity;
-import com.qvd.smartswitch.activity.device.DeviceSoundControlActivity;
-import com.qvd.smartswitch.activity.qsTwo.QsTwoControlActivity;
+import com.qvd.smartswitch.activity.qsTwo.QsTwoSettingActivity;
+import com.qvd.smartswitch.model.device.ScanResultVo;
 import com.qvd.smartswitch.model.mqtt.WifiSmartNotifyVo;
 import com.qvd.smartswitch.utils.CommonUtils;
 import com.qvd.smartswitch.utils.MqttUtils;
 import com.qvd.smartswitch.utils.OnMultiClickListener;
 import com.qvd.smartswitch.utils.PermissionUtils;
 import com.qvd.smartswitch.utils.ToastUtil;
+import com.scwang.smartrefresh.header.MaterialHeader;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
+import com.trello.rxlifecycle2.android.ActivityEvent;
 import com.yanzhenjie.permission.Permission;
+
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
+import io.reactivex.schedulers.Schedulers;
 import top.fighter_lee.mqttlibs.connect.MqttManager;
 import top.fighter_lee.mqttlibs.mqttv3.IMqttDeliveryToken;
 import top.fighter_lee.mqttlibs.mqttv3.MqttCallback;
@@ -53,8 +64,8 @@ public class QsThreeControlActivity extends BaseActivity {
     ImageView ivDeviceControlMore;
     @BindView(R.id.action_bar)
     RelativeLayout actionBar;
-    @BindView(R.id.tv_timing_text)
-    TextView tvTimingText;
+    @BindView(R.id.tv_connect_text)
+    TextView tvConnectText;
     @BindView(R.id.iv_light_one)
     ImageView ivLightOne;
     @BindView(R.id.iv_switch_one)
@@ -67,6 +78,8 @@ public class QsThreeControlActivity extends BaseActivity {
     TextView tvTwo;
     @BindView(R.id.bmb)
     BoomMenuButton bmb;
+    @BindView(R.id.refreshLayout)
+    SmartRefreshLayout smartRefreshLayout;
 
 
     private static String TAG = QsThreeControlActivity.class.getSimpleName();
@@ -79,19 +92,11 @@ public class QsThreeControlActivity extends BaseActivity {
      * 灯2未开启
      */
     private boolean isStatetwo = false;
-    /**
-     * 是否第一次连接
-     */
-    private int isFirstConnect;
-    /**
-     * 设备ID
-     */
-    private String deviceId;
-    private String device_name;
+    private ScanResultVo resultVo;
 
     @Override
     protected int setLayoutId() {
-        return R.layout.activity_device_wifi_control;
+        return R.layout.activity_qsthree_control;
     }
 
     @SuppressLint("HandlerLeak")
@@ -129,86 +134,134 @@ public class QsThreeControlActivity extends BaseActivity {
     protected void initData() {
         super.initData();
         PermissionUtils.requestPermission(this, Permission.READ_PHONE_STATE);
-        isFirstConnect = getIntent().getIntExtra("isFirstConnect", -1);
-        deviceId = getIntent().getStringExtra("deviceId");
-        device_name = getIntent().getStringExtra("device_name");
-        tvDeviceControlTitle.setText(device_name);
-        try {
-            //获取消息
-            MqttManager.getInstance().registerMessageListener(new MqttCallback() {
-                @Override
-                public void connectionLost(Throwable cause) {
-                    Logger.e(TAG, cause);
-                }
+        resultVo = (ScanResultVo) getIntent().getSerializableExtra("scanResult");
+        tvDeviceControlTitle.setText(resultVo.getDeviceName());
+        //获取消息
+        MqttManager.getInstance().registerMessageListener(new MqttCallback() {
+            @Override
+            public void connectionLost(Throwable cause) {
+                Logger.e(TAG, cause);
+            }
 
-                @Override
-                public void messageArrived(String topic, MqttMessage message) {
-                    if (topic.equals(MqttUtils.TOPIC_ONE)) {
-                        return;
-                    } else {
-                        Gson gson = new Gson();
-                        WifiSmartNotifyVo wifiSmartNotifyVo = gson.fromJson(String.valueOf(message), WifiSmartNotifyVo.class);
-                        if (wifiSmartNotifyVo.getKey_one().equals("led1")) {
-                            if (wifiSmartNotifyVo.getKey_two().equals("11")) {
-                                handler.sendEmptyMessage(0);
-                                CommonUtils.addDeviceLog(deviceId, "qs03", "手动打开一号灯");
-                            } else {
-                                handler.sendEmptyMessage(1);
-                                CommonUtils.addDeviceLog(deviceId, "qs03", "手动关闭一号灯");
-                            }
-                        } else if (wifiSmartNotifyVo.getKey_one().equals("led2")) {
-                            if (wifiSmartNotifyVo.getKey_two().equals("21")) {
-                                handler.sendEmptyMessage(2);
-                                CommonUtils.addDeviceLog(deviceId, "qs03", "手动打开二号灯");
-                            } else {
-                                handler.sendEmptyMessage(3);
-                                CommonUtils.addDeviceLog(deviceId, "qs03", "手动关闭二号灯");
-                            }
-                        } else if (wifiSmartNotifyVo.getKey_one().equals("11")) {
+            @Override
+            public void messageArrived(String topic, MqttMessage message) {
+                if (topic.equals(MqttUtils.TOPIC_ONE)) {
+                    return;
+                } else {
+                    Gson gson = new Gson();
+                    WifiSmartNotifyVo wifiSmartNotifyVo = gson.fromJson(String.valueOf(message), WifiSmartNotifyVo.class);
+                    if (wifiSmartNotifyVo.getKey_one().equals("led1")) {
+                        if (wifiSmartNotifyVo.getKey_two().equals("11")) {
                             handler.sendEmptyMessage(0);
-                            if (wifiSmartNotifyVo.getKey_two().equals("21")) {
-                                handler.sendEmptyMessage(2);
-                            } else {
-                                handler.sendEmptyMessage(3);
-                            }
-                        } else if (wifiSmartNotifyVo.getKey_one().equals("10")) {
+                            CommonUtils.addDeviceLog(resultVo.getDeviceId(), "qs03", "手动打开一号灯");
+                        } else {
                             handler.sendEmptyMessage(1);
-                            if (wifiSmartNotifyVo.getKey_two().equals("21")) {
-                                handler.sendEmptyMessage(2);
-                            } else {
-                                handler.sendEmptyMessage(3);
+                            CommonUtils.addDeviceLog(resultVo.getDeviceId(), "qs03", "手动关闭一号灯");
+                        }
+                    } else if (wifiSmartNotifyVo.getKey_one().equals("led2")) {
+                        if (wifiSmartNotifyVo.getKey_two().equals("21")) {
+                            handler.sendEmptyMessage(2);
+                            CommonUtils.addDeviceLog(resultVo.getDeviceId(), "qs03", "手动打开二号灯");
+                        } else {
+                            handler.sendEmptyMessage(3);
+                            CommonUtils.addDeviceLog(resultVo.getDeviceId(), "qs03", "手动关闭二号灯");
+                        }
+                    } else if (wifiSmartNotifyVo.getKey_one().equals("11")) {
+                        handler.sendEmptyMessage(0);
+                        if (wifiSmartNotifyVo.getKey_two().equals("21")) {
+                            handler.sendEmptyMessage(2);
+                        } else {
+                            handler.sendEmptyMessage(3);
+                        }
+                    } else if (wifiSmartNotifyVo.getKey_one().equals("10")) {
+                        handler.sendEmptyMessage(1);
+                        if (wifiSmartNotifyVo.getKey_two().equals("21")) {
+                            handler.sendEmptyMessage(2);
+                        } else {
+                            handler.sendEmptyMessage(3);
+                        }
+                    }
+                    Logger.e("controlmessageArrived() topic:" + topic + "messageArrived() message:" + message);
+                }
+            }
+
+            @Override
+            public void deliveryComplete(IMqttDeliveryToken token) {
+
+            }
+        });
+
+        //设置刷新控件头部高度
+        smartRefreshLayout.setHeaderHeight(100);
+        smartRefreshLayout.setFooterHeight(1);
+        smartRefreshLayout.setEnableRefresh(true);
+        smartRefreshLayout.setEnableHeaderTranslationContent(false);
+        smartRefreshLayout.setEnableFooterTranslationContent(false);
+        //设置头部样式
+        smartRefreshLayout.setRefreshHeader(new MaterialHeader(this));
+        smartRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
+            @Override
+            public void onRefresh(RefreshLayout refreshlayout) {
+                if (!BleManager.getInstance().isConnected(resultVo.getDeviceMac())) {
+                    if (!MqttManager.getInstance().isConneect()) {
+                        tvConnectText.setVisibility(View.VISIBLE);
+                        //连接
+                        try {
+                            MqttUtils.getInstance().connect(new MqttUtils.IMqttResultListener() {
+                                @Override
+                                public void success() {
+                                    tvConnectText.setVisibility(View.GONE);
+                                }
+
+                                @Override
+                                public void fail() {
+
+                                }
+                            });
+                        } catch (MqttException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+                smartRefreshLayout.finishRefresh(true);
+            }
+        });
+        initMenu();
+    }
+
+    /**
+     * 重新连接设备
+     */
+    @SuppressLint("CheckResult")
+    private void retryConnectDevice() {
+        Observable.interval(1, 5, TimeUnit.SECONDS)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .compose(this.<Long>bindUntilEvent(ActivityEvent.DESTROY))
+                .subscribe(new Consumer<Long>() {
+                    @Override
+                    public void accept(Long aLong) {
+                        if (!MqttManager.getInstance().isConneect()) {
+                            tvConnectText.setVisibility(View.VISIBLE);
+                            //连接
+                            try {
+                                MqttUtils.getInstance().connect(new MqttUtils.IMqttResultListener() {
+                                    @Override
+                                    public void success() {
+                                        tvConnectText.setVisibility(View.GONE);
+                                    }
+
+                                    @Override
+                                    public void fail() {
+
+                                    }
+                                });
+                            } catch (MqttException e) {
+                                e.printStackTrace();
                             }
                         }
-                        Logger.e("controlmessageArrived() topic:" + topic + "messageArrived() message:" + message);
-                    }
-                }
-
-                @Override
-                public void deliveryComplete(IMqttDeliveryToken token) {
-
-                }
-            });
-            if (!MqttManager.getInstance().isConneect()) {
-                //连接
-                MqttUtils.getInstance().connect(new MqttUtils.IMqttResultListener() {
-                    @Override
-                    public void success() {
-                        Logger.e("连接success");
-                    }
-
-                    @Override
-                    public void fail() {
-
                     }
                 });
-            }
-            //断连重试机制
-            MqttManager.getInstance().keepConnect(3000, 3000);
-        } catch (MqttException e) {
-            e.printStackTrace();
-        }
-
-        initMenu();
     }
 
     /**
@@ -217,12 +270,12 @@ public class QsThreeControlActivity extends BaseActivity {
     private void initMenu() {
         TextOutsideCircleButton.Builder builder1 = new TextOutsideCircleButton.Builder()
                 .normalImageRes(R.mipmap.device_log_pic)
-                .normalText("日志")
+                .normalText("操作记录")
                 .listener(new OnBMClickListener() {
                     @Override
                     public void onBoomButtonClick(int index) {
                         startActivity(new Intent(QsThreeControlActivity.this, DeviceLogActivity.class)
-                                .putExtra("device_id", deviceId)
+                                .putExtra("device_id", resultVo.getDeviceId())
                                 .putExtra("device_type", "qs03"));
                         overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
                     }
@@ -236,7 +289,9 @@ public class QsThreeControlActivity extends BaseActivity {
                 .listener(new OnBMClickListener() {
                     @Override
                     public void onBoomButtonClick(int index) {
-                        ToastUtil.showToast("功能正在开发中，敬请期待。。。");
+                        startActivity(new Intent(QsThreeControlActivity.this, QsThreeSoundControlActivity.class)
+                                .putExtra("device_id", resultVo.getDeviceId()));
+                        overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
                     }
                 })
                 .textSize(12)
@@ -262,6 +317,25 @@ public class QsThreeControlActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        if (!MqttManager.getInstance().isConneect()) {
+            tvConnectText.setVisibility(View.VISIBLE);
+            //连接
+            try {
+                MqttUtils.getInstance().connect(new MqttUtils.IMqttResultListener() {
+                    @Override
+                    public void success() {
+                        tvConnectText.setVisibility(View.GONE);
+                    }
+
+                    @Override
+                    public void fail() {
+
+                    }
+                });
+            } catch (MqttException e) {
+                e.printStackTrace();
+            }
+        }
         new Handler().postDelayed(() -> {
             //订阅
             try {
@@ -287,7 +361,6 @@ public class QsThreeControlActivity extends BaseActivity {
                 if (isStateOne) {
                     //关灯
                     publish("{\"key_one\":\"led1\",\"key_two\":\"10\"}", false, 1);
-
                 } else {
                     //开灯
                     publish("{\"key_one\":\"led1\",\"key_two\":\"11\"}", true, 1);
@@ -302,7 +375,6 @@ public class QsThreeControlActivity extends BaseActivity {
                 if (isStatetwo) {
                     //关灯
                     publish("{\"key_one\":\"led2\",\"key_two\":\"20\"}", false, 2);
-
                 } else {
                     //开灯
                     publish("{\"key_one\":\"led2\",\"key_two\":\"21\"}", true, 2);
@@ -310,6 +382,7 @@ public class QsThreeControlActivity extends BaseActivity {
                 }
             }
         });
+        retryConnectDevice();
     }
 
     /**
@@ -325,7 +398,6 @@ public class QsThreeControlActivity extends BaseActivity {
                 public void success() {
                     if (i == 1) {
                         isStateOne = b;
-
                     } else {
                         isStatetwo = b;
                     }
@@ -356,9 +428,8 @@ public class QsThreeControlActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.iv_device_control_more:
-                startActivity(new Intent(this, DeviceSettingActivity.class)
-                        .putExtra("device_id", deviceId)
-                        .putExtra("device_No", "qs03"));
+                startActivity(new Intent(this, QsTwoSettingActivity.class)
+                        .putExtra("device_id", resultVo.getDeviceId()));
                 break;
         }
     }
@@ -372,12 +443,11 @@ public class QsThreeControlActivity extends BaseActivity {
                 MqttUtils.getInstance().disconnect(new MqttUtils.IMqttResultListener() {
                     @Override
                     public void success() {
-
+                        ToastUtil.showToast("断开连接");
                     }
 
                     @Override
                     public void fail() {
-
                     }
                 });
             } catch (MqttException e) {

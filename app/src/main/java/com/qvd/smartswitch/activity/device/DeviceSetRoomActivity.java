@@ -61,11 +61,6 @@ public class DeviceSetRoomActivity extends BaseActivity {
     @BindView(R.id.tv_complete)
     TextView tvComplete;
 
-
-    /**
-     * 设备的device_id
-     */
-    private String device_id;
     /**
      * 是否设置成常用
      */
@@ -92,7 +87,6 @@ public class DeviceSetRoomActivity extends BaseActivity {
     @Override
     protected void initData() {
         super.initData();
-        device_id = getIntent().getStringExtra("device_id");
         resultVo = (ScanResultVo) getIntent().getSerializableExtra("scanResult");
         roomId = ConfigUtils.defaultRoomId;
         initDevice();
@@ -111,7 +105,7 @@ public class DeviceSetRoomActivity extends BaseActivity {
                 break;
         }
         tvName.setText(CommonUtils.getDeviceName(resultVo.getDeviceNo()));
-        tableType = CommonUtils.getTableName(resultVo.getDeviceNo());
+        tableType = resultVo.getDeviceNo();
     }
 
     @Override
@@ -222,7 +216,7 @@ public class DeviceSetRoomActivity extends BaseActivity {
                 .content("正在保存相关配置")
                 .progress(true, 0)
                 .show();
-        RetrofitService.qdoApi.updateSpecificDeviceName(device_id, tvName.getText().toString(), tableType)
+        RetrofitService.qdoApi.updateSpecificDeviceName(resultVo.getDeviceId(), tvName.getText().toString(), tableType)
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
                 .filter(new Predicate<MessageVo>() {
@@ -237,7 +231,7 @@ public class DeviceSetRoomActivity extends BaseActivity {
                     public ObservableSource<MessageVo> apply(MessageVo messageVo) throws Exception {
                         Gson gson = new Gson();
                         List<String> list = new ArrayList<>();
-                        list.add(device_id);
+                        list.add(resultVo.getDeviceId());
                         UpdateDeviceRoomVo updateDeviceRoomVo = new UpdateDeviceRoomVo();
                         updateDeviceRoomVo.setRoom_id(roomId);
                         updateDeviceRoomVo.setDevice_id(list);
@@ -255,7 +249,7 @@ public class DeviceSetRoomActivity extends BaseActivity {
                 .flatMap(new Function<MessageVo, ObservableSource<MessageVo>>() {
                     @Override
                     public ObservableSource<MessageVo> apply(MessageVo messageVo) throws Exception {
-                        return RetrofitService.qdoApi.setCommonDevice(device_id, isCommon);
+                        return RetrofitService.qdoApi.setCommonDevice(resultVo.getDeviceId(), isCommon);
                     }
                 })
                 .observeOn(AndroidSchedulers.mainThread())
@@ -270,20 +264,17 @@ public class DeviceSetRoomActivity extends BaseActivity {
                         if (messageVo.getCode() == 200) {
                             dialog.dismiss();
                             if (i == 1) {
+                                resultVo.setIsFirstConnect(1);
                                 switch (resultVo.getDeviceNo()) {
                                     case "qs02":
                                         startActivity(new Intent(DeviceSetRoomActivity.this, QsTwoControlActivity.class)
-                                                .putExtra("scanResult", resultVo)
-                                                .putExtra("isFirstConnect", 1)
-                                                .putExtra("deviceId", device_id));
+                                                .putExtra("scanResult", resultVo));
                                         overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
                                         finish();
                                         break;
                                     case "qs03":
                                         startActivity(new Intent(DeviceSetRoomActivity.this, QsThreeControlActivity.class)
-                                                .putExtra("isFirstConnect", 1)
-                                                .putExtra("device_name", "Wifi智能开关")
-                                                .putExtra("deviceId", device_id));
+                                                .putExtra("scanResult", resultVo));
                                         overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
                                         finish();
                                         break;

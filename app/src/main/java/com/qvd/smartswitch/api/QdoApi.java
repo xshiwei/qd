@@ -2,7 +2,9 @@ package com.qvd.smartswitch.api;
 
 import com.qvd.smartswitch.model.device.AddDeviceListVo;
 import com.qvd.smartswitch.model.device.AddQS02Vo;
+import com.qvd.smartswitch.model.device.DeviceCommonQuestionVo;
 import com.qvd.smartswitch.model.device.DeviceLogVo;
+import com.qvd.smartswitch.model.device.DeviceTimingVo;
 import com.qvd.smartswitch.model.device.IsWifiNetWorkVo;
 import com.qvd.smartswitch.model.device.RoomDeviceListVo;
 import com.qvd.smartswitch.model.home.AddHomeVo;
@@ -17,7 +19,11 @@ import com.qvd.smartswitch.model.home.RoomPicListVo;
 import com.qvd.smartswitch.model.login.LoginVo;
 import com.qvd.smartswitch.model.login.MessageVo;
 import com.qvd.smartswitch.model.login.RegisterVo;
+import com.qvd.smartswitch.model.user.HelpFeedbackListVo;
+import com.qvd.smartswitch.model.user.UserFeedbackListVo;
 import com.qvd.smartswitch.model.user.UserInfoVo;
+import com.qvd.smartswitch.model.user.UserReceiverDeviceListVo;
+import com.qvd.smartswitch.model.user.UserShareDeviceListVo;
 
 import java.util.Map;
 
@@ -97,6 +103,7 @@ public interface QdoApi {
 
     /**
      * 更新用户信息
+     *
      * @param user_id
      * @param user_name
      * @param user_phone
@@ -395,4 +402,150 @@ public interface QdoApi {
      */
     @POST("add/device_log")
     Observable<MessageVo> addDeviceLog(@Query("device_id") String device_id, @Query("device_type") String device_type, @Query("log_content") String log_content);
+
+    /**
+     * 修改设备是否第一次进入
+     */
+    @POST("update/device_first_connect_state")
+    Observable<MessageVo> updateFirstConnectState(@Query("device_id") String device_id);
+
+    /**
+     * 获取设备常用问题
+     *
+     * @param device_no
+     * @return
+     */
+    @GET("get/device_FAQ")
+    Observable<DeviceCommonQuestionVo> getDeviceCommonQuestionList(@Query("device_no") String device_no);
+
+    /**
+     * 添加设备定时信息
+     *
+     * @return
+     */
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @POST("add/device_timing")
+    Observable<MessageVo> addDeviceTiming(@Body RequestBody body);
+
+    /**
+     * 获取定时列表
+     *
+     * @param device_id
+     * @return
+     */
+    @GET("get/device_timing_info")
+    Observable<DeviceTimingVo> getDeviceTimingInfo(@Query("device_id") String device_id);
+
+    /**
+     * 删除设备定时
+     *
+     * @param timing_id
+     * @return
+     */
+    @POST("delete/device_timing")
+    Observable<MessageVo> deleteDeviceTiming(@Query("timing_id") String timing_id);
+
+    /**
+     * 修改设备定时的状态
+     *
+     * @param timing_id
+     * @param timing_state
+     * @return
+     */
+    @POST("update/device_timing_state")
+    Observable<MessageVo> updateDeviceTimingState(@Query("timing_id") String timing_id, @Query("timing_state") String timing_state);
+
+    /**
+     * 修改用户账号密码
+     *
+     * @param user_id
+     * @param current_password
+     * @param password
+     * @param repeat_password
+     * @return
+     */
+    @POST("user/update_user_password")
+    Observable<MessageVo> updateUserPassword(@Query("user_id") String user_id, @Query("current_password") String current_password, @Query("password") String password, @Query("repeat_password") String repeat_password);
+
+    /**
+     * 获取系统用户反馈信息
+     *
+     * @param user_id
+     * @return
+     */
+    @GET("get/user_feedback_category_info")
+    Observable<HelpFeedbackListVo> getUserFeedbackCategoryInfo(@Query("user_id") String user_id);
+
+    /**
+     * 添加一条反馈信息
+     *
+     * @param user_id
+     * @param contact_way
+     * @param feedback_content
+     * @param category_type
+     * @return
+     */
+    @POST("add/user_feedback_info")
+    Observable<MessageVo> addUserFeedbackInfo(@Query("user_id") String user_id, @Query("contact_way") String contact_way, @Query("feedback_content") String feedback_content, @Query("category_type") String category_type);
+
+    /**
+     * 获取单个系统反馈消息
+     *
+     * @param user_id
+     * @return
+     */
+    @GET("get/user_feedback_info")
+    Observable<UserFeedbackListVo> getUserFeedbackInfo(@Query("user_id") String user_id);
+
+    /**
+     * 删除一条反馈信息
+     *
+     * @param body
+     * @return
+     */
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @POST("delete/user_feedback_info")
+    Observable<MessageVo> deleteUserFeedbackInfo(@Body RequestBody body);
+
+    /**
+     * 获取当前用户可共享的设备列表
+     *
+     * @return
+     */
+    @GET("get/user_share_devices_info")
+    Observable<UserShareDeviceListVo> getUserShareDeviceList(@Query("user_id") String user_id);
+
+    /**
+     * 获取用户接受的共享设备列表
+     *
+     * @param user_id
+     * @return
+     */
+    @GET("get/object_user_share_devices_info")
+    Observable<UserReceiverDeviceListVo> getObjectUserShareDeviceInfo(@Query("user_id") String user_id);
+
+    /**
+     * 接受共享设备
+     */
+    @POST("accept/share_devices_info")
+    Observable<MessageVo> acceptShareDevicesInfo(@Query("device_share_id") String device_share_id);
+
+    /**
+     * 删除被共享的消息
+     *
+     * @return
+     */
+    @Headers({"Content-Type: application/json", "Accept: application/json"})
+    @POST("delete/object_user_share_devices_info")
+    Observable<MessageVo> deleteObjectUserShareDevicesInfo(@Body RequestBody body);
+
+    /**
+     * 设备共享
+     *
+     * @return
+     */
+    @POST("add/share_devices_info")
+    Observable<MessageVo> addShareDevicesInfo(@Query("device_id") String device_id, @Query("share_object_userid") String share_object_userid,
+                                              @Query("share_userid") String share_userid, @Query("table_type") String table_type,
+                                              @Query("is_control") int is_control);
 }

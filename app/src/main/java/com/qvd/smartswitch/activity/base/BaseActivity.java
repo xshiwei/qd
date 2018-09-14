@@ -21,6 +21,9 @@ import com.qvd.smartswitch.utils.NetUtils;
 import com.qvd.smartswitch.utils.SharedPreferencesUtil;
 import com.qvd.smartswitch.utils.SysApplication;
 import com.qvd.smartswitch.utils.ToastUtil;
+import com.qvd.smartswitch.widget.MyEmptyLayout;
+import com.qvd.smartswitch.widget.MyErrorLayout;
+import com.qvd.smartswitch.widget.MyLoadingLayout;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 
 
@@ -47,6 +50,9 @@ public abstract class BaseActivity extends RxAppCompatActivity implements NetBro
      * 网络类型
      */
     private int netMobile;
+    protected MyEmptyLayout myEmptyLayout;
+    protected MyErrorLayout myErrorLayout;
+    protected MyLoadingLayout myLoadingLayout;
 
 
     @Override
@@ -65,14 +71,17 @@ public abstract class BaseActivity extends RxAppCompatActivity implements NetBro
         evevt = this;
         inspectNet();
         //初始化沉浸式
+        myEmptyLayout = new MyEmptyLayout(this);
+        myErrorLayout = new MyErrorLayout(this);
+        myLoadingLayout = new MyLoadingLayout(this);
+
         if (isImmersionBarEnabled())
             initImmersionBar();
         //初始化数据
         initData();
         //view与数据绑定
         initView();
-        //网络请求加载数据
-        getData();
+
     }
 
     @Override
@@ -102,7 +111,7 @@ public abstract class BaseActivity extends RxAppCompatActivity implements NetBro
         if (netMobile == -1) {
             ToastUtil.showToast("网络未连接，请检查网络后再试");
         } else {
-            if (!CommonUtils.isEmptyString(ConfigUtils.user_id)) {
+            if (CommonUtils.isEmptyString(ConfigUtils.user_id)) {
                 AutoLogin();
             }
         }
@@ -197,9 +206,6 @@ public abstract class BaseActivity extends RxAppCompatActivity implements NetBro
     }
 
     protected void initView() {
-    }
-
-    protected void getData() {
     }
 
 

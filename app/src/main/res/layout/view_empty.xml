@@ -5,12 +5,12 @@
     android:orientation="vertical">
 
     <TextView
-        android:gravity="center"
         android:id="@+id/textViewMessage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:drawableTop="@mipmap/empty"
+        android:gravity="center"
         android:text="@string/empty_view_message"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@color/app_red_color"

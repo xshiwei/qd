@@ -75,9 +75,8 @@ public class RoomPicListActivity extends BaseActivity {
         });
     }
 
-    @Override
-    protected void getData() {
-        super.getData();
+
+    private void getData() {
         RetrofitService.qdoApi.getRoomPicList()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

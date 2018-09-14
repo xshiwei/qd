@@ -15,6 +15,9 @@ import android.view.ViewGroup;
 
 import com.gyf.barlibrary.ImmersionBar;
 import com.qvd.smartswitch.receiver.NetBroadcastReceiver;
+import com.qvd.smartswitch.widget.MyEmptyLayout;
+import com.qvd.smartswitch.widget.MyErrorLayout;
+import com.qvd.smartswitch.widget.MyLoadingLayout;
 import com.trello.rxlifecycle2.components.support.RxFragment;
 
 
@@ -32,6 +35,10 @@ public abstract class BaseFragment extends RxFragment {
 
     protected ImmersionBar mImmersionBar;
     private Unbinder unbinder;
+
+    protected MyEmptyLayout myEmptyLayout;
+    protected MyErrorLayout myErrorLayout;
+    protected MyLoadingLayout myLoadingLayout;
 
 
     @Override
@@ -54,9 +61,11 @@ public abstract class BaseFragment extends RxFragment {
         unbinder = ButterKnife.bind(this, view);
         if (isImmersionBarEnabled())
             initImmersionBar();
+        myEmptyLayout = new MyEmptyLayout(getActivity());
+        myErrorLayout = new MyErrorLayout(getActivity());
+        myLoadingLayout = new MyLoadingLayout(getActivity());
         initData();
         initView();
-        getData();
     }
 
     @Override
@@ -113,12 +122,6 @@ public abstract class BaseFragment extends RxFragment {
 
     }
 
-    /**
-     * 获取网络数据
-     */
-    protected void getData() {
-
-    }
 
     /**
      * 找到activity的控件

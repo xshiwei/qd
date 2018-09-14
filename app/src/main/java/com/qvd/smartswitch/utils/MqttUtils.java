@@ -47,7 +47,7 @@ public class MqttUtils {
     public void connect(IMqttResultListener listener) throws MqttException {
         MqttManager.getInstance()
                 .connect(new ConnectCommand()
-                                .setClientId(CommonUtils.getIMEI(MyApplication.getContext()))
+                                .setClientId("qevdo_app" + ConfigUtils.user_id)
                                 .setServer("119.29.105.91")
                                 .setPort(1883)
                                 .setKeepAlive(30)
@@ -110,7 +110,7 @@ public class MqttUtils {
 
     public void sub(String topic) throws MqttException {
         if (!MqttManager.getInstance().isConneect()) {
-            ToastUtil.showToast("set当前已断开连接");
+            ToastUtil.showToast("当前已断开连接");
             return;
         }
         MqttManager.getInstance().sub(new SubCommand()

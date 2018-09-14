@@ -62,19 +62,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="@dimen/y30"
-                android:text="设备未连接，下拉连接设备"
+                android:layout_marginTop="@dimen/y10"
                 android:textColor="@color/white"
                 android:textSize="12sp"
-                android:visibility="gone" />
+                android:visibility="visible" />
 
             <RelativeLayout
                 android:id="@+id/rl_light_one"
                 android:layout_width="@dimen/x350"
                 android:layout_height="match_parent"
                 android:layout_below="@+id/tv_connect_text"
-                android:layout_marginBottom="@dimen/y100"
-                android:layout_marginTop="@dimen/y30">
+                android:layout_marginBottom="@dimen/y30"
+                android:layout_marginTop="@dimen/y10">
 
                 <TextView
                     android:id="@+id/tv_one"
@@ -113,7 +112,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_below="@+id/tv_connect_text"
                 android:layout_marginBottom="@dimen/y30"
-                android:layout_marginTop="@dimen/y30">
+                android:layout_marginTop="@dimen/y10">
 
                 <TextView
                     android:id="@+id/tv_two"
@@ -155,7 +154,7 @@
     <com.nightonke.boommenu.BoomMenuButton
         android:id="@+id/bmb"
         android:layout_width="wrap_content"
-        android:layout_height="@dimen/y170"
+        android:layout_height="@dimen/y180"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_marginBottom="@dimen/y50"

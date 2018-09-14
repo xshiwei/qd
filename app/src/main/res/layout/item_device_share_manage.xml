@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/y120"
+    android:clickable="true"
+    android:background="@drawable/layout_seletor">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/civ_portrait"
+        android:layout_width="@dimen/x80"
+        android:layout_height="@dimen/y80"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/x30"
+        android:src="@mipmap/user_portrait" />
+
+    <TextView
+        android:id="@+id/tv_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/x20"
+        android:layout_marginTop="@dimen/y20"
+        android:layout_toRightOf="@+id/civ_portrait"
+        android:text="共享至2812"
+        android:textColor="@color/home_setting_text"
+        android:textSize="14sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/y25"
+        android:layout_marginLeft="@dimen/x20"
+        android:layout_toRightOf="@+id/civ_portrait"
+        android:text="2018-2-12   仅可查看"
+        android:textColor="@color/home_setting_text_two"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/tv_delete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="@dimen/x30"
+        android:background="@drawable/my_capacity_unselete"
+        android:paddingBottom="@dimen/y10"
+        android:paddingLeft="@dimen/x35"
+        android:paddingRight="@dimen/x35"
+        android:paddingTop="@dimen/y10"
+        android:text="删除"
+        android:textColor="@color/add_home_background"
+        android:textSize="14sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_alignParentBottom="true"
+        android:background="@color/popupwindow_edittext" />
+
+</RelativeLayout>

@@ -13,12 +13,32 @@ public class ScanResultVo implements Serializable {
      * 设备连接类型 1表示蓝牙 2表示wifi
      */
     private int connectType;
+    private int isFirstConnect;
+    private String deviceId;
 
-    public ScanResultVo(String deviceNo, String deviceName, String deviceMac, int connectType) {
+    public ScanResultVo(String deviceNo, String deviceName, String deviceMac, int connectType, int isFirstConnect, String deviceId) {
         this.deviceNo = deviceNo;
         this.deviceName = deviceName;
         this.deviceMac = deviceMac;
         this.connectType = connectType;
+        this.isFirstConnect = isFirstConnect;
+        this.deviceId = deviceId;
+    }
+
+    public int getIsFirstConnect() {
+        return isFirstConnect;
+    }
+
+    public void setIsFirstConnect(int isFirstConnect) {
+        this.isFirstConnect = isFirstConnect;
+    }
+
+    public String getDeviceId() {
+        return deviceId;
+    }
+
+    public void setDeviceId(String deviceId) {
+        this.deviceId = deviceId;
     }
 
     public String getDeviceNo() {

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <include layout="@layout/common_actionbar" />
+
+    <com.youth.banner.Banner xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/banner"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/y20"
+        app:indicator_drawable_selected="@drawable/circle_blue_five"
+        app:indicator_drawable_unselected="@drawable/circle_gray_five"
+        app:indicator_height="@dimen/y20"
+        app:indicator_margin="@dimen/x10"
+        app:indicator_width="@dimen/x20"></com.youth.banner.Banner>
+
+</LinearLayout>

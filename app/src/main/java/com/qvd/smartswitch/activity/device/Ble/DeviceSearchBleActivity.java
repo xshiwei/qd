@@ -156,7 +156,7 @@ public class DeviceSearchBleActivity extends BaseNoTipActivity {
             @Override
             public void onScanStarted(boolean success) {
                 list.clear();
-                emptyView.showLoading(R.layout.view_loading, "正在搜索设备");
+                emptyView.showLoading(R.layout.view_loading, "正在搜索,整个过程大约需要8秒");
             }
 
             @Override
@@ -213,7 +213,7 @@ public class DeviceSearchBleActivity extends BaseNoTipActivity {
                                     public void onItemClick(View view, int position) {
                                         //给设备连接传入设备信息
                                         BleDevice bleDevice = list.get(position);
-                                        ScanResultVo resultVo = new ScanResultVo(bleDevice.getName(), CommonUtils.getDeviceName(bleDevice.getName()), bleDevice.getMac(), 1);
+                                        ScanResultVo resultVo = new ScanResultVo(bleDevice.getName(), CommonUtils.getDeviceName(bleDevice.getName()), bleDevice.getMac(), 1, -1, null);
                                         startActivity(new Intent(DeviceSearchBleActivity.this, DeviceBleConnectActivity.class)
                                                 .putExtra("ScanResultVo", resultVo));
                                         overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
@@ -258,5 +258,11 @@ public class DeviceSearchBleActivity extends BaseNoTipActivity {
                 finish();
                 break;
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        BleManageUtils.getInstance().DestroyBleManage();
     }
 }

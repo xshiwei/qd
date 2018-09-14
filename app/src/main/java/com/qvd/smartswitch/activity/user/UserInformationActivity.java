@@ -104,7 +104,7 @@ public class UserInformationActivity extends BaseActivity {
                                     if (tvPhone.equals("null")) {
                                         tvPhone.setText(userInfoVo.getData().getUser_phone() + "");
                                     } else {
-                                        tvPhone.setText("绑定手机号");
+                                        tvPhone.setHint("绑定手机号");
                                     }
                                 } else {
                                     tvName.setHint("获取失败");
@@ -161,7 +161,7 @@ public class UserInformationActivity extends BaseActivity {
                 });
     }
 
-    @OnClick({R.id.iv_common_actionbar_goback, R.id.tv_logout, R.id.rl_name, R.id.rl_phone})
+    @OnClick({R.id.iv_common_actionbar_goback, R.id.tv_logout, R.id.rl_name, R.id.rl_phone, R.id.rl_update_password})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_common_actionbar_goback:
@@ -184,6 +184,7 @@ public class UserInformationActivity extends BaseActivity {
                         .show();
                 SharedPreferencesUtil.putString(this, SharedPreferencesUtil.IDENTIFIER, "");
                 SharedPreferencesUtil.putString(this, SharedPreferencesUtil.PASSWORD, "");
+                SharedPreferencesUtil.putString(this, SharedPreferencesUtil.USER_ID, "");
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -201,12 +202,16 @@ public class UserInformationActivity extends BaseActivity {
             case R.id.rl_phone:
                 showUpdatePhoneDialog();
                 break;
+            case R.id.rl_update_password:
+                //修改密码
+                startActivity(new Intent(this, UpdatePasswordActivity.class));
+                break;
         }
     }
 
     private void showUpdateNameDialog() {
         new MaterialDialog.Builder(this)
-                .title("设置用户名称")
+                .title("修改用户名称")
                 .negativeText("取消")
                 .positiveText("确定")
                 .inputRange(1, 20, getResources().getColor(R.color.red))
@@ -235,7 +240,7 @@ public class UserInformationActivity extends BaseActivity {
 
     private void showUpdatePhoneDialog() {
         new MaterialDialog.Builder(this)
-                .title("设置用户手机号")
+                .title("绑定用户手机号")
                 .negativeText("取消")
                 .positiveText("确定")
                 .inputType(InputType.TYPE_CLASS_PHONE)

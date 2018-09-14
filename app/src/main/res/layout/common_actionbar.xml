@@ -5,13 +5,13 @@
     android:background="@color/white">
 
     <ImageView
-        android:padding="5dp"
-        android:layout_marginLeft="@dimen/x20"
         android:id="@+id/iv_common_actionbar_goback"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/x20"
         android:contentDescription="TODO"
+        android:padding="5dp"
         android:src="@mipmap/actionbar_goback" />
 
     <TextView

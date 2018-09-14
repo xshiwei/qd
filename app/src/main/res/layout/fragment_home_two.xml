@@ -65,6 +65,7 @@
                     android:layout_marginTop="@dimen/y140">
 
                     <com.wang.avi.AVLoadingIndicatorView
+                        android:id="@+id/avi_weather"
                         style="@style/AVLoadingIndicatorView.Large"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

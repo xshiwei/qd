@@ -58,13 +58,12 @@ public class ItemHeaderDecoration extends RecyclerView.ItemDecoration {
         GridLayoutManager.SpanSizeLookup spanSizeLookup = manager.getSpanSizeLookup();
         int pos = ((LinearLayoutManager) (parent.getLayoutManager())).findFirstVisibleItemPosition();
         int spanSize = spanSizeLookup.getSpanSize(pos);
-        Log.d("pos--->", String.valueOf(pos));
         String tag = mDatas.get(pos).getTag();
         View child = parent.findViewHolderForLayoutPosition(pos).itemView;
         boolean isTranslate = false;//canvas是否平移的标志
         if (!TextUtils.equals(mDatas.get(pos).getTag(), mDatas.get(pos + 1).getTag())
                 || !TextUtils.equals(mDatas.get(pos).getTag(), mDatas.get(pos + 2).getTag())
-                || !TextUtils.equals(mDatas.get(pos).getTag(), mDatas.get(pos + 3).getTag())
+//                || !TextUtils.equals(mDatas.get(pos).getTag(), mDatas.get(pos + 3).getTag())
                 ) {
             tag = mDatas.get(pos).getTag();
             int i = child.getHeight() + child.getTop();
@@ -78,8 +77,6 @@ public class ItemHeaderDecoration extends RecyclerView.ItemDecoration {
                     canvas.translate(0, height);
                 }
             }
-
-
         }
         drawHeader(parent, pos, canvas);
         if (isTranslate) {

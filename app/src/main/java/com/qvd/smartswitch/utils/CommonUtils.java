@@ -87,23 +87,6 @@ public class CommonUtils {
         return simpleDateFormat.format(date);
     }
 
-
-    /**
-     * 获取MAC地址
-     *
-     * @param s
-     * @return
-     */
-    public static String getMac(String s) {
-        String[] str = s.split(":");
-        String mac = "";
-        for (int i = 0; i < str.length; i++) {
-            mac += String.valueOf(Integer.parseInt(str[i], 16));
-        }
-        return mac;
-    }
-
-
     /**
      * 定时将时间转换
      *
@@ -276,29 +259,15 @@ public class CommonUtils {
             case "qs03":
                 newName = "Wi_Fi智能开关";
                 break;
-        }
-        return newName;
-    }
-
-    /**
-     * 根据设备型号返回设备名称
-     *
-     * @param name
-     * @return
-     */
-    public static String getTableName(String name) {
-        String newName = "";
-        switch (name) {
-            case "qs02":
-                newName = "qs02";
+            case "ae01":
+                newName = "应用体验";
                 break;
-            case "qs03":
-                newName = "qs03";
+            case "other01":
+                newName = "其他";
                 break;
         }
         return newName;
     }
-
 
     /**
      * 给设备添加操作日志

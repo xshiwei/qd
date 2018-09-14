@@ -16,7 +16,6 @@
 package com.qvd.smartswitch.activity.home;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -36,17 +35,10 @@ import android.widget.TextView;
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.gson.Gson;
-import com.nightonke.boommenu.BoomButtons.OnBMClickListener;
-import com.nightonke.boommenu.BoomButtons.TextOutsideCircleButton;
 import com.nightonke.boommenu.BoomMenuButton;
-import com.orhanobut.logger.Logger;
 import com.qvd.smartswitch.R;
-import com.qvd.smartswitch.activity.device.DeviceLogActivity;
-import com.qvd.smartswitch.activity.device.DeviceSettingActivity;
-import com.qvd.smartswitch.activity.device.DeviceSoundControlActivity;
 import com.qvd.smartswitch.activity.qsThree.QsThreeControlActivity;
 import com.qvd.smartswitch.activity.qsTwo.QsTwoControlActivity;
-import com.qvd.smartswitch.activity.qsTwo.QsTwoTimingActivity;
 import com.qvd.smartswitch.adapter.HomeDeviceListAdapter;
 import com.qvd.smartswitch.api.RetrofitService;
 import com.qvd.smartswitch.model.device.RoomDeviceListVo;
@@ -54,7 +46,6 @@ import com.qvd.smartswitch.model.device.ScanResultVo;
 import com.qvd.smartswitch.model.device.UpdateDeviceRoomVo;
 import com.qvd.smartswitch.model.home.HomeLeftListVo;
 import com.qvd.smartswitch.model.home.RoomListVo;
-import com.qvd.smartswitch.model.home.Test2Vo;
 import com.qvd.smartswitch.model.login.MessageVo;
 import com.qvd.smartswitch.utils.CommonUtils;
 import com.qvd.smartswitch.utils.ConfigUtils;
@@ -538,9 +529,7 @@ public class HomeDeviceFragment extends Fragment {
                         startActivity(new Intent(getActivity(), QsTwoControlActivity.class)
                                 .putExtra("scanResult", new ScanResultVo(dataBean.getDevice_no(),
                                         CommonUtils.getDeviceName(dataBean.getDevice_no()), dataBean.getDevice_mac(),
-                                        dataBean.getConnect_type()))
-                                .putExtra("isFirstConnect", dataBean.getIs_first_connect())
-                                .putExtra("deviceId", dataBean.getDevice_id()));
+                                        dataBean.getConnect_type(), dataBean.getIs_first_connect(), dataBean.getDevice_id())));
                         getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
                         break;
                     case "qs03":

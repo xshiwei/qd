@@ -19,8 +19,6 @@ import java.util.List;
 public class LogDeviceListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private Context context;
     private List<DeviceLogVo.DataBean> data;
-    int[] colors = {0xffFFAD6C, 0xff62f434, 0xffdeda78, 0xff7EDCFF, 0xff58fdea, 0xfffdc75f};//颜色组
-
     public LogDeviceListAdapter(Context context, List<DeviceLogVo.DataBean> data) {
         this.context = context;
         this.data = data;
@@ -69,7 +67,6 @@ public class LogDeviceListAdapter extends RecyclerView.Adapter<RecyclerView.View
                 });
             }
             ((MyViewHolder) holder).tv_time.setText(data.get(position).getCreate_time());
-            ((MyViewHolder) holder).tv_time.setTextColor(colors[position % colors.length]);
             ((MyViewHolder) holder).tv_text.setText(data.get(position).getLog_content());
         }
     }

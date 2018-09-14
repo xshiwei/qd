@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/textViewMessage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:drawableTop="@mipmap/empty"
+        android:gravity="center"
+        android:text="内容为空"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="@color/app_red_color"
+        android:textSize="12sp" />
+
+    <Button
+        android:visibility="gone"
+        android:id="@+id/buttonEmpty"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/y50"
+        android:layout_below="@+id/textViewMessage"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/y10"
+        android:background="@color/add_device_selete"
+        android:text="重新扫描"
+        android:textColor="@color/white"
+        android:textSize="14sp" />
+
+</RelativeLayout>

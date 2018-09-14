@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:background="@drawable/light_background_two">
 
     <RelativeLayout
+        android:id="@+id/action_bar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/y100"
-        android:background="@color/white">
+        android:layout_marginTop="@dimen/y60">
 
         <ImageView
             android:id="@+id/iv_device_control_goback"
@@ -16,15 +18,18 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/x20"
             android:contentDescription="TODO"
-            android:src="@mipmap/actionbar_goback" />
+            android:padding="5dp"
+            android:src="@mipmap/actionbar_goback_white" />
 
         <TextView
             android:id="@+id/tv_device_control_title"
-            android:layout_width="wrap_content"
+            android:layout_width="@dimen/x200"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="@string/device_control_title"
-            android:textColor="@color/app_title"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:lines="1"
+            android:textColor="@color/white"
             android:textSize="16sp" />
 
         <ImageView
@@ -35,50 +40,142 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/x20"
             android:contentDescription="TODO"
-            android:src="@mipmap/actionbar_more_details" />
+            android:padding="5dp"
+            android:src="@mipmap/actionbar_more_detail_white" />
 
     </RelativeLayout>
 
+    <com.scwang.smartrefresh.layout.SmartRefreshLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/smart_refresh"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/bmb"
+        android:layout_below="@+id/action_bar"
+        app:srlHeaderHeight="0dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/tv_connect_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="@dimen/y30"
+                android:text="设备未连接，下拉连接设备"
+                android:textColor="@color/white"
+                android:textSize="12sp"
+                android:visibility="gone" />
+
+            <RelativeLayout
+                android:layout_centerInParent="true"
+                android:id="@+id/rl_light_one"
+                android:layout_width="@dimen/x350"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/tv_connect_text"
+                android:layout_marginBottom="@dimen/y100"
+                android:layout_marginTop="@dimen/y30">
+
+                <ImageView
+                    android:id="@+id/iv_light_one"
+                    android:layout_width="@dimen/x300"
+                    android:layout_height="@dimen/y400"
+                    android:layout_below="@+id/tv_one"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="@dimen/y50"
+                    android:src="@mipmap/device_light_off" />
+
+            </RelativeLayout>
+
+
+        </RelativeLayout>
+
+    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/y100">
 
-        <ImageView
-            android:id="@+id/iv_device_control_state"
-            android:layout_width="@dimen/x311"
-            android:layout_height="@dimen/y311"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="@dimen/y200"
-            android:contentDescription="TODO"
-            android:src="@mipmap/device_control_turnoff" />
-
-        <TextView
-            android:id="@+id/tv_device_control_state"
+        <LinearLayout
+            android:id="@+id/ll_log"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/iv_device_control_state"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="@dimen/y30"
-            android:text="@string/device_control_off"
-            android:textColor="@color/black"
-            android:textSize="16sp" />
+            android:layout_marginLeft="@dimen/x100"
+            android:orientation="vertical">
 
-        <ImageView
-            android:id="@+id/iv_sound"
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_width="@dimen/x80"
+                android:layout_height="@dimen/y80"
+                android:layout_gravity="center_horizontal"
+                android:src="@mipmap/qs_one_switch"
+                app:civ_border_color="@color/home_setting_text_two"
+                app:civ_border_width="@dimen/x2" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/y30"
+                android:text="开关"
+                android:textColor="@color/white"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_sounding"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/coordinatorLayout"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="@dimen/y50"
-            android:src="@mipmap/voice_empty" />
+            android:layout_centerInParent="true"
+            android:orientation="vertical">
 
-        <android.support.design.widget.CoordinatorLayout
-            android:id="@+id/coordinatorLayout"
-            android:layout_width="match_parent"
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_width="@dimen/x80"
+                android:layout_height="@dimen/y80"
+                android:layout_gravity="center_horizontal"
+                android:src="@mipmap/device_sound_pic"
+                app:civ_border_color="@color/home_setting_text_two"
+                app:civ_border_width="@dimen/x2" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/y30"
+                android:text="语音"
+                android:textColor="@color/white"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_timing"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"></android.support.design.widget.CoordinatorLayout>
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/x100"
+            android:orientation="vertical">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_width="@dimen/x80"
+                android:layout_height="@dimen/y80"
+                android:layout_gravity="center_horizontal"
+                android:src="@mipmap/device_timing_pic"
+                app:civ_border_color="@color/home_setting_text_two"
+                app:civ_border_width="@dimen/x2" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/y30"
+                android:text="定时"
+                android:textColor="@color/white"
+                android:textSize="14sp" />
+        </LinearLayout>
+
 
     </RelativeLayout>
 
-</LinearLayout>
+</RelativeLayout>

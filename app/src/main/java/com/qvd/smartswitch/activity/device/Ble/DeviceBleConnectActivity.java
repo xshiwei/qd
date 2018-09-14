@@ -16,6 +16,7 @@ import com.qvd.smartswitch.api.RetrofitService;
 import com.qvd.smartswitch.model.device.AddQS02Vo;
 import com.qvd.smartswitch.model.device.ScanResultVo;
 import com.qvd.smartswitch.utils.ConfigUtils;
+import com.trello.rxlifecycle2.android.ActivityEvent;
 import com.wang.avi.AVLoadingIndicatorView;
 
 import java.util.HashMap;
@@ -206,6 +207,7 @@ public class DeviceBleConnectActivity extends BaseActivity {
         Observable.intervalRange(1, 3, 0, 1, TimeUnit.SECONDS)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .compose(this.<Long>bindUntilEvent(ActivityEvent.DESTROY))
                 .subscribe(new Observer<Long>() {
                     @Override
                     public void onSubscribe(Disposable d) {
@@ -225,8 +227,8 @@ public class DeviceBleConnectActivity extends BaseActivity {
 
                     @Override
                     public void onComplete() {
+                        bleDevice.setDeviceId(device_id);
                         startActivity(new Intent(DeviceBleConnectActivity.this, DeviceSetRoomActivity.class)
-                                .putExtra("device_id", device_id)
                                 .putExtra("scanResult", bleDevice));
                         overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
                         finish();
@@ -252,8 +254,8 @@ public class DeviceBleConnectActivity extends BaseActivity {
                     finish();
                 } else {
                     //成功则跳转到设置房间里
+                    bleDevice.setDeviceId(device_id);
                     startActivity(new Intent(this, DeviceSetRoomActivity.class)
-                            .putExtra("device_id", device_id)
                             .putExtra("scanResult", bleDevice));
                     overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
                     finish();

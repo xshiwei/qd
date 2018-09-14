@@ -10,9 +10,6 @@ import com.stephentuso.welcome.ParallaxPage;
 import com.stephentuso.welcome.WelcomeConfiguration;
 import com.yanzhenjie.permission.Permission;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class WelcomeActivity extends com.stephentuso.welcome.WelcomeActivity {
 
     @Override
@@ -42,7 +39,7 @@ public class WelcomeActivity extends com.stephentuso.welcome.WelcomeActivity {
                         .background(R.color.red_background)
                 )
 
-                .page(new ParallaxPage(R.layout.parallax_example,
+                .page(new ParallaxPage(R.layout.activity_welcome,
                         "Easy parallax",
                         "Supply a layout and parallax effects will automatically be applied")
                         .lastParallaxFactor(2f)

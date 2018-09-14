@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="@dimen/x10"
+    android:layout_marginRight="@dimen/x10"
+    android:background="@drawable/circle_white_five">
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/y30"
+        android:gravity="center"
+        android:text="使用条款和隐私政策"
+        android:textColor="@color/home_setting_text"
+        android:textSize="14sp" />
+
+    <LinearLayout
+        android:id="@+id/ll_item"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_title"
+        android:layout_marginTop="@dimen/y30"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="我已阅读"
+            android:textColor="@color/home_setting_text_three"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/tv_item"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="《软件许可及服务协议》"
+            android:textColor="@color/blue_background"
+            android:textSize="12sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="和"
+            android:textColor="@color/home_setting_text_three"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/tv_privacy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="《隐私政策》"
+            android:textColor="@color/blue_background"
+            android:textSize="12sp" />
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="5px"
+        android:layout_below="@+id/ll_item"
+        android:layout_marginTop="@dimen/y30"
+        android:background="@color/home_manage_backgroud" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y80"
+        android:layout_below="@+id/view"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_cancel"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/popupwindow_button_seletor"
+            android:gravity="center"
+            android:text="取消"
+            android:textColor="@color/home_setting_text_two"
+            android:textSize="14sp" />
+
+        <View
+            android:layout_width="10px"
+            android:layout_height="match_parent"
+            android:background="@color/home_manage_backgroud" />
+
+        <TextView
+            android:id="@+id/tv_confirm"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@drawable/popupwindow_button_seletor"
+            android:gravity="center"
+            android:text="同意并继续"
+            android:textColor="@color/add_home_background"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+
+</RelativeLayout>

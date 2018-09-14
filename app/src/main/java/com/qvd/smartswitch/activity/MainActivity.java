@@ -15,17 +15,12 @@ import com.clj.fastble.BleManager;
 import com.qvd.smartswitch.R;
 import com.qvd.smartswitch.activity.base.BaseActivity;
 import com.qvd.smartswitch.activity.capacity.CapacityFragment;
-import com.qvd.smartswitch.activity.device.DeviceFragment;
-import com.qvd.smartswitch.activity.home.HomeFragment;
 import com.qvd.smartswitch.activity.home.HomeFragmentTest;
 import com.qvd.smartswitch.activity.login.WelcomeActivity;
 import com.qvd.smartswitch.activity.user.UserFragment;
-import com.qvd.smartswitch.utils.PermissionUtils;
 import com.qvd.smartswitch.utils.SysApplication;
 import com.qvd.smartswitch.utils.ToastUtil;
 import com.stephentuso.welcome.WelcomeHelper;
-import com.wenming.library.LogReport;
-import com.yanzhenjie.permission.Permission;
 
 import butterknife.BindView;
 
@@ -39,7 +34,7 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
 
     private Fragment homeFragment;
     //private Fragment deviceFragment;
-    private Fragment capacityFragment;
+//    private Fragment capacityFragment;
     private Fragment userFragment;
 
     private long firstTime = 0;
@@ -89,7 +84,7 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
         int lastSelectedPosition = 0;
         bottomNavigationBar
                 .addItem(new BottomNavigationItem(R.mipmap.home_navgationbar_selete, "首页").setInactiveIcon(ContextCompat.getDrawable(this, R.mipmap.home_navgationbar_unselete)))
-                .addItem(new BottomNavigationItem(R.mipmap.device_navgationbar_unselete, "智能").setInactiveIcon(ContextCompat.getDrawable(this, R.mipmap.device_navgationbar_selete)))
+//                .addItem(new BottomNavigationItem(R.mipmap.device_navgationbar_unselete, "智能").setInactiveIcon(ContextCompat.getDrawable(this, R.mipmap.device_navgationbar_selete)))
                 .addItem(new BottomNavigationItem(R.mipmap.user_navgationbar_selete, "我的").setInactiveIcon(ContextCompat.getDrawable(this, R.mipmap.user_navgationbar_unselete)))
                 .setFirstSelectedPosition(lastSelectedPosition)
                 .initialise();
@@ -143,7 +138,7 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
     /*隐藏所有fragment*/
     private void hideAllFrag() {
         hideFrag(homeFragment);
-        hideFrag(capacityFragment);
+//        hideFrag(capacityFragment);
         hideFrag(userFragment);
     }
 
@@ -169,17 +164,17 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
                 addFrag(homeFragment);
                 getSupportFragmentManager().beginTransaction().show(homeFragment).commit();
                 break;
+//            case 1:
+//                if (capacityFragment == null) {
+//                    assert capacityFragment != null;
+//                    capacityFragment = CapacityFragment.newInstance("device");
+////                    capacityFragment = DeviceFragment.newInstance("device");
+//                }
+//                mImmersionBar.fitsSystemWindows(true).statusBarColor(R.color.white).statusBarDarkFont(true, 1).init();
+//                addFrag(capacityFragment);
+//                getSupportFragmentManager().beginTransaction().show(capacityFragment).commit();
+//                break;
             case 1:
-                if (capacityFragment == null) {
-                    assert capacityFragment != null;
-                    capacityFragment = CapacityFragment.newInstance("device");
-//                    capacityFragment = DeviceFragment.newInstance("device");
-                }
-                mImmersionBar.fitsSystemWindows(true).statusBarColor(R.color.white).statusBarDarkFont(true, 1).init();
-                addFrag(capacityFragment);
-                getSupportFragmentManager().beginTransaction().show(capacityFragment).commit();
-                break;
-            case 2:
                 if (userFragment == null) {
                     assert userFragment != null;
                     userFragment = UserFragment.newInstance("user");

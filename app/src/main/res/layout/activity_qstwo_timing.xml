@@ -47,7 +47,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="@dimen/y20"
-        android:text="0小时0分钟后"
+        android:text="00小时00分钟后"
         android:textColor="@color/home_setting_text_two"
         android:textSize="16sp" />
 

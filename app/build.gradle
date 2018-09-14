@@ -39,15 +39,6 @@ android {
     }
 }
 
-greendao {
-    //数据库的schema版本，也可以理解为数据库版本号
-    schemaVersion 1
-    //设置DaoMaster、DaoSession、Dao包名，也就是要放置这些类的包的全路径。
-    daoPackage 'com.qvd.smartswitch.dao'
-    //设置DaoMaster、DaoSession、Dao目录
-    targetGenDir 'src/main/java'
-}
-
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
 
@@ -102,8 +93,6 @@ dependencies {
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.2.0'
     implementation 'com.squareup.picasso:picasso:2.5.2'
 
-    //greenDao
-    implementation 'org.greenrobot:greendao:3.2.2'
     implementation 'de.hdodenhof:circleimageview:2.2.0'
 
     //圆形头像
@@ -121,7 +110,7 @@ dependencies {
     implementation 'com.melnykov:floatingactionbutton:1.3.0'
     implementation project(':citypickerview')
 
-    //滚动选择器
+    //滚动数字选择器
     implementation 'cn.carbswang.android:NumberPickerView:1.1.1'
 
     //时间轴
@@ -144,9 +133,9 @@ dependencies {
     implementation 'com.zcw:togglebutton-library:1.0.0'
 
     //水波纹
-    implementation 'com.github.traex.rippleeffect:library:1.3'
+    implementation 'com.patrickpissurno:ripple-effect:1.3.1'
 
-    //下落效果
+    //雪花下落效果
     implementation 'com.dingmouren.fallingview:fallingview:1.0.2'
 
     //启动页
@@ -158,4 +147,9 @@ dependencies {
     //日志上传
     implementation 'com.github.wenmingvs:LogReport:1.0.3'
     implementation 'com.android.support:appcompat-v7:27.1.1'
+
+    //viewpager海报效果
+    implementation 'com.youth.banner:banner:1.4.10'
+    //recycleView
+    implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.30'
 }

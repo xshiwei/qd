@@ -1,0 +1,452 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:id="@+id/action_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y80"
+        android:background="@color/home_list_background">
+
+        <ImageView
+            android:id="@+id/iv_common_actionbar_goback"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/x20"
+            android:contentDescription="TODO"
+            android:padding="5dp"
+            android:src="@mipmap/actionbar_goback" />
+
+        <TextView
+            android:id="@+id/tv_common_actionbar_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="蓝牙智能开关"
+            android:textColor="@color/app_title"
+            android:textSize="14sp" />
+
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/action_bar">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/y100"
+                android:gravity="center|left"
+                android:paddingLeft="@dimen/x50"
+                android:text="@string/device_control_setting_function"
+                android:textColor="@color/home_list_text"
+                android:textSize="12sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:layout_alignParentBottom="true"
+                android:layout_marginLeft="@dimen/x50"
+                android:layout_marginRight="@dimen/x50"
+                android:background="@color/black_16" />
+
+            <RelativeLayout
+                android:id="@+id/rl_quick_tour"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/y100">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:paddingLeft="@dimen/x50"
+                    android:text="快速指南"
+                    android:textColor="@color/black"
+                    android:textSize="13sp" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/x50"
+                    android:contentDescription="TODO"
+                    android:src="@mipmap/user_more_details" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginLeft="@dimen/x50"
+                    android:layout_marginRight="@dimen/x50"
+                    android:background="@color/black_16" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rl_common_question"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/y100">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:paddingLeft="@dimen/x50"
+                    android:text="常见问题"
+                    android:textColor="@color/black"
+                    android:textSize="13sp" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/x50"
+                    android:contentDescription="TODO"
+                    android:src="@mipmap/user_more_details" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginLeft="@dimen/x50"
+                    android:layout_marginRight="@dimen/x50"
+                    android:background="@color/black_16" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rl_item_and_privacy"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/y100">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:paddingLeft="@dimen/x50"
+                    android:text="使用条款和隐私政策"
+                    android:textColor="@color/black"
+                    android:textSize="13sp" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/x50"
+                    android:contentDescription="@string/todo"
+                    android:src="@mipmap/user_more_details" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginLeft="@dimen/x50"
+                    android:layout_marginRight="@dimen/x50"
+                    android:background="@color/black_16" />
+
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rl_feedback"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/y100">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:paddingLeft="@dimen/x50"
+                    android:text="反馈"
+                    android:textColor="@color/black"
+                    android:textSize="13sp" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/x50"
+                    android:contentDescription="@string/todo"
+                    android:src="@mipmap/user_more_details" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginLeft="@dimen/x50"
+                    android:layout_marginRight="@dimen/x50"
+                    android:background="@color/black_16" />
+
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rl_about"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/y100">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:paddingLeft="@dimen/x50"
+                    android:text="关于"
+                    android:textColor="@color/black"
+                    android:textSize="13sp" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/x50"
+                    android:contentDescription="@string/todo"
+                    android:src="@mipmap/user_more_details" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginLeft="@dimen/x50"
+                    android:layout_marginRight="@dimen/x50"
+                    android:background="@color/black_16" />
+
+            </RelativeLayout>
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/y100"
+                android:gravity="center|left"
+                android:paddingLeft="@dimen/x50"
+                android:text="通用设置"
+                android:textColor="@color/home_list_text"
+                android:textSize="12sp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1px"
+                android:layout_alignParentBottom="true"
+                android:layout_marginLeft="@dimen/x50"
+                android:layout_marginRight="@dimen/x50"
+                android:background="@color/black_16" />
+
+
+            <RelativeLayout
+                android:id="@+id/rl_retry_name"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/y100">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:paddingLeft="@dimen/x50"
+                    android:text="重命名"
+                    android:textColor="@color/black"
+                    android:textSize="13sp" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/x50"
+                    android:contentDescription="TODO"
+                    android:src="@mipmap/user_more_details" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginLeft="@dimen/x50"
+                    android:layout_marginRight="@dimen/x50"
+                    android:background="@color/black_16" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rl_log"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/y100">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:paddingLeft="@dimen/x50"
+                    android:text="设备操作日志"
+                    android:textColor="@color/black"
+                    android:textSize="13sp" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/x50"
+                    android:contentDescription="TODO"
+                    android:src="@mipmap/user_more_details" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginLeft="@dimen/x50"
+                    android:layout_marginRight="@dimen/x50"
+                    android:background="@color/black_16" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rl_device_share"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/y100">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:paddingLeft="@dimen/x50"
+                    android:text="设备共享"
+                    android:textColor="@color/black"
+                    android:textSize="13sp" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/x50"
+                    android:contentDescription="TODO"
+                    android:src="@mipmap/user_more_details" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginLeft="@dimen/x50"
+                    android:layout_marginRight="@dimen/x50"
+                    android:background="@color/black_16" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rl_location_manager"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/y100"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:paddingLeft="@dimen/x50"
+                    android:text="位置管理"
+                    android:textColor="@color/black"
+                    android:textSize="13sp" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/x50"
+                    android:contentDescription="TODO"
+                    android:src="@mipmap/user_more_details" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginLeft="@dimen/x50"
+                    android:layout_marginRight="@dimen/x50"
+                    android:background="@color/black_16" />
+
+            </RelativeLayout>
+
+
+            <RelativeLayout
+                android:id="@+id/rl_check_update"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/y100">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:paddingLeft="@dimen/x50"
+                    android:text="检查固件更新"
+                    android:textColor="@color/black"
+                    android:textSize="13sp" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/x50"
+                    android:contentDescription="TODO"
+                    android:src="@mipmap/user_more_details" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginLeft="@dimen/x50"
+                    android:layout_marginRight="@dimen/x50"
+                    android:background="@color/black_16" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rl_device_delete"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/y100"
+                android:layout_marginBottom="@dimen/y20">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:paddingLeft="@dimen/x50"
+                    android:text="删除设备"
+                    android:textColor="@color/black"
+                    android:textSize="13sp" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/x50"
+                    android:contentDescription="TODO"
+                    android:src="@mipmap/user_more_details" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginLeft="@dimen/x50"
+                    android:layout_marginRight="@dimen/x50"
+                    android:background="@color/black_16" />
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</RelativeLayout>

@@ -6,18 +6,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.clj.fastble.BleManager;
+
 import com.clj.fastble.data.BleDevice;
 import com.qvd.smartswitch.R;
-import com.qvd.smartswitch.db.DeviceNickNameDaoOpe;
-import com.qvd.smartswitch.model.DeviceNickNameVo;
-import com.qvd.smartswitch.utils.CommonUtils;
-import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
+
 import java.util.List;
 
 /**

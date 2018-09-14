@@ -8,21 +8,18 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
@@ -46,16 +43,13 @@ import com.nightonke.boommenu.BoomButtons.TextOutsideCircleButton;
 import com.nightonke.boommenu.BoomMenuButton;
 import com.orhanobut.logger.Logger;
 import com.qvd.smartswitch.R;
-import com.qvd.smartswitch.activity.base.BaseActivity;
 import com.qvd.smartswitch.activity.base.BaseFragment;
 import com.qvd.smartswitch.activity.device.DeviceAddActivity;
-import com.qvd.smartswitch.activity.device.DeviceLogActivity;
-import com.qvd.smartswitch.activity.device.DeviceSoundControlActivity;
+import com.qvd.smartswitch.activity.device.DeviceItemAndPrivacyActivity;
+import com.qvd.smartswitch.activity.device.DeviceSplashActivity;
 import com.qvd.smartswitch.activity.login.LoginActivity;
 import com.qvd.smartswitch.activity.qsThree.QsThreeControlActivity;
 import com.qvd.smartswitch.activity.qsTwo.QsTwoControlActivity;
-import com.qvd.smartswitch.activity.qsTwo.QsTwoTimingActivity;
-import com.qvd.smartswitch.adapter.HomeContentAdapter;
 import com.qvd.smartswitch.adapter.HomeDeviceListAdapter;
 import com.qvd.smartswitch.adapter.HomeListAdapter;
 import com.qvd.smartswitch.adapter.HomeMenuAdapter;
@@ -69,28 +63,24 @@ import com.qvd.smartswitch.model.home.HomeLeftListVo;
 import com.qvd.smartswitch.model.home.HomeListVo;
 import com.qvd.smartswitch.model.home.RoomListVo;
 import com.qvd.smartswitch.model.login.MessageVo;
-import com.qvd.smartswitch.receiver.NetBroadcastReceiver;
 import com.qvd.smartswitch.receiver.NetFragmentBroadcastReceiver;
 import com.qvd.smartswitch.utils.CommonUtils;
 import com.qvd.smartswitch.utils.ConfigUtils;
-import com.qvd.smartswitch.utils.NetUtils;
 import com.qvd.smartswitch.utils.PermissionUtils;
 import com.qvd.smartswitch.utils.SharedPreferencesUtil;
 import com.qvd.smartswitch.utils.ToastUtil;
-import com.qvd.smartswitch.widget.EmptyLayout;
 import com.scwang.smartrefresh.header.MaterialHeader;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
+import com.wang.avi.AVLoadingIndicatorView;
 import com.yanzhenjie.permission.Permission;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.Unbinder;
 import io.reactivex.ObservableSource;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -152,6 +142,8 @@ public class HomeFragmentTest extends BaseFragment implements AppBarLayout.OnOff
     TextView tvText;
     @BindView(R.id.fab)
     FloatingActionButton fab;
+    @BindView(R.id.avi_weather)
+    AVLoadingIndicatorView avi_weather;
 
 
     public static NetFragmentBroadcastReceiver.NetEvevt evevt;
@@ -247,6 +239,11 @@ public class HomeFragmentTest extends BaseFragment implements AppBarLayout.OnOff
         return R.layout.fragment_home_two;
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+    }
 
     @Override
     protected void initData() {
@@ -266,6 +263,7 @@ public class HomeFragmentTest extends BaseFragment implements AppBarLayout.OnOff
             @Override
             public void onRefresh(RefreshLayout refreshlayout) {
                 if (null != mLocationClient) {
+                    avi_weather.show();
                     tvText.setText("正在加载天气信息...");
                     llWeather.setVisibility(View.VISIBLE);
                     rlWeather.setVisibility(View.GONE);
@@ -276,6 +274,7 @@ public class HomeFragmentTest extends BaseFragment implements AppBarLayout.OnOff
                     tvText.postDelayed(new Runnable() {
                         @Override
                         public void run() {
+                            avi_weather.hide();
                             tvText.setText("天气信息获取失败");
                         }
                     }, 5000);
@@ -290,6 +289,7 @@ public class HomeFragmentTest extends BaseFragment implements AppBarLayout.OnOff
                 smartRefresh.finishRefresh(3000, true);
             }
         });
+
         //初始化定位
         mLocationClient = new AMapLocationClient(getActivity().getApplicationContext());
         //初始化AMapLocationClientOption对象
@@ -310,11 +310,13 @@ public class HomeFragmentTest extends BaseFragment implements AppBarLayout.OnOff
             mLocationClient.startLocation();
         }
         mLocationClient.setLocationListener(locationListener);
+
         initMenu();
         tvText.postDelayed(new Runnable() {
             @Override
             public void run() {
                 tvText.setText("获取天气信息失败");
+                avi_weather.hide();
             }
         }, 5000);
     }
@@ -346,7 +348,7 @@ public class HomeFragmentTest extends BaseFragment implements AppBarLayout.OnOff
                 public void run() {
                     setUpdate();
                 }
-            }, 1000);
+            }, 500);
         }
     }
 
@@ -412,6 +414,18 @@ public class HomeFragmentTest extends BaseFragment implements AppBarLayout.OnOff
     @Override
     public void onResume() {
         super.onResume();
+        userId = SharedPreferencesUtil.getString(getActivity(), SharedPreferencesUtil.USER_ID);
+        if (CommonUtils.isEmptyString(userId)) {
+            //展示需要登录的界面
+            list.clear();
+            contentList.clear();
+            tvSceneSetting.setText("立即登录");
+            llAddDevice.setVisibility(View.VISIBLE);
+            rvContent.setVisibility(View.GONE);
+            tvAddText.setText("立即登录");
+        } else {
+            initEvent();
+        }
         broadcastReceiver = new NetFragmentBroadcastReceiver();
         IntentFilter filter = new IntentFilter();
         filter.addAction("android.net.conn.CONNECTIVITY_CHANGE");
@@ -781,16 +795,14 @@ public class HomeFragmentTest extends BaseFragment implements AppBarLayout.OnOff
                         startActivity(new Intent(getActivity(), QsTwoControlActivity.class)
                                 .putExtra("scanResult", new ScanResultVo(dataBean.getDevice_no(),
                                         dataBean.getDevice_name(), dataBean.getDevice_mac(),
-                                        dataBean.getConnect_type()))
-                                .putExtra("isFirstConnect", dataBean.getIs_first_connect())
-                                .putExtra("deviceId", dataBean.getDevice_id()));
+                                        dataBean.getConnect_type(), dataBean.getIs_first_connect(), dataBean.getDevice_id())));
                         getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
                         break;
                     case "qs03":
                         startActivity(new Intent(getActivity(), QsThreeControlActivity.class)
-                                .putExtra("isFirstConnect", 1)
-                                .putExtra("device_name", dataBean.getDevice_name())
-                                .putExtra("deviceId", dataBean.getDevice_id()));
+                                .putExtra("scanResult", new ScanResultVo(dataBean.getDevice_no(),
+                                        dataBean.getDevice_name(), dataBean.getDevice_mac(),
+                                        dataBean.getConnect_type(), dataBean.getIs_first_connect(), dataBean.getDevice_id())));
                         getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
                         break;
                 }
@@ -964,7 +976,7 @@ public class HomeFragmentTest extends BaseFragment implements AppBarLayout.OnOff
                 if (CommonUtils.isEmptyString(liveResult.getTemperature())) {
                     tvTemperature.setText("Null");
                 } else {
-                    tvTemperature.setText(liveResult.getTemperature() + "");
+                    tvTemperature.setText(liveResult.getTemperature() + "°");
                 }
                 if (CommonUtils.isEmptyString(liveResult.getWeather())) {
                     tvOutdoorAir.setText("天气: Null");
@@ -983,10 +995,12 @@ public class HomeFragmentTest extends BaseFragment implements AppBarLayout.OnOff
                 }
             } else {
                 tvText.setText("天气信息获取失败");
+                avi_weather.hide();
                 llWeather.setVisibility(View.VISIBLE);
                 rlWeather.setVisibility(View.GONE);
             }
         } else {
+            avi_weather.hide();
             tvText.setText("天气信息获取失败");
             llWeather.setVisibility(View.VISIBLE);
             rlWeather.setVisibility(View.GONE);
@@ -1334,6 +1348,4 @@ public class HomeFragmentTest extends BaseFragment implements AppBarLayout.OnOff
                     }
                 });
     }
-
-
 }

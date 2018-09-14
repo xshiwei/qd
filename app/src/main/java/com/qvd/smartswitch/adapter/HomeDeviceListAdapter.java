@@ -89,20 +89,20 @@ public class HomeDeviceListAdapter extends RecyclerView.Adapter<RecyclerView.Vie
             }
             ((ViewHolderContent) holder).tv_device_name.setText(data.get(position).getDevice_name());
 
-            switch ((position + new Random().nextInt(50)) % 4) {
-                case 0:
-                    holder.itemView.setBackground(context.getResources().getDrawable(R.drawable.circle_green_ten));
-                    break;
-                case 1:
-                    holder.itemView.setBackground(context.getResources().getDrawable(R.drawable.circle_blue_ten));
-                    break;
-                case 2:
-                    holder.itemView.setBackground(context.getResources().getDrawable(R.drawable.circle_teal_ten));
-                    break;
-                case 3:
-                    holder.itemView.setBackground(context.getResources().getDrawable(R.drawable.circle_orange_ten));
-                    break;
-            }
+//            switch ((position + new Random().nextInt(50)) % 4) {
+//                case 0:
+//                    holder.itemView.setBackground(context.getResources().getDrawable(R.drawable.circle_green_ten));
+//                    break;
+//                case 1:
+//                    holder.itemView.setBackground(context.getResources().getDrawable(R.drawable.circle_blue_ten));
+//                    break;
+//                case 2:
+//                    holder.itemView.setBackground(context.getResources().getDrawable(R.drawable.circle_teal_ten));
+//                    break;
+//                case 3:
+//                    holder.itemView.setBackground(context.getResources().getDrawable(R.drawable.circle_orange_ten));
+//                    break;
+//            }
         }
     }
 

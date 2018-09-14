@@ -95,8 +95,6 @@ public class DeviceLogActivity extends BaseActivity {
         smartRefresh.setEnableLoadmoreWhenContentNotFull(true);//是否在列表不满一页时候开启上拉加载功能
         smartRefresh.setRefreshHeader(new MaterialHeader(this).setShowBezierWave(true));
         smartRefresh.setRefreshFooter(new BallPulseFooter(this).setSpinnerStyle(SpinnerStyle.Scale));
-
-
         refreshlayout();
     }
 

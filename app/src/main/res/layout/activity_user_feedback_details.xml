@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/home_manage_backgroud"
+    android:orientation="vertical">
+
+    <include layout="@layout/common_actionbar" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/y20"
+        android:background="@color/white">
+
+        <TextView
+            android:id="@+id/tv_content"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/x30"
+            android:layout_marginRight="@dimen/x30"
+            android:layout_marginTop="@dimen/y30"
+            android:text="啦啦啦"
+            android:textColor="@color/home_setting_text"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_content"
+            android:layout_marginBottom="@dimen/y30"
+            android:layout_marginLeft="@dimen/x30"
+            android:layout_marginTop="@dimen/y10"
+            android:text="蓝牙智能开关  |"
+            android:textColor="@color/home_setting_text_two"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/tv_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_content"
+            android:layout_marginBottom="@dimen/y30"
+            android:layout_marginTop="@dimen/y10"
+            android:layout_toRightOf="@+id/tv_name"
+            android:text="  2018-7-7"
+            android:textColor="@color/home_setting_text_two"
+            android:textSize="12sp" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y400"
+        android:layout_marginTop="@dimen/y20"
+        android:background="@color/white">
+
+        <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:src="@mipmap/feedback_success_pic"
+            app:civ_border_width="1px"
+            android:layout_above="@+id/tv_text"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="@dimen/y30"
+            app:civ_border_color="@color/popupwindow_edittext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/tv_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="@dimen/y30"
+            android:text="反馈已经提交，感谢您的吐槽"
+            android:textColor="@color/home_setting_text_three"
+            android:textSize="12sp" />
+
+    </RelativeLayout>
+
+</LinearLayout>

@@ -4,6 +4,7 @@ import com.qvd.smartswitch.model.device.RoomDeviceListVo;
 import com.qvd.smartswitch.model.home.HomeLeftListVo;
 import com.qvd.smartswitch.model.home.HomeListVo;
 import com.qvd.smartswitch.model.home.RoomListVo;
+import com.qvd.smartswitch.model.user.HelpFeedbackListVo;
 import com.qvd.smartswitch.model.user.UserInfoVo;
 
 import java.util.concurrent.TimeUnit;
@@ -92,4 +93,14 @@ public interface CacheProviders {
      */
     @LifeCache(duration = 1, timeUnit = TimeUnit.HOURS)
     Observable<UserInfoVo> getUserInfo(Observable<UserInfoVo> userInfoVoObservable, DynamicKey dynamicKey, EvictDynamicKey evictDynamicKey);
+
+    /**
+     * 获取系统反馈信息
+     * @param helpFeedbackListVoObservable
+     * @param dynamicKey
+     * @param evictDynamicKey
+     * @return
+     */
+    @LifeCache(duration = 1, timeUnit = TimeUnit.DAYS)
+    Observable<HelpFeedbackListVo> getUserHelpFeedbackInfo(Observable<HelpFeedbackListVo> helpFeedbackListVoObservable, DynamicKey dynamicKey, EvictDynamicKey evictDynamicKey);
 }

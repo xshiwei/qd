@@ -144,14 +144,13 @@ public class UserFragment extends BaseFragment {
                 break;
             case R.id.rl_share:
                 //共享设备
-                ToastUtil.showToast("功能开发中。请期待");
-//                startActivity(new Intent(getActivity(),UserShareActivity.class));
+                startActivity(new Intent(getActivity(), UserShareActivity.class));
+                getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
                 break;
             case R.id.rl_help:
                 //反馈帮助
-                ToastUtil.showToast("功能开发中。请期待");
-//                startActivity(new Intent(getActivity(), UserHelpActivity.class));
-//                getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+                startActivity(new Intent(getActivity(), UserHelpActivity.class));
+                getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
                 break;
             case R.id.rl_setting:
                 //设置

@@ -314,7 +314,6 @@ public class DeviceWifiSettingActivity extends BaseNoTipActivity {
                 //2、开始连接Wifi
                 Logger.e("开始连接wifi");
                 deviceMac = scanResult.BSSID;
-                //发送消息给服务器
                 handler.sendEmptyMessage(1);
             }
 
@@ -351,14 +350,14 @@ public class DeviceWifiSettingActivity extends BaseNoTipActivity {
                                     }
                                 }, 1000);
                             } else {
-                                showMyFailPopupWindow("添加设备到服务器失败，是否重试");
+                                showMyFailPopupWindow("请确保当前wifi连接是路由器wifi后，再重试");
                             }
                         }
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        showMyFailPopupWindow("添加设备到服务器失败，是否重试");
+                        showMyFailPopupWindow("请确保当前wifi连接是路由器wifi后，再重试");
                     }
 
                     @Override
@@ -429,7 +428,7 @@ public class DeviceWifiSettingActivity extends BaseNoTipActivity {
 
                     @Override
                     public void onNext(Long aLong) {
-                        RetrofitService.qdoApi.getIsWifiNetWorking(deviceMac, CommonUtils.getTableName(mSSID))
+                        RetrofitService.qdoApi.getIsWifiNetWorking(deviceMac, mSSID)
                                 .subscribeOn(Schedulers.io())
                                 .observeOn(AndroidSchedulers.mainThread())
                                 .subscribe(new Observer<IsWifiNetWorkVo>() {
@@ -444,11 +443,10 @@ public class DeviceWifiSettingActivity extends BaseNoTipActivity {
                                             if (isWifiNetWorkVo.getCode() == 200) {
                                                 if (isWifiNetWorkVo.getData().getIs_networking() == 1) {
                                                     tvDeviceInit.setTextColor(getResources().getColor(R.color.room_manage_add_text));
-                                                    resultVo = new ScanResultVo(mSSID, CommonUtils.getDeviceName(mSSID), deviceMac, 2);
                                                     device_id = isWifiNetWorkVo.getData().getDevice_id();
+                                                    resultVo = new ScanResultVo(mSSID, CommonUtils.getDeviceName(mSSID), deviceMac, 2, -1, device_id);
                                                     isStart = true;
                                                     startActivity(new Intent(DeviceWifiSettingActivity.this, DeviceSetRoomActivity.class)
-                                                            .putExtra("device_id", device_id)
                                                             .putExtra("scanResult", resultVo));
                                                     overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
                                                     finish();

@@ -217,7 +217,7 @@ public class DeviceAddActivity extends BaseActivity implements CheckListener {
     @Override
     protected void onResume() {
         super.onResume();
-        randomTextview.removeKeyWords();
+//        randomTextview.removeKeyWords();
 //        if (bluetoothAdapter.isEnabled()) {
 //            new Handler().postDelayed(new Runnable() {
 //                @Override
@@ -326,7 +326,7 @@ public class DeviceAddActivity extends BaseActivity implements CheckListener {
                 for (ScanResult result : list) {
                     switch (result.SSID) {
                         case "qs03":
-                            ScanResultVo resultVo = new ScanResultVo(result.SSID, CommonUtils.getDeviceName(result.SSID), result.BSSID, 2);
+                            ScanResultVo resultVo = new ScanResultVo(result.SSID, CommonUtils.getDeviceName(result.SSID), result.BSSID, 2, -1, null);
                             randomTextview.addKeyWord(resultVo);
                             handler.sendEmptyMessage(1);
                             break;
@@ -443,7 +443,7 @@ public class DeviceAddActivity extends BaseActivity implements CheckListener {
                     public void onNext(MessageVo messageVo) {
                         if (messageVo != null) {
                             if (messageVo.getCode() == 400) {
-                                ScanResultVo resultVo = new ScanResultVo(bleDevice.getName(), CommonUtils.getDeviceName(bleDevice.getName()), bleDevice.getMac(), 1);
+                                ScanResultVo resultVo = new ScanResultVo(bleDevice.getName(), CommonUtils.getDeviceName(bleDevice.getName()), bleDevice.getMac(), 1,-1,null);
                                 randomTextview.addKeyWord(resultVo);
                                 handler.sendEmptyMessage(1);
                             }

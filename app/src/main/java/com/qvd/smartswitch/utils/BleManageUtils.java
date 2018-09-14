@@ -28,11 +28,11 @@ public class BleManageUtils {
     public void initBleManage() {
         BleManager.getInstance()
                 .enableLog(true)
-                .setReConnectCount(1, 1000)//设置重连次数以及相隔时间
+                .setReConnectCount(5, 5000)//设置重连次数以及相隔时间
                 .setSplitWriteNum(20)//设置分包发送的默认字节数
                 .setMaxConnectCount(7)//设置最大连接数
-                .setOperateTimeout(3000)//设置操作超时时间
-                .setConnectOverTime(5000);//设置连接超时时间
+                .setOperateTimeout(4000)//设置操作超时时间
+                .setConnectOverTime(6000);//设置连接超时时间
     }
 
     /**
@@ -73,7 +73,7 @@ public class BleManageUtils {
                 .setDeviceName(true, names)   // 只扫描指定广播名的设备，可选
                 .setDeviceMac(mac)                  // 只扫描指定mac的设备，可选
                 .setAutoConnect(true)      // 连接时的autoConnect参数，可选，默认false
-                .setScanTimeOut(5000)              // 扫描超时时间，可选，默认10秒
+                .setScanTimeOut(8000)              // 扫描超时时间，可选，默认10秒
                 .build();
         BleManager.getInstance().initScanRule(scanRuleConfig);
     }
