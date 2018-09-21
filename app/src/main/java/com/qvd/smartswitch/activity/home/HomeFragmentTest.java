@@ -46,6 +46,7 @@ import com.qvd.smartswitch.R;
 import com.qvd.smartswitch.activity.base.BaseFragment;
 import com.qvd.smartswitch.activity.device.DeviceAddActivity;
 import com.qvd.smartswitch.activity.device.DeviceItemAndPrivacyActivity;
+import com.qvd.smartswitch.activity.device.DeviceShareActivity;
 import com.qvd.smartswitch.activity.device.DeviceSplashActivity;
 import com.qvd.smartswitch.activity.login.LoginActivity;
 import com.qvd.smartswitch.activity.qsThree.QsThreeControlActivity;
@@ -53,8 +54,11 @@ import com.qvd.smartswitch.activity.qsTwo.QsTwoControlActivity;
 import com.qvd.smartswitch.adapter.HomeDeviceListAdapter;
 import com.qvd.smartswitch.adapter.HomeListAdapter;
 import com.qvd.smartswitch.adapter.HomeMenuAdapter;
+import com.qvd.smartswitch.adapter.HomeShareListAdapter;
+import com.qvd.smartswitch.adapter.ShareDeviceListAdapter;
 import com.qvd.smartswitch.api.CacheSetting;
 import com.qvd.smartswitch.api.RetrofitService;
+import com.qvd.smartswitch.model.device.HomeShareDeviceListVo;
 import com.qvd.smartswitch.model.device.RoomDeviceListVo;
 import com.qvd.smartswitch.model.device.ScanResultVo;
 import com.qvd.smartswitch.model.device.UpdateDeviceRoomVo;
@@ -63,6 +67,8 @@ import com.qvd.smartswitch.model.home.HomeLeftListVo;
 import com.qvd.smartswitch.model.home.HomeListVo;
 import com.qvd.smartswitch.model.home.RoomListVo;
 import com.qvd.smartswitch.model.login.MessageVo;
+import com.qvd.smartswitch.model.user.DeleteReceiveShareVo;
+import com.qvd.smartswitch.model.user.UserReceiverDeviceListVo;
 import com.qvd.smartswitch.receiver.NetFragmentBroadcastReceiver;
 import com.qvd.smartswitch.utils.CommonUtils;
 import com.qvd.smartswitch.utils.ConfigUtils;
@@ -164,6 +170,14 @@ public class HomeFragmentTest extends BaseFragment implements AppBarLayout.OnOff
      * 服务器获取的设备数据源
      */
     private List<RoomDeviceListVo.DataBean> contentList = new ArrayList<>();
+
+    private HomeShareListAdapter shareListAdapter;
+
+    /**
+     * 共享的list
+     */
+    private List<HomeShareDeviceListVo.DataBean> shareList = new ArrayList<>();
+
     /**
      * 点击设置后显示弹窗
      */
@@ -223,6 +237,11 @@ public class HomeFragmentTest extends BaseFragment implements AppBarLayout.OnOff
      * 判断首页房间设备是否更新
      */
     private boolean isRoomList = false;
+    /**
+     * 判断首页分享列表是否更新
+     */
+    private boolean isShareList = false;
+
     private String userId;
 
 
@@ -361,6 +380,7 @@ public class HomeFragmentTest extends BaseFragment implements AppBarLayout.OnOff
         isCommonDevice = true;
         isHomeLeftList = true;
         isHomeMenu = true;
+        isShareList = true;
         if (CommonUtils.isEmptyString(userId)) {
             //展示需要登录的界面
             tvSceneSetting.setText("立即登录");
@@ -502,6 +522,8 @@ public class HomeFragmentTest extends BaseFragment implements AppBarLayout.OnOff
                     getCommonDevice();
                 } else if (list.get(position).getType() == 2) {
                     getRoomListDevice(list.get(position).getRoom_id());
+                } else if (list.get(position).getType() == 3) {
+                    getShareList();
                 }
                 listAdapter.setCheckedPosition(position);
                 mPosition = position;
@@ -602,6 +624,52 @@ public class HomeFragmentTest extends BaseFragment implements AppBarLayout.OnOff
                                 }
                             }
 
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                    }
+
+                    @Override
+                    public void onComplete() {
+                    }
+                });
+    }
+
+    /**
+     * 获取分享列表
+     */
+    private void getShareList() {
+        CacheSetting.getCache().getHomeShareDeviceList(RetrofitService.qdoApi.getShareRoomDevices(ConfigUtils.user_id), new DynamicKey(ConfigUtils.user_id), new EvictDynamicKey(isShareList))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<HomeShareDeviceListVo>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(HomeShareDeviceListVo homeShareDeviceListVo) {
+                        shareList.clear();
+                        if (homeShareDeviceListVo != null) {
+                            if (homeShareDeviceListVo.getCode() == 200) {
+                                if (homeShareDeviceListVo.getData() != null && homeShareDeviceListVo.getData().size() > 0) {
+                                    //获取右侧家庭设备数据
+                                    shareList.addAll(homeShareDeviceListVo.getData());
+                                    shareListAdapter = new HomeShareListAdapter(getActivity(), shareList);
+                                    rvContent.setLayoutManager(new GridLayoutManager(getActivity(), 2, LinearLayoutManager.VERTICAL, false));
+                                    rvContent.setAdapter(shareListAdapter);
+                                    shareListAdapter.notifyDataSetChanged();
+                                    llAddDevice.setVisibility(View.GONE);
+                                    rvContent.setVisibility(View.VISIBLE);
+                                    setShareOnItemClick();
+                                } else {
+                                    llAddDevice.setVisibility(View.VISIBLE);
+                                    rvContent.setVisibility(View.GONE);
+                                }
+                            }
                         }
                     }
 
@@ -782,6 +850,45 @@ public class HomeFragmentTest extends BaseFragment implements AppBarLayout.OnOff
 
 
     /**
+     * 分享点击事件
+     */
+    private void setShareOnItemClick() {
+        shareListAdapter.setOnItemClickListener(new HomeShareListAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                HomeShareDeviceListVo.DataBean dataBean = shareList.get(position);
+                switch (dataBean.getDevice_no()) {
+                    case "qs02":
+                        startActivity(new Intent(getActivity(), QsTwoControlActivity.class)
+                                .putExtra("scanResult", new ScanResultVo(dataBean.getDevice_no(),
+                                        dataBean.getDevice_name(), dataBean.getDevice_mac(),
+                                        dataBean.getConnect_type(), 0, dataBean.getDevice_id()))
+                                .putExtra("is_control", dataBean.getIs_control()));
+                        getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+                        break;
+                    case "qs03":
+                        startActivity(new Intent(getActivity(), QsThreeControlActivity.class)
+                                .putExtra("scanResult", new ScanResultVo(dataBean.getDevice_no(),
+                                        dataBean.getDevice_name(), dataBean.getDevice_mac(),
+                                        dataBean.getConnect_type(), 0, dataBean.getDevice_id())));
+                        getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+                        break;
+                }
+            }
+
+            @Override
+            public void onItemLongClickListener(View view, int position) {
+                showDeleteShareDeviceDialog(position);
+            }
+
+            @Override
+            public void onToggleButtonClickListener(boolean state, int position) {
+
+            }
+        });
+    }
+
+    /**
      * 内容点击事件
      */
     private void setOnItemClick() {
@@ -827,6 +934,66 @@ public class HomeFragmentTest extends BaseFragment implements AppBarLayout.OnOff
     }
 
     /**
+     * 展示删除共享设备的dialog
+     */
+    private void showDeleteShareDeviceDialog(int position) {
+        new MaterialDialog.Builder(getActivity())
+                .title("删除所选中的一个设备吗")
+                .negativeText("取消")
+                .positiveText("确定")
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        deleteReceiver(position);
+                    }
+                }).show();
+    }
+
+    /**
+     * 删除接受共享的设备
+     *
+     * @param position
+     */
+    private void deleteReceiver(int position) {
+        Gson gson = new Gson();
+        DeleteReceiveShareVo feedBackVo = new DeleteReceiveShareVo();
+        List<String> list1 = new ArrayList<>();
+        list1.add(shareList.get(position).getDevice_share_id());
+        feedBackVo.setDevice_share_id(list1);
+        String s = gson.toJson(feedBackVo);
+        RequestBody body = RequestBody.create(MediaType.parse("Content-Type: application/json"), s);
+        RetrofitService.qdoApi.deleteObjectUserShareDevicesInfo(body)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<MessageVo>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(MessageVo messageVo) {
+                        if (messageVo.getCode() == 200) {
+                            ToastUtil.showToast("删除成功");
+                            getShareList();
+                        } else {
+                            ToastUtil.showToast("删除失败");
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        ToastUtil.showToast("删除失败");
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
+    /**
      * 显示popupwindow
      */
     private void shouPopupwindow() {
@@ -865,7 +1032,6 @@ public class HomeFragmentTest extends BaseFragment implements AppBarLayout.OnOff
             getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
         });
     }
-
 
     /**
      * 切换家庭
@@ -1018,6 +1184,7 @@ public class HomeFragmentTest extends BaseFragment implements AppBarLayout.OnOff
     private void showDialog() {
         new MaterialDialog.Builder(getActivity())
                 .title("功能选择")
+                .titleColor(getResources().getColor(R.color.home_setting_text))
                 .items(R.array.home_device_dialog)
                 .itemsColor(getResources().getColor(R.color.app_red_color))
                 .itemsCallback(new MaterialDialog.ListCallback() {
@@ -1035,6 +1202,12 @@ public class HomeFragmentTest extends BaseFragment implements AppBarLayout.OnOff
                                 break;
                             case 3:
                                 showCommonDevice(1);
+                                break;
+                            case 4:
+                                startActivity(new Intent(getActivity(), DeviceShareActivity.class)
+                                        .putExtra("device_id", contentList.get(seletePosition).getDevice_id())
+                                        .putExtra("device_type", contentList.get(seletePosition).getDevice_no()));
+                                getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
                                 break;
                         }
                     }
@@ -1087,6 +1260,7 @@ public class HomeFragmentTest extends BaseFragment implements AppBarLayout.OnOff
     private void showDialogTwo() {
         new MaterialDialog.Builder(getActivity())
                 .title("功能选择")
+                .titleColor(getResources().getColor(R.color.home_setting_text))
                 .items(R.array.home_device_dialog_two)
                 .itemsColor(getResources().getColor(R.color.app_red_color))
                 .itemsCallback(new MaterialDialog.ListCallback() {
@@ -1105,6 +1279,12 @@ public class HomeFragmentTest extends BaseFragment implements AppBarLayout.OnOff
                             case 3:
                                 showCommonDevice(0);
                                 break;
+                            case 4:
+                                startActivity(new Intent(getActivity(), DeviceShareActivity.class)
+                                        .putExtra("device_id", contentList.get(seletePosition).getDevice_id())
+                                        .putExtra("device_type", contentList.get(seletePosition).getDevice_no()));
+                                getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+                                break;
                         }
                     }
                 })
@@ -1119,6 +1299,7 @@ public class HomeFragmentTest extends BaseFragment implements AppBarLayout.OnOff
     private void showDeleteDialog() {
         new MaterialDialog.Builder(getActivity())
                 .title("您确定要删除该设备吗")
+                .titleColor(getResources().getColor(R.color.home_setting_text))
                 .negativeText("取消")
                 .positiveText("确定")
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
@@ -1200,6 +1381,7 @@ public class HomeFragmentTest extends BaseFragment implements AppBarLayout.OnOff
     private void showRetryNameDialog() {
         new MaterialDialog.Builder(getActivity())
                 .title("设置设备名称")
+                .titleColor(getResources().getColor(R.color.home_setting_text))
                 .inputRange(1, 20, getResources().getColor(R.color.red))
                 .input(seleteDevice.getDevice_name(), null, false, new MaterialDialog.InputCallback() {
                     @Override
@@ -1276,6 +1458,7 @@ public class HomeFragmentTest extends BaseFragment implements AppBarLayout.OnOff
                                 }
                                 new MaterialDialog.Builder(getActivity())
                                         .title("移动设备")
+                                        .titleColor(getResources().getColor(R.color.home_setting_text))
                                         .items(strList)
                                         .itemsColor(getResources().getColor(R.color.app_red_color))
                                         .itemsCallbackSingleChoice(-1, new MaterialDialog.ListCallbackSingleChoice() {

@@ -19,6 +19,7 @@ import com.qvd.smartswitch.utils.ConfigUtils;
 import com.scwang.smartrefresh.header.MaterialHeader;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.header.ClassicsHeader;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
 import java.util.ArrayList;
@@ -67,11 +68,12 @@ public class ShareFragment extends BaseFragment {
         adapter = new ShareDeviceListAdapter(list);
         adapter.openLoadAnimation();
         adapter.isFirstOnly(false);
+        adapter.setHasStableIds(true);
         recyclerview.setAdapter(adapter);
 
         smartRefresh.setHeaderHeight(100);
         smartRefresh.setEnableHeaderTranslationContent(true);
-        smartRefresh.setRefreshHeader(new MaterialHeader(getActivity()));
+        smartRefresh.setRefreshHeader(new ClassicsHeader(getActivity()));
         smartRefresh.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(RefreshLayout refreshlayout) {
@@ -83,23 +85,24 @@ public class ShareFragment extends BaseFragment {
         adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                startActivity(new Intent(getActivity(), DeviceShareManageActivity.class));
+                startActivity(new Intent(getActivity(), DeviceShareManageActivity.class)
+                        .putExtra("device_id", list.get(position).getDevice_id())
+                        .putExtra("device_type", list.get(position).getTable_type()));
                 getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
             }
         });
-
-        myEmptyLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getData();
-            }
-        });
+        myEmptyLayout.setTextViewMessage("您当前还未添加设备");
         myErrorLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getData();
             }
         });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
         getData();
     }
 
@@ -119,11 +122,10 @@ public class ShareFragment extends BaseFragment {
 
                     @Override
                     public void onNext(UserShareDeviceListVo userShareDeviceListVo) {
+                        list.clear();
                         if (userShareDeviceListVo.getCode() == 200) {
                             if (userShareDeviceListVo.getData() != null) {
-                                list.clear();
                                 list.addAll(userShareDeviceListVo.getData());
-                                adapter.notifyDataSetChanged();
                                 smartRefresh.setEnableRefresh(true);
                             } else {
                                 adapter.setEmptyView(myEmptyLayout);
@@ -133,12 +135,14 @@ public class ShareFragment extends BaseFragment {
                             adapter.setEmptyView(myErrorLayout);
                             smartRefresh.setEnableRefresh(false);
                         }
+                        adapter.notifyDataSetChanged();
                     }
 
                     @Override
                     public void onError(Throwable e) {
                         adapter.setEmptyView(myErrorLayout);
                         smartRefresh.setEnableRefresh(false);
+                        adapter.notifyDataSetChanged();
                     }
 
                     @Override

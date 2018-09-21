@@ -28,7 +28,7 @@
             android:layout_centerInParent="true"
             android:text="WI-FI智能开关"
             android:textColor="@color/white"
-            android:textSize="16sp" />
+            android:textSize="15sp" />
 
         <ImageView
             android:id="@+id/iv_device_control_more"
@@ -49,8 +49,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/bmb"
-        android:layout_below="@+id/action_bar"
-        app:srlHeaderHeight="0dp">
+        android:layout_below="@+id/action_bar">
 
         <RelativeLayout
             android:layout_width="match_parent"

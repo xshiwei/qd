@@ -6,6 +6,8 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/white</item>
         <item name="colorAccent">@color/my_red</item>
+        <item name="md_title_color">@color/home_menu</item>
+        <item name="md_content_color">@color/home_setting_text_three</item>
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:listDivider">@drawable/recyclerview_decoration</item>
     </style>

@@ -26,7 +26,7 @@
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:textColor="@color/app_title"
-            android:textSize="16sp" />
+            android:textSize="15sp" />
 
         <TextView
             android:id="@+id/tv_device_timing_save"
@@ -37,7 +37,7 @@
             android:paddingRight="@dimen/x30"
             android:text="@string/device_timing_save"
             android:textColor="@color/app_title"
-            android:textSize="16sp" />
+            android:textSize="15sp" />
 
     </RelativeLayout>
 

@@ -93,7 +93,7 @@ public class LoginActivity extends BaseActivity {
         });
     }
 
-    @OnClick({R.id.tv_country, R.id.btn_login, R.id.tv_forget_password, R.id.tv_register, R.id.iv_wechat, R.id.iv_qq, R.id.iv_weibo})
+    @OnClick({R.id.tv_country, R.id.btn_login, R.id.tv_forget_password, R.id.tv_register, R.id.iv_wechat, R.id.iv_qq, R.id.iv_weibo, R.id.goback})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_country:
@@ -105,6 +105,8 @@ public class LoginActivity extends BaseActivity {
                 break;
             case R.id.tv_forget_password:
                 //忘记密码
+                startActivity(new Intent(this, ResetPasswordActivity.class));
+                overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
                 break;
             case R.id.tv_register:
                 //立刻注册
@@ -119,6 +121,9 @@ public class LoginActivity extends BaseActivity {
                 break;
             case R.id.iv_weibo:
                 //微博登录
+                break;
+            case R.id.goback:
+                finish();
                 break;
         }
     }

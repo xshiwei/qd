@@ -66,6 +66,7 @@ public class QsTwoSettingActivity extends BaseActivity {
     RelativeLayout rlDeviceDelete;
 
     private ScanResultVo scanResult;
+    private int is_control;
 
     @Override
     protected int setLayoutId() {
@@ -76,6 +77,11 @@ public class QsTwoSettingActivity extends BaseActivity {
     protected void initData() {
         super.initData();
         scanResult = (ScanResultVo) getIntent().getSerializableExtra("scanResult");
+        is_control = getIntent().getIntExtra("is_control", -1);
+        if (is_control == 1) {
+            rlRetryName.setVisibility(View.GONE);
+            rlDeviceShare.setVisibility(View.GONE);
+        }
         tvCommonActionbarTitle.setText(R.string.device_control_setting_title);
     }
 

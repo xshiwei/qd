@@ -26,7 +26,7 @@
             android:layout_centerInParent="true"
             android:text="蓝牙智能开关"
             android:textColor="@color/app_title"
-            android:textSize="14sp" />
+            android:textSize="15sp" />
 
     </RelativeLayout>
 
@@ -243,7 +243,6 @@
                 android:layout_marginLeft="@dimen/x50"
                 android:layout_marginRight="@dimen/x50"
                 android:background="@color/black_16" />
-
 
             <RelativeLayout
                 android:id="@+id/rl_retry_name"

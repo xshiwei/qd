@@ -10,17 +10,26 @@
         android:layout_height="@dimen/y400"
         android:background="@mipmap/login_actionbar">
 
+        <ImageView
+            android:id="@+id/goback"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/x30"
+            android:layout_marginTop="@dimen/y60"
+            android:padding="5dp"
+            android:src="@mipmap/actionbar_goback" />
+
         <TextView
-            android:visibility="gone"
             android:id="@+id/tv_country"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_marginRight="@dimen/x30"
-            android:layout_marginTop="@dimen/y90"
+            android:layout_marginTop="@dimen/y60"
             android:text="中国大陆"
             android:textColor="@color/white"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            android:visibility="gone" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -153,7 +162,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="@dimen/y100"
-        android:layout_marginTop="@dimen/y30">
+        android:layout_marginTop="@dimen/y30"
+        android:visibility="invisible">
 
         <ImageView
             android:id="@+id/iv_wechat"

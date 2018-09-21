@@ -12,7 +12,7 @@
         android:paddingTop="@dimen/y30"
         android:text="新手引导"
         android:textColor="@color/home_setting_text"
-        android:textSize="14sp" />
+        android:textSize="15sp" />
 
     <com.youth.banner.Banner xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/banner"

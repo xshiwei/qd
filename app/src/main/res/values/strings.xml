@@ -901,6 +901,7 @@
         <item>重命名</item>
         <item>删除</item>
         <item>设置常用</item>
+        <item>共享设备</item>
     </string-array>
 
     <string-array name="home_device_dialog_two">
@@ -908,6 +909,7 @@
         <item>重命名</item>
         <item>删除</item>
         <item>取消常用</item>
+        <item>共享设备</item>
     </string-array>
 
 </resources>

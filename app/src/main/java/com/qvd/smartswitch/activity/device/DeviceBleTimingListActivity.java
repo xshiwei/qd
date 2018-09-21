@@ -32,6 +32,7 @@ import com.qvd.smartswitch.widget.MyProgressDialog;
 import com.scwang.smartrefresh.header.MaterialHeader;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.header.ClassicsHeader;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
 import java.util.ArrayList;
@@ -85,11 +86,11 @@ public class DeviceBleTimingListActivity extends BaseActivity {
                     }
                 });
         //设置刷新控件头部高度
-        smartRefreshLayout.setHeaderHeight(80);
+        smartRefreshLayout.setHeaderHeight(100);
         smartRefreshLayout.setFooterHeight(1);
         smartRefreshLayout.setEnableHeaderTranslationContent(true);
         //设置头部样式
-        smartRefreshLayout.setRefreshHeader(new MaterialHeader(this));
+        smartRefreshLayout.setRefreshHeader(new ClassicsHeader(this));
         smartRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(RefreshLayout refreshlayout) {

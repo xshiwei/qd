@@ -31,6 +31,7 @@ import com.qvd.smartswitch.widget.MyEmptyLayout;
 import com.scwang.smartrefresh.header.MaterialHeader;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.header.ClassicsHeader;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
 import java.util.ArrayList;
@@ -94,7 +95,7 @@ public class UserFeedbackListActivity extends BaseActivity {
 
         smartRefresh.setHeaderHeight(100);
         smartRefresh.setEnableHeaderTranslationContent(true);
-        smartRefresh.setRefreshHeader(new MaterialHeader(this));
+        smartRefresh.setRefreshHeader(new ClassicsHeader(this));
         smartRefresh.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(RefreshLayout refreshlayout) {

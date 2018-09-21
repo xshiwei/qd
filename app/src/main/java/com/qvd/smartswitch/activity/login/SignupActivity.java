@@ -171,7 +171,7 @@ public class SignupActivity extends BaseActivity {
                 break;
             case R.id.btn_email_next:
                 //邮箱下一步
-                if (CommonUtils.isEmptyString(etInputEmail.getText().toString().trim())) {
+                if (CommonUtils.isEmptyString(etInputEmail.getText().toString().trim()) || CommonUtils.isEmptyString(etInputEmailCode.getText().toString().trim())) {
                     SnackbarUtils.Short(btnEmailNext, "邮箱不能为空").show();
                     return;
                 }

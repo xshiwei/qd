@@ -36,6 +36,7 @@ import com.qvd.smartswitch.utils.ToastUtil;
 import com.scwang.smartrefresh.header.MaterialHeader;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.header.ClassicsHeader;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 
@@ -141,10 +142,10 @@ public class QsOneControlActivity extends BaseNoTipActivity {
         smartRefresh.setHeaderHeight(100);
         smartRefresh.setFooterHeight(1);
         smartRefresh.setEnableRefresh(true);
-        smartRefresh.setEnableHeaderTranslationContent(false);
+        smartRefresh.setEnableHeaderTranslationContent(true);
         smartRefresh.setEnableFooterTranslationContent(false);
         //设置头部样式
-        smartRefresh.setRefreshHeader(new MaterialHeader(this));
+        smartRefresh.setRefreshHeader(new ClassicsHeader(this).setAccentColor(getResources().getColor(R.color.white)));
         smartRefresh.setOnRefreshListener(new OnRefreshListener() {
             @Override
             public void onRefresh(RefreshLayout refreshlayout) {

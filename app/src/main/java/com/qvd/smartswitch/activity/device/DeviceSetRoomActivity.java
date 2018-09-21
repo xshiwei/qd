@@ -96,14 +96,6 @@ public class DeviceSetRoomActivity extends BaseActivity {
      * 初始化设备图片
      */
     private void initDevice() {
-        switch (resultVo.getDeviceNo()) {
-            case "qs02":
-                ivDevicePic.setImageResource(R.color.white);
-                break;
-            case "qs03":
-                ivDevicePic.setImageResource(R.color.red);
-                break;
-        }
         tvName.setText(CommonUtils.getDeviceName(resultVo.getDeviceNo()));
         tableType = resultVo.getDeviceNo();
     }
@@ -117,7 +109,7 @@ public class DeviceSetRoomActivity extends BaseActivity {
     @Override
     protected void initImmersionBar() {
         super.initImmersionBar();
-        mImmersionBar.fitsSystemWindows(true).statusBarColor(R.color.white).init();
+        mImmersionBar.fitsSystemWindows(false).transparentBar().init();
     }
 
     @OnClick({R.id.iv_common_actionbar_goback, R.id.rl_device_name, R.id.iv_set_common, R.id.tv_complete, R.id.rl_selete_room})

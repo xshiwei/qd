@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/y120"
+    android:layout_height="@dimen/y130"
     android:background="@drawable/layout_seletor"
     android:clickable="true">
 
@@ -18,9 +18,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/x30"
-        android:layout_marginTop="@dimen/y20"
+        android:layout_marginTop="@dimen/y25"
         android:layout_toRightOf="@+id/iv_device_pic"
-        android:text="蓝牙智能开关"
         android:textColor="@color/home_setting_text"
         android:textSize="14sp"
         android:textStyle="normal" />
@@ -30,14 +29,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="@dimen/y25"
+        android:layout_marginBottom="@dimen/y30"
         android:layout_marginLeft="@dimen/x30"
         android:layout_marginRight="@dimen/x10"
         android:layout_toLeftOf="@+id/iv_more"
         android:layout_toRightOf="@+id/iv_device_pic"
         android:ellipsize="end"
         android:lines="1"
-        android:text="[卫生间]  未共享"
         android:textColor="@color/home_setting_text_two"
         android:textSize="12sp" />
 

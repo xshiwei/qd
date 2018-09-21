@@ -40,8 +40,6 @@ public class SplashActivity extends BaseActivity {
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);//去掉标题栏
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);//去掉信息栏
         super.onCreate(savedInstanceState);
-        //开启日志
-        LogReport.getInstance().upload(this);
         SysApplication.getInstance().addActivity(this);
         AutoLogin();
     }

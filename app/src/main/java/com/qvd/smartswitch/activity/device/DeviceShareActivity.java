@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -16,13 +17,28 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.qvd.smartswitch.R;
 import com.qvd.smartswitch.activity.base.BaseActivity;
+import com.qvd.smartswitch.adapter.ReceiverDeviceListAdapter;
+import com.qvd.smartswitch.adapter.RecentSharePeopleListAdapter;
+import com.qvd.smartswitch.adapter.UserFeedbackListAdapter;
+import com.qvd.smartswitch.api.RetrofitService;
+import com.qvd.smartswitch.model.user.RecentSharePeopleListVo;
 import com.qvd.smartswitch.utils.CommonUtils;
+import com.qvd.smartswitch.utils.ConfigUtils;
+import com.qvd.smartswitch.utils.ToastUtil;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 public class DeviceShareActivity extends BaseActivity {
 
@@ -42,8 +58,13 @@ public class DeviceShareActivity extends BaseActivity {
 
     private PopupWindow popupWindow;
     private View decorView;
+
     private String deviceId;
     private String device_type;
+
+    private RecentSharePeopleListAdapter adapter;
+    private List<RecentSharePeopleListVo.DataBean> list = new ArrayList<>();
+    private RecentSharePeopleListVo.DataBean dataBean;
 
     @Override
     protected int setLayoutId() {
@@ -57,6 +78,28 @@ public class DeviceShareActivity extends BaseActivity {
         deviceId = getIntent().getStringExtra("device_id");
         device_type = getIntent().getStringExtra("device_type");
         tvCommonActionbarTitle.setText(CommonUtils.getDeviceName(device_type));
+
+        recyclerview.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        adapter = new RecentSharePeopleListAdapter(list);
+        adapter.openLoadAnimation();
+        adapter.isFirstOnly(false);
+        adapter.setHasStableIds(true);
+        recyclerview.setAdapter(adapter);
+
+        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                dataBean = list.get(position);
+                showPopupWindow(new DeviceShareQevdoAccountFinallyActivity(), 2);
+                popupWindow.showAtLocation(decorView, Gravity.BOTTOM, 0, 0);
+            }
+        });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getData();
     }
 
     @Override
@@ -73,19 +116,63 @@ public class DeviceShareActivity extends BaseActivity {
                 break;
             case R.id.tv_manger:
                 //管理
+                startActivity(new Intent(this, DeviceShareManageActivity.class)
+                        .putExtra("device_id", deviceId)
+                        .putExtra("device_type", device_type));
+                overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
                 break;
             case R.id.ll_qevdo_account:
                 //科微多账号
-                showPopupWindow(new DeviceShareQevdoAccountActivity());
+                showPopupWindow(new DeviceShareQevdoAccountActivity(), 1);
                 popupWindow.showAtLocation(decorView, Gravity.BOTTOM, 0, 0);
                 break;
             case R.id.ll_family:
                 //家庭账号
+                startActivity(new Intent(this, DeviceShareFamilyAccountActivity.class)
+                        .putExtra("device_id", deviceId)
+                        .putExtra("device_type", device_type));
+                overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
                 break;
         }
     }
 
-    private void showPopupWindow(AppCompatActivity activity) {
+    /**
+     * 获取数据
+     */
+    private void getData() {
+        RetrofitService.qdoApi.getShareObjectUserInfo(ConfigUtils.user_id)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<RecentSharePeopleListVo>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(RecentSharePeopleListVo recentSharePeopleListVo) {
+                        if (recentSharePeopleListVo.getCode() == 200) {
+                            if (recentSharePeopleListVo.getData() != null) {
+                                list.clear();
+                                list.addAll(recentSharePeopleListVo.getData());
+                                adapter.notifyDataSetChanged();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+    }
+
+    private void showPopupWindow(AppCompatActivity activity, int type) {
         LayoutInflater inflater = LayoutInflater.from(this);
         View view = inflater.inflate(R.layout.popupwindow_device_share_selete, null, false);
         popupWindow = new PopupWindow(view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, false);
@@ -114,9 +201,19 @@ public class DeviceShareActivity extends BaseActivity {
             public void onClick(View v) {
                 iv_one.setVisibility(View.VISIBLE);
                 iv_two.setVisibility(View.INVISIBLE);
-                startActivity(new Intent(DeviceShareActivity.this, activity.getClass())
-                        .putExtra("device_id", deviceId)
-                        .putExtra("device_type", device_type));
+                if (type == 1) {
+                    startActivity(new Intent(DeviceShareActivity.this, activity.getClass())
+                            .putExtra("device_id", deviceId)
+                            .putExtra("device_type", device_type)
+                            .putExtra("is_control", 1));
+                } else {
+                    startActivity(new Intent(DeviceShareActivity.this, activity.getClass())
+                            .putExtra("person_info", dataBean)
+                            .putExtra("is_control", 1)
+                            .putExtra("device_id", deviceId)
+                            .putExtra("device_type", device_type)
+                            .putExtra("type", dataBean.getPeople_type()));
+                }
                 overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
                 popupWindow.dismiss();
             }
@@ -127,14 +224,23 @@ public class DeviceShareActivity extends BaseActivity {
             public void onClick(View v) {
                 iv_one.setVisibility(View.INVISIBLE);
                 iv_two.setVisibility(View.VISIBLE);
-                startActivity(new Intent(DeviceShareActivity.this, activity.getClass())
-                        .putExtra("device_id", deviceId)
-                        .putExtra("device_type", device_type));
+                if (type == 1) {
+                    startActivity(new Intent(DeviceShareActivity.this, activity.getClass())
+                            .putExtra("device_id", deviceId)
+                            .putExtra("device_type", device_type)
+                            .putExtra("is_control", 0));
+                } else {
+                    startActivity(new Intent(DeviceShareActivity.this, activity.getClass())
+                            .putExtra("person_info", dataBean)
+                            .putExtra("is_control", 0)
+                            .putExtra("device_id", deviceId)
+                            .putExtra("device_type", device_type)
+                            .putExtra("type", dataBean.getPeople_type()));
+                }
                 overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
                 popupWindow.dismiss();
             }
         });
-
     }
 
 

@@ -21,6 +21,7 @@ import com.qvd.smartswitch.activity.user.UserFragment;
 import com.qvd.smartswitch.utils.SysApplication;
 import com.qvd.smartswitch.utils.ToastUtil;
 import com.stephentuso.welcome.WelcomeHelper;
+import com.wenming.library.LogReport;
 
 import butterknife.BindView;
 
@@ -64,6 +65,8 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
         // 判断是否是第一次开启应用
         sampleWelcomeScreen = new WelcomeHelper(this, WelcomeActivity.class);
         sampleWelcomeScreen.show(savedInstanceState);
+        //开启日志
+        LogReport.getInstance().upload(this);
     }
 
     @Override

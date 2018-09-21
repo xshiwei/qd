@@ -45,7 +45,6 @@ public class UpdatePasswordActivity extends BaseActivity {
     @Override
     protected void initData() {
         super.initData();
-
     }
 
     @Override

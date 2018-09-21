@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/home_manage_backgroud">
@@ -9,7 +8,8 @@
         android:id="@+id/iv_device_pic"
         android:layout_width="match_parent"
         android:layout_height="@dimen/y400"
-        android:background="@color/white" />
+        android:scaleType="center"
+        android:src="@mipmap/set_room_pic" />
 
     <ImageView
         android:id="@+id/iv_common_actionbar_goback"
@@ -20,6 +20,16 @@
         android:contentDescription="TODO"
         android:padding="5dp"
         android:src="@mipmap/actionbar_goback" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/y60"
+        android:padding="5dp"
+        android:text="设置房间"
+        android:textColor="@color/home_setting_text"
+        android:textSize="15sp" />
 
     <RelativeLayout
         android:id="@+id/rl_device_name"
@@ -141,13 +151,13 @@
             android:textSize="14sp" />
 
         <ImageView
-            android:padding="5dp"
             android:id="@+id/iv_set_common"
             android:layout_width="@dimen/x60"
             android:layout_height="@dimen/y60"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/x20"
+            android:padding="5dp"
             android:src="@mipmap/register_selete" />
 
         <View

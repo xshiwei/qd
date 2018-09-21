@@ -5,8 +5,11 @@ import com.qvd.smartswitch.model.device.AddQS02Vo;
 import com.qvd.smartswitch.model.device.DeviceCommonQuestionVo;
 import com.qvd.smartswitch.model.device.DeviceLogVo;
 import com.qvd.smartswitch.model.device.DeviceTimingVo;
+import com.qvd.smartswitch.model.device.FamilyDetailsVo;
+import com.qvd.smartswitch.model.device.HomeShareDeviceListVo;
 import com.qvd.smartswitch.model.device.IsWifiNetWorkVo;
 import com.qvd.smartswitch.model.device.RoomDeviceListVo;
+import com.qvd.smartswitch.model.device.ShareSuccessVo;
 import com.qvd.smartswitch.model.home.AddHomeVo;
 import com.qvd.smartswitch.model.home.AddRomeVo;
 import com.qvd.smartswitch.model.home.DefaultRoomVo;
@@ -19,7 +22,11 @@ import com.qvd.smartswitch.model.home.RoomPicListVo;
 import com.qvd.smartswitch.model.login.LoginVo;
 import com.qvd.smartswitch.model.login.MessageVo;
 import com.qvd.smartswitch.model.login.RegisterVo;
+import com.qvd.smartswitch.model.user.DeviceShareManageListVo;
+import com.qvd.smartswitch.model.user.FamilyListVo;
 import com.qvd.smartswitch.model.user.HelpFeedbackListVo;
+import com.qvd.smartswitch.model.user.RecentSharePeopleListVo;
+import com.qvd.smartswitch.model.user.ShareObjectInfoVo;
 import com.qvd.smartswitch.model.user.UserFeedbackListVo;
 import com.qvd.smartswitch.model.user.UserInfoVo;
 import com.qvd.smartswitch.model.user.UserReceiverDeviceListVo;
@@ -91,6 +98,22 @@ public interface QdoApi {
      */
     @GET("user/login")
     Observable<LoginVo> login(@Query("username") String username, @Query("password") String password);
+
+    /**
+     * 忘记密码时发送邮箱或者手机号验证信息
+     *
+     * @return
+     */
+    @POST("user/user_forget_password_validation")
+    Observable<MessageVo> userForgetPasswordValidation(@QueryMap Map<String, Object> map);
+
+    /**
+     * 用户设置新密码
+     *
+     * @return
+     */
+    @POST("user/user_set_new_password")
+    Observable<MessageVo> userSetNewPassword(@Query("user_name") String user_name, @Query("password") String password, @Query("repeat_password") String repeat_password);
 
     /**
      * 获取个人信息
@@ -545,7 +568,114 @@ public interface QdoApi {
      * @return
      */
     @POST("add/share_devices_info")
-    Observable<MessageVo> addShareDevicesInfo(@Query("device_id") String device_id, @Query("share_object_userid") String share_object_userid,
-                                              @Query("share_userid") String share_userid, @Query("table_type") String table_type,
-                                              @Query("is_control") int is_control);
+    Observable<ShareSuccessVo> addShareDevicesInfo(@Query("device_id") String device_id, @Query("share_object_userid") String share_object_userid,
+                                                   @Query("share_userid") String share_userid, @Query("table_type") String table_type,
+                                                   @Query("is_control") int is_control);
+
+    /**
+     * 获取最近共享设备人列表
+     */
+    @GET("get/share_object_user_info")
+    Observable<RecentSharePeopleListVo> getShareObjectUserInfo(@Query("user_id") String user_id);
+
+    /**
+     * 获取共享对象信息
+     *
+     * @return
+     */
+    @GET("get/add_share_object_user_info")
+    Observable<ShareObjectInfoVo> getAddShareObjectUserInfo(@Query("user_identifier") String user_identifier);
+
+    /**
+     * 获取当前设备共享的对象列表
+     *
+     * @return
+     */
+    @GET("get/device_share_user_info")
+    Observable<DeviceShareManageListVo> getDeviceShareUserInfo(@Query("user_id") String user_id, @Query("device_id") String device_id);
+
+    /**
+     * 取消对共享人的授权
+     *
+     * @return
+     */
+    @POST("cancel/devices_share")
+    Observable<MessageVo> cancelDevicesShare(@Query("device_share_id") String device_share_id);
+
+    /**
+     * 获取分享设备列表
+     *
+     * @param user_id
+     * @return
+     */
+    @GET("get/share_room_devices")
+    Observable<HomeShareDeviceListVo> getShareRoomDevices(@Query("user_id") String user_id);
+
+    /**
+     * 获取用户所有的家庭成员
+     *
+     * @param user_id
+     * @return
+     */
+    @GET("get/all_family_members")
+    Observable<FamilyListVo> getAllFamilyMembers(@Query("user_id") String user_id);
+
+    /**
+     * 添加家庭关系成员
+     *
+     * @param user_id
+     * @param family_members_userid
+     * @param family_members_relation
+     * @return
+     */
+    @POST("add/family_member")
+    Observable<MessageVo> addFamilyMember(@Query("user_id") String user_id, @Query("family_members_userid") String family_members_userid, @Query("family_members_relation") String family_members_relation);
+
+    /**
+     * 添加分享到我的家人
+     *
+     * @param device_id
+     * @param share_object_userid
+     * @param share_userid
+     * @param table_type
+     * @return
+     */
+    @POST("share/family_members_of_device")
+    Observable<ShareSuccessVo> addShareFamilymembersOfDevice(@Query("device_id") String device_id, @Query("share_object_userid") String share_object_userid,
+                                                             @Query("share_userid") String share_userid, @Query("table_type") String table_type);
+
+    /**
+     * 同意成为对方家人
+     *
+     * @param family_members_id
+     * @return
+     */
+    @POST("agree/family_members_relation")
+    Observable<MessageVo> agreeFamilyMembersRelation(@Query("family_members_id") String family_members_id);
+
+    /**
+     * 解除关系
+     *
+     * @return
+     */
+    @POST("relieve/family_members")
+    Observable<MessageVo> relieveFamilyMembers(@Query("family_members_id") String family_members_id);
+
+    /**
+     * 更新家人关系
+     *
+     * @return
+     */
+    @POST("update/family_members")
+    Observable<MessageVo> updateFamilyMembers(@Query("family_members_id") String family_members_id, @Query("family_members_relation") String family_members_relation);
+
+    /**
+     * 查询家人的详细信息
+     *
+     * @param share_object_userid
+     * @param share_userid
+     * @return
+     */
+    @GET("get/family_members_detailInfo")
+    Observable<FamilyDetailsVo> addGetFamilyMembersDetailInfo(@Query("share_object_userid") String share_object_userid, @Query("share_userid") String share_userid);
 }

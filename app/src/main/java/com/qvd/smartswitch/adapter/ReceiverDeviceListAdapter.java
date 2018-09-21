@@ -25,14 +25,14 @@ public class ReceiverDeviceListAdapter extends BaseQuickAdapter<UserReceiverDevi
                 .setText(R.id.tv_content, "来自 " + item.getUser_name())
                 .addOnClickListener(R.id.tv_receiver);
         if (!CommonUtils.isEmptyString(item.getDevice_pic())) {
-            Picasso.with(mContext).load(item.getDevice_pic()).into((ImageView) helper.getView(R.id.iv_device_pic));
+            Picasso.with(mContext).load(item.getDevice_pic()).into((ImageView) helper.getView(R.id.civ_portrait));
         }
         if (item.getIs_share() == 0) {
-            helper.setVisible(R.id.tv_receiver, true);
-            helper.setGone(R.id.tv_already_receiver, true);
-        } else {
             helper.setGone(R.id.tv_receiver, true);
-            helper.setVisible(R.id.tv_already_receiver, true);
+            helper.setGone(R.id.tv_already_receiver, false);
+        } else {
+            helper.setGone(R.id.tv_receiver, false);
+            helper.setGone(R.id.tv_already_receiver, true);
         }
     }
 }

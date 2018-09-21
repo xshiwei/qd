@@ -1,5 +1,6 @@
 package com.qvd.smartswitch.api;
 
+import com.qvd.smartswitch.model.device.HomeShareDeviceListVo;
 import com.qvd.smartswitch.model.device.RoomDeviceListVo;
 import com.qvd.smartswitch.model.home.HomeLeftListVo;
 import com.qvd.smartswitch.model.home.HomeListVo;
@@ -96,6 +97,7 @@ public interface CacheProviders {
 
     /**
      * 获取系统反馈信息
+     *
      * @param helpFeedbackListVoObservable
      * @param dynamicKey
      * @param evictDynamicKey
@@ -103,4 +105,11 @@ public interface CacheProviders {
      */
     @LifeCache(duration = 1, timeUnit = TimeUnit.DAYS)
     Observable<HelpFeedbackListVo> getUserHelpFeedbackInfo(Observable<HelpFeedbackListVo> helpFeedbackListVoObservable, DynamicKey dynamicKey, EvictDynamicKey evictDynamicKey);
+
+    /**
+     * 获取首页分享列表
+     *
+     * @return
+     */
+    Observable<HomeShareDeviceListVo> getHomeShareDeviceList(Observable<HomeShareDeviceListVo> homeShareDeviceListVoObservable, DynamicKey dynamicKey, EvictDynamicKey evictDynamicKey);
 }

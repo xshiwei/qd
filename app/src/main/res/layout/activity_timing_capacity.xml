@@ -18,7 +18,7 @@
             android:layout_marginLeft="@dimen/x30"
             android:text="取消"
             android:textColor="@color/home_setting_text_two"
-            android:textSize="14sp" />
+            android:textSize="15sp" />
 
         <TextView
             android:id="@+id/tv_common_actionbar_title"
@@ -27,7 +27,7 @@
             android:layout_centerInParent="true"
             android:text="定时"
             android:textColor="@color/app_title"
-            android:textSize="14sp" />
+            android:textSize="15sp" />
 
         <TextView
             android:id="@+id/tv_confirm"
@@ -38,7 +38,7 @@
             android:layout_marginRight="@dimen/x30"
             android:text="确定"
             android:textColor="@color/home_voice_normal"
-            android:textSize="14sp" />
+            android:textSize="15sp" />
 
     </RelativeLayout>
 

@@ -27,7 +27,7 @@
             android:layout_marginRight="@dimen/x30"
             android:text="大陆地区"
             android:textColor="@color/add_room_save_background"
-            android:textSize="14sp" />
+            android:textSize="15sp" />
 
     </RelativeLayout>
 

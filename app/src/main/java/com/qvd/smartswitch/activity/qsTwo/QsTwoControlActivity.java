@@ -40,6 +40,7 @@ import com.qvd.smartswitch.utils.ToastUtil;
 import com.scwang.smartrefresh.header.MaterialHeader;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.header.ClassicsHeader;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 
@@ -97,6 +98,11 @@ public class QsTwoControlActivity extends BaseNoTipActivity {
 
     private BluetoothAdapter bluetoothAdapter;
 
+    /**
+     * 代表共享进来的权限
+     */
+    private int is_control;
+
     @Override
     protected int setLayoutId() {
         return R.layout.activity_qstwo_control;
@@ -109,16 +115,66 @@ public class QsTwoControlActivity extends BaseNoTipActivity {
         super.initData();
         tvConnectText = findViewById(R.id.tv_connect_text);
         resultVo = (ScanResultVo) getIntent().getSerializableExtra("scanResult");
+        is_control = getIntent().getIntExtra("is_control", -1);
+        tvDeviceControlTitle.setText(resultVo.getDeviceName());
+        bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        BleManageUtils.getInstance().initBleManage();
         if (resultVo.getIsFirstConnect() == 1) {
             startActivity(new Intent(this, DeviceSplashActivity.class)
                     .putExtra("scanResult", resultVo));
             overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
             finish();
             return;
+        } else if (is_control == 0) {
+            //共享进来的,仅可查看
+            ivDeviceControlMore.setVisibility(View.GONE);
+            bmb.setVisibility(View.GONE);
+            tvConnectText.setVisibility(View.GONE);
+            smartRefresh.setEnableRefresh(false);
+        } else {
+            ivSwitchOne.setOnClickListener(new OnMultiClickListener() {
+                @Override
+                public void onMultiClick(View v) {
+                    if (isStateOne) {
+                        //关灯
+                        writeToBleOne(String.valueOf("fe010010ffffffffffffffffffffffffffffffff"));
+                    } else {
+                        //开灯
+                        writeToBleOne(String.valueOf("fe010011ffffffffffffffffffffffffffffffff"));
+                    }
+                }
+            });
+            ivSwitchTwo.setOnClickListener(new OnMultiClickListener() {
+                @Override
+                public void onMultiClick(View v) {
+                    if (isStatetwo) {
+                        //关灯
+                        writeToBleTwo(String.valueOf("fe010020ffffffffffffffffffffffffffffffff"));
+                    } else {
+                        //开灯
+                        writeToBleTwo(String.valueOf("fe010021ffffffffffffffffffffffffffffffff"));
+                    }
+                }
+            });
+            //设置刷新控件头部高度
+            smartRefresh.setHeaderHeight(100);
+            smartRefresh.setFooterHeight(1);
+            smartRefresh.setEnableRefresh(true);
+            smartRefresh.setEnableHeaderTranslationContent(true);
+            smartRefresh.setEnableFooterTranslationContent(false);
+            //设置头部样式
+            smartRefresh.setRefreshHeader(new ClassicsHeader(this).setAccentColor(getResources().getColor(R.color.white)));
+            smartRefresh.setOnRefreshListener(new OnRefreshListener() {
+                @Override
+                public void onRefresh(RefreshLayout refreshlayout) {
+                    if (!BleManager.getInstance().isConnected(resultVo.getDeviceMac())) {
+                        connectDevice();
+                    }
+                    smartRefresh.finishRefresh(3000, true);
+                }
+            });
+            initMenu();
         }
-        tvDeviceControlTitle.setText(resultVo.getDeviceName());
-        bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        BleManageUtils.getInstance().initBleManage();
         /**
          * 去打开蓝牙，否则直接扫描设备
          */
@@ -138,48 +194,6 @@ public class QsTwoControlActivity extends BaseNoTipActivity {
                 }
             }, 3000);
         }
-        ivSwitchOne.setOnClickListener(new OnMultiClickListener() {
-            @Override
-            public void onMultiClick(View v) {
-                if (isStateOne) {
-                    //关灯
-                    writeToBleOne(String.valueOf("fe010010ffffffffffffffffffffffffffffffff"));
-                } else {
-                    //开灯
-                    writeToBleOne(String.valueOf("fe010011ffffffffffffffffffffffffffffffff"));
-                }
-            }
-        });
-        ivSwitchTwo.setOnClickListener(new OnMultiClickListener() {
-            @Override
-            public void onMultiClick(View v) {
-                if (isStatetwo) {
-                    //关灯
-                    writeToBleTwo(String.valueOf("fe010020ffffffffffffffffffffffffffffffff"));
-                } else {
-                    //开灯
-                    writeToBleTwo(String.valueOf("fe010021ffffffffffffffffffffffffffffffff"));
-                }
-            }
-        });
-        //设置刷新控件头部高度
-        smartRefresh.setHeaderHeight(100);
-        smartRefresh.setFooterHeight(1);
-        smartRefresh.setEnableRefresh(true);
-        smartRefresh.setEnableHeaderTranslationContent(false);
-        smartRefresh.setEnableFooterTranslationContent(false);
-        //设置头部样式
-        smartRefresh.setRefreshHeader(new MaterialHeader(this));
-        smartRefresh.setOnRefreshListener(new OnRefreshListener() {
-            @Override
-            public void onRefresh(RefreshLayout refreshlayout) {
-                if (!BleManager.getInstance().isConnected(resultVo.getDeviceMac())) {
-                    connectDevice();
-                }
-                smartRefresh.finishRefresh(3000, true);
-            }
-        });
-        initMenu();
     }
 
     /**
@@ -302,7 +316,11 @@ public class QsTwoControlActivity extends BaseNoTipActivity {
 
             @Override
             public void onConnectFail(BleDevice bleDevice, BleException exception) {
-                tvConnectText.setText("设备掉线，下拉重新连接设备");
+                if (is_control == 1) {
+                    tvConnectText.setText("设备可能被其他人正在使用,请检查后再试");
+                } else {
+                    tvConnectText.setText("设备掉线，下拉重新连接设备");
+                }
             }
 
             @Override
@@ -320,7 +338,11 @@ public class QsTwoControlActivity extends BaseNoTipActivity {
 
             @Override
             public void onDisConnected(boolean isActiveDisConnected, BleDevice device, BluetoothGatt gatt, int status) {
-                tvConnectText.setText("设备掉线，下拉重新连接设备");
+                if (is_control == 1) {
+                    tvConnectText.setText("设备可能被其他人正在使用,请检查后再试");
+                } else {
+                    tvConnectText.setText("设备掉线，下拉重新连接设备");
+                }
             }
         });
     }
@@ -504,7 +526,8 @@ public class QsTwoControlActivity extends BaseNoTipActivity {
                 break;
             case R.id.iv_device_control_more:
                 startActivity(new Intent(this, QsTwoSettingActivity.class)
-                        .putExtra("scanResult", resultVo));
+                        .putExtra("scanResult", resultVo)
+                        .putExtra("is_control", is_control));
                 overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
                 break;
         }

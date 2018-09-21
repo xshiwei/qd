@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/y120"
+    android:layout_height="@dimen/y130"
     android:clickable="true"
     android:background="@drawable/layout_seletor">
 
@@ -18,17 +18,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/x20"
-        android:layout_marginTop="@dimen/y20"
+        android:layout_marginTop="@dimen/y25"
         android:layout_toRightOf="@+id/civ_portrait"
         android:text="共享至2812"
         android:textColor="@color/home_setting_text"
         android:textSize="14sp" />
 
     <TextView
+        android:id="@+id/tv_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="@dimen/y25"
+        android:layout_marginBottom="@dimen/y30"
         android:layout_marginLeft="@dimen/x20"
         android:layout_toRightOf="@+id/civ_portrait"
         android:text="2018-2-12   仅可查看"

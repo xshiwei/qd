@@ -21,6 +21,7 @@ import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.constant.SpinnerStyle;
 import com.scwang.smartrefresh.layout.footer.BallPulseFooter;
+import com.scwang.smartrefresh.layout.header.ClassicsHeader;
 import com.scwang.smartrefresh.layout.listener.OnLoadmoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.vivian.timelineitemdecoration.itemdecoration.DotItemDecoration;
@@ -93,7 +94,7 @@ public class DeviceLogActivity extends BaseActivity {
         smartRefresh.setHeaderHeight(100);
         smartRefresh.setFooterHeight(100);
         smartRefresh.setEnableLoadmoreWhenContentNotFull(true);//是否在列表不满一页时候开启上拉加载功能
-        smartRefresh.setRefreshHeader(new MaterialHeader(this).setShowBezierWave(true));
+        smartRefresh.setRefreshHeader(new ClassicsHeader(this).setAccentColor(getResources().getColor(R.color.white)));
         smartRefresh.setRefreshFooter(new BallPulseFooter(this).setSpinnerStyle(SpinnerStyle.Scale));
         refreshlayout();
     }

@@ -41,7 +41,6 @@
         android:layout_alignParentBottom="true">
 
         <com.melnykov.fab.FloatingActionButton
-            android:visibility="gone"
             android:id="@+id/fab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -49,6 +48,7 @@
             android:layout_marginBottom="@dimen/y40"
             android:layout_marginRight="@dimen/x40"
             android:src="@mipmap/home_setting_delete"
+            android:visibility="gone"
             app:fab_colorNormal="@color/white"
             app:fab_colorPressed="@color/add_device_background"
             app:fab_type="normal" />

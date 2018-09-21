@@ -110,7 +110,8 @@ public class QsTwoSoundControlActivity extends BaseActivity {
             case R.id.iv_topic:
                 break;
             case R.id.iv_sound:
-                ret = mAsr.startListening(mRecognizerListener);
+//                ret = mAsr.startListening(mRecognizerListener);
+                setSound();
                 tvText.setText("你可以这样说：");
                 break;
             case R.id.iv_close:
@@ -124,7 +125,6 @@ public class QsTwoSoundControlActivity extends BaseActivity {
         super.onResume();
         FlowerCollector.onResume(this);
         FlowerCollector.onPageStart(TAG);
-        setSound();
     }
 
     /**

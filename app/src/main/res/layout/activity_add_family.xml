@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/home_manage_backgroud"
+    android:orientation="vertical">
+
+    <include layout="@layout/common_actionbar" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/x30"
+        android:layout_marginTop="@dimen/y50"
+        android:text="与我的关系"
+        android:textColor="@color/home_content_text"
+        android:textSize="13sp" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y65"
+        android:layout_marginLeft="@dimen/x30"
+        android:layout_marginRight="@dimen/x30"
+        android:layout_marginTop="@dimen/y20"
+        android:background="@drawable/stroke_white_one">
+
+        <EditText
+            android:id="@+id/et_input_relation"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:background="@null"
+            android:inputType="text"
+            android:maxLength="20"
+            android:paddingLeft="@dimen/x10"
+            android:textColor="@color/home_setting_text"
+            android:textSize="13sp" />
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/x30"
+        android:layout_marginTop="@dimen/y30"
+        android:text="输入账号"
+        android:textColor="@color/home_content_text"
+        android:textSize="13sp" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y65"
+        android:layout_marginLeft="@dimen/x30"
+        android:layout_marginRight="@dimen/x30"
+        android:layout_marginTop="@dimen/y20"
+        android:background="@drawable/stroke_white_one">
+
+        <EditText
+            android:id="@+id/et_input_account"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:background="@null"
+            android:inputType="phone"
+            android:maxLength="20"
+            android:paddingLeft="@dimen/x10"
+            android:textColor="@color/home_setting_text"
+            android:textSize="13sp" />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/tv_add"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y70"
+        android:layout_marginLeft="@dimen/x50"
+        android:layout_marginRight="@dimen/x50"
+        android:layout_marginTop="@dimen/y80"
+        android:background="@drawable/circle_green_twenty"
+        android:gravity="center"
+        android:text="添加"
+        android:textColor="@color/white"
+        android:textSize="14sp" />
+
+</LinearLayout>

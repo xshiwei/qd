@@ -21,6 +21,7 @@ import com.qvd.smartswitch.utils.ConfigUtils;
 import com.qvd.smartswitch.utils.ToastUtil;
 import com.scwang.smartrefresh.header.MaterialHeader;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.scwang.smartrefresh.layout.header.ClassicsHeader;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,18 +68,18 @@ public class ReceiveFragment extends BaseFragment {
         adapter = new ReceiverDeviceListAdapter(list);
         adapter.openLoadAnimation();
         adapter.isFirstOnly(false);
+        adapter.setHasStableIds(true);
         recyclerview.setAdapter(adapter);
         smartRefresh.setHeaderHeight(100);
         smartRefresh.setEnableHeaderTranslationContent(true);
-        smartRefresh.setRefreshHeader(new MaterialHeader(getActivity()));
+        smartRefresh.setRefreshHeader(new ClassicsHeader(getActivity()));
         smartRefresh.setOnRefreshListener(refreshlayout -> {
             getData();
             smartRefresh.finishRefresh(1500, true);
         });
 
-        myEmptyLayout.setOnClickListener(v -> getData());
+        myEmptyLayout.setTextViewMessage("您当前没有共享消息");
         myErrorLayout.setOnClickListener(v -> getData());
-        getData();
 
         adapter.setOnItemChildClickListener((adapter, view, position) -> {
             //接受
@@ -92,7 +93,12 @@ public class ReceiveFragment extends BaseFragment {
                 return true;
             }
         });
+    }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        getData();
     }
 
     /**
@@ -100,26 +106,26 @@ public class ReceiveFragment extends BaseFragment {
      */
     private void showDeleteDialog(int position) {
         new MaterialDialog.Builder(getActivity())
-                .title("要删除这一条消息吗")
+                .content("要删除这一条消息吗")
                 .negativeText("取消")
                 .positiveText("确定")
                 .onNegative((dialog, which) -> {
                 })
-                .onPositive((dialog, which) -> deleteReceiver(list.get(position).getDevice_share_id()))
+                .onPositive((dialog, which) -> deleteReceiver(position))
                 .show();
     }
 
     /**
      * 删除接受共享的消息
      *
-     * @param device_share_id
+     * @param position
      */
-    private void deleteReceiver(String device_share_id) {
+    private void deleteReceiver(int position) {
         Gson gson = new Gson();
         DeleteReceiveShareVo feedBackVo = new DeleteReceiveShareVo();
-        List<String> list = new ArrayList<>();
-        list.add(device_share_id);
-        feedBackVo.setDevice_share_id(list);
+        List<String> list1 = new ArrayList<>();
+        list1.add(list.get(position).getDevice_share_id());
+        feedBackVo.setDevice_share_id(list1);
         String s = gson.toJson(feedBackVo);
         RequestBody body = RequestBody.create(MediaType.parse("Content-Type: application/json"), s);
         RetrofitService.qdoApi.deleteObjectUserShareDevicesInfo(body)
@@ -135,6 +141,7 @@ public class ReceiveFragment extends BaseFragment {
                     public void onNext(MessageVo messageVo) {
                         if (messageVo.getCode() == 200) {
                             ToastUtil.showToast("删除成功");
+                            getData();
                         } else {
                             ToastUtil.showToast("删除失败");
                         }
@@ -169,6 +176,7 @@ public class ReceiveFragment extends BaseFragment {
                     @Override
                     public void onNext(MessageVo messageVo) {
                         if (messageVo.getCode() == 200) {
+                            list.get(position).setIs_share(1);
                             adapter.notifyItemChanged(position);
                         } else {
                             ToastUtil.showToast("网络错误");
@@ -204,11 +212,10 @@ public class ReceiveFragment extends BaseFragment {
 
                     @Override
                     public void onNext(UserReceiverDeviceListVo userReceiverDeviceListVo) {
+                        list.clear();
                         if (userReceiverDeviceListVo.getCode() == 200) {
                             if (userReceiverDeviceListVo.getData() != null) {
-                                list.clear();
                                 list.addAll(userReceiverDeviceListVo.getData());
-                                adapter.notifyDataSetChanged();
                                 smartRefresh.setEnableRefresh(true);
                             } else {
                                 adapter.setEmptyView(myEmptyLayout);
@@ -218,12 +225,14 @@ public class ReceiveFragment extends BaseFragment {
                             adapter.setEmptyView(myErrorLayout);
                             smartRefresh.setEnableRefresh(false);
                         }
+                        adapter.notifyDataSetChanged();
                     }
 
                     @Override
                     public void onError(Throwable e) {
                         adapter.setEmptyView(myErrorLayout);
                         smartRefresh.setEnableRefresh(false);
+                        adapter.notifyDataSetChanged();
                     }
 
                     @Override

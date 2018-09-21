@@ -12,12 +12,13 @@
         android:background="@color/white">
 
         <ImageView
+            android:padding="5dp"
+            android:layout_marginLeft="@dimen/x20"
             android:id="@+id/iv_common_actionbar_goback"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:contentDescription="TODO"
-            android:paddingLeft="@dimen/x20"
             android:src="@mipmap/actionbar_goback" />
 
         <TextView
@@ -27,7 +28,7 @@
             android:layout_centerInParent="true"
             android:text="新建智能"
             android:textColor="@color/app_title"
-            android:textSize="14sp" />
+            android:textSize="15sp" />
 
         <TextView
             android:id="@+id/tv_save"

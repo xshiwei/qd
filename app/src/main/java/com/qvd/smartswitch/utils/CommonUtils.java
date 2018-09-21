@@ -332,4 +332,17 @@ public class CommonUtils {
         }
     }
 
+    /**
+     * 获取分享后对象是否接受的状态
+     * @param i
+     * @return
+     */
+    public static String getShareState(int i) {
+        if (i == 0) {
+            return "未接受";
+        } else {
+            return "已接受";
+        }
+    }
+
 }
