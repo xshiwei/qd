@@ -354,7 +354,7 @@ public class QsTwoTimingActivity extends BaseActivity {
                 break;
             case R.id.tv_device_timing_save:
                 //实现定时功能
-                if (newHour == 0 && newMinute == 0) {
+                if (newHour == 00 && newMinute == 00) {
                     ToastUtil.showToast("时间不能设置为零");
                     return;
                 }

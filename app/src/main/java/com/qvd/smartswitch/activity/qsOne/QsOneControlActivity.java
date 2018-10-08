@@ -368,7 +368,7 @@ public class QsOneControlActivity extends BaseNoTipActivity {
     @Override
     protected void initImmersionBar() {
         super.initImmersionBar();
-        mImmersionBar.fitsSystemWindows(false).transparentBar().statusBarDarkFont(false).init();
+        mImmersionBar.fitsSystemWindows(true).statusBarColor(R.color.light_background_end).statusBarDarkFont(false).init();
     }
 
     /**

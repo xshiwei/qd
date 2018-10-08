@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/action_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y80"
+        android:background="@color/home_list_background">
+
+        <ImageView
+            android:id="@+id/iv_common_actionbar_goback"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/x20"
+            android:contentDescription="TODO"
+            android:padding="5dp"
+            android:src="@mipmap/actionbar_goback" />
+
+        <TextView
+            android:id="@+id/tv_common_actionbar_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="勿扰模式"
+            android:textColor="@color/app_title"
+            android:textSize="15sp" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y150">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/y35"
+            android:layout_marginTop="@dimen/y20"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/x50"
+            android:text="勿扰模式"
+            android:textColor="@color/black"
+            android:textSize="14sp" />
+
+        <com.zcw.togglebutton.ToggleButton xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/tlb_disturbance_mode"
+            android:layout_width="@dimen/x70"
+            android:layout_height="@dimen/y35"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/x50"
+            android:layout_marginTop="@dimen/y20"
+            app:tbAnimate="true"
+            app:tbOffBorderColor="@color/home_setting_text_two"
+            app:tbOffColor="@color/home_setting_text_two"
+            app:tbOnColor="@color/add_home_background"
+            app:tbSpotColor="@color/white"></com.zcw.togglebutton.ToggleButton>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tlb_disturbance_mode"
+            android:layout_marginLeft="@dimen/x50"
+            android:layout_marginRight="@dimen/x50"
+            android:layout_marginTop="@dimen/y20"
+            android:text="开启后，设定时间段内不会自动续扫，机器人会自动降低播放的语音音量"
+            android:textColor="@color/home_setting_text_two"
+            android:textSize="13sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="@dimen/x50"
+            android:layout_marginRight="@dimen/x50"
+            android:background="@color/black_16" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_start_time"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y100">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:paddingLeft="@dimen/x50"
+            android:text="开始时间"
+            android:textColor="@color/black"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tv_start_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/x50"
+            android:contentDescription="TODO"
+            android:text="22:00"
+            android:textColor="@color/home_content_text"
+            android:textSize="14sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="@dimen/x50"
+            android:layout_marginRight="@dimen/x50"
+            android:background="@color/black_16" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_end_time"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y100">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:paddingLeft="@dimen/x50"
+            android:text="结束时间"
+            android:textColor="@color/black"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tv_end_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/x50"
+            android:contentDescription="TODO"
+            android:text="08:00"
+            android:textColor="@color/home_content_text"
+            android:textSize="14sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="@dimen/x50"
+            android:layout_marginRight="@dimen/x50"
+            android:background="@color/black_16" />
+
+    </RelativeLayout>
+
+</LinearLayout>

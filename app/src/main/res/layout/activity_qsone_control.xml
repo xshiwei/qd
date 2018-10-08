@@ -8,8 +8,7 @@
     <RelativeLayout
         android:id="@+id/action_bar"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/y100"
-        android:layout_marginTop="@dimen/y60">
+        android:layout_height="@dimen/y100">
 
         <ImageView
             android:id="@+id/iv_device_control_goback"

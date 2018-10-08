@@ -227,7 +227,7 @@
             android:background="@drawable/user_message_selector"
             android:clickable="true"
             android:gravity="center"
-            android:text="注 销"
+            android:text="退出登录"
             android:textColor="@color/home_setting_text"
             android:textSize="14sp" />
 

@@ -16,7 +16,7 @@ public class WelcomeActivity extends com.stephentuso.welcome.WelcomeActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         SysApplication.getInstance().addActivity(this);
-        PermissionUtils.requestPermission(this, Permission.READ_PHONE_STATE);
+//        PermissionUtils.requestPermission(this, Permission.READ_PHONE_STATE);
         PermissionUtils.requestPermission(this, Permission.Group.LOCATION);
         PermissionUtils.requestPermission(this, Permission.Group.STORAGE);
     }
@@ -51,7 +51,6 @@ public class WelcomeActivity extends com.stephentuso.welcome.WelcomeActivity {
                         "All elements of the welcome screen can be customized easily.")
                         .background(R.color.blue_background)
                 )
-
                 .swipeToDismiss(true)
                 .exitAnimation(android.R.anim.fade_out)
                 .build();

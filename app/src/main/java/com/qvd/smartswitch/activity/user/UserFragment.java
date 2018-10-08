@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.qvd.smartswitch.R;
 import com.qvd.smartswitch.activity.base.BaseFragment;
 import com.qvd.smartswitch.activity.login.LoginActivity;
+import com.qvd.smartswitch.activity.robot.RobotControlActivity;
 import com.qvd.smartswitch.api.CacheSetting;
 import com.qvd.smartswitch.api.RetrofitService;
 import com.qvd.smartswitch.model.user.UserInfoVo;
@@ -84,7 +85,7 @@ public class UserFragment extends BaseFragment {
 
     private void getUserInfo() {
         CacheSetting.getCache().getUserInfo(RetrofitService.qdoApi.getUserInfo(ConfigUtils.user_id),
-                new DynamicKey(userId), new EvictDynamicKey(false))
+                new DynamicKey(userId), new EvictDynamicKey(true))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<UserInfoVo>() {
@@ -128,7 +129,9 @@ public class UserFragment extends BaseFragment {
         switch (view.getId()) {
             case R.id.iv_message:
                 //消息中心
-                ToastUtil.showToast("功能开发中。请期待");
+//                ToastUtil.showToast("功能开发中。请期待");
+                startActivity(new Intent(getActivity(), RobotControlActivity.class));
+                getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
                 break;
             case R.id.rl_portrait:
                 //头像
@@ -142,6 +145,7 @@ public class UserFragment extends BaseFragment {
                 break;
             case R.id.rl_family:
                 //我的家庭
+
                 if (CommonUtils.isEmptyString(userId)) {
                     startActivity(new Intent(mActivity, LoginActivity.class));
                     getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);

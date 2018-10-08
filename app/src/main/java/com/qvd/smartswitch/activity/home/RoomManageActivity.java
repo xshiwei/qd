@@ -47,13 +47,13 @@ public class RoomManageActivity extends BaseActivity {
     TextView tvAddRoom;
     @BindView(R.id.recyclerview)
     RecyclerView recyclerview;
-    @BindView(R.id.emptylayout)
-    EmptyLayout emptylayout;
 
     private List<RoomListVo.DataBean> list = new ArrayList<>();
     private RoomManageListAdapter adapter;
 
     private boolean isRoom = false;
+
+    private EmptyLayout emptylayout;
     /**
      * 家庭id
      */
@@ -74,6 +74,7 @@ public class RoomManageActivity extends BaseActivity {
     protected void initData() {
         super.initData();
         family_id = getIntent().getStringExtra("family_id");
+        emptylayout = findViewById(R.id.emptylayout);
     }
 
     @Override

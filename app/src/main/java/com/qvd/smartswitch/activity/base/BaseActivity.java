@@ -81,7 +81,6 @@ public abstract class BaseActivity extends RxAppCompatActivity implements NetBro
         initData();
         //view与数据绑定
         initView();
-
     }
 
     @Override

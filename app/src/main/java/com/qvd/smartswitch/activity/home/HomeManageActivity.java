@@ -46,8 +46,8 @@ public class HomeManageActivity extends BaseActivity {
     RecyclerView recyclerview;
     @BindView(R.id.rl_add)
     RelativeLayout rlAdd;
-    @BindView(R.id.emptylayout)
-    EmptyLayout emptylayout;
+
+    private EmptyLayout emptylayout;
 
 
     /**
@@ -74,6 +74,7 @@ public class HomeManageActivity extends BaseActivity {
     protected void initData() {
         super.initData();
         tvCommonActionbarTitle.setText("家庭管理");
+        emptylayout = findViewById(R.id.emptylayout);
     }
 
     @Override

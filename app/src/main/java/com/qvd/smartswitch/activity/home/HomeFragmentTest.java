@@ -7,6 +7,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
@@ -49,6 +50,7 @@ import com.qvd.smartswitch.activity.device.DeviceItemAndPrivacyActivity;
 import com.qvd.smartswitch.activity.device.DeviceShareActivity;
 import com.qvd.smartswitch.activity.device.DeviceSplashActivity;
 import com.qvd.smartswitch.activity.login.LoginActivity;
+import com.qvd.smartswitch.activity.login.WelcomeActivity;
 import com.qvd.smartswitch.activity.qsThree.QsThreeControlActivity;
 import com.qvd.smartswitch.activity.qsTwo.QsTwoControlActivity;
 import com.qvd.smartswitch.adapter.HomeDeviceListAdapter;
@@ -79,6 +81,7 @@ import com.scwang.smartrefresh.header.MaterialHeader;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
+import com.stephentuso.welcome.WelcomeHelper;
 import com.wang.avi.AVLoadingIndicatorView;
 import com.yanzhenjie.permission.Permission;
 
@@ -244,7 +247,6 @@ public class HomeFragmentTest extends BaseFragment implements AppBarLayout.OnOff
 
     private String userId;
 
-
     public static HomeFragmentTest newInstance(String param1) {
         HomeFragmentTest fragment = new HomeFragmentTest();
         Bundle args = new Bundle();
@@ -256,12 +258,6 @@ public class HomeFragmentTest extends BaseFragment implements AppBarLayout.OnOff
     @Override
     protected int setLayoutId() {
         return R.layout.fragment_home_two;
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
     }
 
     @Override
@@ -330,7 +326,7 @@ public class HomeFragmentTest extends BaseFragment implements AppBarLayout.OnOff
         }
         mLocationClient.setLocationListener(locationListener);
 
-        initMenu();
+//        initMenu();
         tvText.postDelayed(new Runnable() {
             @Override
             public void run() {

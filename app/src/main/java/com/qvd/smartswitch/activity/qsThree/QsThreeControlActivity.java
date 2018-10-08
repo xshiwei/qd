@@ -417,7 +417,7 @@ public class QsThreeControlActivity extends BaseActivity {
     @Override
     protected void initImmersionBar() {
         super.initImmersionBar();
-        mImmersionBar.fitsSystemWindows(false).transparentBar().statusBarDarkFont(false).init();
+        mImmersionBar.fitsSystemWindows(true).statusBarColor(R.color.light_background_end).statusBarDarkFont(false).init();
     }
 
     @OnClick({R.id.iv_device_control_goback, R.id.iv_device_control_more})

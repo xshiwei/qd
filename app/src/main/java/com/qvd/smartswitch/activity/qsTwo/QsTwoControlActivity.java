@@ -4,6 +4,7 @@ package com.qvd.smartswitch.activity.qsTwo;
 import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothGatt;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Handler;
@@ -49,7 +50,9 @@ import java.util.concurrent.TimeUnit;
 import butterknife.BindView;
 import butterknife.OnClick;
 import io.reactivex.Observable;
+import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
@@ -156,6 +159,30 @@ public class QsTwoControlActivity extends BaseNoTipActivity {
                     }
                 }
             });
+            ivLightOne.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (isStateOne) {
+                        //关灯
+                        writeToBleOne(String.valueOf("fe010010ffffffffffffffffffffffffffffffff"));
+                    } else {
+                        //开灯
+                        writeToBleOne(String.valueOf("fe010011ffffffffffffffffffffffffffffffff"));
+                    }
+                }
+            });
+            ivLightTwo.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (isStatetwo) {
+                        //关灯
+                        writeToBleTwo(String.valueOf("fe010020ffffffffffffffffffffffffffffffff"));
+                    } else {
+                        //开灯
+                        writeToBleTwo(String.valueOf("fe010021ffffffffffffffffffffffffffffffff"));
+                    }
+                }
+            });
             //设置刷新控件头部高度
             smartRefresh.setHeaderHeight(100);
             smartRefresh.setFooterHeight(1);
@@ -175,6 +202,7 @@ public class QsTwoControlActivity extends BaseNoTipActivity {
             });
             initMenu();
         }
+
         /**
          * 去打开蓝牙，否则直接扫描设备
          */
@@ -194,6 +222,7 @@ public class QsTwoControlActivity extends BaseNoTipActivity {
                 }
             }, 3000);
         }
+        showTip();
     }
 
     /**
@@ -215,17 +244,6 @@ public class QsTwoControlActivity extends BaseNoTipActivity {
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
                         bluetoothAdapter.enable();
-                        dialog = new MaterialDialog.Builder(QsTwoControlActivity.this)
-                                .content("设备正在初始化")
-                                .progress(true, 0)
-                                .autoDismiss(false)
-                                .show();
-                        try {
-                            Thread.sleep(3000);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                        dialog.dismiss();
                     }
                 })
                 .show();
@@ -302,6 +320,55 @@ public class QsTwoControlActivity extends BaseNoTipActivity {
                 }
             }, 100);
         }
+    }
+
+
+    /**
+     * 展示提示
+     */
+    private void showTip() {
+        Observable.intervalRange(1, 1, 3, 0, TimeUnit.MINUTES)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .compose(this.<Long>bindUntilEvent(ActivityEvent.DESTROY))
+                .subscribe(new Observer<Long>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(Long aLong) {
+                        new MaterialDialog.Builder(QsTwoControlActivity.this)
+                                .content("您当前停留该设备时间太长，可能导致其他用户无法连接该设备")
+                                .negativeText("不再提示")
+                                .positiveText("确定")
+                                .onNegative(new MaterialDialog.SingleButtonCallback() {
+                                    @Override
+                                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+
+                                    }
+                                })
+                                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                                    @Override
+                                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                                        showTip();
+                                    }
+                                })
+                                .canceledOnTouchOutside(false)
+                                .show();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
     }
 
     /**
@@ -410,7 +477,7 @@ public class QsTwoControlActivity extends BaseNoTipActivity {
     @Override
     protected void initImmersionBar() {
         super.initImmersionBar();
-        mImmersionBar.fitsSystemWindows(false).transparentBar().statusBarDarkFont(false).init();
+        mImmersionBar.fitsSystemWindows(true).statusBarColor(R.color.light_background_end).statusBarDarkFont(false).init();
     }
 
     /**

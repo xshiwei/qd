@@ -178,7 +178,7 @@ public class UserInformationActivity extends BaseActivity {
                 break;
             case R.id.tv_logout:
                 dialog = new MaterialDialog.Builder(this)
-                        .content("正在注销")
+                        .content("正在退出")
                         .progress(true, 0)
                         .autoDismiss(false)
                         .show();

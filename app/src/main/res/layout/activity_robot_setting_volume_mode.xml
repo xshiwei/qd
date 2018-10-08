@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/action_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y80"
+        android:background="@color/home_list_background">
+
+        <ImageView
+            android:id="@+id/iv_common_actionbar_goback"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/x20"
+            android:contentDescription="TODO"
+            android:padding="5dp"
+            android:src="@mipmap/actionbar_goback" />
+
+        <TextView
+            android:id="@+id/tv_common_actionbar_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="音量设置"
+            android:textColor="@color/app_title"
+            android:textSize="15sp" />
+
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/popupwindow_cancle_background"
+        android:paddingBottom="@dimen/y30"
+        android:paddingLeft="@dimen/x50"
+        android:paddingTop="@dimen/y30"
+        android:text="可拖动滑杆调节机器人语音音量大小，调节完成后点击试听
+按钮可试听机器人音量大小"
+        android:textColor="@color/home_content_text"
+        android:textSize="13sp" />
+
+    <RelativeLayout
+        android:id="@+id/rl_disturbance_mode"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y100">
+
+        <ImageView
+            android:id="@+id/iv_volume_low"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/x50"
+            android:src="@mipmap/robot_volume_low" />
+
+        <SeekBar
+            android:id="@+id/sb_volume"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/x10"
+            android:layout_marginRight="@dimen/x10"
+            android:layout_toLeftOf="@+id/iv_volume_hight"
+            android:layout_toRightOf="@+id/iv_volume_low"
+            android:thumb="@mipmap/robot_volume_progress" />
+
+        <ImageView
+            android:id="@+id/iv_volume_hight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/x50"
+            android:contentDescription="TODO"
+            android:src="@mipmap/robot_volume_hight" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="@dimen/x50"
+            android:layout_marginRight="@dimen/x50"
+            android:background="@color/black_16" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="bottom">
+
+        <TextView
+            android:id="@+id/tv_listening_test"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/y60"
+            android:layout_marginBottom="@dimen/y60"
+            android:layout_marginLeft="@dimen/x50"
+            android:layout_marginRight="@dimen/x50"
+            android:background="@drawable/stroke_white_one_circle_five"
+            android:gravity="center"
+            android:text="试听"
+            android:textColor="@color/home_setting_text"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+
+
+</LinearLayout>

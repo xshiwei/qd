@@ -12,6 +12,7 @@ import android.widget.FrameLayout;
 import com.ashokvarma.bottomnavigation.BottomNavigationBar;
 import com.ashokvarma.bottomnavigation.BottomNavigationItem;
 import com.clj.fastble.BleManager;
+import com.orhanobut.logger.Logger;
 import com.qvd.smartswitch.R;
 import com.qvd.smartswitch.activity.base.BaseActivity;
 import com.qvd.smartswitch.activity.capacity.CapacityFragment;
@@ -39,7 +40,6 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
     private Fragment userFragment;
 
     private long firstTime = 0;
-    private WelcomeHelper sampleWelcomeScreen;
 
     /**
      * 别的页面返回时显示的fragment
@@ -62,17 +62,14 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // 判断是否是第一次开启应用
-        sampleWelcomeScreen = new WelcomeHelper(this, WelcomeActivity.class);
-        sampleWelcomeScreen.show(savedInstanceState);
         //开启日志
         LogReport.getInstance().upload(this);
+        Logger.e("oncreate");
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
         super.onSaveInstanceState(outState, outPersistentState);
-        sampleWelcomeScreen.show(outState);
     }
 
     @Override
@@ -92,7 +89,9 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
                 .setFirstSelectedPosition(lastSelectedPosition)
                 .initialise();
         bottomNavigationBar.setTabSelectedListener(this);
-        setDefaultFragment();
+//        setDefaultFragment();
+        onTabSelected(0);
+        bottomNavigationBar.selectTab(0);
     }
 
     @Override
@@ -202,8 +201,6 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        BleManager.getInstance().disconnectAllDevice();
-        BleManager.getInstance().destroy();
     }
 
 }

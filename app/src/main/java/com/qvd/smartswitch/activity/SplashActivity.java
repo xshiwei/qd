@@ -2,12 +2,14 @@ package com.qvd.smartswitch.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
 import android.view.Window;
 import android.view.WindowManager;
 
 import com.qvd.smartswitch.R;
 import com.qvd.smartswitch.activity.base.BaseActivity;
+import com.qvd.smartswitch.activity.login.WelcomeActivity;
 import com.qvd.smartswitch.api.RetrofitService;
 import com.qvd.smartswitch.model.login.LoginVo;
 import com.qvd.smartswitch.utils.CommonUtils;
@@ -17,6 +19,7 @@ import com.qvd.smartswitch.utils.RxHelper;
 import com.qvd.smartswitch.utils.SharedPreferencesUtil;
 import com.qvd.smartswitch.utils.SysApplication;
 import com.qvd.smartswitch.widget.SimpleButton;
+import com.stephentuso.welcome.WelcomeHelper;
 import com.wenming.library.LogReport;
 import com.yanzhenjie.permission.Permission;
 
@@ -35,13 +38,25 @@ public class SplashActivity extends BaseActivity {
 
     private SimpleButton sbSkip;
 
+    private WelcomeHelper sampleWelcomeScreen;
+    private boolean show;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);//去掉标题栏
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);//去掉信息栏
         super.onCreate(savedInstanceState);
         SysApplication.getInstance().addActivity(this);
-        AutoLogin();
+
+        // 判断是否是第一次开启应用
+        sampleWelcomeScreen = new WelcomeHelper(this, WelcomeActivity.class);
+        show = sampleWelcomeScreen.show(savedInstanceState);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistentState) {
+        super.onSaveInstanceState(outState, outPersistentState);
+        sampleWelcomeScreen.show(outState);
     }
 
     @Override
@@ -52,7 +67,10 @@ public class SplashActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        initData();
+        if (!show) {
+            initSplashData();
+            AutoLogin();
+        }
     }
 
     /**
@@ -97,7 +115,7 @@ public class SplashActivity extends BaseActivity {
     }
 
 
-    protected void initData() {
+    protected void initSplashData() {
         sbSkip = findViewById(R.id.sb_skip);
         RxHelper.countdown(3)
                 .subscribe(new Observer<Integer>() {
@@ -132,6 +150,20 @@ public class SplashActivity extends BaseActivity {
     public void onBackPressed() {
         // 不响应后退键
         return;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == WelcomeHelper.DEFAULT_WELCOME_SCREEN_REQUEST) {
+            if (resultCode == RESULT_OK) {
+                startActivity(new Intent(this, MainActivity.class));
+                overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+                // Code here will run if the welcome screen was completed
+            } else {
+                SysApplication.getInstance().exit();
+            }
+        }
     }
 
     @OnClick(R.id.sb_skip)

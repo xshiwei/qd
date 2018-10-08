@@ -61,11 +61,6 @@ public class DeviceSplashActivity extends BaseActivity {
         super.initData();
         resultVo = (ScanResultVo) getIntent().getSerializableExtra("scanResult");
         setHomeBanner();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
         //展示popupWindow
         View decorView = getWindow().getDecorView();
         decorView.post(new Runnable() {
