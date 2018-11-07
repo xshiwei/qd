@@ -1,17 +1,13 @@
 package com.qvd.smartswitch.adapter;
 
-import android.content.Context;
-import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
+import android.support.annotation.Nullable;
 import android.widget.ImageView;
-import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.BaseViewHolder;
 import com.qvd.smartswitch.R;
 import com.qvd.smartswitch.model.home.RoomListVo;
-import com.qvd.smartswitch.model.home.Test2Vo;
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -19,79 +15,15 @@ import java.util.List;
  * Created by Administrator on 2018/6/13 0013.
  */
 
-public class RoomManageListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private Context context;
-    private List<RoomListVo.DataBean> data;
-
-    public RoomManageListAdapter(Context context, List<RoomListVo.DataBean> data) {
-        this.context = context;
-        this.data = data;
-    }
-
-
-    public interface OnItemClickListener {
-        void onItemClick(View view, int position);
-
-        void onItemLongClickListener(View view, int position);
-    }
-
-    private OnItemClickListener onItemClickListener;
-
-    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
-        this.onItemClickListener = onItemClickListener;
-    }
-
-
-    @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_room_manage, parent, false);
-        return new MyViewHolder(view);
+public class RoomManageListAdapter extends BaseQuickAdapter<RoomListVo.DataBean, BaseViewHolder> {
+    public RoomManageListAdapter(@Nullable List<RoomListVo.DataBean> data) {
+        super(R.layout.item_room_manage, data);
     }
 
     @Override
-    public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
-        if (holder instanceof MyViewHolder) {
-            if (onItemClickListener != null) {
-                holder.itemView.setOnClickListener(new View.OnClickListener() {
-
-                    @Override
-                    public void onClick(View view) {
-                        int position = holder.getLayoutPosition();
-                        onItemClickListener.onItemClick(holder.itemView, position);
-                    }
-                });
-                holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
-
-                    @Override
-                    public boolean onLongClick(View view) {
-                        int position = holder.getLayoutPosition();
-                        onItemClickListener.onItemLongClickListener(holder.itemView, position);
-                        return true;
-                    }
-                });
-            }
-            ((MyViewHolder) holder).tv_text.setText(data.get(position).getRoom_name());
-            ((MyViewHolder) holder).tv_device_num.setText(data.get(position).getDevice_count() + "个设备");
-            Picasso.with(context).load(data.get(position).getRoom_pic()).into(((MyViewHolder) holder).iv_pic);
-        }
-    }
-
-
-    @Override
-    public int getItemCount() {
-        return data.size();
-    }
-
-
-    public class MyViewHolder extends RecyclerView.ViewHolder {
-        ImageView iv_pic;
-        TextView tv_text, tv_device_num;
-
-        public MyViewHolder(View itemView) {
-            super(itemView);
-            tv_text = itemView.findViewById(R.id.tv_text);
-            iv_pic = itemView.findViewById(R.id.iv_pic);
-            tv_device_num = itemView.findViewById(R.id.tv_device_num);
-        }
+    protected void convert(BaseViewHolder helper, RoomListVo.DataBean item) {
+        helper.setText(R.id.tv_text, item.getRoom_name())
+                .setText(R.id.tv_device_num, item.getDevice_count() + "个设备");
+        Glide.with(mContext).load(item.getRoom_pic()).into((ImageView) helper.getView(R.id.iv_pic));
     }
 }

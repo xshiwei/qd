@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/home_manage_backgroud"
@@ -13,7 +14,8 @@
         android:layout_height="@dimen/y130"
         android:layout_marginTop="@dimen/y30"
         android:background="@drawable/layout_seletor"
-        android:clickable="true">
+        android:clickable="true"
+        android:focusable="true">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/iv_one"
@@ -21,7 +23,8 @@
             android:layout_height="@dimen/y80"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/x50"
-            android:src="@color/black_16" />
+            android:src="@color/black_16"
+            tools:ignore="RtlHardcoded" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -29,9 +32,10 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/x50"
             android:layout_toRightOf="@+id/iv_one"
-            android:text="日出/日落"
+            android:text="@string/weather_capacity_text_one"
             android:textColor="@color/add_capacity_text"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            tools:ignore="RtlHardcoded" />
 
         <ImageView
             android:layout_width="wrap_content"
@@ -39,14 +43,16 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/x30"
-            android:src="@mipmap/home_manage_right" />
+            android:src="@mipmap/home_manage_right"
+            tools:ignore="RtlHardcoded" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1px"
             android:layout_alignParentBottom="true"
             android:layout_marginLeft="@dimen/x30"
-            android:background="@color/black_16" />
+            android:background="@color/black_16"
+            tools:ignore="RtlHardcoded" />
 
     </RelativeLayout>
 
@@ -55,7 +61,8 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/y130"
         android:background="@drawable/layout_seletor"
-        android:clickable="true">
+        android:clickable="true"
+        android:focusable="true">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/iv_two"
@@ -63,7 +70,8 @@
             android:layout_height="@dimen/y80"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/x50"
-            android:src="@color/black_16" />
+            android:src="@color/black_16"
+            tools:ignore="RtlHardcoded" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -71,16 +79,17 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/x50"
             android:layout_toRightOf="@+id/iv_two"
-            android:text="室外温度"
+            android:text="@string/weather_capacity_text_two"
             android:textColor="@color/add_capacity_text"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            tools:ignore="RtlHardcoded" />
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="@dimen/x30"
+            android:layout_marginEnd="@dimen/x30"
             android:src="@mipmap/home_manage_right" />
 
         <View
@@ -88,7 +97,8 @@
             android:layout_height="1px"
             android:layout_alignParentBottom="true"
             android:layout_marginLeft="@dimen/x30"
-            android:background="@color/black_16" />
+            android:background="@color/black_16"
+            tools:ignore="RtlHardcoded" />
 
     </RelativeLayout>
 
@@ -97,14 +107,15 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/y130"
         android:background="@drawable/layout_seletor"
-        android:clickable="true">
+        android:clickable="true"
+        android:focusable="true">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/iv_three"
             android:layout_width="@dimen/x80"
             android:layout_height="@dimen/y80"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/x50"
+            android:layout_marginStart="@dimen/x50"
             android:src="@color/black_16" />
 
         <TextView
@@ -113,9 +124,10 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/x50"
             android:layout_toRightOf="@+id/iv_three"
-            android:text="室外湿度"
+            android:text="@string/weather_capacity_text_three"
             android:textColor="@color/add_capacity_text"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            tools:ignore="RtlHardcoded" />
 
         <ImageView
             android:layout_width="wrap_content"
@@ -123,14 +135,16 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/x30"
-            android:src="@mipmap/home_manage_right" />
+            android:src="@mipmap/home_manage_right"
+            tools:ignore="RtlHardcoded" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1px"
             android:layout_alignParentBottom="true"
             android:layout_marginLeft="@dimen/x30"
-            android:background="@color/black_16" />
+            android:background="@color/black_16"
+            tools:ignore="RtlHardcoded" />
 
     </RelativeLayout>
 
@@ -139,7 +153,8 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/y130"
         android:background="@drawable/layout_seletor"
-        android:clickable="true">
+        android:clickable="true"
+        android:focusable="true">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/iv_four"
@@ -147,7 +162,8 @@
             android:layout_height="@dimen/y80"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/x50"
-            android:src="@color/black_16" />
+            android:src="@color/black_16"
+            tools:ignore="RtlHardcoded" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -155,9 +171,10 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/x50"
             android:layout_toRightOf="@+id/iv_four"
-            android:text="室外PM2.5"
+            android:text="@string/weather_capacity_text_four"
             android:textColor="@color/add_capacity_text"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            tools:ignore="RtlHardcoded" />
 
         <ImageView
             android:layout_width="wrap_content"
@@ -165,14 +182,16 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/x30"
-            android:src="@mipmap/home_manage_right" />
+            android:src="@mipmap/home_manage_right"
+            tools:ignore="RtlHardcoded" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1px"
             android:layout_alignParentBottom="true"
             android:layout_marginLeft="@dimen/x30"
-            android:background="@color/black_16" />
+            android:background="@color/black_16"
+            tools:ignore="RtlHardcoded" />
 
     </RelativeLayout>
 

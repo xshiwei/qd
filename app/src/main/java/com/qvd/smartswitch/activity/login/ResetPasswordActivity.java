@@ -41,7 +41,7 @@ public class ResetPasswordActivity extends BaseActivity {
     @Override
     protected void initData() {
         super.initData();
-        tvCommonActionbarTitle.setText("科微多账号-重置密码");
+        tvCommonActionbarTitle.setText(R.string.reset_password_title);
     }
 
     @Override
@@ -57,7 +57,7 @@ public class ResetPasswordActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.tv_help:
-                ToastUtil.showToast("功能正在开发中。。。");
+                ToastUtil.showToast(getString(R.string.common_features_being_development));
                 break;
             case R.id.tv_next:
                 if (vaild()) {
@@ -93,10 +93,10 @@ public class ResetPasswordActivity extends BaseActivity {
         boolean b = false;
         if (CommonUtils.isEmptyString(etAccount.getText().toString())) {
             b = true;
-            ToastUtil.showToast("账号不能为空");
+            ToastUtil.showToast(getString(R.string.reset_password_account_not_empty));
         } else if (!RegexpUtils.isEmailNO(etAccount.getText().toString()) && !RegexpUtils.isMobileNO(etAccount.getText().toString()) && etAccount.getText().toString().length() != 10) {
             b = true;
-            ToastUtil.showToast("账号格式不正确");
+            ToastUtil.showToast(getString(R.string.reset_password_type_error));
         }
         return b;
     }

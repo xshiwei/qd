@@ -21,9 +21,10 @@
             android:background="@color/white"
             android:hint="@string/device_update_nickname_tip"
             android:maxLength="10"
-            android:paddingLeft="@dimen/x20"
+            android:paddingStart="@dimen/x20"
             android:textColor="@color/black"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            android:inputType="" />
 
         <View
             android:layout_width="match_parent"

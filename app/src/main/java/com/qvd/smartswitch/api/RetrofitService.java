@@ -1,20 +1,16 @@
 package com.qvd.smartswitch.api;
 
-import android.app.Activity;
 import android.support.annotation.NonNull;
-import android.view.Window;
-import android.view.WindowManager;
 
 import com.orhanobut.logger.Logger;
 import com.qvd.smartswitch.MyApplication;
 import com.qvd.smartswitch.utils.NetUtil;
-import com.qvd.smartswitch.utils.SnackbarUtils;
 import com.qvd.smartswitch.utils.ToastUtil;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 
@@ -83,57 +79,49 @@ public class RetrofitService {
     /**
      * 云端响应头拦截器，用来配置缓存策略
      */
-    private static final Interceptor sRewriteCacheControlInterceptor = new Interceptor() {
+    private static final Interceptor sRewriteCacheControlInterceptor = chain -> {
+        Request request = chain.request();
+        if (!NetUtil.isNetworkAvalible(MyApplication.getContext())) {
+            request = request.newBuilder().cacheControl(CacheControl.FORCE_CACHE).build();
+            ToastUtil.showToast("网络未连接，请检查网络后再试");
+        }
+        Response originalResponse = chain.proceed(request);
 
-        @Override
-        public Response intercept(Chain chain) throws IOException {
-            Request request = chain.request();
-            if (!NetUtil.isNetworkAvalible(MyApplication.getContext())) {
-                request = request.newBuilder().cacheControl(CacheControl.FORCE_CACHE).build();
-                ToastUtil.showToast("网络未连接，请检查网络后再试");
-            }
-            Response originalResponse = chain.proceed(request);
-
-            if (NetUtil.isNetworkAvalible(MyApplication.getContext())) {
-                //有网的时候读接口上的@Headers里的配置，你可以在这里进行统一的设置
-                String cacheControl = request.cacheControl().toString();
-                return originalResponse.newBuilder()
-                        .header("Cache-Control", cacheControl)
-                        .removeHeader("Pragma")
-                        .build();
-            } else {
-                return originalResponse.newBuilder()
-                        .header("Cache-Control", "public, " + CACHE_CONTROL_CACHE)
-                        .removeHeader("Pragma")
-                        .build();
-            }
+        if (NetUtil.isNetworkAvalible(MyApplication.getContext())) {
+            //有网的时候读接口上的@Headers里的配置，你可以在这里进行统一的设置
+            String cacheControl = request.cacheControl().toString();
+            return originalResponse.newBuilder()
+                    .header("Cache-Control", cacheControl)
+                    .removeHeader("Pragma")
+                    .build();
+        } else {
+            return originalResponse.newBuilder()
+                    .header("Cache-Control", "public, " + CACHE_CONTROL_CACHE)
+                    .removeHeader("Pragma")
+                    .build();
         }
     };
 
     /**
      * 打印返回的json数据拦截器
      */
-    private static final Interceptor sLoggingInterceptor = new Interceptor() {
-
-        @Override
-        public Response intercept(Chain chain) throws IOException {
-            final Request request = chain.request();
-            Buffer requestBuffer = new Buffer();
-            if (request.body() != null) {
-                request.body().writeTo(requestBuffer);
-            } else {
-                Logger.d("LogTAG", "request.body() == null");
-            }
-            //打印url信息
-            Logger.w(request.url() + (request.body() != null ? "?" + _parseParams(request.body(), requestBuffer) : ""));
-
-            return chain.proceed(request);
+    private static final Interceptor sLoggingInterceptor = chain -> {
+        final Request request = chain.request();
+        Buffer requestBuffer = new Buffer();
+        if (request.body() != null) {
+            Objects.requireNonNull(request.body()).writeTo(requestBuffer);
+        } else {
+            Logger.d("LogTAG", "request.body() == null");
         }
+        //打印url信息
+        Logger.w(request.url() + (request.body() != null ? "?" + _parseParams(Objects.requireNonNull(request.body()), requestBuffer) : ""));
+
+        return chain.proceed(request);
     };
 
     @NonNull
     private static String _parseParams(RequestBody body, Buffer requestBuffer) throws UnsupportedEncodingException {
-        if (body.contentType() != null && !body.contentType().toString().contains("multipart")) {
+        if (body.contentType() != null && !Objects.requireNonNull(body.contentType()).toString().contains("multipart")) {
             return URLDecoder.decode(requestBuffer.readUtf8(), "UTF-8");
         }
         return "null";

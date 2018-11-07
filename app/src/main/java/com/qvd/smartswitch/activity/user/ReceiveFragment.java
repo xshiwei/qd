@@ -1,14 +1,10 @@
 package com.qvd.smartswitch.activity.user;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
 
-import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.google.gson.Gson;
 import com.qvd.smartswitch.R;
 import com.qvd.smartswitch.activity.base.BaseFragment;
@@ -19,12 +15,12 @@ import com.qvd.smartswitch.model.user.DeleteReceiveShareVo;
 import com.qvd.smartswitch.model.user.UserReceiverDeviceListVo;
 import com.qvd.smartswitch.utils.ConfigUtils;
 import com.qvd.smartswitch.utils.ToastUtil;
-import com.scwang.smartrefresh.header.MaterialHeader;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.header.ClassicsHeader;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import butterknife.BindView;
 import io.reactivex.Observer;
@@ -46,7 +42,7 @@ public class ReceiveFragment extends BaseFragment {
     SmartRefreshLayout smartRefresh;
 
     private ReceiverDeviceListAdapter adapter;
-    private List<UserReceiverDeviceListVo.DataBean> list = new ArrayList<>();
+    private final List<UserReceiverDeviceListVo.DataBean> list = new ArrayList<>();
 
     public static ReceiveFragment newInstance(String param1) {
         ReceiveFragment fragment = new ReceiveFragment();
@@ -72,13 +68,13 @@ public class ReceiveFragment extends BaseFragment {
         recyclerview.setAdapter(adapter);
         smartRefresh.setHeaderHeight(100);
         smartRefresh.setEnableHeaderTranslationContent(true);
-        smartRefresh.setRefreshHeader(new ClassicsHeader(getActivity()));
+        smartRefresh.setRefreshHeader(new ClassicsHeader(Objects.requireNonNull(getActivity())));
         smartRefresh.setOnRefreshListener(refreshlayout -> {
             getData();
             smartRefresh.finishRefresh(1500, true);
         });
 
-        myEmptyLayout.setTextViewMessage("您当前没有共享消息");
+        myEmptyLayout.setTextViewMessage(getString(R.string.receive_empty));
         myErrorLayout.setOnClickListener(v -> getData());
 
         adapter.setOnItemChildClickListener((adapter, view, position) -> {
@@ -86,12 +82,9 @@ public class ReceiveFragment extends BaseFragment {
             acceptShare(position);
         });
 
-        adapter.setOnItemLongClickListener(new BaseQuickAdapter.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(BaseQuickAdapter adapter, View view, int position) {
-                showDeleteDialog(position);
-                return true;
-            }
+        adapter.setOnItemLongClickListener((adapter, view, position) -> {
+            showDeleteDialog(position);
+            return true;
         });
     }
 
@@ -105,10 +98,10 @@ public class ReceiveFragment extends BaseFragment {
      * 显示删除的dialog
      */
     private void showDeleteDialog(int position) {
-        new MaterialDialog.Builder(getActivity())
-                .content("要删除这一条消息吗")
-                .negativeText("取消")
-                .positiveText("确定")
+        new MaterialDialog.Builder(Objects.requireNonNull(getActivity()))
+                .content(R.string.receive_delete_the_message)
+                .negativeText(R.string.common_cancel)
+                .positiveText(R.string.common_confirm)
                 .onNegative((dialog, which) -> {
                 })
                 .onPositive((dialog, which) -> deleteReceiver(position))
@@ -140,16 +133,15 @@ public class ReceiveFragment extends BaseFragment {
                     @Override
                     public void onNext(MessageVo messageVo) {
                         if (messageVo.getCode() == 200) {
-                            ToastUtil.showToast("删除成功");
+                            ToastUtil.showToast(getString(R.string.common_delete_success));
                             getData();
                         } else {
-                            ToastUtil.showToast("删除失败");
+                            ToastUtil.showToast(getString(R.string.common_delete_fail));
                         }
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        ToastUtil.showToast("删除失败");
                     }
 
                     @Override
@@ -179,13 +171,12 @@ public class ReceiveFragment extends BaseFragment {
                             list.get(position).setIs_share(1);
                             adapter.notifyItemChanged(position);
                         } else {
-                            ToastUtil.showToast("网络错误");
+                            ToastUtil.showToast(getString(R.string.receive_receive_fail));
                         }
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        ToastUtil.showToast("网络错误");
                     }
 
                     @Override
@@ -212,14 +203,14 @@ public class ReceiveFragment extends BaseFragment {
 
                     @Override
                     public void onNext(UserReceiverDeviceListVo userReceiverDeviceListVo) {
-                        list.clear();
                         if (userReceiverDeviceListVo.getCode() == 200) {
                             if (userReceiverDeviceListVo.getData() != null) {
+                                list.clear();
                                 list.addAll(userReceiverDeviceListVo.getData());
                                 smartRefresh.setEnableRefresh(true);
                             } else {
                                 adapter.setEmptyView(myEmptyLayout);
-                                smartRefresh.setEnableRefresh(false);
+                                smartRefresh.setEnableRefresh(true);
                             }
                         } else {
                             adapter.setEmptyView(myErrorLayout);

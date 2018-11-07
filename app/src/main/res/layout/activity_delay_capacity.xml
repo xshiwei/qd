@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -14,16 +15,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:contentDescription="TODO"
             android:paddingLeft="@dimen/x20"
-            android:src="@mipmap/actionbar_goback" />
+            android:src="@mipmap/actionbar_goback"
+            tools:ignore="RtlHardcoded" />
 
         <TextView
             android:id="@+id/tv_common_actionbar_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="延时"
+            android:text="@string/delay_capacity_title"
             android:textColor="@color/app_title"
             android:textSize="15sp" />
 
@@ -34,9 +35,10 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/x30"
-            android:text="完成"
+            android:text="@string/delay_capacity_complete"
             android:textColor="@color/home_voice_normal"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            tools:ignore="RtlHardcoded" />
 
     </RelativeLayout>
 
@@ -51,13 +53,10 @@
             android:id="@+id/picker_minute"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
             android:layout_weight="1"
             android:background="@color/white"
-            android:contentDescription="test_number_picker_view"
             app:npv_DividerColor="@color/black_16"
-            app:npv_HintText="分"
+            app:npv_HintText="@string/delay_capacity_hour"
             app:npv_ItemPaddingVertical="@dimen/y25"
             app:npv_RespondChangeOnDetached="false"
             app:npv_ShowCount="5"
@@ -79,13 +78,10 @@
             android:id="@+id/picker_second"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
             android:layout_weight="1"
             android:background="@color/white"
-            android:contentDescription="test_number_picker_view"
             app:npv_DividerColor="@color/black_16"
-            app:npv_HintText="秒"
+            app:npv_HintText="@string/delay_capacity_minute"
             app:npv_ItemPaddingVertical="@dimen/y25"
             app:npv_RespondChangeOnDetached="false"
             app:npv_ShowCount="5"

@@ -1,7 +1,6 @@
 package com.qvd.smartswitch.activity.qsThree;
 
 
-import android.app.ProgressDialog;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -87,39 +86,30 @@ public class QsThreeTimingActivity extends BaseActivity {
         tvCommonActionbarTitle.setText("蓝牙智能开关定时");
 
         progressDialog = MyProgressDialog.createProgressDialog(this, 5000,
-                new MyProgressDialog.OnTimeOutListener() {
-                    @Override
-                    public void onTimeOut(ProgressDialog dialog) {
-                        dialog.dismiss();
-                        ToastUtil.showToast("设置失败");
-                    }
+                dialog -> {
+                    dialog.dismiss();
+                    ToastUtil.showToast("设置失败");
                 });
-        setData(pickerHour, 0, 23, 0);
-        setData(pickerMinute, 0, 59, 0);
-        pickerHour.setOnValueChangeListenerInScrolling(new NumberPickerView.OnValueChangeListenerInScrolling() {
-            @Override
-            public void onValueChangeInScrolling(NumberPickerView picker, int oldVal, int newVal) {
-                newHour = oldVal;
-                newMinute = pickerMinute.getValue();
-                tvText.setText(newHour + "小时" + newMinute + "分钟后");
-            }
+        setData(pickerHour, 23);
+        setData(pickerMinute, 59);
+        pickerHour.setOnValueChangeListenerInScrolling((picker, oldVal, newVal) -> {
+            newHour = oldVal;
+            newMinute = pickerMinute.getValue();
+            tvText.setText(newHour + "小时" + newMinute + "分钟后");
         });
-        pickerMinute.setOnValueChangeListenerInScrolling(new NumberPickerView.OnValueChangeListenerInScrolling() {
-            @Override
-            public void onValueChangeInScrolling(NumberPickerView picker, int oldVal, int newVal) {
-                newMinute = oldVal;
-                newHour = pickerHour.getValue();
-                Logger.e("minute->" + newVal);
-                tvText.setText(newHour + "小时" + newMinute + "分钟后");
-            }
+        pickerMinute.setOnValueChangeListenerInScrolling((picker, oldVal, newVal) -> {
+            newMinute = oldVal;
+            newHour = pickerHour.getValue();
+            Logger.e("minute->" + newVal);
+            tvText.setText(newHour + "小时" + newMinute + "分钟后");
         });
 //        CommonUtils.getConnectNotify(this, bledevice, tvCommonActionbarTitle);
     }
 
-    private void setData(NumberPickerView picker, int minValue, int maxValue, int value) {
-        picker.setMinValue(minValue);
+    private void setData(NumberPickerView picker, int maxValue) {
+        picker.setMinValue(0);
         picker.setMaxValue(maxValue);
-        picker.setValue(value);
+        picker.setValue(0);
     }
 
 
@@ -173,9 +163,9 @@ public class QsThreeTimingActivity extends BaseActivity {
             public void onWriteSuccess(int current, int total, byte[] justWrite) {
                 progressDialog.dismiss();
                 ToastUtil.showToast("定时成功");
-                String text1 = "";
-                String text2 = "";
-                String content = "";
+                String text1;
+                String text2;
+                String content;
                 if (isState) {
                     text1 = "打开";
                 } else {

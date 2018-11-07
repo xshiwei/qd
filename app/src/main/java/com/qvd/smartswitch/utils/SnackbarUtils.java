@@ -40,16 +40,16 @@ public class SnackbarUtils {
     }
 
     private SnackbarUtils(@Nullable WeakReference<Snackbar> snackbarWeakReference){
-        this.snackbarWeakReference = snackbarWeakReference;
+        SnackbarUtils.snackbarWeakReference = snackbarWeakReference;
     }
 
     /**
      * 获取 mSnackbar
      * @return
      */
-    public Snackbar getSnackbar() {
-        if(this.snackbarWeakReference != null && this.snackbarWeakReference.get()!=null){
-            return this.snackbarWeakReference.get();
+    private Snackbar getSnackbar() {
+        if(snackbarWeakReference != null && snackbarWeakReference.get()!=null){
+            return snackbarWeakReference.get();
         }else {
             return null;
         }
@@ -87,7 +87,7 @@ public class SnackbarUtils {
         </shape>
         <color name="design_snackbar_background_color">#323232</color>
         */
-        return new SnackbarUtils(new WeakReference<Snackbar>(Snackbar.make(view,message,Snackbar.LENGTH_SHORT))).backColor(0XFF323232);
+        return new SnackbarUtils(new WeakReference<>(Snackbar.make(view, message, Snackbar.LENGTH_SHORT))).backColor(0XFF323232);
     }
     /**
      * 初始化Snackbar实例
@@ -97,7 +97,7 @@ public class SnackbarUtils {
      * @return
      */
     public static SnackbarUtils Long(View view, String message){
-        return new SnackbarUtils(new WeakReference<Snackbar>(Snackbar.make(view,message,Snackbar.LENGTH_LONG))).backColor(0XFF323232);
+        return new SnackbarUtils(new WeakReference<>(Snackbar.make(view, message, Snackbar.LENGTH_LONG))).backColor(0XFF323232);
     }
     /**
      * 初始化Snackbar实例
@@ -107,7 +107,7 @@ public class SnackbarUtils {
      * @return
      */
     public static SnackbarUtils Indefinite(View view, String message){
-        return new SnackbarUtils(new WeakReference<Snackbar>(Snackbar.make(view,message,Snackbar.LENGTH_INDEFINITE))).backColor(0XFF323232);
+        return new SnackbarUtils(new WeakReference<>(Snackbar.make(view, message, Snackbar.LENGTH_INDEFINITE))).backColor(0XFF323232);
     }
     /**
      * 初始化Snackbar实例
@@ -118,7 +118,7 @@ public class SnackbarUtils {
      * @return
      */
     public static SnackbarUtils Custom(View view, String message, int duration){
-        return new SnackbarUtils(new WeakReference<Snackbar>(Snackbar.make(view,message,Snackbar.LENGTH_SHORT).setDuration(duration))).backColor(0XFF323232);
+        return new SnackbarUtils(new WeakReference<>(Snackbar.make(view, message, Snackbar.LENGTH_SHORT).setDuration(duration))).backColor(0XFF323232);
     }
 
     /**
@@ -162,7 +162,7 @@ public class SnackbarUtils {
      * 设置Snackbar背景色
      * @param backgroundColor
      */
-    public SnackbarUtils backColor(@ColorInt int backgroundColor){
+    private SnackbarUtils backColor(@ColorInt int backgroundColor){
         if(getSnackbar()!=null){
             getSnackbar().getView().setBackgroundColor(backgroundColor);
         }
@@ -223,26 +223,24 @@ public class SnackbarUtils {
      * 设置Snackbar显示的位置
      * @param gravity
      */
-    public SnackbarUtils gravityFrameLayout(int gravity){
+    private void gravityFrameLayout(int gravity){
         if(getSnackbar()!=null){
             FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(getSnackbar().getView().getLayoutParams().width,getSnackbar().getView().getLayoutParams().height);
             params.gravity = gravity;
             getSnackbar().getView().setLayoutParams(params);
         }
-        return this;
     }
 
     /**
      * 设置Snackbar显示的位置,当Snackbar和CoordinatorLayout组合使用的时候
      * @param gravity
      */
-    public SnackbarUtils gravityCoordinatorLayout(int gravity){
+    private void gravityCoordinatorLayout(int gravity){
         if(getSnackbar()!=null){
             CoordinatorLayout.LayoutParams params = new CoordinatorLayout.LayoutParams(getSnackbar().getView().getLayoutParams().width,getSnackbar().getView().getLayoutParams().height);
             params.gravity = gravity;
             getSnackbar().getView().setLayoutParams(params);
         }
-        return this;
     }
 
     /**
@@ -267,7 +265,7 @@ public class SnackbarUtils {
      * @param listener
      * @return
      */
-    public SnackbarUtils setAction(CharSequence text, View.OnClickListener listener){
+    private SnackbarUtils setAction(CharSequence text, View.OnClickListener listener){
         if(getSnackbar()!=null){
             getSnackbar().setAction(text,listener);
         }
@@ -298,14 +296,14 @@ public class SnackbarUtils {
             Drawable drawableRight = null;
             if(leftDrawable!=null){
                 try {
-                    drawableLeft = getSnackbar().getView().getResources().getDrawable(leftDrawable.intValue());
-                }catch (Exception e){
+                    drawableLeft = getSnackbar().getView().getResources().getDrawable(leftDrawable);
+                }catch (Exception ignored){
                 }
             }
             if(rightDrawable!=null){
                 try {
-                    drawableRight = getSnackbar().getView().getResources().getDrawable(rightDrawable.intValue());
-                }catch (Exception e){
+                    drawableRight = getSnackbar().getView().getResources().getDrawable(rightDrawable);
+                }catch (Exception ignored){
                 }
             }
             return leftAndRightDrawable(drawableLeft,drawableRight);
@@ -320,9 +318,9 @@ public class SnackbarUtils {
      * @param rightDrawable
      * @return
      */
-    public SnackbarUtils leftAndRightDrawable(@Nullable Drawable leftDrawable, @Nullable Drawable rightDrawable){
+    private SnackbarUtils leftAndRightDrawable(@Nullable Drawable leftDrawable, @Nullable Drawable rightDrawable){
         if(getSnackbar()!=null){
-            TextView message = (TextView) getSnackbar().getView().findViewById(R.id.snackbar_text);
+            TextView message = getSnackbar().getView().findViewById(R.id.snackbar_text);
             LinearLayout.LayoutParams paramsMessage = (LinearLayout.LayoutParams) message.getLayoutParams();
             paramsMessage = new LinearLayout.LayoutParams(paramsMessage.width, paramsMessage.height,0.0f);
             message.setLayoutParams(paramsMessage);
@@ -348,13 +346,11 @@ public class SnackbarUtils {
      */
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     public SnackbarUtils messageCenter(){
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1){
-            if(getSnackbar()!=null){
-                TextView message = (TextView) getSnackbar().getView().findViewById(R.id.snackbar_text);
-                //View.setTextAlignment需要SDK>=17
-                message.setTextAlignment(View.TEXT_ALIGNMENT_GRAVITY);
-                message.setGravity(Gravity.CENTER);
-            }
+        if(getSnackbar()!=null){
+            TextView message = getSnackbar().getView().findViewById(R.id.snackbar_text);
+            //View.setTextAlignment需要SDK>=17
+            message.setTextAlignment(View.TEXT_ALIGNMENT_GRAVITY);
+            message.setGravity(Gravity.CENTER);
         }
         return this;
     }
@@ -365,13 +361,11 @@ public class SnackbarUtils {
      */
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     public SnackbarUtils messageRight(){
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1){
-            if(getSnackbar()!=null){
-                TextView message = (TextView) getSnackbar().getView().findViewById(R.id.snackbar_text);
-                //View.setTextAlignment需要SDK>=17
-                message.setTextAlignment(View.TEXT_ALIGNMENT_GRAVITY);
-                message.setGravity(Gravity.CENTER_VERTICAL|Gravity.RIGHT);
-            }
+        if(getSnackbar()!=null){
+            TextView message = getSnackbar().getView().findViewById(R.id.snackbar_text);
+            //View.setTextAlignment需要SDK>=17
+            message.setTextAlignment(View.TEXT_ALIGNMENT_GRAVITY);
+            message.setGravity(Gravity.CENTER_VERTICAL|Gravity.RIGHT);
         }
         return this;
     }
@@ -398,7 +392,7 @@ public class SnackbarUtils {
      * @param index
      * @return
      */
-    public SnackbarUtils addView(View addView, int index) {
+    private SnackbarUtils addView(View addView, int index) {
         if(getSnackbar()!=null){
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,LinearLayout.LayoutParams.WRAP_CONTENT);//设置新建布局参数
             //设置新建View在Snackbar内垂直居中显示
@@ -434,7 +428,7 @@ public class SnackbarUtils {
      * @param bottom
      * @return
      */
-    public SnackbarUtils margins(int left, int top, int right, int bottom){
+    private SnackbarUtils margins(int left, int top, int right, int bottom){
         if(getSnackbar()!=null){
             ViewGroup.LayoutParams params = getSnackbar().getView().getLayoutParams();
             ((ViewGroup.MarginLayoutParams) params).setMargins(left,top,right,bottom);
@@ -443,12 +437,6 @@ public class SnackbarUtils {
         return this;
     }
 
-    /**
-     * 经试验发现:
-     *      执行过{@link SnackbarUtils#backColor(int)}后:background instanceof ColorDrawable
-     *      未执行过{@link SnackbarUtils#backColor(int)}:background instanceof GradientDrawable
-     * @return
-     */
     /*
     public SnackbarUtils radius(){
         Drawable background = snackbarWeakReference.get().getView().getBackground();
@@ -479,7 +467,6 @@ public class SnackbarUtils {
             int backgroundColor = ((ColorDrawable)backgroundOri).getColor();
             background = new GradientDrawable();
             background.setColor(backgroundColor);
-        }else {
         }
         return background;
     }

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/home_manage_backgroud">
@@ -18,15 +19,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:contentDescription="TODO"
-            android:src="@mipmap/actionbar_goback" />
+            android:src="@mipmap/actionbar_goback"
+            tools:ignore="RtlHardcoded" />
 
         <TextView
             android:id="@+id/tv_common_actionbar_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="新建智能"
+            android:text="@string/notification_capacity_title"
             android:textColor="@color/app_title"
             android:textSize="15sp" />
 
@@ -37,9 +38,10 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/x30"
-            android:text="完成"
+            android:text="@string/notification_capacity_complete"
             android:textColor="@color/home_voice_normal"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            tools:ignore="RtlHardcoded" />
 
     </RelativeLayout>
 
@@ -53,7 +55,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <LinearLayout
@@ -72,7 +74,7 @@
                         android:layout_width="@dimen/x40"
                         android:layout_height="@dimen/y40"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="@dimen/x30"
+                        android:layout_marginStart="@dimen/x30"
                         android:src="@color/black6" />
 
                     <TextView
@@ -80,9 +82,10 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="@dimen/x15"
-                        android:text="如果"
+                        android:text="@string/notification_capacity_if"
                         android:textColor="@color/capacity_tablayout_text"
-                        android:textSize="14sp" />
+                        android:textSize="14sp"
+                        tools:ignore="RtlHardcoded" />
                 </LinearLayout>
 
                 <View
@@ -93,7 +96,7 @@
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/recyclerview_condition"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
+                    android:layout_height="wrap_content" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -102,8 +105,9 @@
                     android:paddingBottom="@dimen/y30"
                     android:paddingLeft="@dimen/x30"
                     android:paddingTop="@dimen/y30"
-                    android:text="继续添加"
-                    android:textColor="@color/notification_text" />
+                    android:text="@string/notification_capacity_continue_add"
+                    android:textColor="@color/notification_text"
+                    tools:ignore="RtlHardcoded" />
 
             </LinearLayout>
 
@@ -124,14 +128,15 @@
                         android:layout_height="@dimen/y40"
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="@dimen/x30"
-                        android:src="@color/black6" />
+                        android:src="@color/black6"
+                        tools:ignore="RtlHardcoded" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="@dimen/x15"
-                        android:text="就执行"
+                        android:layout_marginStart="@dimen/x15"
+                        android:text="@string/notification_capacity_make"
                         android:textColor="@color/capacity_tablayout_text"
                         android:textSize="14sp" />
                 </LinearLayout>
@@ -144,7 +149,7 @@
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/recyclerview_result"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
+                    android:layout_height="wrap_content" />
 
                 <TextView
                     android:layout_width="match_parent"
@@ -153,8 +158,9 @@
                     android:paddingBottom="@dimen/y30"
                     android:paddingLeft="@dimen/x30"
                     android:paddingTop="@dimen/y30"
-                    android:text="继续添加"
-                    android:textColor="@color/notification_text" />
+                    android:text="@string/notification_capacity_continue_add"
+                    android:textColor="@color/notification_text"
+                    tools:ignore="RtlHardcoded" />
 
             </LinearLayout>
 
@@ -175,9 +181,10 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/x30"
-            android:text="生效时间段"
+            android:text="@string/notification_capacity_time_effect"
             android:textColor="@color/add_room_text"
-            android:textSize="12sp" />
+            android:textSize="12sp"
+            tools:ignore="RtlHardcoded" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -185,9 +192,10 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/x10"
             android:layout_toLeftOf="@+id/iv_more"
-            android:text="全天"
+            android:text="@string/notification_capacity_example_time_effect"
             android:textColor="@color/add_room_text"
-            android:textSize="12sp" />
+            android:textSize="12sp"
+            tools:ignore="RtlHardcoded" />
 
         <ImageView
             android:id="@+id/iv_more"
@@ -196,7 +204,8 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/x30"
-            android:src="@mipmap/home_manage_right" />
+            android:src="@mipmap/home_manage_right"
+            tools:ignore="RtlHardcoded" />
 
     </RelativeLayout>
 

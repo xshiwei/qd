@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/home_manage_backgroud"
@@ -16,16 +17,16 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/x20"
-            android:contentDescription="TODO"
             android:padding="5dp"
-            android:src="@mipmap/actionbar_goback" />
+            android:src="@mipmap/actionbar_goback"
+            tools:ignore="RtlHardcoded" />
 
         <TextView
             android:id="@+id/tv_common_actionbar_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="选择房间"
+            android:text="@string/selete_room_to_set_title"
             android:textColor="@color/app_title"
             android:textSize="15sp" />
 
@@ -37,27 +38,18 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/x30"
             android:padding="5dp"
-            android:src="@mipmap/capacity_add" />
+            android:src="@mipmap/capacity_add"
+            tools:ignore="RtlHardcoded" />
 
     </RelativeLayout>
 
-    <com.qvd.smartswitch.widget.EmptyLayout
-        android:layout_marginTop="@dimen/y20"
-        android:id="@+id/emptylayout"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_marginBottom="@dimen/y30"
+        android:layout_marginTop="@dimen/y25">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recyclerview"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_above="@+id/rl_add"
-            android:layout_below="@+id/tv_text"
-            android:layout_marginBottom="@dimen/y30"
-            android:layout_marginTop="@dimen/y25">
-
-        </android.support.v7.widget.RecyclerView>
-
-    </com.qvd.smartswitch.widget.EmptyLayout>
+    </android.support.v7.widget.RecyclerView>
 
 </LinearLayout>

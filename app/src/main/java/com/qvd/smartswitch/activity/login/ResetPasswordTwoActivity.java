@@ -1,7 +1,6 @@
 package com.qvd.smartswitch.activity.login;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.text.Html;
 import android.view.View;
 import android.widget.ImageView;
@@ -11,7 +10,6 @@ import com.qvd.smartswitch.R;
 import com.qvd.smartswitch.activity.base.BaseActivity;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class ResetPasswordTwoActivity extends BaseActivity {
@@ -42,15 +40,15 @@ public class ResetPasswordTwoActivity extends BaseActivity {
         super.initData();
         type = getIntent().getIntExtra("type", -1);
         account = getIntent().getStringExtra("account");
-        tvCommonActionbarTitle.setText("科微多账号-科微多安全验证");
+        tvCommonActionbarTitle.setText(R.string.reset_password_two_title);
         if (type == 1) {
-            tvText.setText("为了保护账号安全，需要验证邮箱有效性");
-            tvContent.setText(Html.fromHtml("点击发送邮件按钮，我们将发送一条有验证码的邮件至邮箱<font color='DE5484'>" + account));
-            tvSendMsg.setText("发送邮件");
+            tvText.setText(R.string.reset_password_two_text_one);
+            tvContent.setText(Html.fromHtml(getString(R.string.reset_password_two_text_two) + "<font color='DE5484'>" + account));
+            tvSendMsg.setText(R.string.reset_password_two_send_email);
         } else if (type == 2) {
-            tvText.setText("为了保护账号安全，需要验证手机有效性");
-            tvContent.setText(Html.fromHtml("点击发送短信按钮，我们将发送一条有验证码的短信至手机<font color='DE5484'>" + account));
-            tvSendMsg.setText("发送短信");
+            tvText.setText(R.string.reset_password_two_text_three);
+            tvContent.setText(Html.fromHtml(getString(R.string.reset_password_two_text_four)+"<font color='DE5484'>" + account));
+            tvSendMsg.setText(R.string.reset_password_two_send_phone);
         }
 // else if (type == 3) {
 //            tvText.setText("为了保护账号安全，需要验证账号有效性");

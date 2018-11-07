@@ -2,15 +2,14 @@ package com.qvd.smartswitch.activity.home;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.orhanobut.logger.Logger;
 import com.qvd.smartswitch.R;
 import com.qvd.smartswitch.activity.base.BaseActivity;
@@ -19,8 +18,7 @@ import com.qvd.smartswitch.api.CacheSetting;
 import com.qvd.smartswitch.api.RetrofitService;
 import com.qvd.smartswitch.model.home.RoomListVo;
 import com.qvd.smartswitch.model.login.MessageVo;
-import com.qvd.smartswitch.utils.SnackbarUtils;
-import com.qvd.smartswitch.widget.EmptyLayout;
+import com.qvd.smartswitch.utils.ToastUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,12 +46,9 @@ public class RoomManageActivity extends BaseActivity {
     @BindView(R.id.recyclerview)
     RecyclerView recyclerview;
 
-    private List<RoomListVo.DataBean> list = new ArrayList<>();
+    private final List<RoomListVo.DataBean> list = new ArrayList<>();
     private RoomManageListAdapter adapter;
 
-    private boolean isRoom = false;
-
-    private EmptyLayout emptylayout;
     /**
      * 家庭id
      */
@@ -74,56 +69,45 @@ public class RoomManageActivity extends BaseActivity {
     protected void initData() {
         super.initData();
         family_id = getIntent().getStringExtra("family_id");
-        emptylayout = findViewById(R.id.emptylayout);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        getRoomList();
         recyclerview.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        adapter = new RoomManageListAdapter(this, list);
+        adapter = new RoomManageListAdapter(list);
+        adapter.openLoadAnimation();
+        adapter.isFirstOnly(false);
+        adapter.setHasStableIds(true);
         recyclerview.setAdapter(adapter);
-        adapter.setOnItemClickListener(new RoomManageListAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("room", list.get(position));
-                startActivity(new Intent(RoomManageActivity.this, RoomUpdateDetailsActivity.class)
-                        .putExtra("bundle", bundle));
-                overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
-            }
-
-            @Override
-            public void onItemLongClickListener(View view, int position) {
-                showDeleteRoomPopouWindow(position);
-            }
+        adapter.setOnItemClickListener((adapter, view, position) -> {
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("room", list.get(position));
+            startActivity(new Intent(RoomManageActivity.this, RoomUpdateDetailsActivity.class)
+                    .putExtra("bundle", bundle));
+            overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
         });
-    }
-
-    @Override
-    public void onNetChange(int netMobile) {
-        super.onNetChange(netMobile);
-        if (netMobile == -1) {
-            isRoom = false;
-        } else {
-            isRoom = true;
+        adapter.setOnItemLongClickListener((adapter, view, position) -> {
+            showDeleteRoomPopouWindow(position);
+            return true;
+        });
+        myEmptyLayout.setTextViewMessage(getString(R.string.room_list_selete_empty));
+        myErrorLayout.setOnClickListener(v -> {
             getRoomList();
-        }
+        });
+        getRoomList();
     }
 
     /**
      * 获取房间列表
      */
     private void getRoomList() {
-        CacheSetting.getCache().getRoomManger(RetrofitService.qdoApi.getRoomList(family_id),
-                new DynamicKey(family_id), new EvictDynamicKey(isRoom))
+        RetrofitService.qdoApi.getRoomList(family_id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<RoomListVo>() {
                     @Override
                     public void onSubscribe(Disposable d) {
-
                     }
 
                     @Override
@@ -131,20 +115,21 @@ public class RoomManageActivity extends BaseActivity {
                         if (roomListVo != null) {
                             if (roomListVo.getCode() == 200) {
                                 if (roomListVo.getData() != null) {
-                                    emptylayout.hide();
                                     list.clear();
                                     list.addAll(roomListVo.getData());
                                     adapter.notifyDataSetChanged();
+                                } else {
+                                    adapter.setEmptyView(myEmptyLayout);
                                 }
                             } else {
-                                emptylayout.showError();
+                                adapter.setEmptyView(myErrorLayout);
                             }
                         }
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        emptylayout.showError();
+                        adapter.setEmptyView(myErrorLayout);
                     }
 
                     @Override
@@ -159,21 +144,13 @@ public class RoomManageActivity extends BaseActivity {
      */
     private void showDeleteRoomPopouWindow(int position) {
         new MaterialDialog.Builder(this)
-                .content("删除房间后，原房间内设备将被移入默认房间，是否确认删除？")
-                .negativeText("取消")
-                .positiveText("确定")
-                .onNegative(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                .content(R.string.room_manage_delete_room_content)
+                .negativeText(R.string.common_cancel)
+                .positiveText(R.string.common_confirm)
+                .onNegative((dialog, which) -> {
 
-                    }
                 })
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        deleteRoom(position);
-                    }
-                })
+                .onPositive((dialog, which) -> deleteRoom(position))
                 .show();
     }
 
@@ -192,13 +169,13 @@ public class RoomManageActivity extends BaseActivity {
 
                     @Override
                     public void onNext(MessageVo messageVo) {
-                        if (messageVo.getCode() == 200) {
-                            SnackbarUtils.Short(tvCommonActionbarTitle, "删除成功").show();
-                            getRoomList();
-                        } else if (messageVo.getCode() == 400) {
-                            SnackbarUtils.Short(tvCommonActionbarTitle, "删除失败").show();
-                        } else {
-                            SnackbarUtils.Short(tvCommonActionbarTitle, "连接超时").show();
+                        if (messageVo != null) {
+                            if (messageVo.getCode() == 200) {
+                                ToastUtil.showToast(getString(R.string.common_delete_success));
+                                getRoomList();
+                            } else {
+                                ToastUtil.showToast(getString(R.string.common_server_error));
+                            }
                         }
                     }
 

@@ -1,12 +1,9 @@
 package com.qvd.smartswitch.adapter;
 
 import android.support.annotation.NonNull;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.PagerAdapter;
-import android.view.ViewGroup;
 
 import com.qvd.smartswitch.activity.home.HomeDeviceFragment;
 
@@ -18,8 +15,8 @@ import java.util.List;
 
 public class HomeTabLayoutAdapter extends FragmentPagerAdapter {
 
-    private List<HomeDeviceFragment> list_fragment;                         //fragment列表
-    private List<String> list_Title;                              //tab名的列表
+    private final List<HomeDeviceFragment> list_fragment;                         //fragment列表
+    private final List<String> list_Title;                              //tab名的列表
 
 
     public HomeTabLayoutAdapter(FragmentManager fm, List<HomeDeviceFragment> list_fragment, List<String> list_Title) {

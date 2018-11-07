@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/device_background_two">
@@ -12,7 +13,7 @@
         android:layout_marginLeft="@dimen/x50"
         android:layout_marginRight="@dimen/x50"
         android:layout_marginTop="@dimen/y100"
-        android:text="你可以这样说："
+        android:text="@string/qsthree_sound_control_title"
         android:textColor="@color/white"
         android:textSize="18sp" />
 
@@ -29,7 +30,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="“打开一号灯”"
+            android:text="@string/qsthree_sound_control_example_one"
             android:textColor="@color/white"
             android:textSize="14sp" />
 
@@ -37,7 +38,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/y10"
-            android:text="“我想要打开一号灯”"
+            android:text="@string/qsthree_sound_control_example_two"
             android:textColor="@color/white"
             android:textSize="14sp" />
 
@@ -45,7 +46,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/y10"
-            android:text="“我想要关闭一号灯”"
+            android:text="@string/qsthree_sound_control_example_three"
             android:textColor="@color/white"
             android:textSize="14sp" />
 
@@ -53,7 +54,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/y10"
-            android:text="“打开全部灯”"
+            android:text="@string/qsthree_sound_control_example_four"
             android:textColor="@color/white"
             android:textSize="14sp" />
     </LinearLayout>
@@ -70,7 +71,8 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/x30"
-            android:src="@mipmap/sound_topic" />
+            android:src="@mipmap/sound_topic"
+            tools:ignore="RtlHardcoded" />
 
         <ImageView
             android:id="@+id/iv_sound"
@@ -88,7 +90,8 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/x30"
-            android:src="@mipmap/sound_close" />
+            android:src="@mipmap/sound_close"
+            tools:ignore="RtlHardcoded" />
     </RelativeLayout>
 
 

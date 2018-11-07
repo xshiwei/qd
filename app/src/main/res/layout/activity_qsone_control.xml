@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/light_background_two">
@@ -16,9 +17,9 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/x20"
-            android:contentDescription="TODO"
             android:padding="5dp"
-            android:src="@mipmap/actionbar_goback_white" />
+            android:src="@mipmap/actionbar_goback_white"
+            tools:ignore="RtlHardcoded" />
 
         <TextView
             android:id="@+id/tv_device_control_title"
@@ -38,9 +39,9 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/x20"
-            android:contentDescription="TODO"
             android:padding="5dp"
-            android:src="@mipmap/actionbar_more_detail_white" />
+            android:src="@mipmap/actionbar_more_detail_white"
+            tools:ignore="RtlHardcoded" />
 
     </RelativeLayout>
 
@@ -61,10 +62,21 @@
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="@dimen/y30"
-                android:text="设备未连接，下拉连接设备"
+                android:text="@string/qsone_control_device_disconnect"
                 android:textColor="@color/white"
                 android:textSize="12sp"
                 android:visibility="gone" />
+
+            <com.wang.avi.AVLoadingIndicatorView
+                android:id="@+id/avi_loading"
+                style="@style/AVLoadingIndicatorView"
+                android:layout_width="@dimen/x50"
+                android:layout_height="@dimen/y40"
+                android:layout_below="@+id/tv_connect_text"
+                android:layout_centerHorizontal="true"
+                android:visibility="visible"
+                app:indicatorColor="@color/white"
+                app:indicatorName="BallPulseIndicator" />
 
             <RelativeLayout
                 android:layout_centerInParent="true"
@@ -92,6 +104,7 @@
     </com.scwang.smartrefresh.layout.SmartRefreshLayout>
 
     <RelativeLayout
+        android:id="@+id/rl_bottom"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -102,7 +115,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/x100"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            tools:ignore="RtlHardcoded">
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:layout_width="@dimen/x80"
@@ -117,7 +131,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="@dimen/y30"
-                android:text="开关"
+                android:text="@string/qsone_control_switch"
                 android:textColor="@color/white"
                 android:textSize="14sp" />
         </LinearLayout>
@@ -142,7 +156,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="@dimen/y30"
-                android:text="语音"
+                android:text="@string/qsone_control_sound"
                 android:textColor="@color/white"
                 android:textSize="14sp" />
         </LinearLayout>
@@ -153,7 +167,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_marginRight="@dimen/x100"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            tools:ignore="RtlHardcoded">
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:layout_width="@dimen/x80"
@@ -168,11 +183,10 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="@dimen/y30"
-                android:text="定时"
+                android:text="@string/qsone_control_timing"
                 android:textColor="@color/white"
                 android:textSize="14sp" />
         </LinearLayout>
-
 
     </RelativeLayout>
 

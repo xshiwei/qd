@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
@@ -17,16 +18,16 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/x20"
-            android:contentDescription="TODO"
             android:padding="5dp"
-            android:src="@mipmap/actionbar_goback" />
+            android:src="@mipmap/actionbar_goback"
+            tools:ignore="RtlHardcoded" />
 
         <TextView
             android:id="@+id/tv_common_actionbar_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="机器人设置"
+            android:text="@string/robot_self_setting_title"
             android:textColor="@color/app_title"
             android:textSize="15sp" />
 
@@ -42,9 +43,10 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:paddingLeft="@dimen/x50"
-            android:text="机器人时区"
+            android:text="@string/robot_self_setting_time_zone"
             android:textColor="@color/black"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            tools:ignore="RtlHardcoded" />
 
         <TextView
             android:id="@+id/tv_time_zone"
@@ -53,7 +55,8 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/x10"
             android:layout_toLeftOf="@+id/iv_more"
-            android:text="Asia/Beijing" />
+            android:text="@string/robot_self_setting_example_time_zone"
+            tools:ignore="RtlHardcoded" />
 
         <ImageView
             android:id="@+id/iv_more"
@@ -62,8 +65,8 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/x50"
-            android:contentDescription="TODO"
-            android:src="@mipmap/user_more_details" />
+            android:src="@mipmap/user_more_details"
+            tools:ignore="RtlHardcoded" />
 
         <View
             android:layout_width="match_parent"
@@ -85,9 +88,10 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:paddingLeft="@dimen/x50"
-            android:text="音量设置"
+            android:text="@string/robot_self_setting_volume_setting"
             android:textColor="@color/black"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            tools:ignore="RtlHardcoded" />
 
         <ImageView
             android:layout_width="wrap_content"
@@ -95,8 +99,8 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/x50"
-            android:contentDescription="TODO"
-            android:src="@mipmap/user_more_details" />
+            android:src="@mipmap/user_more_details"
+            tools:ignore="RtlHardcoded" />
 
         <View
             android:layout_width="match_parent"
@@ -118,9 +122,10 @@
             android:layout_marginTop="@dimen/y20"
             android:gravity="center_vertical"
             android:paddingLeft="@dimen/x50"
-            android:text="地毯增压模式"
+            android:text="@string/robot_self_setting_carpet_boost_mode"
             android:textColor="@color/black"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            tools:ignore="RtlHardcoded" />
 
         <com.zcw.togglebutton.ToggleButton xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/tlb_carpet_boost_mode"
@@ -133,7 +138,8 @@
             app:tbOffBorderColor="@color/home_setting_text_two"
             app:tbOffColor="@color/home_setting_text_two"
             app:tbOnColor="@color/add_home_background"
-            app:tbSpotColor="@color/white"></com.zcw.togglebutton.ToggleButton>
+            app:tbSpotColor="@color/white"
+            tools:ignore="RtlHardcoded" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -142,8 +148,7 @@
             android:layout_marginLeft="@dimen/x50"
             android:layout_marginRight="@dimen/x50"
             android:layout_marginTop="@dimen/y20"
-            android:text="开启后，机器人自动识别地毯并开启最大吸力清扫地毯，离开地毯后自动恢复正常吸力。
-*开启后将不再检测轻微的异物缠绕。"
+            android:text="@string/robot_self_setting_carpet_boost_mode_text"
             android:textColor="@color/home_setting_text_two"
             android:textSize="13sp" />
 
@@ -168,9 +173,10 @@
             android:layout_marginTop="@dimen/y20"
             android:gravity="center_vertical"
             android:paddingLeft="@dimen/x50"
-            android:text="纯拖地模式"
+            android:text="@string/robot_self_setting_mopping_mode"
             android:textColor="@color/black"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            tools:ignore="RtlHardcoded" />
 
         <com.zcw.togglebutton.ToggleButton xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/tlb_mopping_mode"
@@ -183,7 +189,8 @@
             app:tbOffBorderColor="@color/home_setting_text_two"
             app:tbOffColor="@color/home_setting_text_two"
             app:tbOnColor="@color/add_home_background"
-            app:tbSpotColor="@color/white"></com.zcw.togglebutton.ToggleButton>
+            app:tbSpotColor="@color/white"
+            tools:ignore="RtlHardcoded" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -192,7 +199,7 @@
             android:layout_marginLeft="@dimen/x50"
             android:layout_marginRight="@dimen/x50"
             android:layout_marginTop="@dimen/y20"
-            android:text="开启后可在主界面清扫模式中选择拖地模式"
+            android:text="@string/robot_self_setting_mopping_mode_text"
             android:textColor="@color/home_setting_text_two"
             android:textSize="13sp" />
 
@@ -216,9 +223,10 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:paddingLeft="@dimen/x50"
-            android:text="勿扰模式"
+            android:text="@string/robot_self_setting_disturbance_mode"
             android:textColor="@color/black"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            tools:ignore="RtlHardcoded" />
 
         <ImageView
             android:layout_width="wrap_content"
@@ -226,8 +234,8 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/x50"
-            android:contentDescription="TODO"
-            android:src="@mipmap/user_more_details" />
+            android:src="@mipmap/user_more_details"
+            tools:ignore="RtlHardcoded" />
 
         <View
             android:layout_width="match_parent"

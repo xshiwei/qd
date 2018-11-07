@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/device_background_four">
@@ -16,11 +17,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:contentDescription="TODO"
-            android:src="@mipmap/actionbar_goback_white" />
+            android:src="@mipmap/actionbar_goback_white"
+            tools:ignore="RtlHardcoded" />
 
         <TextView
-            android:text="确认设备"
+            android:text="@string/confirm_light_flicker_title"
             android:id="@+id/tv_common_actionbar_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -43,7 +44,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/login_button_shape"
             android:padding="10dp"
-            android:text="确认指示灯处于红灯常亮"
+            android:text="@string/confirm_light_flicker_content"
             android:textColor="@color/white"
             android:textSize="18sp" />
 

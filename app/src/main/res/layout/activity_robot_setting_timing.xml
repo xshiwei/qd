@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y100"
+        android:background="@color/home_list_background">
+
+        <ImageView
+            android:id="@+id/iv_common_actionbar_goback"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/x30"
+            android:padding="5dp"
+            android:src="@mipmap/actionbar_goback"
+            tools:ignore="RtlHardcoded" />
+
+        <TextView
+            android:id="@+id/tv_common_actionbar_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/robot_setting_timing_title"
+            android:textColor="@color/app_title"
+            android:textSize="15sp" />
+
+        <TextView
+            android:id="@+id/tv_device_timing_save"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:paddingRight="@dimen/x30"
+            android:text="@string/robot_setting_timing_save"
+            android:textColor="@color/app_title"
+            android:textSize="15sp"
+            tools:ignore="RtlHardcoded" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_state"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y120">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/x50"
+            android:layout_marginTop="@dimen/y20"
+            android:text="@string/robot_setting_timing_state"
+            android:textColor="@color/home_content_text"
+            android:textSize="14sp"
+            tools:ignore="RtlHardcoded" />
+
+        <TextView
+            android:id="@+id/tv_state"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="@dimen/y25"
+            android:layout_marginLeft="@dimen/x50"
+            android:text="@string/robot_setting_timing_default_state"
+            android:textColor="@color/home_setting_text_two"
+            android:textSize="12sp"
+            tools:ignore="RtlHardcoded" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/x50"
+            android:src="@mipmap/device_share_object_selete_more"
+            tools:ignore="RtlHardcoded" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="@dimen/x50"
+            android:layout_marginRight="@dimen/x50"
+            android:background="@color/popupwindow_edittext" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y120">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/x50"
+            android:layout_marginTop="@dimen/y20"
+            android:text="@string/robot_setting_timing_open_time"
+            android:textColor="@color/home_content_text"
+            android:textSize="14sp"
+            tools:ignore="RtlHardcoded" />
+
+        <TextView
+            android:id="@+id/tv_open_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="@dimen/y25"
+            android:layout_marginLeft="@dimen/x50"
+            android:text="@string/robot_setting_timing_default_time"
+            android:textColor="@color/home_setting_text_two"
+            android:textSize="12sp"
+            tools:ignore="RtlHardcoded" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="@dimen/x50"
+            android:layout_marginRight="@dimen/x50"
+            android:background="@color/popupwindow_edittext" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_mode"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y120">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/x50"
+            android:layout_marginTop="@dimen/y20"
+            android:text="@string/robot_setting_timing_mode"
+            android:textColor="@color/home_content_text"
+            android:textSize="14sp"
+            tools:ignore="RtlHardcoded" />
+
+        <TextView
+            android:id="@+id/tv_mode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="@dimen/y25"
+            android:layout_marginStart="@dimen/x50"
+            android:text="@string/robot_setting_timing_default_mode"
+            android:textColor="@color/home_setting_text_two"
+            android:textSize="12sp" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/x50"
+            android:src="@mipmap/device_share_object_selete_more"
+            tools:ignore="RtlHardcoded" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="@dimen/x50"
+            android:layout_marginRight="@dimen/x50"
+            android:background="@color/popupwindow_edittext" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="bottom">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <cn.carbswang.android.numberpickerview.library.NumberPickerView
+                android:id="@+id/picker_hour"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/white"
+                app:npv_DividerColor="@color/black_16"
+                app:npv_HintText="@string/robot_setting_timing_hour"
+                app:npv_ItemPaddingVertical="@dimen/y25"
+                app:npv_RespondChangeOnDetached="false"
+                app:npv_ShowCount="5"
+                app:npv_TextArray="@array/hour_display"
+                app:npv_TextColorHint="@color/capacity_tablayout_text_two"
+                app:npv_TextColorNormal="@color/home_setting_text_two"
+                app:npv_TextColorSelected="@color/capacity_tablayout_text_two"
+                app:npv_TextSizeHint="14sp"
+                app:npv_TextSizeNormal="16sp"
+                app:npv_TextSizeSelected="20sp"
+                app:npv_WrapSelectorWheel="true" />
+
+            <View
+                android:layout_width="1px"
+                android:layout_height="match_parent"
+                android:background="@color/black_16" />
+
+            <cn.carbswang.android.numberpickerview.library.NumberPickerView
+                android:id="@+id/picker_minute"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@color/white"
+                app:npv_DividerColor="@color/black_16"
+                app:npv_HintText="@string/robot_setting_timing_minute"
+                app:npv_ItemPaddingVertical="@dimen/y25"
+                app:npv_RespondChangeOnDetached="false"
+                app:npv_ShowCount="5"
+                app:npv_TextArray="@array/minute_display"
+                app:npv_TextColorHint="@color/capacity_tablayout_text_two"
+                app:npv_TextColorNormal="@color/home_setting_text_two"
+                app:npv_TextColorSelected="@color/capacity_tablayout_text_two"
+                app:npv_TextSizeHint="14sp"
+                app:npv_TextSizeNormal="16sp"
+                app:npv_TextSizeSelected="20sp"
+                app:npv_WrapSelectorWheel="true" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

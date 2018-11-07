@@ -6,7 +6,11 @@ import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
 
+import com.amap.api.location.AMapLocationClient;
+import com.amap.api.location.AMapLocationClientOption;
+import com.bumptech.glide.Glide;
 import com.qvd.smartswitch.R;
 import com.qvd.smartswitch.activity.base.BaseActivity;
 import com.qvd.smartswitch.activity.login.WelcomeActivity;
@@ -14,16 +18,16 @@ import com.qvd.smartswitch.api.RetrofitService;
 import com.qvd.smartswitch.model.login.LoginVo;
 import com.qvd.smartswitch.utils.CommonUtils;
 import com.qvd.smartswitch.utils.ConfigUtils;
-import com.qvd.smartswitch.utils.PermissionUtils;
-import com.qvd.smartswitch.utils.RxHelper;
 import com.qvd.smartswitch.utils.SharedPreferencesUtil;
-import com.qvd.smartswitch.utils.SysApplication;
 import com.qvd.smartswitch.widget.SimpleButton;
 import com.stephentuso.welcome.WelcomeHelper;
-import com.wenming.library.LogReport;
-import com.yanzhenjie.permission.Permission;
+import com.trello.rxlifecycle2.android.ActivityEvent;
 
+import java.util.concurrent.TimeUnit;
+
+import butterknife.BindView;
 import butterknife.OnClick;
+import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -36,6 +40,8 @@ import io.reactivex.schedulers.Schedulers;
 public class SplashActivity extends BaseActivity {
 
 
+    @BindView(R.id.iv_splash)
+    ImageView ivSplash;
     private SimpleButton sbSkip;
 
     private WelcomeHelper sampleWelcomeScreen;
@@ -46,7 +52,7 @@ public class SplashActivity extends BaseActivity {
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);//去掉标题栏
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);//去掉信息栏
         super.onCreate(savedInstanceState);
-        SysApplication.getInstance().addActivity(this);
+        Glide.with(this).load(R.mipmap.home_splash).into(ivSplash);
 
         // 判断是否是第一次开启应用
         sampleWelcomeScreen = new WelcomeHelper(this, WelcomeActivity.class);
@@ -73,52 +79,25 @@ public class SplashActivity extends BaseActivity {
         }
     }
 
-    /**
-     * 自动登录
-     */
-    private void AutoLogin() {
-        String password = SharedPreferencesUtil.getString(this, SharedPreferencesUtil.PASSWORD);
-        String identifier = SharedPreferencesUtil.getString(this, SharedPreferencesUtil.IDENTIFIER);
-        if (!CommonUtils.isEmptyString(password) && !CommonUtils.isEmptyString(identifier)) {
-            RetrofitService.qdoApi.login(identifier, password)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Observer<LoginVo>() {
-                        @Override
-                        public void onSubscribe(Disposable d) {
-
-                        }
-
-                        @Override
-                        public void onNext(LoginVo loginVo) {
-                            if (loginVo != null) {
-                                if (loginVo.getData() != null && loginVo.getCode() == 200) {
-                                    SharedPreferencesUtil.putString(SplashActivity.this, SharedPreferencesUtil.USER_ID, loginVo.getData().getUser_id());
-                                    SharedPreferencesUtil.putString(SplashActivity.this, SharedPreferencesUtil.IDENTIFIER, loginVo.getData().getIdentifier());
-                                    SharedPreferencesUtil.putString(SplashActivity.this, SharedPreferencesUtil.PASSWORD, loginVo.getData().getPassword());
-                                    ConfigUtils.user_id = loginVo.getData().getUser_id();
-                                }
-                            }
-                        }
-
-                        @Override
-                        public void onError(Throwable e) {
-
-                        }
-
-                        @Override
-                        public void onComplete() {
-
-                        }
-                    });
-        }
-    }
-
-
-    protected void initSplashData() {
+    private void initSplashData() {
         sbSkip = findViewById(R.id.sb_skip);
-        RxHelper.countdown(3)
-                .subscribe(new Observer<Integer>() {
+        //设置默认3秒后进入
+        Observable.intervalRange(1, 3, 0, 1, TimeUnit.SECONDS)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .compose(this.bindUntilEvent(ActivityEvent.DESTROY))
+                .subscribe(new Observer<Long>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(Long aLong) {
+                        int time = 4 - aLong.intValue();
+                        sbSkip.setText(getString(R.string.common_skip) + time);
+                    }
+
                     @Override
                     public void onError(Throwable e) {
                         _doSkip();
@@ -127,15 +106,6 @@ public class SplashActivity extends BaseActivity {
                     @Override
                     public void onComplete() {
                         _doSkip();
-                    }
-
-                    @Override
-                    public void onSubscribe(Disposable d) {
-                    }
-
-                    @Override
-                    public void onNext(Integer integer) {
-                        sbSkip.setText("跳过 " + integer);
                     }
                 });
     }
@@ -149,7 +119,6 @@ public class SplashActivity extends BaseActivity {
     @Override
     public void onBackPressed() {
         // 不响应后退键
-        return;
     }
 
     @Override
@@ -159,9 +128,7 @@ public class SplashActivity extends BaseActivity {
             if (resultCode == RESULT_OK) {
                 startActivity(new Intent(this, MainActivity.class));
                 overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
-                // Code here will run if the welcome screen was completed
-            } else {
-                SysApplication.getInstance().exit();
+                finish();
             }
         }
     }

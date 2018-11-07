@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="@dimen/y200">
 
@@ -10,16 +11,16 @@
         android:layout_height="@dimen/y40"
         android:layout_marginLeft="@dimen/x30"
         android:layout_marginTop="@dimen/y20"
-        android:src="@mipmap/home_setting" />
+        android:src="@mipmap/home_setting"
+        tools:ignore="RtlHardcoded" />
 
     <TextView
         android:id="@+id/tv_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/iv_pic"
-        android:layout_marginLeft="@dimen/x30"
+        android:layout_marginStart="@dimen/x30"
         android:layout_marginTop="@dimen/y15"
-        android:text="蓝牙智能开关"
         android:textColor="@color/app_title"
         android:textSize="14sp" />
 
@@ -30,9 +31,10 @@
         android:layout_below="@+id/tv_text"
         android:layout_marginLeft="@dimen/x30"
         android:layout_marginTop="@dimen/y10"
-        android:text="请点击连接"
+        android:text="@string/item_home_content_item_state"
         android:textColor="@color/home_list_text"
-        android:textSize="14sp" />
+        android:textSize="14sp"
+        tools:ignore="RtlHardcoded" />
 
     <com.zcw.togglebutton.ToggleButton
         android:id="@+id/btn_toggle"
@@ -44,6 +46,7 @@
         android:layout_marginRight="@dimen/x30"
         android:visibility="gone"
         app:tbOffColor="@color/home_setting_text_two"
-        app:tbOnColor="@color/app_color" />
+        app:tbOnColor="@color/app_color"
+        tools:ignore="RtlHardcoded" />
 
 </RelativeLayout>

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/home_manage_backgroud"
@@ -20,7 +21,7 @@
             app:tabBackground="@color/white"
             app:tabIndicatorColor="@color/capacity_tablayout_text_two"
             app:tabSelectedTextColor="@color/capacity_tablayout_text_two"
-            app:tabTextColor="@color/capacity_tablayout_text"></android.support.design.widget.TabLayout>
+            app:tabTextColor="@color/capacity_tablayout_text" />
 
         <ImageView
             android:id="@+id/iv_capacity_add"
@@ -29,7 +30,8 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/x30"
-            android:src="@mipmap/capacity_add" />
+            android:src="@mipmap/capacity_add"
+            tools:ignore="RtlHardcoded" />
 
     </RelativeLayout>
 

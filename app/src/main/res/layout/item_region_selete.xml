@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/y100"
+    android:background="@color/white">
+
+    <ImageView
+        android:id="@+id/iv_selete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="@dimen/x30"
+        android:src="@mipmap/device_share_object_selete_more" />
+
+    <TextView
+        android:id="@+id/tv_region"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/x15"
+        android:layout_toRightOf="@+id/iv_selete"
+        android:text="大陆地区(推荐)"
+        android:textColor="@color/home_setting_text"
+        android:textSize="14sp"
+        tools:ignore="RtlHardcoded" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="@dimen/x30"
+        android:background="@color/black_16"
+        tools:ignore="RtlHardcoded" />
+
+</RelativeLayout>

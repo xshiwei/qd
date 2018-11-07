@@ -41,8 +41,6 @@ public class RobotSettingActivity extends BaseActivity {
     RelativeLayout rlLocateRobot;
 
 
-    private ToggleButton tlb_message_switch;
-
     @Override
     protected int setLayoutId() {
         return R.layout.activity_robot_setting;
@@ -51,7 +49,7 @@ public class RobotSettingActivity extends BaseActivity {
     @Override
     protected void initData() {
         super.initData();
-        tlb_message_switch = findViewById(R.id.tlb_message_switch);
+        ToggleButton tlb_message_switch = findViewById(R.id.tlb_message_switch);
     }
 
     @Override
@@ -60,7 +58,7 @@ public class RobotSettingActivity extends BaseActivity {
         mImmersionBar.fitsSystemWindows(true).statusBarColor(R.color.home_list_background).init();
     }
 
-    @OnClick({R.id.iv_common_actionbar_goback, R.id.rl_robot_setting, R.id.rl_timing_sweep, R.id.rl_voice_packet, R.id.rl_message_reminding, R.id.rl_robot_general_setting, R.id.rl_sweep_recode, R.id.rl_consumable_maintain, R.id.rl_product_guide_service, R.id.rl_remote_control, R.id.rl_locate_robot})
+    @OnClick({R.id.iv_common_actionbar_goback, R.id.rl_robot_setting, R.id.rl_timing_sweep, R.id.rl_voice_packet, R.id.rl_robot_general_setting, R.id.rl_sweep_recode, R.id.rl_consumable_maintain, R.id.rl_product_guide_service, R.id.rl_remote_control, R.id.rl_locate_robot})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_common_actionbar_goback:
@@ -75,20 +73,26 @@ public class RobotSettingActivity extends BaseActivity {
                 overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
                 break;
             case R.id.rl_voice_packet:
-                break;
-            case R.id.rl_message_reminding:
+                startActivity(new Intent(this, RobotVoicePacketActivity.class));
+                overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
                 break;
             case R.id.rl_robot_general_setting:
                 startActivity(new Intent(this, RobotGeneralSettingActivity.class));
                 overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
                 break;
             case R.id.rl_sweep_recode:
+                startActivity(new Intent(this, RobotSweepRecodeActivity.class));
+                overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
                 break;
             case R.id.rl_consumable_maintain:
+                startActivity(new Intent(this, RobotConsumableMaintainActivity.class));
+                overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
                 break;
             case R.id.rl_product_guide_service:
                 break;
             case R.id.rl_remote_control:
+                startActivity(new Intent(this, RobotRemoteControlActivity.class));
+                overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
                 break;
             case R.id.rl_locate_robot:
                 break;

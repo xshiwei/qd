@@ -15,7 +15,8 @@
         android:background="@drawable/layout_seletor"
         android:clickable="true"
         android:gravity="center"
-        android:text="连接" />
+        android:text="连接"
+        android:focusable="true" />
 
     <TextView
         android:id="@+id/tv_disconnect"
@@ -25,7 +26,8 @@
         android:background="@drawable/layout_seletor"
         android:clickable="true"
         android:gravity="center"
-        android:text="断开连接" />
+        android:text="断开连接"
+        android:focusable="true" />
 
     <TextView
         android:id="@+id/tv_publish"
@@ -35,7 +37,8 @@
         android:background="@drawable/layout_seletor"
         android:clickable="true"
         android:gravity="center"
-        android:text="发布" />
+        android:text="发布"
+        android:focusable="true" />
 
     <TextView
         android:id="@+id/tv_subscriber"
@@ -45,7 +48,8 @@
         android:background="@drawable/layout_seletor"
         android:clickable="true"
         android:gravity="center"
-        android:text="订阅" />
+        android:text="订阅"
+        android:focusable="true" />
 
     <TextView
         android:id="@+id/tv_unSubscriber"
@@ -55,7 +59,8 @@
         android:background="@drawable/layout_seletor"
         android:clickable="true"
         android:gravity="center"
-        android:text="取消订阅" />
+        android:text="取消订阅"
+        android:focusable="true" />
 
 
     <TextView

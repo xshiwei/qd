@@ -10,11 +10,12 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Shader;
 import android.graphics.SweepGradient;
-import android.os.Handler;
+import android.os.Message;
 import android.util.AttributeSet;
 import android.view.View;
 
 import com.qvd.smartswitch.R;
+import com.qvd.smartswitch.activity.base.BaseHandler;
 
 
 /**
@@ -38,8 +39,8 @@ public class RadarScanView extends View {
     private Paint mPaintRadar;
     private Matrix matrix;
 
-    private Handler handler = new Handler();
-    private Runnable run = new Runnable() {
+    private final MyHandler handler = new MyHandler(this);
+    private final Runnable run = new Runnable() {
         @Override
         public void run() {
             start += 2;
@@ -49,6 +50,18 @@ public class RadarScanView extends View {
             handler.postDelayed(run, 10);
         }
     };
+
+    private static class MyHandler extends BaseHandler<RadarScanView> {
+
+        MyHandler(RadarScanView reference) {
+            super(reference);
+        }
+
+        @Override
+        protected void handleMessage(RadarScanView reference, Message msg) {
+
+        }
+    }
 
     public RadarScanView(Context context) {
         super(context);
@@ -114,7 +127,7 @@ public class RadarScanView extends View {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        int resultWidth = 0;
+        int resultWidth;
         int modeWidth = MeasureSpec.getMode(widthMeasureSpec);
         int sizeWidth = MeasureSpec.getSize(widthMeasureSpec);
 
@@ -127,7 +140,7 @@ public class RadarScanView extends View {
             }
         }
 
-        int resultHeight = 0;
+        int resultHeight;
         int modeHeight = MeasureSpec.getMode(heightMeasureSpec);
         int sizeHeight = MeasureSpec.getSize(heightMeasureSpec);
         if (modeHeight == MeasureSpec.EXACTLY) {
@@ -169,6 +182,13 @@ public class RadarScanView extends View {
     private int px2dip(Context context, float pxValue) {
         final float scale = context.getResources().getDisplayMetrics().density;
         return (int) (pxValue / scale + 0.5f);
+    }
+
+    /**
+     * 销毁
+     */
+    public void destory() {
+        handler.removeCallbacks(run);
     }
 
 }

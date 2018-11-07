@@ -28,7 +28,7 @@ import android.widget.LinearLayout;
 /**
  * Recycle stores wheel items to reuse. 
  */
-public class WheelRecycle {
+class WheelRecycle {
 	// Cached items
 	private List<View> items;
 	
@@ -36,7 +36,7 @@ public class WheelRecycle {
 	private List<View> emptyItems;
 	
 	// Wheel view
-	private WheelView wheel;
+	private final WheelView wheel;
 	
 	/**
 	 * Constructor
@@ -109,7 +109,7 @@ public class WheelRecycle {
 	 */
 	private List<View> addView(View view, List<View> cache) {
 		if (cache == null) {
-			cache = new LinkedList<View>();
+			cache = new LinkedList<>();
 		}
 		
 		cache.add(view);
@@ -131,8 +131,7 @@ public class WheelRecycle {
 			while (index < 0) {
 				index = count + index;
 			}
-			index %= count;
-			items = addView(view, items);
+            items = addView(view, items);
 		}
 	}
 	

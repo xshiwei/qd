@@ -1,6 +1,5 @@
 package com.qvd.smartswitch.activity.device;
 
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -17,23 +16,18 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.qvd.smartswitch.R;
 import com.qvd.smartswitch.activity.base.BaseActivity;
-import com.qvd.smartswitch.adapter.ReceiverDeviceListAdapter;
 import com.qvd.smartswitch.adapter.RecentSharePeopleListAdapter;
-import com.qvd.smartswitch.adapter.UserFeedbackListAdapter;
 import com.qvd.smartswitch.api.RetrofitService;
 import com.qvd.smartswitch.model.user.RecentSharePeopleListVo;
 import com.qvd.smartswitch.utils.CommonUtils;
 import com.qvd.smartswitch.utils.ConfigUtils;
-import com.qvd.smartswitch.utils.ToastUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -63,7 +57,7 @@ public class DeviceShareActivity extends BaseActivity {
     private String device_type;
 
     private RecentSharePeopleListAdapter adapter;
-    private List<RecentSharePeopleListVo.DataBean> list = new ArrayList<>();
+    private final List<RecentSharePeopleListVo.DataBean> list = new ArrayList<>();
     private RecentSharePeopleListVo.DataBean dataBean;
 
     @Override
@@ -86,13 +80,10 @@ public class DeviceShareActivity extends BaseActivity {
         adapter.setHasStableIds(true);
         recyclerview.setAdapter(adapter);
 
-        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                dataBean = list.get(position);
-                showPopupWindow(new DeviceShareQevdoAccountFinallyActivity(), 2);
-                popupWindow.showAtLocation(decorView, Gravity.BOTTOM, 0, 0);
-            }
+        adapter.setOnItemClickListener((adapter, view, position) -> {
+            dataBean = list.get(position);
+            showPopupWindow(new DeviceShareQevdoAccountFinallyActivity(), 2);
+            popupWindow.showAtLocation(decorView, Gravity.BOTTOM, 0, 0);
         });
     }
 
@@ -189,57 +180,46 @@ public class DeviceShareActivity extends BaseActivity {
         ImageView iv_one = view.findViewById(R.id.iv_one);
         ImageView iv_two = view.findViewById(R.id.iv_two);
 
-        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
-            @Override
-            public void onDismiss() {
-                CommonUtils.setBackgroundAlpha(DeviceShareActivity.this, 1.0f);
+        popupWindow.setOnDismissListener(() -> CommonUtils.setBackgroundAlpha(DeviceShareActivity.this, 1.0f));
+
+        rl_one.setOnClickListener(v -> {
+            iv_one.setVisibility(View.VISIBLE);
+            iv_two.setVisibility(View.INVISIBLE);
+            if (type == 1) {
+                startActivity(new Intent(DeviceShareActivity.this, activity.getClass())
+                        .putExtra("device_id", deviceId)
+                        .putExtra("device_type", device_type)
+                        .putExtra("is_control", 1));
+            } else {
+                startActivity(new Intent(DeviceShareActivity.this, activity.getClass())
+                        .putExtra("person_info", dataBean)
+                        .putExtra("is_control", 1)
+                        .putExtra("device_id", deviceId)
+                        .putExtra("device_type", device_type)
+                        .putExtra("type", dataBean.getPeople_type()));
             }
+            overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+            popupWindow.dismiss();
         });
 
-        rl_one.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                iv_one.setVisibility(View.VISIBLE);
-                iv_two.setVisibility(View.INVISIBLE);
-                if (type == 1) {
-                    startActivity(new Intent(DeviceShareActivity.this, activity.getClass())
-                            .putExtra("device_id", deviceId)
-                            .putExtra("device_type", device_type)
-                            .putExtra("is_control", 1));
-                } else {
-                    startActivity(new Intent(DeviceShareActivity.this, activity.getClass())
-                            .putExtra("person_info", dataBean)
-                            .putExtra("is_control", 1)
-                            .putExtra("device_id", deviceId)
-                            .putExtra("device_type", device_type)
-                            .putExtra("type", dataBean.getPeople_type()));
-                }
-                overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
-                popupWindow.dismiss();
+        rl_two.setOnClickListener(v -> {
+            iv_one.setVisibility(View.INVISIBLE);
+            iv_two.setVisibility(View.VISIBLE);
+            if (type == 1) {
+                startActivity(new Intent(DeviceShareActivity.this, activity.getClass())
+                        .putExtra("device_id", deviceId)
+                        .putExtra("device_type", device_type)
+                        .putExtra("is_control", 0));
+            } else {
+                startActivity(new Intent(DeviceShareActivity.this, activity.getClass())
+                        .putExtra("person_info", dataBean)
+                        .putExtra("is_control", 0)
+                        .putExtra("device_id", deviceId)
+                        .putExtra("device_type", device_type)
+                        .putExtra("type", dataBean.getPeople_type()));
             }
-        });
-
-        rl_two.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                iv_one.setVisibility(View.INVISIBLE);
-                iv_two.setVisibility(View.VISIBLE);
-                if (type == 1) {
-                    startActivity(new Intent(DeviceShareActivity.this, activity.getClass())
-                            .putExtra("device_id", deviceId)
-                            .putExtra("device_type", device_type)
-                            .putExtra("is_control", 0));
-                } else {
-                    startActivity(new Intent(DeviceShareActivity.this, activity.getClass())
-                            .putExtra("person_info", dataBean)
-                            .putExtra("is_control", 0)
-                            .putExtra("device_id", deviceId)
-                            .putExtra("device_type", device_type)
-                            .putExtra("type", dataBean.getPeople_type()));
-                }
-                overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
-                popupWindow.dismiss();
-            }
+            overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+            popupWindow.dismiss();
         });
     }
 

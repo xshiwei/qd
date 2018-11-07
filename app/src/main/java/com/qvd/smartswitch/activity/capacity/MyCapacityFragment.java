@@ -2,17 +2,12 @@ package com.qvd.smartswitch.activity.capacity;
 
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.qvd.smartswitch.R;
 import com.qvd.smartswitch.activity.base.BaseFragment;
 import com.qvd.smartswitch.widget.EmptyLayout;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 
 /**
  * Created by Administrator on 2018/6/14 0014.

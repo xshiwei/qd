@@ -4,11 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
-import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.qvd.smartswitch.R;
 import com.qvd.smartswitch.activity.base.BaseFragment;
 import com.qvd.smartswitch.activity.device.DeviceShareManageActivity;
@@ -16,18 +12,14 @@ import com.qvd.smartswitch.adapter.ShareDeviceListAdapter;
 import com.qvd.smartswitch.api.RetrofitService;
 import com.qvd.smartswitch.model.user.UserShareDeviceListVo;
 import com.qvd.smartswitch.utils.ConfigUtils;
-import com.scwang.smartrefresh.header.MaterialHeader;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
-import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.header.ClassicsHeader;
-import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -44,9 +36,8 @@ public class ShareFragment extends BaseFragment {
     @BindView(R.id.smart_refresh)
     SmartRefreshLayout smartRefresh;
 
-
     private ShareDeviceListAdapter adapter;
-    private List<UserShareDeviceListVo.DataBean> list = new ArrayList<>();
+    private final List<UserShareDeviceListVo.DataBean> list = new ArrayList<>();
 
     public static ShareFragment newInstance(String param1) {
         ShareFragment fragment = new ShareFragment();
@@ -73,31 +64,20 @@ public class ShareFragment extends BaseFragment {
 
         smartRefresh.setHeaderHeight(100);
         smartRefresh.setEnableHeaderTranslationContent(true);
-        smartRefresh.setRefreshHeader(new ClassicsHeader(getActivity()));
-        smartRefresh.setOnRefreshListener(new OnRefreshListener() {
-            @Override
-            public void onRefresh(RefreshLayout refreshlayout) {
-                getData();
-                smartRefresh.finishRefresh(1500, true);
-            }
+        smartRefresh.setRefreshHeader(new ClassicsHeader(Objects.requireNonNull(getActivity())));
+        smartRefresh.setOnRefreshListener(refreshlayout -> {
+            getData();
+            smartRefresh.finishRefresh(1500, true);
         });
 
-        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                startActivity(new Intent(getActivity(), DeviceShareManageActivity.class)
-                        .putExtra("device_id", list.get(position).getDevice_id())
-                        .putExtra("device_type", list.get(position).getTable_type()));
-                getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
-            }
+        adapter.setOnItemClickListener((adapter, view, position) -> {
+            startActivity(new Intent(getActivity(), DeviceShareManageActivity.class)
+                    .putExtra("device_id", list.get(position).getDevice_id())
+                    .putExtra("device_type", list.get(position).getTable_type()));
+            getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
         });
-        myEmptyLayout.setTextViewMessage("您当前还未添加设备");
-        myErrorLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getData();
-            }
-        });
+        myEmptyLayout.setTextViewMessage(getString(R.string.share_empty));
+        myErrorLayout.setOnClickListener(v -> getData());
     }
 
     @Override
@@ -129,7 +109,7 @@ public class ShareFragment extends BaseFragment {
                                 smartRefresh.setEnableRefresh(true);
                             } else {
                                 adapter.setEmptyView(myEmptyLayout);
-                                smartRefresh.setEnableRefresh(false);
+                                smartRefresh.setEnableRefresh(true);
                             }
                         } else {
                             adapter.setEmptyView(myErrorLayout);

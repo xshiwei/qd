@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
@@ -30,7 +31,7 @@
         android:layout_gravity="center"
         android:layout_marginTop="@dimen/y50"
         android:padding="5dp"
-        android:text="正在连接"
+        android:text="@string/device_connect_text_one"
         android:textColor="@color/app_title"
         android:textSize="16sp" />
 
@@ -50,7 +51,8 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/x50"
             app:indicatorColor="@color/add_device_selete"
-            app:indicatorName="CubeTransitionIndicator" />
+            app:indicatorName="CubeTransitionIndicator"
+            tools:ignore="RtlHardcoded" />
 
         <TextView
             android:id="@+id/tv_one"
@@ -58,9 +60,10 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/x130"
-            android:text="连接设备成功"
+            android:text="@string/device_connect_text_two"
             android:textColor="@color/add_device_selete"
-            android:textSize="13sp" />
+            android:textSize="13sp"
+            tools:ignore="RtlHardcoded" />
 
     </RelativeLayout>
 
@@ -78,7 +81,8 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/x50"
             app:indicatorColor="@color/add_device_selete"
-            app:indicatorName="CubeTransitionIndicator" />
+            app:indicatorName="CubeTransitionIndicator"
+            tools:ignore="RtlHardcoded" />
 
         <TextView
             android:id="@+id/tv_two"
@@ -86,9 +90,10 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/x130"
-            android:text="安全验证成功"
+            android:text="@string/device_connect_text_three"
             android:textColor="@color/add_device_selete"
-            android:textSize="13sp" />
+            android:textSize="13sp"
+            tools:ignore="RtlHardcoded" />
 
     </RelativeLayout>
 
@@ -106,7 +111,8 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/x50"
             app:indicatorColor="@color/add_device_selete"
-            app:indicatorName="CubeTransitionIndicator" />
+            app:indicatorName="CubeTransitionIndicator"
+            tools:ignore="RtlHardcoded" />
 
         <TextView
             android:id="@+id/tv_three"
@@ -114,9 +120,10 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/x130"
-            android:text="设备绑定账号成功"
+            android:text="@string/device_connect_text_four"
             android:textColor="@color/add_device_selete"
-            android:textSize="13sp" />
+            android:textSize="13sp"
+            tools:ignore="RtlHardcoded" />
 
     </RelativeLayout>
 
@@ -134,7 +141,8 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/x50"
             app:indicatorColor="@color/add_device_selete"
-            app:indicatorName="CubeTransitionIndicator" />
+            app:indicatorName="CubeTransitionIndicator"
+            tools:ignore="RtlHardcoded" />
 
         <TextView
             android:id="@+id/tv_four"
@@ -142,9 +150,10 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/x130"
-            android:text="扩展程序初始化成功"
+            android:text="@string/device_connect_text_five"
             android:textColor="@color/add_device_selete"
-            android:textSize="13sp" />
+            android:textSize="13sp"
+            tools:ignore="RtlHardcoded" />
 
     </RelativeLayout>
 
@@ -166,7 +175,7 @@
             android:layout_marginRight="@dimen/x40"
             android:background="@drawable/seletor_circle_blue_gray_five"
             android:gravity="center"
-            android:text="完成"
+            android:text="@string/device_connect_complete"
             android:textColor="@color/white"
             android:textSize="13sp" />
 

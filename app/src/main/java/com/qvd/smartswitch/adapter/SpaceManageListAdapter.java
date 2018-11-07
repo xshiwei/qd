@@ -1,6 +1,7 @@
 package com.qvd.smartswitch.adapter;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,7 +10,6 @@ import android.widget.TextView;
 
 import com.qvd.smartswitch.R;
 import com.qvd.smartswitch.model.home.HomeListVo;
-import com.qvd.smartswitch.model.home.Test2Vo;
 
 import java.util.List;
 
@@ -18,8 +18,8 @@ import java.util.List;
  */
 
 public class SpaceManageListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private Context context;
-    private List<HomeListVo.DataBean> data;
+    private final Context context;
+    private final List<HomeListVo.DataBean> data;
 
     public SpaceManageListAdapter(Context context, List<HomeListVo.DataBean> data) {
         this.context = context;
@@ -40,32 +40,25 @@ public class SpaceManageListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     }
 
 
+    @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.item_home_manage, parent, false);
         return new MyViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof MyViewHolder) {
             if (onItemClickListener != null) {
-                holder.itemView.setOnClickListener(new View.OnClickListener() {
-
-                    @Override
-                    public void onClick(View view) {
-                        int position = holder.getLayoutPosition();
-                        onItemClickListener.onItemClick(holder.itemView, position);
-                    }
+                holder.itemView.setOnClickListener(view -> {
+                    int position12 = holder.getLayoutPosition();
+                    onItemClickListener.onItemClick(holder.itemView, position12);
                 });
-                holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
-
-                    @Override
-                    public boolean onLongClick(View view) {
-                        int position = holder.getLayoutPosition();
-                        onItemClickListener.onItemClick(holder.itemView, position);
-                        return false;
-                    }
+                holder.itemView.setOnLongClickListener(view -> {
+                    int position1 = holder.getLayoutPosition();
+                    onItemClickListener.onItemClick(holder.itemView, position1);
+                    return false;
                 });
             }
             ((MyViewHolder) holder).tv_home.setText(data.get(position).getFamily_name());
@@ -79,10 +72,10 @@ public class SpaceManageListAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     }
 
 
-    public class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView tv_home;
+    class MyViewHolder extends RecyclerView.ViewHolder {
+        final TextView tv_home;
 
-        public MyViewHolder(View itemView) {
+        MyViewHolder(View itemView) {
             super(itemView);
             tv_home = itemView.findViewById(R.id.tv_home);
         }

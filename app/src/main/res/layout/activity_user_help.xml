@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/home_setting_background"
@@ -16,16 +17,16 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/x20"
-            android:contentDescription="TODO"
             android:padding="5dp"
-            android:src="@mipmap/actionbar_goback" />
+            android:src="@mipmap/actionbar_goback"
+            tools:ignore="RtlHardcoded" />
 
         <TextView
             android:id="@+id/tv_common_actionbar_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="帮助与反馈"
+            android:text="@string/user_help_title"
             android:textColor="@color/app_title"
             android:textSize="15sp" />
 
@@ -33,11 +34,11 @@
             android:id="@+id/iv_message"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="@dimen/x30"
+            android:layout_marginEnd="@dimen/x30"
             android:padding="5dp"
-            android:src="@mipmap/user_help_message" />
+            android:src="@mipmap/user_message" />
 
     </RelativeLayout>
 
@@ -57,9 +58,10 @@
                 android:layout_height="wrap_content"
                 android:paddingLeft="@dimen/x30"
                 android:paddingTop="@dimen/y40"
-                android:text="我的设备"
+                android:text="@string/user_help_my_device"
                 android:textColor="@color/home_setting_text_three"
-                android:textSize="12sp" />
+                android:textSize="12sp"
+                tools:ignore="RtlHardcoded" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -72,7 +74,7 @@
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/recyclerview"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
+                    android:layout_height="match_parent" />
             </LinearLayout>
 
             <TextView
@@ -80,9 +82,10 @@
                 android:layout_height="wrap_content"
                 android:paddingLeft="@dimen/x30"
                 android:paddingTop="@dimen/y40"
-                android:text="更多"
+                android:text="@string/user_help_more"
                 android:textColor="@color/home_setting_text_three"
-                android:textSize="12sp" />
+                android:textSize="12sp"
+                tools:ignore="RtlHardcoded" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -94,7 +97,7 @@
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/recyclerview_two"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
+                    android:layout_height="match_parent" />
             </LinearLayout>
 
         </LinearLayout>

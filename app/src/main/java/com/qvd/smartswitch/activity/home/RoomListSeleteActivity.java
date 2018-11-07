@@ -1,15 +1,14 @@
 package com.qvd.smartswitch.activity.home;
 
 import android.content.Intent;
-import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.orhanobut.logger.Logger;
 import com.qvd.smartswitch.R;
 import com.qvd.smartswitch.activity.base.BaseActivity;
@@ -17,14 +16,13 @@ import com.qvd.smartswitch.adapter.RoomManageListAdapter;
 import com.qvd.smartswitch.api.RetrofitService;
 import com.qvd.smartswitch.model.home.AddRomeVo;
 import com.qvd.smartswitch.model.home.RoomListVo;
-import com.qvd.smartswitch.model.login.MessageVo;
 import com.qvd.smartswitch.utils.CommonUtils;
 import com.qvd.smartswitch.utils.ConfigUtils;
 import com.qvd.smartswitch.utils.ToastUtil;
-import com.qvd.smartswitch.widget.EmptyLayout;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -42,10 +40,8 @@ public class RoomListSeleteActivity extends BaseActivity {
     ImageView ivAddRoom;
     @BindView(R.id.recyclerview)
     RecyclerView recyclerview;
-    @BindView(R.id.emptylayout)
-    EmptyLayout emptylayout;
 
-    private List<RoomListVo.DataBean> list = new ArrayList<>();
+    private final List<RoomListVo.DataBean> list = new ArrayList<>();
     private RoomManageListAdapter adapter;
 
     @Override
@@ -62,25 +58,22 @@ public class RoomListSeleteActivity extends BaseActivity {
     @Override
     protected void initData() {
         super.initData();
-        getRoomList();
         recyclerview.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        adapter = new RoomManageListAdapter(this, list);
+        adapter = new RoomManageListAdapter(list);
+        adapter.openLoadAnimation();
+        adapter.isFirstOnly(false);
+        adapter.setHasStableIds(true);
         recyclerview.setAdapter(adapter);
-        adapter.setOnItemClickListener(new RoomManageListAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                Intent intent = new Intent();
-                intent.putExtra("room_id", list.get(position).getRoom_id());
-                intent.putExtra("room_name", list.get(position).getRoom_name());
-                setResult(2, intent);
-                finish();
-            }
-
-            @Override
-            public void onItemLongClickListener(View view, int position) {
-
-            }
+        adapter.setOnItemClickListener((adapter, view, position) -> {
+            Intent intent = new Intent();
+            intent.putExtra("room_id", list.get(position).getRoom_id());
+            intent.putExtra("room_name", list.get(position).getRoom_name());
+            setResult(2, intent);
+            finish();
         });
+        myEmptyLayout.setTextViewMessage(getString(R.string.room_list_selete_empty));
+        myErrorLayout.setOnClickListener(v -> getRoomList());
+        getRoomList();
     }
 
     @OnClick({R.id.iv_common_actionbar_goback, R.id.iv_add_room})
@@ -100,29 +93,17 @@ public class RoomListSeleteActivity extends BaseActivity {
      */
     private void showAddRoomPopupWindow() {
         new MaterialDialog.Builder(this)
-                .title("添加属于您的房间")
-                .negativeText("取消")
-                .positiveText("确定")
+                .content(R.string.room_list_sleete_add_room)
+                .negativeText(R.string.common_cancel)
+                .positiveText(R.string.common_confirm)
                 .inputRange(1, 20, getResources().getColor(R.color.red))
-                .input(null, null, false, new MaterialDialog.InputCallback() {
-                    @Override
-                    public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
-
-                    }
+                .input(null, null, false, (dialog, input) -> {
                 })
-                .onNegative(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        CommonUtils.closeSoftKeyboard(RoomListSeleteActivity.this);
-                    }
-                })
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        addRoom(dialog.getInputEditText().getText().toString());
-                        getRoomList();
-                        CommonUtils.closeSoftKeyboard(RoomListSeleteActivity.this);
-                    }
+                .onNegative((dialog, which) -> CommonUtils.closeSoftKeyboard(RoomListSeleteActivity.this))
+                .onPositive((dialog, which) -> {
+                    addRoom(Objects.requireNonNull(dialog.getInputEditText()).getText().toString());
+                    getRoomList();
+                    CommonUtils.closeSoftKeyboard(RoomListSeleteActivity.this);
                 })
                 .show();
     }
@@ -143,13 +124,13 @@ public class RoomListSeleteActivity extends BaseActivity {
 
                     @Override
                     public void onNext(AddRomeVo messageVo) {
-                        if (messageVo.getCode() == 200) {
-                            ToastUtil.showToast("添加成功");
-                            getRoomList();
-                        } else if (messageVo.getCode() == 400) {
-                            ToastUtil.showToast("添加失败");
-                        } else {
-                            ToastUtil.showToast("添加超时");
+                        if (messageVo!=null){
+                            if (messageVo.getCode()==200){
+                                ToastUtil.showToast(getString(R.string.common_add_success));
+                                getRoomList();
+                            }else {
+                                ToastUtil.showToast(getString(R.string.common_server_error));
+                            }
                         }
                     }
 
@@ -182,22 +163,21 @@ public class RoomListSeleteActivity extends BaseActivity {
                     @Override
                     public void onNext(RoomListVo roomListVo) {
                         if (roomListVo != null) {
-                            list.clear();
-                            if (roomListVo.getCode() == 200) {
-                                emptylayout.hide();
+                            if (roomListVo.getData() != null) {
+                                list.clear();
                                 list.addAll(roomListVo.getData());
                                 adapter.notifyDataSetChanged();
-                            } else if (roomListVo.getCode() == 400) {
-                                emptylayout.showEmpty();
                             } else {
-                                emptylayout.showEmpty();
+                                adapter.setEmptyView(myEmptyLayout);
                             }
+                        } else {
+                            adapter.setEmptyView(myErrorLayout);
                         }
                     }
 
                     @Override
                     public void onError(Throwable e) {
-
+                        adapter.setEmptyView(myErrorLayout);
                     }
 
                     @Override

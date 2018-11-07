@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="@dimen/y80"
     android:background="@color/white">
@@ -10,9 +11,9 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_marginLeft="@dimen/x20"
-        android:contentDescription="TODO"
         android:padding="5dp"
-        android:src="@mipmap/actionbar_goback" />
+        android:src="@mipmap/actionbar_goback"
+        tools:ignore="RtlHardcoded" />
 
     <TextView
         android:id="@+id/tv_common_actionbar_title"

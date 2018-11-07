@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/home_manage_backgroud"
@@ -17,16 +18,16 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/x20"
-            android:contentDescription="TODO"
             android:padding="5dp"
-            android:src="@mipmap/actionbar_goback" />
+            android:src="@mipmap/actionbar_goback"
+            tools:ignore="RtlHardcoded" />
 
         <TextView
             android:id="@+id/tv_common_actionbar_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="通用设置"
+            android:text="@string/robot_general_setting_title"
             android:textColor="@color/app_title"
             android:textSize="15sp" />
 
@@ -49,9 +50,10 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:paddingLeft="@dimen/x50"
-                android:text="重命名"
+                android:text="@string/robot_general_setting_rename"
                 android:textColor="@color/black"
-                android:textSize="13sp" />
+                android:textSize="13sp"
+                tools:ignore="RtlHardcoded" />
 
             <TextView
                 android:id="@+id/tv_name"
@@ -60,9 +62,9 @@
                 android:layout_centerVertical="true"
                 android:layout_toLeftOf="@+id/iv_name"
                 android:paddingRight="@dimen/x20"
-                android:text="机器人规划版"
                 android:textColor="@color/home_setting_text_two"
-                android:textSize="13sp" />
+                android:textSize="13sp"
+                tools:ignore="RtlHardcoded" />
 
             <ImageView
                 android:id="@+id/iv_name"
@@ -72,7 +74,8 @@
                 android:layout_centerVertical="true"
                 android:layout_marginRight="@dimen/x50"
                 android:contentDescription="TODO"
-                android:src="@mipmap/user_more_details" />
+                android:src="@mipmap/user_more_details"
+                tools:ignore="RtlHardcoded" />
 
             <View
                 android:layout_width="match_parent"
@@ -94,9 +97,10 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:paddingLeft="@dimen/x50"
-                android:text="设备共享"
+                android:text="@string/robot_general_setting_device_share"
                 android:textColor="@color/black"
-                android:textSize="13sp" />
+                android:textSize="13sp"
+                tools:ignore="RtlHardcoded" />
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -104,8 +108,8 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="@dimen/x50"
-                android:contentDescription="TODO"
-                android:src="@mipmap/user_more_details" />
+                android:src="@mipmap/user_more_details"
+                tools:ignore="RtlHardcoded" />
 
             <View
                 android:layout_width="match_parent"
@@ -127,9 +131,10 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:paddingLeft="@dimen/x50"
-                android:text="检查固件更新"
+                android:text="@string/robot_general_setting_check_update"
                 android:textColor="@color/black"
-                android:textSize="13sp" />
+                android:textSize="13sp"
+                tools:ignore="RtlHardcoded" />
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -137,8 +142,8 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="@dimen/x50"
-                android:contentDescription="TODO"
-                android:src="@mipmap/user_more_details" />
+                android:src="@mipmap/user_more_details"
+                tools:ignore="RtlHardcoded" />
 
             <View
                 android:layout_width="match_parent"
@@ -160,9 +165,10 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:paddingLeft="@dimen/x50"
-                android:text="删除设备"
+                android:text="@string/robot_general_setting_delete_device"
                 android:textColor="@color/black"
-                android:textSize="13sp" />
+                android:textSize="13sp"
+                tools:ignore="RtlHardcoded" />
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -170,8 +176,8 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="@dimen/x50"
-                android:contentDescription="TODO"
-                android:src="@mipmap/user_more_details" />
+                android:src="@mipmap/user_more_details"
+                tools:ignore="RtlHardcoded" />
 
             <View
                 android:layout_width="match_parent"
@@ -192,8 +198,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:paddingLeft="@dimen/x50"
-                android:text="网络信息"
+                android:paddingStart="@dimen/x50"
+                android:text="@string/robot_general_setting_network_message"
                 android:textColor="@color/black"
                 android:textSize="13sp" />
 
@@ -203,8 +209,8 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="@dimen/x50"
-                android:contentDescription="TODO"
-                android:src="@mipmap/user_more_details" />
+                android:src="@mipmap/user_more_details"
+                tools:ignore="RtlHardcoded" />
 
             <View
                 android:layout_width="match_parent"
@@ -225,18 +231,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:paddingLeft="@dimen/x50"
-                android:text="设备时区"
+                android:paddingStart="@dimen/x50"
+                android:text="@string/robot_general_setting_device_time_zone"
                 android:textColor="@color/black"
                 android:textSize="13sp" />
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
                 android:layout_centerVertical="true"
-                android:layout_marginRight="@dimen/x50"
-                android:contentDescription="TODO"
+                android:layout_marginEnd="@dimen/x50"
                 android:src="@mipmap/user_more_details" />
 
             <View
@@ -259,9 +264,10 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:paddingLeft="@dimen/x50"
-                android:text="反馈"
+                android:text="@string/robot_general_setting_feedback"
                 android:textColor="@color/black"
-                android:textSize="13sp" />
+                android:textSize="13sp"
+                tools:ignore="RtlHardcoded" />
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -270,7 +276,8 @@
                 android:layout_centerVertical="true"
                 android:layout_marginRight="@dimen/x50"
                 android:contentDescription="TODO"
-                android:src="@mipmap/user_more_details" />
+                android:src="@mipmap/user_more_details"
+                tools:ignore="RtlHardcoded" />
 
             <View
                 android:layout_width="match_parent"
@@ -291,8 +298,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:paddingLeft="@dimen/x50"
-                android:text="使用条款和隐私政策"
+                android:paddingStart="@dimen/x50"
+                android:text="@string/robot_general_setting_item_privacy"
                 android:textColor="@color/black"
                 android:textSize="13sp" />
 
@@ -302,8 +309,8 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="@dimen/x50"
-                android:contentDescription="TODO"
-                android:src="@mipmap/user_more_details" />
+                android:src="@mipmap/user_more_details"
+                tools:ignore="RtlHardcoded" />
 
             <View
                 android:layout_width="match_parent"

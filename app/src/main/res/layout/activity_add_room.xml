@@ -15,9 +15,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingBottom="@dimen/y25"
-            android:paddingLeft="@dimen/x30"
+            android:paddingStart="@dimen/x30"
             android:paddingTop="@dimen/y40"
-            android:text="选择一个你要创建的房间"
+            android:text="@string/add_room_content"
             android:textColor="@color/home_setting_text_three"
             android:textSize="12sp" />
     </RelativeLayout>
@@ -29,7 +29,6 @@
         android:layout_marginLeft="@dimen/x10"
         android:layout_marginRight="@dimen/x10"
         android:background="@color/white">
-
     </android.support.v7.widget.RecyclerView>
 
 

@@ -39,6 +39,7 @@ import com.lljjcoder.style.citypickerview.widget.wheel.adapters.WheelViewAdapter
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Numeric wheel view.
@@ -102,7 +103,7 @@ public class WheelView extends View {
     /**
      * 滚轮是否循环滚动
      */
-    boolean isCyclic = false;
+    private boolean isCyclic = false;
     
     // Items layout
     private LinearLayout itemsLayout;
@@ -114,14 +115,14 @@ public class WheelView extends View {
     private WheelViewAdapter viewAdapter;
     
     // Recycle
-    private WheelRecycle recycle = new WheelRecycle(this);
+    private final WheelRecycle recycle = new WheelRecycle(this);
     
     // Listeners
-    private List<OnWheelChangedListener> changingListeners = new LinkedList<OnWheelChangedListener>();
+    private final List<OnWheelChangedListener> changingListeners = new LinkedList<>();
     
-    private List<OnWheelScrollListener> scrollingListeners = new LinkedList<OnWheelScrollListener>();
+    private final List<OnWheelScrollListener> scrollingListeners = new LinkedList<>();
     
-    private List<OnWheelClickedListener> clickingListeners = new LinkedList<OnWheelClickedListener>();
+    private final List<OnWheelClickedListener> clickingListeners = new LinkedList<>();
     
     /**
      * 中间线的颜色
@@ -167,7 +168,7 @@ public class WheelView extends View {
     }
     
     // Scrolling listener
-    WheelScroller.ScrollingListener scrollingListener = new WheelScroller.ScrollingListener() {
+    private final WheelScroller.ScrollingListener scrollingListener = new WheelScroller.ScrollingListener() {
         @Override
         public void onStarted() {
             isScrollingPerformed = true;
@@ -208,7 +209,7 @@ public class WheelView extends View {
         }
     };
     
-    public String getLineColorStr() {
+    private String getLineColorStr() {
         return lineColorStr == null ? "" : lineColorStr;
     }
     
@@ -216,7 +217,7 @@ public class WheelView extends View {
         this.lineColorStr = lineColorStr;
     }
     
-    public int getLineWidth() {
+    private int getLineWidth() {
         return lineWidth;
     }
     
@@ -238,7 +239,7 @@ public class WheelView extends View {
      *
      * @return the count of visible items
      */
-    public int getVisibleItems() {
+    private int getVisibleItems() {
         return visibleItems;
     }
     
@@ -263,7 +264,7 @@ public class WheelView extends View {
     }
     
     // Adapter listener
-    private DataSetObserver dataObserver = new DataSetObserver() {
+    private final DataSetObserver dataObserver = new DataSetObserver() {
         @Override
         public void onChanged() {
             invalidateWheel(false);
@@ -317,7 +318,7 @@ public class WheelView extends View {
      * @param oldValue the old wheel value
      * @param newValue the new wheel value
      */
-    protected void notifyChangingListeners(int oldValue, int newValue) {
+    private void notifyChangingListeners(int oldValue, int newValue) {
         for (OnWheelChangedListener listener : changingListeners) {
             listener.onChanged(this, oldValue, newValue);
         }
@@ -344,7 +345,7 @@ public class WheelView extends View {
     /**
      * Notifies listeners about starting scrolling
      */
-    protected void notifyScrollingListenersAboutStart() {
+    private void notifyScrollingListenersAboutStart() {
         for (OnWheelScrollListener listener : scrollingListeners) {
             listener.onScrollingStarted(this);
         }
@@ -353,7 +354,7 @@ public class WheelView extends View {
     /**
      * Notifies listeners about ending scrolling
      */
-    protected void notifyScrollingListenersAboutEnd() {
+    private void notifyScrollingListenersAboutEnd() {
         for (OnWheelScrollListener listener : scrollingListeners) {
             listener.onScrollingFinished(this);
         }
@@ -380,7 +381,7 @@ public class WheelView extends View {
     /**
      * Notifies listeners about clicking
      */
-    protected void notifyClickListenersAboutClick(int item) {
+    private void notifyClickListenersAboutClick(int item) {
         for (OnWheelClickedListener listener : clickingListeners) {
             listener.onItemClicked(this, item);
         }
@@ -401,7 +402,7 @@ public class WheelView extends View {
      * @param index    the item index
      * @param animated the animation flag
      */
-    public void setCurrentItem(int index, boolean animated) {
+    private void setCurrentItem(int index, boolean animated) {
         if (viewAdapter == null || viewAdapter.getItemsCount() == 0) {
             return; // throw?
         }
@@ -524,7 +525,7 @@ public class WheelView extends View {
      *
      * @param clearCaches if true then cached views will be clear
      */
-    public void invalidateWheel(boolean clearCaches) {
+    private void invalidateWheel(boolean clearCaches) {
         if (clearCaches) {
             recycle.clearAll();
             if (itemsLayout != null) {
@@ -699,7 +700,7 @@ public class WheelView extends View {
         
         //从中间到顶部渐变处理
         int count = getVisibleItems() == 2 ? 1 : getVisibleItems() / 2;
-        int height = (int) (count * getItemHeight());
+        int height = count * getItemHeight();
         
         topShadow.setBounds(0, 0, getWidth(), height);
         topShadow.draw(canvas);
@@ -868,7 +869,7 @@ public class WheelView extends View {
      *
      * @param time        scrolling duration
      */
-    public void scroll(int itemsToScroll, int time) {
+    private void scroll(int itemsToScroll, int time) {
         int distance = itemsToScroll * getItemHeight() - scrollingOffset;
         scroller.scroll(distance, time);
     }
@@ -911,7 +912,7 @@ public class WheelView extends View {
      * @return true if items are rebuilt
      */
     private boolean rebuildItems() {
-        boolean updated = false;
+        boolean updated;
         ItemsRange range = getItemsRange();
         if (itemsLayout != null) {
             int first = recycle.recycleItems(itemsLayout, firstItem, range);
@@ -924,10 +925,10 @@ public class WheelView extends View {
         }
         
         if (!updated) {
-            updated = firstItem != range.getFirst() || itemsLayout.getChildCount() != range.getCount();
+            updated = firstItem != Objects.requireNonNull(range).getFirst() || itemsLayout.getChildCount() != range.getCount();
         }
         
-        if (firstItem > range.getFirst() && firstItem <= range.getLast()) {
+        if (firstItem > Objects.requireNonNull(range).getFirst() && firstItem <= range.getLast()) {
             for (int i = firstItem - 1; i >= range.getFirst(); i--) {
                 if (!addViewItem(i, true)) {
                     break;

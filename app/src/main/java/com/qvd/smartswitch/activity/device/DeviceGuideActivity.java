@@ -1,13 +1,12 @@
 package com.qvd.smartswitch.activity.device;
 
 import android.content.Context;
-import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.qvd.smartswitch.R;
 import com.qvd.smartswitch.activity.base.BaseActivity;
-import com.squareup.picasso.Picasso;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
 import com.youth.banner.Transformer;
@@ -17,7 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class DeviceGuideActivity extends BaseActivity {
@@ -29,7 +27,7 @@ public class DeviceGuideActivity extends BaseActivity {
     @BindView(R.id.tv_common_actionbar_title)
     TextView tvCommonActionbarTitle;
 
-    private List<Integer> images = new ArrayList<>();
+    private final List<Integer> images = new ArrayList<>();
 
     @Override
     protected int setLayoutId() {
@@ -39,7 +37,7 @@ public class DeviceGuideActivity extends BaseActivity {
     @Override
     protected void initData() {
         super.initData();
-        tvCommonActionbarTitle.setText("快速指南");
+        tvCommonActionbarTitle.setText(R.string.device_guide_title);
         setHomeBanner();
     }
 
@@ -61,7 +59,7 @@ public class DeviceGuideActivity extends BaseActivity {
         //设置banner样式
         banner.setBannerStyle(BannerConfig.CIRCLE_INDICATOR);
         //设置图片加载器
-        banner.setImageLoader(new PicassoLoader());
+        banner.setImageLoader(new GlideLoader());
         //设置图片集合
         banner.setImages(images);
         //设置banner动画效果
@@ -80,10 +78,10 @@ public class DeviceGuideActivity extends BaseActivity {
         finish();
     }
 
-    public class PicassoLoader extends ImageLoader {
+    static class GlideLoader extends ImageLoader {
         @Override
         public void displayImage(Context context, Object path, ImageView imageView) {
-            Picasso.with(context).load((Integer) path).into(imageView);
+            Glide.with(context).load((Integer) path).into(imageView);
         }
     }
 

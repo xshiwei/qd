@@ -53,17 +53,17 @@ public class CityParseHelper {
     /**
      * key - 省 value - 市
      */
-    private Map<String, CityBean[]> mPro_CityMap = new HashMap<String, CityBean[]>();
+    private Map<String, CityBean[]> mPro_CityMap = new HashMap<>();
     
     /**
      * key - 市 values - 区
      */
-    private Map<String, DistrictBean[]> mCity_DisMap = new HashMap<String, DistrictBean[]>();
+    private Map<String, DistrictBean[]> mCity_DisMap = new HashMap<>();
     
     /**
      * key - 区 values - 邮编
      */
-    private Map<String, DistrictBean> mDisMap = new HashMap<String, DistrictBean>();
+    private Map<String, DistrictBean> mDisMap = new HashMap<>();
     
     public ArrayList<ProvinceBean> getProvinceBeanArrayList() {
         return mProvinceBeanArrayList;
@@ -171,10 +171,10 @@ public class CityParseHelper {
         if (mProvinceBeanArrayList != null && !mProvinceBeanArrayList.isEmpty()) {
             mProvinceBean = mProvinceBeanArrayList.get(0);
             List<CityBean> cityList = mProvinceBean.getCityList();
-            if (cityList != null && !cityList.isEmpty() && cityList.size() > 0) {
+            if (cityList != null && !cityList.isEmpty()) {
                 mCityBean = cityList.get(0);
                 List<DistrictBean> districtList = mCityBean.getCityList();
-                if (districtList != null && !districtList.isEmpty() && districtList.size() > 0) {
+                if (districtList != null && !districtList.isEmpty()) {
                     mDistrictBean = districtList.get(0);
                 }
             }

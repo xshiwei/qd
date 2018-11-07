@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/device_background">
@@ -15,9 +16,9 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/x20"
-            android:contentDescription="TODO"
             android:padding="5dp"
-            android:src="@mipmap/actionbar_goback_white" />
+            android:src="@mipmap/actionbar_goback_white"
+            tools:ignore="RtlHardcoded" />
 
         <TextView
             android:id="@+id/tv_device_control_title"
@@ -28,7 +29,7 @@
             android:ellipsize="end"
             android:gravity="center"
             android:lines="1"
-            android:text="科微多扫地机器人规划版"
+            android:text="@string/robot_control_title"
             android:textColor="@color/white"
             android:textSize="14sp" />
 
@@ -42,9 +43,9 @@
             android:ellipsize="end"
             android:gravity="center"
             android:lines="1"
-            android:text="暂停"
+            android:text="@string/robot_control_state"
             android:textColor="@color/white"
-            android:textSize="12sp"></TextView>
+            android:textSize="12sp" />
 
         <ImageView
             android:id="@+id/iv_device_control_more"
@@ -53,9 +54,9 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/x20"
-            android:contentDescription="TODO"
             android:padding="5dp"
-            android:src="@mipmap/actionbar_more_detail_white" />
+            android:src="@mipmap/actionbar_more_detail_white"
+            tools:ignore="RtlHardcoded" />
 
     </RelativeLayout>
 
@@ -70,7 +71,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/x60"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            tools:ignore="RtlHardcoded">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -83,7 +85,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/y10"
-                    android:text="_ _"
+                    android:text="@string/robot_control_empty_text"
                     android:textColor="@color/white"
                     android:textSize="16sp" />
 
@@ -91,7 +93,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="top"
-                    android:text="㎡"
+                    android:text="@string/robot_control_area_unit"
                     android:textColor="@color/white"
                     android:textSize="12sp" />
 
@@ -100,7 +102,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="清扫面积"
+                android:text="@string/robot_control_area"
                 android:textColor="@color/white"
                 android:textSize="13sp" />
         </LinearLayout>
@@ -122,7 +124,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/y10"
-                    android:text="_ _"
+                    android:text="@string/robot_control_empty_text"
                     android:textColor="@color/white"
                     android:textSize="16sp" />
 
@@ -130,7 +132,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="top"
-                    android:text="%"
+                    android:text="@string/robot_control_electrice_quantity_unit"
                     android:textColor="@color/white"
                     android:textSize="12sp" />
 
@@ -139,7 +141,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="剩余电量"
+                android:text="@string/robot_control_electrice_quantity"
                 android:textColor="@color/white"
                 android:textSize="13sp" />
         </LinearLayout>
@@ -149,7 +151,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_marginRight="@dimen/x60"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            tools:ignore="RtlHardcoded">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -162,7 +165,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/y10"
-                    android:text="_ _"
+                    android:text="@string/robot_control_empty_text"
                     android:textColor="@color/white"
                     android:textSize="16sp" />
 
@@ -170,7 +173,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="top"
-                    android:text="′"
+                    android:text="@string/robot_control_clear_time_unit"
                     android:textColor="@color/white"
                     android:textSize="12sp" />
 
@@ -179,7 +182,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="清扫时间"
+                android:text="@string/robot_control_clear_time"
                 android:textColor="@color/white"
                 android:textSize="13sp" />
         </LinearLayout>
@@ -200,7 +203,8 @@
             android:layout_marginLeft="@dimen/x80"
             android:orientation="vertical"
             android:paddingLeft="@dimen/x30"
-            android:paddingRight="@dimen/x30">
+            android:paddingRight="@dimen/x30"
+            tools:ignore="RtlHardcoded">
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -215,7 +219,7 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="@dimen/y15"
                 android:layout_marginTop="@dimen/y10"
-                android:text="回充"
+                android:text="@string/robot_control_recharge"
                 android:textColor="@color/bottom_text"
                 android:textSize="16sp" />
         </LinearLayout>
@@ -242,7 +246,7 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="@dimen/y15"
                 android:layout_marginTop="@dimen/y10"
-                android:text="清扫"
+                android:text="@string/robot_control_sweep"
                 android:textColor="@color/bottom_text"
                 android:textSize="16sp" />
         </LinearLayout>
@@ -255,7 +259,8 @@
             android:layout_marginRight="@dimen/x80"
             android:orientation="vertical"
             android:paddingLeft="@dimen/x30"
-            android:paddingRight="@dimen/x30">
+            android:paddingRight="@dimen/x30"
+            tools:ignore="RtlHardcoded">
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -270,7 +275,7 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="@dimen/y15"
                 android:layout_marginTop="@dimen/y10"
-                android:text="标准"
+                android:text="@string/robot_control_standard"
                 android:textColor="@color/bottom_text"
                 android:textSize="16sp" />
         </LinearLayout>
@@ -286,7 +291,8 @@
         android:layout_marginBottom="@dimen/y30"
         android:layout_marginRight="@dimen/x30"
         android:background="@drawable/robot_circle_white"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        tools:ignore="RtlHardcoded">
 
         <ImageView
             android:layout_width="@dimen/x64"
@@ -299,7 +305,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:text="地图"
+            android:text="@string/robot_control_map"
             android:textColor="@color/bottom_text"
             android:textSize="14sp" />
 

@@ -4,11 +4,9 @@ import android.content.Intent;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.orhanobut.logger.Logger;
 import com.qvd.smartswitch.R;
 import com.qvd.smartswitch.activity.base.BaseActivity;
 import com.qvd.smartswitch.adapter.AddRoomListAdapter;
@@ -40,7 +38,7 @@ public class RoomAddListActivity extends BaseActivity {
     /**
      * 房间数据源
      */
-    private List<RoomPicListVo.DataBean> list = new ArrayList<>();
+    private final List<RoomPicListVo.DataBean> list = new ArrayList<>();
     private AddRoomListAdapter adapter;
     private String family_id;
 
@@ -59,32 +57,29 @@ public class RoomAddListActivity extends BaseActivity {
     @Override
     protected void initData() {
         super.initData();
-        tvCommonActionbarTitle.setText("添加房间");
+        tvCommonActionbarTitle.setText(R.string.room_add_list_title);
         family_id = getIntent().getStringExtra("family_id");
-        getData();
         recyclerview.setLayoutManager(new GridLayoutManager(this, 4, LinearLayoutManager.VERTICAL, false));
-        adapter = new AddRoomListAdapter(this, list);
+        adapter = new AddRoomListAdapter(list);
+        adapter.openLoadAnimation();
+        adapter.isFirstOnly(false);
+        adapter.setHasStableIds(true);
         recyclerview.setAdapter(adapter);
-        adapter.setOnItemClickListener(new AddRoomListAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                if (position == list.size() - 1) {
-                    //说明点击了最后一个
-                } else {
-                    startActivity(new Intent(RoomAddListActivity.this, RoomAddDetailsActivity.class)
-                            .putExtra("name", list.get(position).getRoom_name())
-                            .putExtra("pic", list.get(position).getRoom_min_pic())
-                            .putExtra("family_id", family_id));
-                    overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
-                }
-                finish();
+        adapter.setOnItemClickListener((adapter, view, position) -> {
+            if (position == list.size() - 1) {
+                //说明点击了最后一个
+            } else {
+                startActivity(new Intent(RoomAddListActivity.this, RoomAddDetailsActivity.class)
+                        .putExtra("name", list.get(position).getRoom_name())
+                        .putExtra("pic", list.get(position).getRoom_min_pic())
+                        .putExtra("family_id", family_id));
+                overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
             }
-
-            @Override
-            public void onItemLongClickListener(View view, int position) {
-
-            }
+            finish();
         });
+        myEmptyLayout.setTextViewMessage(getString(R.string.common_server_error));
+        myErrorLayout.setOnClickListener(v -> getData());
+        getData();
     }
 
 
@@ -100,14 +95,22 @@ public class RoomAddListActivity extends BaseActivity {
 
                     @Override
                     public void onNext(RoomPicListVo roomPicListVo) {
-                        list.clear();
-                        list.addAll(roomPicListVo.getData());
-                        adapter.notifyDataSetChanged();
+                        if (roomPicListVo.getCode() == 200) {
+                            if (roomPicListVo.getData() != null && roomPicListVo.getData().size() > 0) {
+                                list.clear();
+                                list.addAll(roomPicListVo.getData());
+                                adapter.notifyDataSetChanged();
+                            } else {
+                                adapter.setEmptyView(myEmptyLayout);
+                            }
+                        } else {
+                            adapter.setEmptyView(myErrorLayout);
+                        }
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        Logger.e(e.getMessage());
+                        adapter.setEmptyView(myErrorLayout);
                     }
 
                     @Override

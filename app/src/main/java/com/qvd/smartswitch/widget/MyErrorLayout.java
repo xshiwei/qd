@@ -11,7 +11,7 @@ import android.widget.TextView;
 import com.qvd.smartswitch.R;
 
 public class MyErrorLayout extends RelativeLayout {
-    private Context mContext;
+    private final Context mContext;
     private ImageView iv_pic;
     private TextView textViewMessage;
 

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/home_manage_backgroud">
@@ -15,9 +16,10 @@
         android:layout_below="@+id/action_bar"
         android:layout_marginLeft="@dimen/x30"
         android:layout_marginTop="@dimen/y40"
-        android:text="我的空间"
+        android:text="@string/space_manage_my_space"
         android:textColor="@color/home_setting_text_three"
-        android:textSize="12sp" />
+        android:textSize="12sp"
+        tools:ignore="RtlHardcoded" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerview"
@@ -29,7 +31,6 @@
         android:layout_marginTop="@dimen/y25">
 
     </android.support.v7.widget.RecyclerView>
-
 
     <RelativeLayout
         android:id="@+id/rl_add"
@@ -52,7 +53,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/iv_add"
             android:layout_centerHorizontal="true"
-            android:text="新建家庭"
+            android:text="@string/space_manage_add_family"
             android:textColor="@color/home_setting_text_three"
             android:textSize="12sp" />
 

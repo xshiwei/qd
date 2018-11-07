@@ -21,7 +21,6 @@
         android:layout_marginTop="@dimen/y20"
         android:ellipsize="end"
         android:maxLines="2"
-        android:text="智能"
         android:textColor="@color/home_setting_text"
         android:textSize="14sp" />
 </RelativeLayout>

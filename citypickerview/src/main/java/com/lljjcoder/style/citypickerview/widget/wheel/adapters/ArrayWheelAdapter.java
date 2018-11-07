@@ -24,7 +24,7 @@ import android.content.Context;
 public class ArrayWheelAdapter<T> extends AbstractWheelTextAdapter {
     
     // items
-    private T items[];
+    private final T[] items;
 
     /**
      * Constructor

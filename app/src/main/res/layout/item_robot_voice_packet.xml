@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/y120">
+
+    <ImageView
+        android:id="@+id/iv_pic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/x50"
+        android:src="@mipmap/robot_voice_packet_one"
+        tools:ignore="RtlHardcoded" />
+
+    <com.qvd.smartswitch.widget.MasterLayout
+        android:id="@+id/masterlayout"
+        android:layout_width="@dimen/x96"
+        android:layout_height="@dimen/y96"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/x50"
+        android:clickable="true"
+        tools:ignore="RtlHardcoded"
+        android:focusable="true" />
+
+    <TextView
+        android:id="@+id/tv_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/x30"
+        android:layout_marginTop="@dimen/y20"
+        android:layout_toRightOf="@+id/iv_pic"
+        android:text="@string/robot_voice_packet_example_name"
+        android:textColor="@color/home_setting_text"
+        android:textSize="14sp"
+        tools:ignore="RtlHardcoded" />
+
+    <TextView
+        android:id="@+id/tv_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/y25"
+        android:layout_marginLeft="@dimen/x30"
+        android:layout_toRightOf="@+id/iv_pic"
+        android:text="@string/robot_voice_packet_example_content"
+        android:textColor="@color/home_setting_text_two"
+        android:textSize="12sp"
+        tools:ignore="RtlHardcoded" />
+
+    <TextView
+        android:id="@+id/tv_usage"
+        android:layout_width="@dimen/x100"
+        android:layout_height="@dimen/y45"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="@dimen/x50"
+        android:background="@drawable/my_capacity_unselete"
+        android:gravity="center"
+        android:text="@string/robot_voice_packet_usage"
+        android:textColor="@color/add_home_background"
+        android:textSize="12sp"
+        tools:ignore="RtlHardcoded" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="@dimen/x50"
+        android:layout_marginRight="@dimen/x50"
+        android:background="@color/popupwindow_edittext" />
+
+</RelativeLayout>

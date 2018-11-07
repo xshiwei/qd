@@ -1,7 +1,6 @@
 package com.qvd.smartswitch.activity.user;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -17,14 +16,12 @@ import com.qvd.smartswitch.adapter.HelpFeedBackListAdapter;
 import com.qvd.smartswitch.api.CacheSetting;
 import com.qvd.smartswitch.api.RetrofitService;
 import com.qvd.smartswitch.model.user.HelpFeedbackListVo;
-import com.qvd.smartswitch.model.user.UserInfoVo;
-import com.qvd.smartswitch.utils.ConfigUtils;
+import com.qvd.smartswitch.utils.SharedPreferencesUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -53,8 +50,9 @@ public class UserHelpActivity extends BaseActivity {
 
     private HelpFeedBackListAdapter adapter;
     private HelpFeedBackListAdapter adapter2;
-    private List<HelpFeedbackListVo.DataBeanX.DataBean> list = new ArrayList<>();
-    private List<HelpFeedbackListVo.DataBeanX.DataBean> list2 = new ArrayList<>();
+    private final List<HelpFeedbackListVo.DataBeanX.DataBean> list = new ArrayList<>();
+    private final List<HelpFeedbackListVo.DataBeanX.DataBean> list2 = new ArrayList<>();
+    private String userId;
 
     @Override
     protected int setLayoutId() {
@@ -70,15 +68,21 @@ public class UserHelpActivity extends BaseActivity {
     @Override
     protected void initData() {
         super.initData();
-
+         userId = SharedPreferencesUtil.getString(this, SharedPreferencesUtil.USER_ID);
         recyclerview.setLayoutManager(new GridLayoutManager(this, 3, LinearLayoutManager.VERTICAL, false));
         recyclerview.setNestedScrollingEnabled(false);
-        adapter = new HelpFeedBackListAdapter(this, list);
+        adapter = new HelpFeedBackListAdapter(list);
+        adapter.openLoadAnimation();
+        adapter.isFirstOnly(false);
+        adapter.setHasStableIds(true);
         recyclerview.setAdapter(adapter);
 
         recyclerviewTwo.setLayoutManager(new GridLayoutManager(this, 3, LinearLayoutManager.VERTICAL, false));
         recyclerviewTwo.setNestedScrollingEnabled(false);
-        adapter2 = new HelpFeedBackListAdapter(this, list2);
+        adapter2 = new HelpFeedBackListAdapter(list2);
+        adapter2.openLoadAnimation();
+        adapter2.isFirstOnly(false);
+        adapter2.setHasStableIds(true);
         recyclerviewTwo.setAdapter(adapter2);
     }
 
@@ -86,31 +90,15 @@ public class UserHelpActivity extends BaseActivity {
     protected void onResume() {
         super.onResume();
         getData();
-        adapter.setOnItemClickListener(new HelpFeedBackListAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                startActivity(new Intent(UserHelpActivity.this, DeviceCommonQuestionActivity.class)
-                        .putExtra("type", list.get(position).getDevice_no()));
-                overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
-            }
-
-            @Override
-            public void onItemLongClickListener(View view, int position) {
-
-            }
+        adapter.setOnItemClickListener((adapter, view, position) -> {
+            startActivity(new Intent(UserHelpActivity.this, DeviceCommonQuestionActivity.class)
+                    .putExtra("type", list.get(position).getDevice_no()));
+            overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
         });
-        adapter2.setOnItemClickListener(new HelpFeedBackListAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                startActivity(new Intent(UserHelpActivity.this, DeviceCommonQuestionActivity.class)
-                        .putExtra("type", list2.get(position).getDevice_no()));
-                overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
-            }
-
-            @Override
-            public void onItemLongClickListener(View view, int position) {
-
-            }
+        adapter2.setOnItemClickListener((adapter, view, position) -> {
+            startActivity(new Intent(UserHelpActivity.this, DeviceCommonQuestionActivity.class)
+                    .putExtra("type", list2.get(position).getDevice_no()));
+            overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
         });
     }
 
@@ -118,7 +106,7 @@ public class UserHelpActivity extends BaseActivity {
      * 获取数据
      */
     private void getData() {
-        CacheSetting.getCache().getUserHelpFeedbackInfo(RetrofitService.qdoApi.getUserFeedbackCategoryInfo(ConfigUtils.user_id), new DynamicKey(ConfigUtils.user_id), new EvictDynamicKey(true))
+        CacheSetting.getCache().getUserHelpFeedbackInfo(RetrofitService.qdoApi.getUserFeedbackCategoryInfo(userId), new DynamicKey(userId), new EvictDynamicKey(true))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<HelpFeedbackListVo>() {

@@ -3,13 +3,12 @@ package com.qvd.smartswitch.adapter;
 import android.support.annotation.Nullable;
 import android.widget.ImageView;
 
-import com.chad.library.adapter.base.BaseItemDraggableAdapter;
+import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.qvd.smartswitch.R;
 import com.qvd.smartswitch.model.user.UserReceiverDeviceListVo;
 import com.qvd.smartswitch.utils.CommonUtils;
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -25,7 +24,7 @@ public class ReceiverDeviceListAdapter extends BaseQuickAdapter<UserReceiverDevi
                 .setText(R.id.tv_content, "来自 " + item.getUser_name())
                 .addOnClickListener(R.id.tv_receiver);
         if (!CommonUtils.isEmptyString(item.getDevice_pic())) {
-            Picasso.with(mContext).load(item.getDevice_pic()).into((ImageView) helper.getView(R.id.civ_portrait));
+            Glide.with(mContext).load(item.getDevice_pic()).into((ImageView) helper.getView(R.id.civ_portrait));
         }
         if (item.getIs_share() == 0) {
             helper.setGone(R.id.tv_receiver, true);

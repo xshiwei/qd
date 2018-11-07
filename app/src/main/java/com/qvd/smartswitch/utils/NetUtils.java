@@ -4,6 +4,8 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
+import java.util.Objects;
+
 
 public class NetUtils {
     /**
@@ -23,7 +25,7 @@ public class NetUtils {
         // 得到连接管理器对象
         ConnectivityManager connectivityManager = (ConnectivityManager) context
                 .getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = connectivityManager
+        NetworkInfo activeNetworkInfo = Objects.requireNonNull(connectivityManager)
                 .getActiveNetworkInfo();
         if (activeNetworkInfo != null && activeNetworkInfo.isConnected()) {
             if (activeNetworkInfo.getType() == (ConnectivityManager.TYPE_WIFI)) {

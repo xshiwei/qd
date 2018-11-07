@@ -25,6 +25,7 @@ import com.qvd.smartswitch.model.login.RegisterVo;
 import com.qvd.smartswitch.model.user.DeviceShareManageListVo;
 import com.qvd.smartswitch.model.user.FamilyListVo;
 import com.qvd.smartswitch.model.user.HelpFeedbackListVo;
+import com.qvd.smartswitch.model.user.QiNiuPicTokenVo;
 import com.qvd.smartswitch.model.user.RecentSharePeopleListVo;
 import com.qvd.smartswitch.model.user.ShareObjectInfoVo;
 import com.qvd.smartswitch.model.user.UserFeedbackListVo;
@@ -133,7 +134,7 @@ public interface QdoApi {
      * @return
      */
     @POST("update/userInfo")
-    Observable<MessageVo> updateuserInfo(@Query("user_id") String user_id, @Query("user_name") String user_name, @Query("user_phone") String user_phone);
+    Observable<MessageVo> updateuserInfo(@Query("user_id") String user_id, @Query("user_name") String user_name, @Query("user_phone") String user_phone,@Query("user_avatar")String user_avatar);
 
     /**
      * 添加新的家庭
@@ -377,7 +378,6 @@ public interface QdoApi {
     @POST("delete/temp_id_data")
     Observable<MessageVo> cancelWifiNetwork(@Query("device_mac") String device_mac);
 
-
     /**
      * 获取常用设备列表
      *
@@ -387,7 +387,6 @@ public interface QdoApi {
      */
     @GET("get/common_device_list")
     Observable<RoomDeviceListVo> getCommonDeviceList(@Query("user_id") String user_id, @Query("family_id") String family_id);
-
 
     /**
      * 获取房间设备列表
@@ -678,4 +677,11 @@ public interface QdoApi {
      */
     @GET("get/family_members_detailInfo")
     Observable<FamilyDetailsVo> addGetFamilyMembersDetailInfo(@Query("share_object_userid") String share_object_userid, @Query("share_userid") String share_userid);
+
+    /**
+     * 获取七牛云上传图片的token
+     * @return
+     */
+    @POST("create/qiniu_upload_token")
+    Observable<QiNiuPicTokenVo> getQiNiuToken();
 }

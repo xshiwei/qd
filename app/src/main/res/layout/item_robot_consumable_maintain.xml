@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/y290"
+    android:layout_marginLeft="@dimen/x30"
+    android:layout_marginRight="@dimen/x30"
+    android:layout_marginTop="@dimen/y15"
+    android:background="@drawable/circle_white_five">
+
+    <ImageView
+        android:id="@+id/iv_part_pic"
+        android:layout_width="@dimen/x280"
+        android:layout_height="@dimen/y180"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="@dimen/x50"
+        android:scaleType="fitXY"
+        android:src="@mipmap/robot_consumable_maintain_pic" />
+
+    <TextView
+        android:id="@+id/tv_percent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/x50"
+        android:layout_marginTop="@dimen/y30"
+        android:layout_toRightOf="@+id/iv_part_pic"
+        android:text="@string/robot_consumable_maintain_example_percent"
+        android:textColor="@color/light_background_start_two"
+        android:textSize="28sp"
+        tools:ignore="RtlHardcoded" />
+
+    <TextView
+        android:id="@+id/tv_part_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_percent"
+        android:layout_marginLeft="@dimen/x50"
+        android:layout_marginTop="@dimen/y40"
+        android:layout_toRightOf="@+id/iv_part_pic"
+        android:text="@string/robot_consumable_maintain_example_part_name"
+        android:textColor="@color/home_setting_text"
+        android:textSize="18sp"
+        tools:ignore="RtlHardcoded" />
+
+    <TextView
+        android:id="@+id/tv_time"
+        android:layout_width="@dimen/x180"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_part_name"
+        android:layout_marginLeft="@dimen/x50"
+        android:layout_marginTop="@dimen/y15"
+        android:layout_toRightOf="@+id/iv_part_pic"
+        android:text="@string/robot_consumable_maintain_example_time"
+        android:textColor="@color/home_setting_text_three"
+        android:textSize="12sp"
+        tools:ignore="RtlHardcoded" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="@dimen/x100"
+        android:src="@mipmap/device_more_details"
+        tools:ignore="RtlHardcoded" />
+
+</RelativeLayout>

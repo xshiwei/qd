@@ -1,6 +1,7 @@
 package com.qvd.smartswitch.activity.user;
 
-import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -14,12 +15,11 @@ import com.qvd.smartswitch.api.RetrofitService;
 import com.qvd.smartswitch.model.login.MessageVo;
 import com.qvd.smartswitch.utils.CommonUtils;
 import com.qvd.smartswitch.utils.ConfigUtils;
+import com.qvd.smartswitch.utils.RegexpUtils;
 import com.qvd.smartswitch.utils.ToastUtil;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
-import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
@@ -45,7 +45,8 @@ public class UserFeedbackActivity extends BaseActivity {
 
     private String type;
 
-    private RippleView rippleView;
+    private boolean b1 = false;
+    private boolean b2 = false;
 
     @Override
     protected int setLayoutId() {
@@ -63,13 +64,58 @@ public class UserFeedbackActivity extends BaseActivity {
         super.initData();
         type = getIntent().getStringExtra("type");
         tvName.setText(CommonUtils.getDeviceName(type));
-        tvCommonActionbarTitle.setText("反馈");
-        rippleView = findViewById(R.id.riv_view);
-        rippleView.setOnClickListener(new View.OnClickListener() {
+        tvCommonActionbarTitle.setText(R.string.user_feedback_title);
+        RippleView rippleView = findViewById(R.id.riv_view);
+        rippleView.setOnClickListener(v -> {
+            if (!vaild()) {
+                addFeedback();
+            }
+        });
+        etCommonContract.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onClick(View v) {
-                if (!vaild()) {
-                    addFeedback();
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (!CommonUtils.isEmptyString(s.toString())) {
+                    b1 = true;
+                    if (b2) {
+                        tvConfirm.setTextColor(getResources().getColor(R.color.home_setting_text));
+                    }
+                } else {
+                    b1 = false;
+                    tvConfirm.setTextColor(getResources().getColor(R.color.home_setting_text_two));
+                }
+            }
+        });
+        etContent.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (!CommonUtils.isEmptyString(s.toString())) {
+                    b2 = true;
+                    if (b1) {
+                        tvConfirm.setTextColor(getResources().getColor(R.color.home_setting_text));
+                    }
+                } else {
+                    b2 = false;
+                    tvConfirm.setTextColor(getResources().getColor(R.color.home_setting_text_two));
                 }
             }
         });
@@ -98,14 +144,15 @@ public class UserFeedbackActivity extends BaseActivity {
                     @Override
                     public void onNext(MessageVo messageVo) {
                         if (messageVo.getCode() == 200) {
-                            ToastUtil.showToast("反馈成功");
+                            ToastUtil.showToast(getString(R.string.common_feedback_success));
                             finish();
+                        } else {
+                            ToastUtil.showToast(getString(R.string.common_feedback_fail));
                         }
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        ToastUtil.showToast("网络出错了");
                     }
 
                     @Override
@@ -118,11 +165,14 @@ public class UserFeedbackActivity extends BaseActivity {
     private boolean vaild() {
         boolean b = false;
         if (CommonUtils.isEmptyString(etCommonContract.getText().toString())) {
-            Toast.makeText(this, "联系方式不能为空", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.common_contract_not_empty, Toast.LENGTH_SHORT).show();
             b = true;
         } else if (CommonUtils.isEmptyString(etContent.getText().toString())) {
-            Toast.makeText(this, "反馈内容不能为空", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.common_content_not_empty, Toast.LENGTH_SHORT).show();
             b = true;
+        } else if (!RegexpUtils.isEmailNO(etCommonContract.getText().toString()) && !RegexpUtils.isMobileNO(etCommonContract.getText().toString()) && etCommonContract.getText().toString().length() != 10) {
+            b = true;
+            ToastUtil.showToast(getString(R.string.reset_password_type_error));
         }
         return b;
     }

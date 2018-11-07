@@ -82,19 +82,22 @@ public class UpdatePasswordActivity extends BaseActivity {
 
                     @Override
                     public void onNext(MessageVo messageVo) {
-                        if (messageVo.getCode() == 200) {
-                            ToastUtil.showToast("修改成功");
-                            finish();
-                        } else if (messageVo.getCode() == 409) {
-                            ToastUtil.showToast("旧密码不正确");
-                        } else {
-                            ToastUtil.showToast("网络错误");
+                        switch (messageVo.getCode()) {
+                            case 200:
+                                ToastUtil.showToast(getString(R.string.common_update_success));
+                                finish();
+                                break;
+                            case 409:
+                                ToastUtil.showToast(getString(R.string.common_old_password_not_correct));
+                                break;
+                            default:
+                                ToastUtil.showToast(getString(R.string.common_update_two_fail));
+                                break;
                         }
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        ToastUtil.showToast("网络错误");
                     }
 
                     @Override
@@ -113,13 +116,15 @@ public class UpdatePasswordActivity extends BaseActivity {
         boolean b = false;
         if (CommonUtils.isEmptyString(etNewPassword.getText().toString()) || CommonUtils.isEmptyString(etOldPassword.getText().toString())
                 || CommonUtils.isEmptyString(etOnceNewPassword.getText().toString())) {
-            ToastUtil.showToast("密码不能为空");
+            ToastUtil.showToast(getString(R.string.common_password_not_empty));
             b = true;
-        } else if (!etOldPassword.getText().toString().equals(etOnceNewPassword.getText().toString())) {
-            ToastUtil.showToast("两次输入的新密码不一致");
+        } else if (etNewPassword.length() < 6 || etNewPassword.length() > 16) {
+            ToastUtil.showToast(getString(R.string.login_password_length));
+        } else if (!etNewPassword.getText().toString().equals(etOnceNewPassword.getText().toString())) {
+            ToastUtil.showToast(getString(R.string.update_password_inconformity));
             b = true;
-        } else if (!etOldPassword.getText().toString().equals(etNewPassword.getText().toString())) {
-            ToastUtil.showToast("新密码不能和旧密码相同");
+        } else if (etOldPassword.getText().toString().equals(etNewPassword.getText().toString())) {
+            ToastUtil.showToast(getString(R.string.update_password_new_and_old_same));
             b = true;
         }
         return b;

@@ -1,6 +1,6 @@
 <resources>
-    <string name="app_name">smartswitch</string>
-    <string name="message_permission_always_failed">我们需要权限</string>
+    <string name="app_name">Q家</string>
+    <string name="message_permission_always_failed">您需要开启</string>
     <string name="message_permission_rationale">您需要以下权限</string>
     <string name="connect_timeout">设备连接超时</string>
     <string name="ota_error">更新设备失败，请检查蓝牙连接</string>
@@ -27,13 +27,10 @@
     <string name="device_nickname_update_name">请为产品命名哦</string>
     <string name="device_nickname_input">请在此输入</string>
     <string name="device_title">用户设备</string>
-    <string name="device_finding">已经发现设备...</string>
+    <string name="device_finding">已经发现设备…</string>
     <string name="device_scan">重新扫描</string>
     <string name="home_degree">℃</string>
-    <string name="home_temperature">Temperature</string>
-    <string name="home_humidity">Humidity</string>
     <string name="home_bulb">灯泡</string>
-    <string name="user_setting">设置</string>
     <string name="user_notebook">用户手册</string>
     <string name="user_faq">FAQ</string>
     <string name="user_about_company">关于科微多</string>
@@ -43,14 +40,14 @@
     <string name="device_item_on_connect">已连接</string>
     <string name="empty_view_message">没有可连设备</string>
     <string name="empty_view_button">空数据</string>
-    <string name="error_view_message">出错了</string>
+    <string name="error_view_message">网络出错了</string>
     <string name="error_view_button">出错</string>
     <string name="loading_view_message">加载中</string>
     <string name="loading_view_button">加载</string>
     <string name="device_control_setting_title">设备设置</string>
     <string name="dialog_confirm">确定</string>
     <string name="dialog_cancle">取消</string>
-    <string name="device_scaning">扫描中...</string>
+    <string name="device_scaning">扫描中…</string>
     <string name="device_stop_scan">停止扫描</string>
     <string name="home_unknowe_city">未知</string>
     <string name="about_company_title">关于科微多</string>
@@ -88,6 +85,605 @@
     <string name="device_update_nickname_confirm">确定</string>
     <string name="device_update_pic_save">保存</string>
     <string name="device_update_light">电灯</string>
+
+    <!--device_network-->
+    <string name="device_network_wifi_name">WIFI名称</string>
+    <string name="device_network_wifi_strength">WIFI强度</string>
+    <string name="device_network_wifi_rssi">RSSI</string>
+    <string name="device_network_wifi_mode">当前模式</string>
+    <string name="device_network_wifi_ip_address">IP地址</string>
+    <string name="device_network_wifi_mac_address">MAC地址</string>
+
+    <!--robot_consumable_maintain-->
+    <string name="robot_consumable_maintain_title">耗材&amp;维护</string>
+    <string name="robot_consumable_maintain_immediately_buy">立即购买</string>
+    <string name="robot_consumable_maintain_example_percent">94%</string>
+    <string name="robot_consumable_maintain_example_part_name">滤网</string>
+    <string name="robot_consumable_maintain_example_time">预计剩余141小时更换</string>
+
+    <!--robot_setting_timing-->
+    <string name="robot_setting_timing_title">设置定时</string>
+    <string name="robot_setting_timing_save">保存</string>
+    <string name="robot_setting_timing_state">重复</string>
+    <string name="robot_setting_timing_default_state">清扫一次</string>
+    <string name="robot_setting_timing_open_time">开启时间</string>
+    <string name="robot_setting_timing_default_time">11:01</string>
+    <string name="robot_setting_timing_mode">清扫模式</string>
+    <string name="robot_setting_timing_default_mode">标准</string>
+    <string name="robot_setting_timing_hour">时</string>
+    <string name="robot_setting_timing_minute">分</string>
+    <string name="robot_setting_timing_item_open_time">开启时间</string>
+    <string name="robot_setting_timing_item_example_time">今天 12:01</string>
+    <string name="robot_setting_timing_item_example_content">执行一次 标准</string>
+
+    <!--robot_sweep_recode-->
+    <string name="robot_sweep_recode_title">清扫记录</string>
+    <string name="robot_sweep_recode_total_time">总时长 / 分</string>
+    <string name="robot_sweep_recode_total_area">总清扫 / 平</string>
+    <string name="robot_sweep_recode_total_num">总次数 / 次</string>
+    <string name="robot_sweep_recode_empty_text">_ _</string>
+    <string name="robot_sweep_recode_example_time">09月10日 15:00</string>
+    <string name="robot_sweep_recode_example_content">清扫 1㎡ 丨 工作 1min</string>
+    <string name="robot_sweep_recode_map_details">地图详情</string>
+
+    <!--robot_voice_packet-->
+    <string name="robot_voice_packet_title">语音包</string>
+    <string name="robot_voice_packet_example_name">标准普通话版(默认)</string>
+    <string name="robot_voice_packet_example_content">经典女声</string>
+    <string name="robot_voice_packet_usage">使用</string>
+
+    <!--add_device-->
+    <string name="add_device_nearby_device">附近设备</string>
+    <string name="add_device_manual">手动添加</string>
+    <string name="add_device_pulldown_retry_scan">下拉进行重新扫描</string>
+
+    <!--add_home-->
+    <string name="add_home_home_name_text">家庭名称</string>
+    <string name="add_home_input_home_name">请输入家庭名称</string>
+    <string name="add_home_home_location">家庭位置</string>
+    <string name="add_home_selete_home_location">请选择家庭的位置</string>
+    <string name="add_home_theme_wallpaper">主题壁纸</string>
+    <string name="add_home_confirm">确 定</string>
+
+    <!--add_room_details-->
+    <string name="add_room_details_cancel">取消</string>
+    <string name="add_room_details_title">添加房间</string>
+    <string name="add_room_details_save">保存</string>
+    <string name="add_room_details_room_name">房间名称</string>
+    <string name="add_room_details_room_pic">房间图标</string>
+    <string name="add_room_details_selete_device_move">已选中0个设备移动到该房间</string>
+
+    <!--device_ble_timing-->
+    <string name="device_ble_timing_add_timing">添加定时</string>
+
+    <!--device_share_qevdo_account-->
+    <string name="device_share_qevdo_account_content">快来共享设备，和家人一起享受智能生活吧！</string>
+    <string name="device_share_qevdo_account_input_hint">手机号码/邮箱/科微多账号</string>
+    <string name="device_share_qevdo_account_confirm">确定</string>
+
+    <!--device_splash-->
+    <string name="device_splash_title">新手引导</string>
+
+    <!--device_wifi_setting-->
+    <string name="device_wifi_setting_cancel">取消</string>
+    <string name="device_wifi_setting_title">设置网络</string>
+    <string name="device_wifi_setting_input_wifi_password">请输入家中的Wi-Fi密码</string>
+    <string name="device_wifi_setting_hint_password">密码</string>
+    <string name="device_wifi_setting_current_wifi">当前Wi-Fi:</string>
+    <string name="device_wifi_setting_change_network">更换网络</string>
+    <string name="device_wifi_setting_confirm">确 认</string>
+    <string name="device_wifi_setting_support_network">仅支持2.4G Wi-Fi网络</string>
+    <string name="device_wifi_setting_connecting">正在连接</string>
+    <string name="device_wifi_setting_near_tip">路由器、手机、设备尽量靠的近</string>
+    <string name="device_wifi_setting_find_device">找到设备</string>
+    <string name="device_wifi_setting_device_register">设备注册到服务器</string>
+    <string name="device_wifi_setting_init">设备初始化</string>
+
+    <!--family_share_details-->
+    <string name="family_share_details_add_share">添加共享</string>
+
+    <!--home_setting-->
+    <string name="home_setting_home_name">家庭名称</string>
+    <string name="home_setting_home_location">家庭位置</string>
+    <string name="home_setting_room_manage">房间管理</string>
+    <string name="home_setting_theme_wallpaper">主题壁纸</string>
+    <string name="home_setting_delete_home">删除家庭</string>
+
+    <!--login-->
+    <string name="login_china">中国大陆</string>
+    <string name="login_hint_account">手机号/账号/邮箱</string>
+    <string name="login_hint_password">密码</string>
+    <string name="login_login">登 录</string>
+    <string name="login_forget_password">忘记密码？</string>
+    <string name="login_register">现在注册</string>
+
+    <!--notification_capacity-->
+    <string name="notification_capacity_title">新建智能</string>
+    <string name="notification_capacity_complete">完成</string>
+    <string name="notification_capacity_if">如果</string>
+    <string name="notification_capacity_continue_add">继续添加</string>
+    <string name="notification_capacity_make">就执行</string>
+    <string name="notification_capacity_time_effect">生效时间段</string>
+    <string name="notification_capacity_example_time_effect">全天</string>
+
+    <!--qsone_control-->
+    <string name="qsone_control_device_disconnect">设备未连接，下拉连接设备</string>
+    <string name="qsone_control_switch">日志</string>
+    <string name="qsone_control_sound">语音</string>
+    <string name="qsone_control_timing">定时</string>
+
+    <!--qsone_timing-->
+    <string name="qsone_timing_save">保存</string>
+    <string name="qsone_timing_time_text">0小时0分钟后</string>
+    <string name="qsone_timing_hour">小时</string>
+    <string name="qsone_timing_minute">分钟</string>
+    <string name="qsone_timing_repeat">操作</string>
+    <string name="qsone_timing_open_light">打开灯泡</string>
+    <string name="qsone_timing_close_light">关闭灯泡</string>
+
+    <!--qsthree_timing-->
+    <string name="qsthree_timing_save">保存</string>
+    <string name="qsthree_timing_time_text">0小时0分钟后</string>
+    <string name="qsthree_timing_hour">小时</string>
+    <string name="qsthree_timing_minute">分钟</string>
+    <string name="qsthree_timing_repeat">操作</string>
+    <string name="qsthree_timing_opne_light">打开灯泡</string>
+    <string name="qsthree_timing_close_light">关闭灯泡</string>
+    <string name="qsthree_timing_device">设备</string>
+    <string name="qsthree_timing_light_one">灯泡一</string>
+    <string name="qsthree_timing_light_two">灯泡二</string>
+
+    <!--qstwo_timing-->
+    <string name="qstwo_timing_save">保存</string>
+    <string name="qstwo_timing_time_text">0小时0分钟后</string>
+    <string name="qstwo_timing_hour">小时</string>
+    <string name="qstwo_timing_minute">分钟</string>
+    <string name="qstwo_timing_repeat">操作</string>
+    <string name="qstwo_timing_open_light">打开灯泡</string>
+    <string name="qstwo_timing_close_light">关闭灯泡</string>
+    <string name="qstwo_timing_device">设备</string>
+    <string name="qstwo_timing_light_one">灯泡一</string>
+    <string name="qstwo_timing_light_two">灯泡二</string>
+
+    <!--reset_password-->
+    <string name="reset_password_reset_password">重置密码</string>
+    <string name="reset_password_tip_one">请输入注册的手机号码、邮箱地址或科微多账号:</string>
+    <string name="reset_password_hint_account">邮箱/手机号码/账号</string>
+    <string name="reset_password_tip_two">用户输入手机号时请正确选择区域前缀，如台湾：+8869****，香港：+8526****</string>
+    <string name="reset_password_help">帮助</string>
+    <string name="reset_password_next">下一步</string>
+
+    <!--robot_control-->
+    <string name="robot_control_title">科微多扫地机器人规划版</string>
+    <string name="robot_control_state">暂停</string>
+    <string name="robot_control_empty_text">_ _</string>
+    <string name="robot_control_area_unit">㎡</string>
+    <string name="robot_control_area">清扫面积</string>
+    <string name="robot_control_electrice_quantity_unit">%</string>
+    <string name="robot_control_electrice_quantity">剩余电量</string>
+    <string name="robot_control_clear_time_unit">′</string>
+    <string name="robot_control_clear_time">清扫时间</string>
+    <string name="robot_control_recharge">回充</string>
+    <string name="robot_control_sweep">清扫</string>
+    <string name="robot_control_standard">标准</string>
+    <string name="robot_control_map">地图</string>
+
+    <!--robot_self_setting-->
+    <string name="robot_self_setting_title">机器人设置</string>
+    <string name="robot_self_setting_time_zone">机器人时区</string>
+    <string name="robot_self_setting_example_time_zone">Asia/Beijing</string>
+    <string name="robot_self_setting_volume_setting">音量设置</string>
+    <string name="robot_self_setting_carpet_boost_mode">地毯增压模式</string>
+    <string name="robot_self_setting_carpet_boost_mode_text">开启后，机器人自动识别地毯并开启最大吸力清扫地毯，离开地毯后自动恢复正常吸力。 *开启后将不再检测轻微的异物缠绕。</string>
+    <string name="robot_self_setting_mopping_mode">纯拖地模式</string>
+    <string name="robot_self_setting_mopping_mode_text">开启后可在主界面清扫模式中选择拖地模式</string>
+    <string name="robot_self_setting_disturbance_mode">勿扰模式</string>
+
+    <!--robot_setting-->
+    <string name="robot_setting_title">设置</string>
+    <string name="robot_setting_robot_setting">机器人设置</string>
+    <string name="robot_setting_timing_sweep">定时清扫</string>
+    <string name="robot_setting_voice_packet">语音包</string>
+    <string name="robot_setting_message_reminding">消息提醒开关</string>
+    <string name="robot_setting_general_setting">通用设置</string>
+    <string name="robot_setting_sweep_recode">清扫记录</string>
+    <string name="robot_setting_consumable_maintain">耗材&amp;维护></string>
+    <string name="robot_setting_product_guide_service">产品指南&amp;客服</string>
+    <string name="robot_setting_remote_control">遥控器</string>
+    <string name="robot_setting_locate_robot">定位我的机器人</string>
+
+    <!--robot_setting_disturbance_model-->
+    <string name="robot_setting_disturbance_model_title">勿扰模式</string>
+    <string name="robot_setting_disturbance_model_text">开启后，设定时间段内不会自动续扫，机器人会自动降低播放的语音音量</string>
+    <string name="robot_setting_disturbance_model_start_time">开始时间</string>
+    <string name="robot_setting_disturbance_model_end_time">结束时间</string>
+    <string name="robot_setting_disturbance_model_example_start_time">22:00</string>
+    <string name="robot_setting_disturbance_model_example_end_time">08:00</string>
+
+    <!--robot_timing_sweep-->
+    <string name="robot_timing_sweep_title">定时清扫</string>
+    <string name="robot_timing_sweep_add_timing">添加定时</string>
+
+    <!--room_pic_list-->
+    <string name="room_pic_list_all_pic">全部图标</string>
+    <string name="update_room_details_cancel">取消</string>
+    <string name="update_room_details_title">编辑房间</string>
+    <string name="update_room_details_save">保存</string>
+    <string name="update_room_details_room_name">房间名称</string>
+    <string name="update_room_details_room_pic">房间图标</string>
+    <string name="update_room_details_selete_device_move">已选中0个设备移除该房间</string>
+
+    <!--user_family-->
+    <string name="user_family_father">爸爸</string>
+    <string name="user_family_mather">妈妈</string>
+    <string name="user_family_son">儿子</string>
+    <string name="user_family_daughter">女儿</string>
+    <string name="user_family_friend">同居密友</string>
+    <string name="user_family_other">其它家人</string>
+
+    <!--user_feedback-->
+    <string name="user_feedback_hint_common_contract">常用联系方式（必填）</string>
+    <string name="user_feedback_hint_content">想跟我们说些什么呢？</string>
+    <string name="user_feedback_commit">提 交</string>
+
+    <!--user_help-->
+    <string name="user_help_title">帮助与反馈</string>
+    <string name="user_help_my_device">我的设备</string>
+    <string name="user_help_more">更多</string>
+
+    <!--user-->
+    <string name="user_question_common_question">常见问题</string>
+    <string name="user_title">我的</string>
+    <string name="user_my_family">我的家庭</string>
+    <string name="user_device_share">设备共享</string>
+    <string name="user_help_feedback">帮助与反馈</string>
+    <string name="user_setting">设置</string>
+
+    <!--popupwindow_home_setting-->
+    <string name="popupwindow_home_setting_home_room_manager">家庭房间管理</string>
+
+    <!--space_manage-->
+    <string name="space_manage_my_space">我的空间</string>
+    <string name="space_manage_add_family">新建家庭</string>
+
+    <!--weather_capacity_details-->
+    <string name="weather_capacity_details_complete">完成</string>
+
+    <!--selete_room_to_set-->
+    <string name="selete_room_to_set_title">选择房间</string>
+
+    <!--set_device_to_room_title-->
+    <string name="set_device_to_room_title">设置房间</string>
+    <string name="set_device_to_room_device_name">设备名称</string>
+    <string name="set_device_to_room_selete_device_location">选择设备所在位置</string>
+    <string name="set_device_to_room_default_room">默认房间</string>
+    <string name="set_device_to_room_common_device">常用设备</string>
+    <string name="set_device_to_room_complete">立即使用</string>
+
+    <!--qsthree_setting-->
+    <string name="qsthree_setting_title">WI-FI智能开关</string>
+    <string name="qsthree_setting_notice_for_use">使用须知</string>
+    <string name="qsthree_setting_common_question">常见问题</string>
+    <string name="qsthree_setting_item_and_privacy">使用条款和隐私政策</string>
+    <string name="qsthree_setting_feedback">反馈</string>
+    <string name="qsthree_setting_about">关于</string>
+    <string name="qsthree_setting_general_setting">通用设置</string>
+    <string name="qsthree_setting_retry_name">重命名</string>
+    <string name="qsthree_setting_device_log">设备操作日志</string>
+    <string name="qsthree_setting_device_share">设备共享</string>
+    <string name="qsthree_setting_location_manage">位置管理</string>
+    <string name="qsthree_setting_check_update">检查固件更新</string>
+    <string name="qsthree_setting_delete_device">删除设备</string>
+
+    <!--qsthree_sound_control-->
+    <string name="qsthree_sound_control_title">你可以这样说：</string>
+    <string name="qsthree_sound_control_example_one">“打开一号灯”</string>
+    <string name="qsthree_sound_control_example_two">“我想要打开一号灯”</string>
+    <string name="qsthree_sound_control_example_three">“我想要关闭一号灯”</string>
+    <string name="qsthree_sound_control_example_four">“打开全部灯”</string>
+
+    <!--user_feedback_details-->
+    <string name="user_feedback_details_content">反馈已经提交，感谢您的吐槽</string>
+
+    <!--room_manage-->
+    <string name="room_manage_title">房间管理</string>
+    <string name="room_manage_add_room">添加房间</string>
+    <string name="room_manage_my_room">我的房间</string>
+
+    <!--view_error-->
+    <string name="view_error_retry_loading">重新加载</string>
+
+    <!--qsone_setting-->
+    <string name="qsone_setting_title">蓝牙智能开关</string>
+    <string name="qsone_setting_notice_for_use">使用须知</string>
+    <string name="qsone_setting_common_question">常见问题</string>
+    <string name="qsone_setting_item_and_privacy">使用条款和隐私政策</string>
+    <string name="qsone_setting_feedback">反馈</string>
+    <string name="qsone_setting_about">关于</string>
+    <string name="qsone_setting_general_setting">通用设置</string>
+    <string name="qsone_setting_retry_name">重命名</string>
+    <string name="qsone_setting_log">设备操作日志</string>
+    <string name="qsone_setting_device_share">设备共享</string>
+    <string name="qsone_setting_location_manage">位置管理</string>
+    <string name="qsone_setting_check_update">检查固件更新</string>
+    <string name="qsone_setting_delete_device">删除设备</string>
+
+    <!--confirm_light_flicker-->
+    <string name="confirm_light_flicker_title">确认设备</string>
+    <string name="confirm_light_flicker_content">确认指示灯处于红灯常亮</string>
+
+    <!--device_common_question-->
+    <string name="device_common_question_common_question">常见问题</string>
+    <string name="device_common_question_feedback_question">反馈问题</string>
+
+    <!--view_empty-->
+    <string name="view_empty_content">重新扫描</string>
+
+    <!--popupwindow_device_share_selete-->
+    <string name="popupwindow_device_share_selete_title">共享设备使用权限</string>
+    <string name="popupwindow_device_share_selete_allow_control">允许控制</string>
+    <string name="popupwindow_device_share_selete_text_one">可浏览设备信息并可控制设备</string>
+    <string name="popupwindow_device_share_selete_just_look">仅可查看</string>
+    <string name="popupwindow_device_share_selete_text_two">可浏览设备不可控制设备</string>
+
+    <!--weather_capacity-->
+    <string name="weather_capacity_start">日出时</string>
+    <string name="weather_capacity_end">日落时</string>
+
+    <!--timing_capacity-->
+    <string name="timing_capacity_cancel">取消</string>
+    <string name="timing_capacity_timing">定时</string>
+    <string name="timing_capacity_confirm">确定</string>
+    <string name="timing_capacity_repeat">重复</string>
+    <string name="timing_capacity_default_content">只执行一次</string>
+    <string name="timing_capacity_hour">时</string>
+    <string name="timing_capacity_minute">分</string>
+
+    <!--popopwindow_share_family-->
+    <string name="popopwindow_share_family_relieve_relation">解除关系</string>
+    <string name="popupwindow_share_family_update_relation">修改关系</string>
+
+    <!--device_item_privacy-->
+    <string name="device_item_privacy_use_item">使用条款</string>
+    <string name="device_item_privacy_privacy">隐私政策</string>
+    <string name="device_item_privacy_delete">撤销“使用条款和隐私政策”授权</string>
+    <string name="device_share_qevdo_account_fnally_confirm">确 定</string>
+
+    <!--view_loading-->
+    <string name="view_loading_retry_loading">重新加载</string>
+
+    <!--set_password-->
+    <string name="set_password_title">设置密码</string>
+    <string name="set_password_hint_password">密码</string>
+    <string name="set_password_hint_retry_password">重复密码</string>
+    <string name="set_password_complete">完 成</string>
+
+    <!--manually_capacity-->
+    <string name="manually_capacity_text_one">如果条件满足时就做什么</string>
+    <string name="manually_capacity_text_two">比如：打开主卧灯</string>
+    <string name="manually_capacity_general">通用</string>
+    <string name="manually_capacity_switch">开关某条智能</string>
+    <string name="manually_capacity_notification">向手机发送通知</string>
+    <string name="manually_capacity_delay">延时</string>
+    <string name="manually_capacity_device">智能设备</string>
+    <string name="manually_capacity_screen">筛选</string>
+
+    <!--add_room-->
+    <string name="add_room_content">选择一个你要创建的房间</string>
+
+    <!--item_device_share_manage-->
+    <string name="item_device_share_manage_delete">删除</string>
+
+    <!--qsthree_control-->
+    <string name="qsthree_control_title">WI-FI智能开关</string>
+    <string name="qsthree_control_text">设备已断开，正在重连</string>
+    <string name="qsthree_control_light_one">电灯一</string>
+    <string name="qsthree_control_light_two">电灯二</string>
+    <string name="qsthree_control_selete">功能选择</string>
+
+    <!--reset_password_three-->
+    <string name="reset_password_three_content">科微多账号安全验证</string>
+    <string name="reset_password_three_hint">请输入短信验证码</string>
+    <string name="reset_password_three_phone_code">发送验证码</string>
+    <string name="reset_password_three_confirm">确定</string>
+    <string name="reset_password_three_other">换用其他验证方式</string>
+
+    <!--robot_general_setting-->
+    <string name="robot_general_setting_title">通用设置</string>
+    <string name="robot_general_setting_rename">重命名</string>
+    <string name="robot_general_setting_device_share">设备共享</string>
+    <string name="robot_general_setting_check_update">检查固件更新</string>
+    <string name="robot_general_setting_delete_device">删除设备</string>
+    <string name="robot_general_setting_network_message">网络信息</string>
+    <string name="robot_general_setting_device_time_zone">设备时区</string>
+    <string name="robot_general_setting_feedback">反馈</string>
+    <string name="robot_general_setting_item_privacy">使用条款和隐私政策</string>
+
+    <!--delay_capacity-->
+    <string name="delay_capacity_title">延时</string>
+    <string name="delay_capacity_complete">完 成</string>
+    <string name="delay_capacity_hour">分</string>
+    <string name="delay_capacity_minute">秒</string>
+
+    <!--device_connect-->
+    <string name="device_connect_text_one">正在连接</string>
+    <string name="device_connect_text_two">连接设备成功</string>
+    <string name="device_connect_text_three">安全验证成功</string>
+    <string name="device_connect_text_four">设备绑定账号成功</string>
+    <string name="device_connect_text_five">扩展程序初始化成功</string>
+    <string name="device_connect_complete">完 成</string>
+
+    <!--home_device-->
+    <string name="home_device_state">设备未连接</string>
+
+    <!--popupwindow_device_splash-->
+    <string name="popupwindow_device_splash_title">使用条款和隐私政策</string>
+    <string name="popupwindow_device_splash_text_one">我已阅读</string>
+    <string name="popupwindow_device_splash_text_two">《软件许可及服务协议》</string>
+    <string name="popupwindow_device_splash_text_three">和</string>
+    <string name="popupwindow_device_splash_text_four">《隐私政策》</string>
+    <string name="popupwindow_device_splash_cancel">取消</string>
+    <string name="popupwindow_device_splash_confirm">同意并继续</string>
+
+    <!--weather_capacity-->
+    <string name="weather_capacity_text_one">日出/日落</string>
+    <string name="weather_capacity_text_two">室外温度</string>
+    <string name="weather_capacity_text_three">室外湿度</string>
+    <string name="weather_capacity_text_four">室外PM2.5</string>
+
+    <!--recycleview_error-->
+    <string name="recycleview_error_text">网络出错了，点击立即刷新</string>
+
+    <!--qstwo_setting-->
+    <string name="qstwo_setting_title">蓝牙智能开关</string>
+    <string name="qstwo_setting_use_notice">使用须知</string>
+    <string name="qstwo_setting_quick_tour">快速指南</string>
+    <string name="qstwo_setting_common_question">常见问题</string>
+    <string name="qstwo_setting_item_privacy">使用条款和隐私政策</string>
+    <string name="qstwo_setting_feedback">反馈</string>
+    <string name="qstwo_setting_about">关于</string>
+    <string name="qstwo_setting_general_setting">通用设置</string>
+    <string name="qstwo_setting_retry_name">重命名</string>
+    <string name="qstwo_setting_log">设备操作日志</string>
+    <string name="qstwo_setting_device_share">设备共享</string>
+    <string name="qstwo_setting_location_manage">位置管理</string>
+    <string name="qstwo_setting_check_update">检查固件更新</string>
+    <string name="qstwo_setting_delete_device">删除设备</string>
+
+    <!--recycleview_empty-->
+    <string name="recycleview_empty_text">未获取到数据，点击立即刷新</string>
+
+    <!--device_share-->
+    <string name="device_share_manage">管理</string>
+    <string name="device_share_qevdo_account">共享给科微多账号</string>
+    <string name="device_share_my_family">共享给我的家人</string>
+    <string name="device_share_recently">最近</string>
+
+    <!--qstwo_sound_control-->
+    <string name="qstwo_sound_control_text_one">你可以这样说：</string>
+    <string name="qstwo_sound_control_text_two">“打开灯”</string>
+    <string name="qstwo_sound_control_text_three">“我想要打开灯”</string>
+    <string name="qstwo_sound_control_text_four">“我想要关闭灯”</string>
+    <string name="qstwo_sound_control_text_five">“打开全部灯”</string>
+
+    <!--user_information-->
+    <string name="user_information_general_message">基础资料</string>
+    <string name="user_information_portrait">头像</string>
+    <string name="user_information_account">账号</string>
+    <string name="user_information_nickname">名称</string>
+    <string name="user_information_encrypted_message">密保资料</string>
+    <string name="user_information_phone">手机号</string>
+    <string name="user_information_update_password">修改密码</string>
+    <string name="user_information_logout">退出登录</string>
+
+    <!--update_password-->
+    <string name="update_password_title">修改密码</string>
+    <string name="update_password_forgot_password">忘记密码</string>
+    <string name="update_password_old_password">旧登录密码</string>
+    <string name="update_password_hint_old_password">请输入当前登录密码</string>
+    <string name="update_password_new_password">新登录密码</string>
+    <string name="update_password_hint_new_password">请输入新登录密码</string>
+    <string name="update_password_confirm_new_password">确认新登录密码</string>
+    <string name="update_password_hint_confirm_new_password">请再次输入新登录密码</string>
+    <string name="update_password_confirm_update">确认修改</string>
+
+    <!--user_setting-->
+    <string name="user_setting_update">更新</string>
+    <string name="user_setting_adt_auto_update">插件自动更新</string>
+    <string name="user_setting_adt_auto_update_text">WLAN环境下自动更新</string>
+    <string name="user_setting_check_update">检查更新</string>
+    <string name="user_setting_home">首页</string>
+    <string name="user_setting_common_voice_switch">常用快捷开关音效</string>
+    <string name="user_setting_show_space_name">侧边栏显示空间名称</string>
+    <string name="user_setting_family_manage">家庭房间管理</string>
+    <string name="user_setting_home_manage">房间管理</string>
+    <string name="user_setting_state_manage">状态管理</string>
+    <string name="user_setting_device">设备</string>
+    <string name="device_operation_recode">设备操作记录</string>
+    <string name="user_setting_message_setting">消息设置</string>
+    <string name="user_setting_region_and_language">地区和语言</string>
+    <string name="user_setting_region">地区</string>
+    <string name="user_setting_china_region">大陆地区</string>
+    <string name="user_setting_language">语言</string>
+    <string name="user_setting_default">默认</string>
+    <string name="user_setting_item_privacy">使用条款和隐私政策</string>
+    <string name="user_setting_now_version">当前版本：1.1.0</string>
+    <string name="user_setting_privacy_setting">隐私设置</string>
+
+    <!--recycleview_loading-->
+    <string name="recycleview_loading_loading">正在加载</string>
+
+    <!--qsone_sound_control-->
+    <string name="qsone_sound_control_text_one">你可以这样说：</string>
+    <string name="qsone_sound_control_text_two">“打开一号灯”</string>
+    <string name="qsone_sound_control_text_three">“我想要打开一号灯”</string>
+    <string name="qsone_sound_control_text_four">“我想要关闭一号灯”</string>
+
+    <!--item_home_content-->
+    <string name="item_home_content_item_state">请点击连接</string>
+
+    <!--add_capacity-->
+    <string name="add_capacity_text_one">如果满足某个条件时</string>
+    <string name="add_capacity_text_two">比如：有人移动时</string>
+    <string name="add_capacity_text_three">通用</string>
+    <string name="add_capacity_manually_execute">手动执行</string>
+    <string name="add_capacity_timing">定时</string>
+    <string name="add_capacity_weather">室外天气发生变化时</string>
+    <string name="add_capacity_capacity_device">智能设备</string>
+    <string name="add_capacity_screen">筛选</string>
+
+    <!--robot_setting_volume_mode-->
+    <string name="robot_setting_volume_mode_title">音量设置</string>
+    <string name="robot_setting_volume_mode_content">可拖动滑杆调节机器人语音音量大小，调节完成后点击试听 按钮可试听机器人音量大小</string>
+    <string name="robot_setting_volume_mode_listening_test">试听</string>
+
+    <!--reset_password_two-->
+    <string name="reset_password_two_content">科微多账号安全验证</string>
+    <string name="reset_password_two_send_message">发送短信</string>
+    <string name="reset_password_two_other_vaild">换用其他验证方式</string>
+
+    <!--device_share_manage-->
+    <string name="device_share_manage_add_share">添加共享</string>
+
+    <!--signup-->
+    <string name="signup_china_region">中国大陆</string>
+    <string name="signup_phone_register">手机注册</string>
+    <string name="signup_email_register">邮箱注册</string>
+    <string name="signup_hint_phone">手机号码</string>
+    <string name="signup_hint_vaild_code">验证码</string>
+    <string name="signup_send_code">发送验证码</string>
+    <string name="signup_next">下一步</string>
+    <string name="signup_hint_email">邮箱</string>
+    <string name="signup_email_error">该邮箱已被注册</string>
+
+    <!--qstwo_control-->
+    <string name="qstwo_control_light_one">电灯一</string>
+    <string name="qstwo_control_light_two">电灯二</string>
+    <string name="qstwo_control_selete">功能选择</string>
+
+    <!--reset_password_four-->
+    <string name="reset_password_four_reset_password">重置密码</string>
+    <string name="reset_password_four_text_one">请重设您的账号密码</string>
+    <string name="reset_password_four_hint_new_password">请输入新密码</string>
+    <string name="reset_password_four_hint_confirm_password">请输入确认密码</string>
+    <string name="reset_password_four_text_two">密码长度6–16位,数字和字母必须都有</string>
+    <string name="reset_password_four_text_three">提 交</string>
+
+    <!--device_share_receiver-->
+    <string name="device_share_receiver_receiver">接受</string>
+    <string name="device_share_receiver_already_receiver">已接受</string>
+
+    <!--my_capacity-->
+    <string name="my_capacity_screen">筛选</string>
+
+    <!--add_family-->
+    <string name="add_family_text_one">与我的关系</string>
+    <string name="add_family_text_two">输入账号</string>
+    <string name="add_family_add">添加</string>
+
+    <!--home_manage-->
+    <string name="home_manage_my_home">我的家庭</string>
+    <string name="home_manage_add_home">新建家庭</string>
 
 
     <string-array name="minute_display">
@@ -903,6 +1499,11 @@
         <item>设置常用</item>
         <item>共享设备</item>
     </string-array>
+    
+    <string-array name="head_portrait">
+        <item>从相册选择</item>
+        <item>拍照</item>
+    </string-array>
 
     <string-array name="home_device_dialog_two">
         <item>移动</item>
@@ -911,5 +1512,265 @@
         <item>取消常用</item>
         <item>共享设备</item>
     </string-array>
+    <string name="message_setting_comeback">用户从设置页面返回</string>
+    <string name="message_install_storage_failed">我们需要读取和写入外部存储许可。</string>
+    <string name="message_install_always_failed">你的手机没有允许我们安装app</string>
+    <string name="message_error_storage">请检查外部存储设备。</string>
+    <string name="home_temperature">温度</string>
+    <string name="home_humidity">湿度</string>
+    <string name="base_net_disconnected">网络未连接，请检查网络后再试</string>
+    <string name="device_ble_connect_title">添加设备</string>
+    <string name="device_ble_connect_isbinging">该设备已被人绑定</string>
+    <string name="device_ble_connect_add_fail">添加失败，请重试</string>
+    <string name="device_search_ble_title">搜索设备</string>
+    <string name="common_phone_nonsupport_ble">您的手机不支持蓝牙功能</string>
+    <string name="common_retry_scan_ble">没有搜索到设备，点击重新搜索设备</string>
+    <string name="common_open_ble_content">您当前蓝牙未开启，不能扫描连接蓝牙设备,点击确定开启蓝牙。</string>
+    <string name="common_cancel">取消</string>
+    <string name="common_confirm">确定</string>
+    <string name="common_searching">正在搜索</string>
+    <string name="common_search_end">搜索结束</string>
+    <string name="common_location_not_open">定位权限未打开</string>
+    <string name="device_share_setting_current_not_wifi">当前无Wi-Fi连接</string>
+    <string name="common_open_wifi">您当前Wi-Fi网络未开启，不能进行连接设备操作,点击确定开启Wi-Fi。</string>
+    <string name="common_wifi_open_success">Wi-Fi开启成功</string>
+    <string name="common_wifi_open_fail">Wi-Fi开启失败</string>
+    <string name="device_wifi_setting_password_not_empty">密码不能为空</string>
+    <string name="common_current_not_wifi_connect">当前无Wi-Fi连接</string>
+    <string name="common_not_connect_wifi">未连接Wi-Fi</string>
+    <string name="common_current_search_fail">当前设备搜索失败，是否需要重试？</string>
+    <string name="common_not_search_and_retry">当前未搜索到该类设备，是否需要重试？</string>
+    <string name="device_wifi_setting_insure_wifi">请确保当前wifi连接是路由器wifi后，再重试</string>
+    <string name="common_device_connect_fail">当前设备连接失败，是否需要重试？</string>
+    <string name="common_distribution_network_failure">配网失败，是否重试</string>
+    <string name="common_distribution_network_and_retry">配网超时，是否重试</string>
+    <string name="common_insure_cancel_distribution_network">您确定要取消配网吗</string>
+    <string name="common_gps_not_open">检测到您的GPS未打开，可能导致搜索不到设备,是否去打开？</string>
+    <string name="common_device_possible_offline">该设备可能已经离线，请重新刷新</string>
+    <string name="device_all_list_title">设备列表</string>
+    <string name="common_not_add_device">您还没有添加设备</string>
+    <string name="device_ble_timing_list_title">蓝牙开关定时</string>
+    <string name="device_ble_timing_list_cancel_fail">取消失败</string>
+    <string name="device_ble_timing_list_not_set">您当前还未有设置过定时</string>
+    <string name="device_ble_timing_list_delete_timing">您确定要删除这条定时记录吗？</string>
+    <string name="common_device_offline">设备已掉线</string>
+    <string name="common_delete_success">删除成功</string>
+    <string name="common_delete_fail">删除失败</string>
+    <string name="device_ble_timing_list_cancel_timing">您确定要取消定时吗？</string>
+    <string name="common_cancel_success">取消成功</string>
+    <string name="device_ble_timing_list_not_cancel_timing">设备未连接，不能取消定时</string>
+    <string name="common_is_set">正在设置</string>
+    <string name="device_guide_title">快速指南</string>
+    <string name="device_item_title">使用条款</string>
+    <string name="device_item_and_privacy_title">条款与隐私</string>
+    <string name="device_item_and_privacy_confirm_repeal_impower">确认撤销授权吗？</string>
+    <string name="device_item_and_privacy_content">授权撤销后，设备会与您当前登录的账号解除绑定并清除该设备之前存储在服务端的数据；物理设备中存储的数据需要您进行人工本地物理重置后清除，若设备支持，您可直接在设备上进行重置或参照“隐私政策”中的撤销授权进行重置。上述数据撤销后均不可恢复。若要重新使用设备，需要您再次进行绑定并且重新授权。</string>
+    <string name="device_log_log_empty">当前没有操作日志</string>
+    <string name="device_network_message_title">网络信息</string>
+    <string name="device_privacy_title">使用条款</string>
+    <string name="device_set_room_set_device_name">设置设备名称</string>
+    <string name="common_save_update">是否保存本次修改</string>
+    <string name="device_set_room_save_setting">正在保存相关配置</string>
+    <string name="common_save_success">保存成功</string>
+    <string name="common_save_fail">保存失败</string>
+    <string name="device_share_family_account_title">共享给我的家人</string>
+    <string name="device_share_family_account_empty">您还未添加家人，点击去添加</string>
+    <string name="device_share_family_title">分享给家人</string>
+    <string name="device_share_family_empty">您还没有添加设备</string>
+    <string name="device_share_family_share_device">您要把该设备分享出去吗</string>
+    <string name="common_share_success">分享成功</string>
+    <string name="common_not_share_self">不能分享给自己</string>
+    <string name="device_share_family_wait_agree">该设备已分享，请等待对方同意</string>
+    <string name="device_share_family_have_to_share">该设备已分享</string>
+    <string name="common_share_fail">分享失败</string>
+    <string name="device_share_manage_not_share_device">您当前没有共享该设备</string>
+    <string name="device_share_manage_cancel_accredit">您确定取消授权吗</string>
+    <string name="device_share_qevdo_account_title">共享给科微多账号</string>
+    <string name="device_share_qevdo_account_not_empty">账号不能为空</string>
+    <string name="device_share_qevdo_account_not_find_user">没有找到对应的用户</string>
+    <string name="device_share_qevdo_account_finally_title">共享给科微多账号</string>
+    <string name="common_accredit_fail">授权失败</string>
+    <string name="home_add_title">添加家庭</string>
+    <string name="home_add_not_empty">名字或位置不能为空</string>
+    <string name="home_add_abandon_edit_and_exit">您当前创建的家庭还没有保存，是否放弃编辑并退出？</string>
+    <string name="common_exit">退出</string>
+    <string name="common_continue_edit">继续编辑</string>
+    <string name="home_add_immediately_set_family">是否现在立刻去设置新家庭</string>
+    <string name="common_talk_about_later">稍后再说</string>
+    <string name="common_immediately_setting">立即设置</string>
+    <string name="home_add_set_family_name">设置家庭名称</string>
+    <string name="home_device_function_selete">功能选择</string>
+    <string name="common_set_success">设置成功</string>
+    <string name="common_server_error">服务器出错了</string>
+    <string name="home_device_delete_device">您确定要删除该设备吗</string>
+    <string name="home_device_set_device_name">设置设备名称</string>
+    <string name="common_update_success">修改成功</string>
+    <string name="home_device_move_device">移动设备</string>
+    <string name="home_device_move_success">移动成功</string>
+    <string name="home_loading_weather_message">正在加载天气信息…</string>
+    <string name="home_weather_message_get_fail">天气信息获取失败,请刷新重新获取</string>
+    <string name="common_immediately_login">立即登录</string>
+    <string name="common_network_disconnected">网络未连接，请检查网络后再试</string>
+    <string name="common_voice_control">语音控制</string>
+    <string name="common_features_being_development">该功能正在开发中。。。</string>
+    <string name="common_add_device">添加设备</string>
+    <string name="common_delete_share_device_content">您确定要删除所选中的一个共享设备吗</string>
+    <string name="common_null">_ _</string>
+    <string name="common_outdoor_air">天气:</string>
+    <string name="common_humidness">湿度:</string>
+    <string name="common_water_quality">风向:</string>
+    <string name="common_wind">风</string>
+    <string name="common_grade">级</string>
+    <string name="home_manage_title">家庭管理</string>
+    <string name="home_setting_title">家庭设置</string>
+    <string name="common_update_fail">修改失败</string>
+    <string name="home_manage_delete_family_content">删除家庭后，所有已设置的信息将全部清除，不可恢复。是否确认删除家庭?</string>
+    <string name="home_manage_save_default_family">必须保留一个默认家庭,不能删除</string>
+    <string name="home_manage_set_family_name">设置家庭名称</string>
+    <string name="room_add_details_empty">您当前家庭还未添加设备</string>
+    <string name="common_room_name_not_empty">房间名称不能为空</string>
+    <string name="common_room_save_success">房间保存成功</string>
+    <string name="common_room_save_success_and_device_move_fail">房间保存成功，设备移动失败</string>
+    <string name="room_add_details_edit_not_save">房间编辑信息未保存</string>
+    <string name="room_add_details_confirm_save_content">房间被编辑还未保存，请确认是否要保存编辑信息</string>
+    <string name="room_add_details_set_room_name">设置房间名称</string>
+    <string name="room_add_list_title">添加房间</string>
+    <string name="room_list_selete_empty">您当前还未添加房间，立即去添加吧</string>
+    <string name="room_list_sleete_add_room">添加属于你的房间</string>
+    <string name="common_add_success">添加成功</string>
+    <string name="room_manage_delete_room_content">删除房间后，原房间内设备将被移入默认房间，是否确认删除？</string>
+    <string name="room_pic_list_title">更换图标</string>
+    <string name="room_update_details_empty">您当前房间还未添加设备</string>
+    <string name="space_manage_title">空间管理</string>
+    <string name="common_login">登录中</string>
+    <string name="common_login_fail">登录失败</string>
+    <string name="login_password_account_not_empty">密码或账号不能为空</string>
+    <string name="login_password_length">密码长度应在6~16个字符之间</string>
+    <string name="reset_password_title">科微多账号-重置密码</string>
+    <string name="reset_password_account_not_empty">账号不能为空</string>
+    <string name="reset_password_type_error">账号格式不正确</string>
+    <string name="reset_password_four_title">科微多账号-重置密码</string>
+    <string name="common_password_not_empty">密码不能为空</string>
+    <string name="reset_password_four_success">重置密码成功</string>
+    <string name="reset_password_four_vaild_one">两次输入的密码不一致</string>
+    <string name="reset_password_four_vaild_two">密码中必须同时包含数字和字母</string>
+    <string name="reset_password_four_vaild_three">密码长度不能小于6或者大于16</string>
+    <string name="reset_password_three_title">科微多账号-科微多安全验证</string>
+    <string name="reset_password_three_send_success">发送成功</string>
+    <string name="reset_password_three_code_not_empty">验证码不能为空</string>
+    <string name="reset_password_three_code_length_error">验证码长度错误</string>
+    <string name="reset_password_three_send_code">发送验证码</string>
+    <string name="reset_password_two_title">科微多账号-科微多安全验证</string>
+    <string name="reset_password_two_text_one">为了保护账号安全，需要验证邮箱有效性</string>
+    <string name="reset_password_two_text_two">点击发送邮件按钮,我们将发送一条有验证码的邮件至邮箱</string>
+    <string name="reset_password_two_send_email">发送邮件</string>
+    <string name="reset_password_two_text_three">为了保护账号安全，需要验证手机有效性</string>
+    <string name="reset_password_two_text_four">点击发送短信按钮，我们将发送一条有验证码的短信至手机</string>
+    <string name="reset_password_two_send_phone">发送短信</string>
+    <string name="common_register_fail">注册失败</string>
+    <string name="common_time_out">连接超时</string>
+    <string name="set_password_email_not_vaild">您当前邮箱未验证</string>
+    <string name="set_password_inconformity">两次密码不一致</string>
+    <string name="signup_phone_vaild_not_empty">手机号或验证码不能为空</string>
+    <string name="signup_email_not_empty">邮箱不能为空</string>
+    <string name="signup_vaild_account_not_vaild">验证码与账号不匹配</string>
+    <string name="common_email_be_registered">该邮箱已被注册</string>
+    <string name="common_phone_be_registered">该手机号已被注册</string>
+    <string name="common_code_send_success">验证码发送成功</string>
+    <string name="common_code_send_fail">验证码发送失败</string>
+    <string name="common_vaild_not_repeat_send">验证码不能重复发送</string>
+    <string name="common_phone_not_empty">手机号码不能为空</string>
+    <string name="common_phone_type_error">手机号码格式不正确</string>
+    <string name="common_email_not_empty">邮箱不能为空</string>
+    <string name="common_email_type_error">邮箱格式不正确</string>
+    <string name="common_open_ble_can_control_device">您需要打开蓝牙开关才能连接控制设备</string>
+    <string name="common_ble_not_open">蓝牙未开启</string>
+    <string name="common_operating_data">操作记录</string>
+    <string name="common_voice">语音</string>
+    <string name="common_timing">定时</string>
+    <string name="common_use_timeout_tip">您当前停留该设备时间太长，可能导致其他用户无法连接该设备</string>
+    <string name="comon_not_tip">不再提示</string>
+    <string name="common_device_is_connecting">设备正在连接，请稍候</string>
+    <string name="common_device_connect_timeout">设备连接超时,请重新连接</string>
+    <string name="common_device_connect_error_one">设备连接失败或被其他人正在使用,请检查后再试</string>
+    <string name="common_device_connect_error_two">设备连接失败，下拉重新连接设备</string>
+    <string name="common_device_connect_success">设备连接成功</string>
+    <string name="common_device_prepare_retry_connect">设备掉线，准备重新连接设备</string>
+    <string name="common_connect_fail_retry_open_ble">检测到您多次连接失败，是否通过重启蓝牙来改善这一现象？</string>
+    <string name="common_manual_open_one_light">手动打开灯</string>
+    <string name="common_manual_close_one_light">手动关闭灯</string>
+    <string name="common_manual_open_two_light">手动打开二号灯</string>
+    <string name="common_manual_close_two_light">手动关闭二号灯</string>
+    <string name="common_set_device_name">设置设备名称</string>
+    <string name="common_set_name">设置名称</string>
+    <string name="common_delete_device">您确定要删除该设备吗</string>
+    <string name="common_should_say">你可以这样说：</string>
+    <string name="common_not_recognition">识别不出来哦</string>
+    <string name="common_voice_not_recognition">你说的话我识别不出来哦</string>
+    <string name="common_sound_open_one_light">语音打开电灯</string>
+    <string name="common_sound_close_one_light">语音关闭电灯</string>
+    <string name="common_sound_open_two_light">语音打开二号灯</string>
+    <string name="common_sound_close_two_light">语音关闭二号灯</string>
+    <string name="common_accredit_success">授权成功</string>
+    <string name="qstwo_timing_title">蓝牙智能开关定时</string>
+    <string name="common_set_fail">设置失败</string>
+    <string name="common_hour">小时</string>
+    <string name="comon_minute">分钟后</string>
+    <string name="common_current_device_disconnect">当前设备已断开</string>
+    <string name="common_timing_success">定时成功</string>
+    <string name="common_timing_fail">定时失败</string>
+    <string name="common_setting">正在设置</string>
+    <string name="common_timing_tip">您当前有一个定时正在执行，蓝牙设备只支持设置一个定时，您是否确认取消上一个定时来设置当前定时？</string>
+    <string name="common_time_not_zero">时间不能设置为零</string>
+    <string name="common_device_disconnect_and_set_timing">设备未连接，不能设置定时</string>
+    <string name="add_family_title">添加家人</string>
+    <string name="add_family_send_invite_success">发送邀请成功</string>
+    <string name="add_family_not_add_self">不能添加自己</string>
+    <string name="add_family_the_account_be_send_invite">该账号已发送邀请</string>
+    <string name="add_family_send_invite_fail">发送邀请失败</string>
+    <string name="add_family_family_name_not_empty">家人名称不能为空</string>
+    <string name="add_family_account_not_empty">家人账号不能为空</string>
+    <string name="add_family_account_type_not_correct">账号格式不正确</string>
+    <string name="family_share_details_title">家人详情</string>
+    <string name="language_selete_title">语言选择</string>
+    <string name="message_setting_title">消息设置</string>
+    <string name="privacy_setting_title">隐私设置</string>
+    <string name="receive_empty">您当前没有共享消息</string>
+    <string name="receive_delete_the_message">你要删除这一条消息吗</string>
+    <string name="receive_receive_fail">授权失败</string>
+    <string name="share_empty">您当前还未添加设备</string>
+    <string name="common_old_password_not_correct">旧密码不正确</string>
+    <string name="common_update_two_fail">更新失败</string>
+    <string name="update_password_inconformity">两次输入的新密码不一致</string>
+    <string name="update_password_new_and_old_same">新密码不能和旧密码相同</string>
+    <string name="user_family_title">我的家人</string>
+    <string name="user_family_not_agree">对方还未同意你的邀请</string>
+    <string name="user_family_update_relation">修改家人关系</string>
+    <string name="user_family_relieve_relation">你确定要解除和他/她的关系吗</string>
+    <string name="user_family_relieve_fail">解除失败</string>
+    <string name="user_family_agree_the_invite">你确定同意这个邀请吗</string>
+    <string name="user_feedback_title">反馈</string>
+    <string name="common_feedback_success">反馈成功</string>
+    <string name="common_feedback_fail">反馈失败</string>
+    <string name="common_contract_not_empty">联系方式不能为空</string>
+    <string name="common_content_not_empty">反馈内容不能为空</string>
+    <string name="user_feedback_details_title">反馈详情</string>
+    <string name="user_feedback_list_title">反馈记录</string>
+    <string name="common_not_login">当前未登录</string>
+    <string name="common_device_num">设备数量:</string>
+    <string name="user_information_title">个人信息</string>
+    <string name="user_information_binding_phone">绑定手机号</string>
+    <string name="common_update_two_success">更新成功</string>
+    <string name="common_exiting">正在退出</string>
+    <string name="user_information_update_name">修改用户名称</string>
+    <string name="user_setting_title">用户设置</string>
+    <string name="common_share">共享</string>
+    <string name="common_receive">接受</string>
+    <string name="common_home">首页</string>
+    <string name="common_user">我的</string>
+    <string name="common_skip">跳过</string>
+    <string name="user_getdate_error">获取数据错误</string>
+    <string name="user_no_device">无设备</string>
+    <string name="QSTwo">QSTwo</string>
 
 </resources>

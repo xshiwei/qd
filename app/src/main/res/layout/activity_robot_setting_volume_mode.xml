@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
@@ -17,16 +18,16 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/x20"
-            android:contentDescription="TODO"
             android:padding="5dp"
-            android:src="@mipmap/actionbar_goback" />
+            android:src="@mipmap/actionbar_goback"
+            tools:ignore="RtlHardcoded" />
 
         <TextView
             android:id="@+id/tv_common_actionbar_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="音量设置"
+            android:text="@string/robot_setting_volume_mode_title"
             android:textColor="@color/app_title"
             android:textSize="15sp" />
 
@@ -39,10 +40,10 @@
         android:paddingBottom="@dimen/y30"
         android:paddingLeft="@dimen/x50"
         android:paddingTop="@dimen/y30"
-        android:text="可拖动滑杆调节机器人语音音量大小，调节完成后点击试听
-按钮可试听机器人音量大小"
+        android:text="@string/robot_setting_volume_mode_content"
         android:textColor="@color/home_content_text"
-        android:textSize="13sp" />
+        android:textSize="13sp"
+        tools:ignore="RtlHardcoded" />
 
     <RelativeLayout
         android:id="@+id/rl_disturbance_mode"
@@ -54,7 +55,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/x50"
+            android:layout_marginStart="@dimen/x50"
             android:src="@mipmap/robot_volume_low" />
 
         <SeekBar
@@ -64,8 +65,8 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/x10"
             android:layout_marginRight="@dimen/x10"
-            android:layout_toLeftOf="@+id/iv_volume_hight"
-            android:layout_toRightOf="@+id/iv_volume_low"
+            android:layout_toStartOf="@+id/iv_volume_hight"
+            android:layout_toEndOf="@+id/iv_volume_low"
             android:thumb="@mipmap/robot_volume_progress" />
 
         <ImageView
@@ -75,8 +76,8 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/x50"
-            android:contentDescription="TODO"
-            android:src="@mipmap/robot_volume_hight" />
+            android:src="@mipmap/robot_volume_hight"
+            tools:ignore="RtlHardcoded" />
 
         <View
             android:layout_width="match_parent"
@@ -103,7 +104,7 @@
             android:layout_marginRight="@dimen/x50"
             android:background="@drawable/stroke_white_one_circle_five"
             android:gravity="center"
-            android:text="试听"
+            android:text="@string/robot_setting_volume_mode_listening_test"
             android:textColor="@color/home_setting_text"
             android:textSize="14sp" />
 

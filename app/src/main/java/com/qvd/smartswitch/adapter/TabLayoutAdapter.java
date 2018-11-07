@@ -12,8 +12,8 @@ import java.util.List;
 
 public class TabLayoutAdapter extends FragmentPagerAdapter {
 
-    private List<Fragment> list_fragment;                         //fragment列表
-    private List<String> list_Title;                              //tab名的列表
+    private final List<Fragment> list_fragment;                         //fragment列表
+    private final List<String> list_Title;                              //tab名的列表
 
 
 

@@ -1,7 +1,6 @@
 package com.qvd.smartswitch.activity.user;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -17,7 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
@@ -34,8 +32,7 @@ public class UserQuestionActivity extends BaseActivity {
     @BindView(R.id.recyclerview)
     RecyclerView recyclerview;
 
-    private UserQuestionListAdapter adapter;
-    private List<Test2Vo> list = new ArrayList<>();
+    private final List<Test2Vo> list = new ArrayList<>();
 
     @Override
     protected int setLayoutId() {
@@ -54,7 +51,7 @@ public class UserQuestionActivity extends BaseActivity {
         for (int i = 0; i < 10; i++) {
             list.add(new Test2Vo("如何更换色环"));
         }
-        adapter = new UserQuestionListAdapter(this, list);
+        UserQuestionListAdapter adapter = new UserQuestionListAdapter(list);
         recyclerview.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         recyclerview.setAdapter(adapter);
     }

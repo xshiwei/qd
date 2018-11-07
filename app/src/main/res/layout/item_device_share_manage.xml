@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="@dimen/y130"
     android:clickable="true"
-    android:background="@drawable/layout_seletor">
+    android:background="@drawable/layout_seletor"
+    android:focusable="true">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/civ_portrait"
@@ -11,7 +13,8 @@
         android:layout_height="@dimen/y80"
         android:layout_centerVertical="true"
         android:layout_marginLeft="@dimen/x30"
-        android:src="@mipmap/user_portrait" />
+        android:src="@mipmap/user_portrait"
+        tools:ignore="RtlHardcoded" />
 
     <TextView
         android:id="@+id/tv_name"
@@ -20,9 +23,9 @@
         android:layout_marginLeft="@dimen/x20"
         android:layout_marginTop="@dimen/y25"
         android:layout_toRightOf="@+id/civ_portrait"
-        android:text="共享至2812"
         android:textColor="@color/home_setting_text"
-        android:textSize="14sp" />
+        android:textSize="14sp"
+        tools:ignore="RtlHardcoded" />
 
     <TextView
         android:id="@+id/tv_text"
@@ -32,9 +35,9 @@
         android:layout_marginBottom="@dimen/y30"
         android:layout_marginLeft="@dimen/x20"
         android:layout_toRightOf="@+id/civ_portrait"
-        android:text="2018-2-12   仅可查看"
         android:textColor="@color/home_setting_text_two"
-        android:textSize="12sp" />
+        android:textSize="12sp"
+        tools:ignore="RtlHardcoded" />
 
     <TextView
         android:id="@+id/tv_delete"
@@ -48,9 +51,10 @@
         android:paddingLeft="@dimen/x35"
         android:paddingRight="@dimen/x35"
         android:paddingTop="@dimen/y10"
-        android:text="删除"
+        android:text="@string/item_device_share_manage_delete"
         android:textColor="@color/add_home_background"
-        android:textSize="14sp" />
+        android:textSize="14sp"
+        tools:ignore="RtlHardcoded" />
 
     <View
         android:layout_width="match_parent"

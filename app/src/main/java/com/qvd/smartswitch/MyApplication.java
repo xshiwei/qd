@@ -1,18 +1,23 @@
 package com.qvd.smartswitch;
 
+import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
+import android.os.Bundle;
 import android.support.multidex.MultiDex;
 
 import com.clj.fastble.BleManager;
 import com.iflytek.cloud.SpeechConstant;
 import com.iflytek.cloud.SpeechUtility;
 import com.qvd.smartswitch.api.RetrofitService;
+import com.qvd.smartswitch.utils.ActivityManager;
+import com.qvd.smartswitch.utils.LanguageUtils;
+import com.squareup.leakcanary.LeakCanary;
 import com.wenming.library.LogReport;
 import com.wenming.library.save.imp.CrashWriter;
 import com.wenming.library.upload.email.EmailReporter;
 
-import top.fighter_lee.mqttlibs.connect.MqttManager;
+import java.util.Locale;
 
 
 /**
@@ -26,12 +31,58 @@ public class MyApplication extends Application {
     public void onCreate() {
         super.onCreate();
         context = getApplicationContext();
+        Locale locale = LanguageUtils.getAppLocale(this);
+        LanguageUtils.changeAppLanguage(this, locale, true);
+//        if (LeakCanary.isInAnalyzerProcess(this)) {
+//            return;
+//        }
+//        LeakCanary.install(this);
         BleManager.getInstance().init(this);
         RetrofitService.init();
         //科大讯飞语音识别初始化
         SpeechUtility.createUtility(context, SpeechConstant.APPID + "=5afcdd8d");
-        MqttManager.getInstance().setContext(getApplicationContext());
         initCrashReport();
+
+        this.registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
+            @Override
+            public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
+                ActivityManager.getInstance().addActivity(activity);
+                if (LanguageUtils.isSameWithSetting(activity)) {
+                    LanguageUtils.changeAppLanguage(activity,
+                            LanguageUtils.getAppLocale(activity), true);
+                }
+            }
+
+            @Override
+            public void onActivityStarted(Activity activity) {
+
+            }
+
+            @Override
+            public void onActivityResumed(Activity activity) {
+
+            }
+
+            @Override
+            public void onActivityPaused(Activity activity) {
+
+            }
+
+            @Override
+            public void onActivityStopped(Activity activity) {
+
+            }
+
+            @Override
+            public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
+
+            }
+
+            @Override
+            public void onActivityDestroyed(Activity activity) {
+                ActivityManager.getInstance().removeActivity(activity);
+            }
+        });
     }
 
     public static Context getContext() {

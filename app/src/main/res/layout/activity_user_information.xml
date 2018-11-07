@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/home_manage_backgroud"
@@ -12,11 +13,13 @@
         android:layout_height="wrap_content"
         android:paddingLeft="@dimen/x30"
         android:paddingTop="@dimen/y40"
-        android:text="基础资料"
+        android:text="@string/user_information_general_message"
         android:textColor="@color/home_setting_text_three"
-        android:textSize="12sp" />
+        android:textSize="12sp"
+        tools:ignore="RtlHardcoded" />
 
     <RelativeLayout
+        android:id="@+id/rl_portrait"
         android:layout_width="match_parent"
         android:layout_height="@dimen/y100"
         android:layout_marginTop="@dimen/y25"
@@ -26,19 +29,20 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/x30"
-            android:text="头像"
+            android:layout_marginStart="@dimen/x30"
+            android:text="@string/user_information_portrait"
             android:textColor="@color/home_setting_text"
             android:textSize="14sp" />
 
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/cir_head_portrait"
+            android:layout_width="@dimen/x75"
+            android:layout_height="@dimen/y75"
             android:layout_centerVertical="true"
-            android:layout_marginRight="@dimen/x10"
+            android:layout_marginRight="@dimen/x20"
             android:layout_toLeftOf="@+id/iv_one"
-            android:src="@mipmap/user_portrait_message" />
+            android:src="@mipmap/user_portrait_message"
+            tools:ignore="RtlHardcoded" />
 
 
         <ImageView
@@ -48,14 +52,16 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/x30"
-            android:src="@mipmap/home_manage_right" />
+            android:src="@mipmap/home_manage_right"
+            tools:ignore="RtlHardcoded" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1px"
             android:layout_alignParentBottom="true"
             android:layout_marginLeft="@dimen/x30"
-            android:background="@color/black_16" />
+            android:background="@color/black_16"
+            tools:ignore="RtlHardcoded" />
 
     </RelativeLayout>
 
@@ -69,9 +75,10 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/x30"
-            android:text="账号"
+            android:text="@string/user_information_account"
             android:textColor="@color/home_setting_text"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            tools:ignore="RtlHardcoded" />
 
         <TextView
             android:id="@+id/tv_account"
@@ -81,13 +88,14 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/x40"
             android:textColor="@color/home_setting_text_three"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            tools:ignore="RtlHardcoded" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1px"
             android:layout_alignParentBottom="true"
-            android:layout_marginLeft="@dimen/x30"
+            android:layout_marginStart="@dimen/x30"
             android:background="@color/black_16" />
 
     </RelativeLayout>
@@ -104,19 +112,21 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/x30"
-            android:text="名称"
+            android:text="@string/user_information_nickname"
             android:textColor="@color/home_setting_text"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            tools:ignore="RtlHardcoded" />
 
         <TextView
-            android:textSize="14sp"
             android:id="@+id/tv_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/x10"
             android:layout_toLeftOf="@+id/iv_two"
-            android:textColor="@color/home_setting_text_three" />
+            android:textColor="@color/home_setting_text_three"
+            android:textSize="14sp"
+            tools:ignore="RtlHardcoded" />
 
         <ImageView
             android:id="@+id/iv_two"
@@ -125,7 +135,8 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/x30"
-            android:src="@mipmap/home_manage_right" />
+            android:src="@mipmap/home_manage_right"
+            tools:ignore="RtlHardcoded" />
 
 
     </RelativeLayout>
@@ -136,9 +147,10 @@
         android:layout_height="wrap_content"
         android:paddingLeft="@dimen/x30"
         android:paddingTop="@dimen/y40"
-        android:text="密保资料"
+        android:text="@string/user_information_encrypted_message"
         android:textColor="@color/home_setting_text_three"
-        android:textSize="12sp" />
+        android:textSize="12sp"
+        tools:ignore="RtlHardcoded" />
 
     <RelativeLayout
         android:id="@+id/rl_phone"
@@ -151,8 +163,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/x30"
-            android:text="手机号"
+            android:layout_marginStart="@dimen/x30"
+            android:text="@string/user_information_phone"
             android:textColor="@color/home_setting_text"
             android:textSize="14sp" />
 
@@ -165,7 +177,8 @@
             android:layout_toLeftOf="@+id/iv_three"
             android:inputType="phone"
             android:textColor="@color/home_setting_text_three"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            tools:ignore="RtlHardcoded" />
 
         <ImageView
             android:id="@+id/iv_three"
@@ -174,14 +187,16 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/x30"
-            android:src="@mipmap/home_manage_right" />
+            android:src="@mipmap/home_manage_right"
+            tools:ignore="RtlHardcoded" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1px"
             android:layout_alignParentBottom="true"
             android:layout_marginLeft="@dimen/x30"
-            android:background="@color/black_16" />
+            android:background="@color/black_16"
+            tools:ignore="RtlHardcoded" />
 
     </RelativeLayout>
 
@@ -197,9 +212,10 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/x30"
-            android:text="修改密码"
+            android:text="@string/user_information_update_password"
             android:textColor="@color/home_setting_text"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            tools:ignore="RtlHardcoded" />
 
         <ImageView
             android:layout_width="wrap_content"
@@ -207,7 +223,8 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/x30"
-            android:src="@mipmap/home_manage_right" />
+            android:src="@mipmap/home_manage_right"
+            tools:ignore="RtlHardcoded" />
 
     </RelativeLayout>
 
@@ -226,8 +243,9 @@
             android:layout_marginRight="@dimen/x60"
             android:background="@drawable/user_message_selector"
             android:clickable="true"
+            android:focusable="true"
             android:gravity="center"
-            android:text="退出登录"
+            android:text="@string/user_information_logout"
             android:textColor="@color/home_setting_text"
             android:textSize="14sp" />
 

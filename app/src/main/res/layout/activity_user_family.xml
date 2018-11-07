@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/home_manage_backgroud"
@@ -31,7 +32,7 @@
                     <android.support.v7.widget.RecyclerView
                         android:id="@+id/recyclerview_one"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
+                        android:layout_height="wrap_content" />
 
                 </RelativeLayout>
 
@@ -42,7 +43,7 @@
                     <android.support.v7.widget.RecyclerView
                         android:id="@+id/recyclerview_two"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
+                        android:layout_height="wrap_content" />
                 </RelativeLayout>
 
                 <LinearLayout
@@ -59,9 +60,10 @@
                         android:layout_marginTop="@dimen/y50"
                         android:background="@color/home_manage_backgroud"
                         android:gravity="center"
-                        android:text="爸爸"
+                        android:text="@string/user_family_father"
                         android:textColor="@color/home_menu"
-                        android:textSize="16sp" />
+                        android:textSize="16sp"
+                        tools:ignore="RtlHardcoded" />
 
                     <TextView
                         android:id="@+id/tv_mather"
@@ -71,9 +73,10 @@
                         android:layout_marginTop="@dimen/y50"
                         android:background="@color/home_manage_backgroud"
                         android:gravity="center"
-                        android:text="妈妈"
+                        android:text="@string/user_family_mather"
                         android:textColor="@color/home_menu"
-                        android:textSize="16sp" />
+                        android:textSize="16sp"
+                        tools:ignore="RtlHardcoded" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -90,19 +93,20 @@
                         android:layout_marginTop="@dimen/y20"
                         android:background="@color/home_manage_backgroud"
                         android:gravity="center"
-                        android:text="儿子"
+                        android:text="@string/user_family_son"
                         android:textColor="@color/home_menu"
-                        android:textSize="16sp" />
+                        android:textSize="16sp"
+                        tools:ignore="RtlHardcoded" />
 
                     <TextView
                         android:id="@+id/tv_daughter"
                         android:layout_width="@dimen/x315"
                         android:layout_height="@dimen/y100"
-                        android:layout_marginLeft="@dimen/x10"
+                        android:layout_marginStart="@dimen/x10"
                         android:layout_marginTop="@dimen/y20"
                         android:background="@color/home_manage_backgroud"
                         android:gravity="center"
-                        android:text="女儿"
+                        android:text="@string/user_family_daughter"
                         android:textColor="@color/home_menu"
                         android:textSize="16sp" />
                 </LinearLayout>
@@ -122,9 +126,10 @@
                         android:layout_marginTop="@dimen/y20"
                         android:background="@color/home_manage_backgroud"
                         android:gravity="center"
-                        android:text="同居密友"
+                        android:text="@string/user_family_friend"
                         android:textColor="@color/home_menu"
-                        android:textSize="16sp" />
+                        android:textSize="16sp"
+                        tools:ignore="RtlHardcoded" />
 
                     <TextView
                         android:id="@+id/tv_other"
@@ -134,9 +139,10 @@
                         android:layout_marginTop="@dimen/y20"
                         android:background="@color/home_manage_backgroud"
                         android:gravity="center"
-                        android:text="其它家人"
+                        android:text="@string/user_family_other"
                         android:textColor="@color/home_menu"
-                        android:textSize="16sp" />
+                        android:textSize="16sp"
+                        tools:ignore="RtlHardcoded" />
                 </LinearLayout>
 
             </LinearLayout>

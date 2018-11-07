@@ -27,11 +27,7 @@ public class RippleView extends TextView
     /**
      * 波纹的颜色
      */
-    private int mRippleColor = DEFAULT_RIPPLE_COLOR;
-    /**
-     * 默认的波纹的最小值
-     */
-    private int mMinSize = 200;
+    private final int mRippleColor = DEFAULT_RIPPLE_COLOR;
     /**
      * 波纹动画效果是否正在进行
      */
@@ -39,20 +35,15 @@ public class RippleView extends TextView
 
     private int currentProgress = 0;
     /**
-     * 动画中波纹的个数
-     */
-    private int mRippleNum = 4;
-    /**
      * //无限长的数值，使动画不停止
      */
-    private int mTotalTime = 1000 * 1000;
+    private final int mTotalTime = 1000 * 1000;
 
     public static final int MODE_IN = 1;
     public static final int MODE_OUT = 2;
 
     private int mode = MODE_OUT;
 
-    private int mPeriod = 30;
     private int mCenterX;
     private int mCenterY;
     private int mRadius;
@@ -112,7 +103,7 @@ public class RippleView extends TextView
         }
     }
 
-    public void stopRippleAnimation()
+    private void stopRippleAnimation()
     {
         if (animationRunning)
         {
@@ -121,7 +112,7 @@ public class RippleView extends TextView
         }
     }
 
-    public boolean isRippleAnimationRunning()
+    private boolean isRippleAnimationRunning()
     {
         return animationRunning;
     }
@@ -147,9 +138,13 @@ public class RippleView extends TextView
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec)
     {
         //super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        int resultWidth = 0;
+        int resultWidth;
         int modeWidth = MeasureSpec.getMode(widthMeasureSpec);
         int sizeWidth = MeasureSpec.getSize(widthMeasureSpec);
+        /*
+      默认的波纹的最小值
+     */
+        int mMinSize = 200;
         if (modeWidth == MeasureSpec.EXACTLY)
         {
             resultWidth = sizeWidth;
@@ -163,7 +158,7 @@ public class RippleView extends TextView
             }
         }
 
-        int resultHeight = 0;
+        int resultHeight;
         int modeHeight = MeasureSpec.getMode(heightMeasureSpec);
         int sizeHeight = MeasureSpec.getSize(heightMeasureSpec);
         if (modeHeight == MeasureSpec.EXACTLY)
@@ -192,6 +187,10 @@ public class RippleView extends TextView
     @Override
     public void onDraw(Canvas canvas)
     {
+        /*
+      动画中波纹的个数
+     */
+        int mRippleNum = 4;
         for (int i = 0; i < mRippleNum; i++)
         {
             int progress = (currentProgress + i * 100 / (mRippleNum)) % 100;
@@ -215,15 +214,10 @@ public class RippleView extends TextView
     /**
      * 自定义估值器
      */
-    private TypeEvaluator mProgressEvaluator = new TypeEvaluator()
-    {
-
-        @Override
-        public Object evaluate(float fraction, Object startValue, Object endValue)
-        {
-            fraction = (fraction * mTotalTime / mPeriod) % 100;
-            return fraction;
-        }
+    private final TypeEvaluator mProgressEvaluator = (fraction, startValue, endValue) -> {
+        int mPeriod = 30;
+        fraction = (fraction * mTotalTime / mPeriod) % 100;
+        return fraction;
     };
 
 }

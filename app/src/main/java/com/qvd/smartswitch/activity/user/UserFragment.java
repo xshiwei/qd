@@ -1,15 +1,14 @@
 package com.qvd.smartswitch.activity.user;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.qvd.smartswitch.R;
 import com.qvd.smartswitch.activity.base.BaseFragment;
-import com.qvd.smartswitch.activity.login.LoginActivity;
 import com.qvd.smartswitch.activity.robot.RobotControlActivity;
 import com.qvd.smartswitch.api.CacheSetting;
 import com.qvd.smartswitch.api.RetrofitService;
@@ -17,17 +16,20 @@ import com.qvd.smartswitch.model.user.UserInfoVo;
 import com.qvd.smartswitch.utils.CommonUtils;
 import com.qvd.smartswitch.utils.ConfigUtils;
 import com.qvd.smartswitch.utils.SharedPreferencesUtil;
-import com.qvd.smartswitch.utils.ToastUtil;
+
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import butterknife.Unbinder;
+import de.hdodenhof.circleimageview.CircleImageView;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 import io.rx_cache2.DynamicKey;
 import io.rx_cache2.EvictDynamicKey;
+
+import static com.qvd.smartswitch.utils.CommonUtils.startIntentLogin;
 
 /**
  * Created by Administrator on 2018/6/14 0014.
@@ -38,7 +40,7 @@ public class UserFragment extends BaseFragment {
     @BindView(R.id.iv_message)
     ImageView ivMessage;
     @BindView(R.id.iv_portrait)
-    ImageView ivPortrait;
+    CircleImageView ivPortrait;
     @BindView(R.id.tv_nickname)
     TextView tvNickname;
     @BindView(R.id.tv_num)
@@ -54,7 +56,6 @@ public class UserFragment extends BaseFragment {
     @BindView(R.id.rl_setting)
     RelativeLayout rlSetting;
     private String userId;
-    private String user_name;
 
 
     public static UserFragment newInstance(String param1) {
@@ -73,18 +74,18 @@ public class UserFragment extends BaseFragment {
     @Override
     public void onResume() {
         super.onResume();
-        userId = SharedPreferencesUtil.getString(getActivity(), SharedPreferencesUtil.USER_ID);
+        userId = SharedPreferencesUtil.getString(Objects.requireNonNull(getActivity()), SharedPreferencesUtil.USER_ID);
         if (CommonUtils.isEmptyString(userId)) {
-            tvNickname.setText("未登录，点击立即去登录");
-            tvNum.setVisibility(View.GONE);
+            tvNickname.setText(R.string.common_not_login);
+            tvNum.setText(R.string.user_no_device);
+            Glide.with(this).load(R.mipmap.user_portrait).into(ivPortrait);
         } else {
-            tvNum.setVisibility(View.VISIBLE);
             getUserInfo();
         }
     }
 
     private void getUserInfo() {
-        CacheSetting.getCache().getUserInfo(RetrofitService.qdoApi.getUserInfo(ConfigUtils.user_id),
+        CacheSetting.getCache().getUserInfo(RetrofitService.qdoApi.getUserInfo(userId),
                 new DynamicKey(userId), new EvictDynamicKey(true))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -99,12 +100,14 @@ public class UserFragment extends BaseFragment {
                         if (userInfoVo != null) {
                             if (userInfoVo.getCode() == 200) {
                                 if (userInfoVo.getData() != null) {
-                                    user_name = userInfoVo.getData().getUser_name();
                                     tvNickname.setText(userInfoVo.getData().getUser_name());
-                                    tvNum.setText("设备数量: " + userInfoVo.getData().getDevices_count());
+                                    ConfigUtils.USERNAME = userInfoVo.getData().getUser_name();
+                                    ConfigUtils.USERAVATAR = userInfoVo.getData().getUser_avatar();
+                                    tvNum.setText(getString(R.string.common_device_num) + userInfoVo.getData().getDevices_count());
+                                    Glide.with(getActivity()).load(userInfoVo.getData().getUser_avatar()).into(ivPortrait);
                                 } else {
-                                    tvNickname.setText("名称为空");
-                                    tvNum.setText("设备数量: 0");
+                                    tvNickname.setText(R.string.user_getdate_error);
+                                    tvNum.setText(R.string.user_no_device);
                                 }
                             }
                         }
@@ -112,8 +115,8 @@ public class UserFragment extends BaseFragment {
 
                     @Override
                     public void onError(Throwable e) {
-                        tvNickname.setText("名称为空");
-                        tvNum.setText("设备数量: 0");
+                        tvNickname.setText(R.string.user_getdate_error);
+                        tvNum.setText(R.string.user_no_device);
                     }
 
                     @Override
@@ -129,58 +132,29 @@ public class UserFragment extends BaseFragment {
         switch (view.getId()) {
             case R.id.iv_message:
                 //消息中心
-//                ToastUtil.showToast("功能开发中。请期待");
-                startActivity(new Intent(getActivity(), RobotControlActivity.class));
-                getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+                startIntentLogin(userId, getActivity(), RobotControlActivity.class);
                 break;
             case R.id.rl_portrait:
                 //头像
-                if (CommonUtils.isEmptyString(userId)) {
-                    startActivity(new Intent(mActivity, LoginActivity.class));
-                    getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
-                } else {
-                    startActivity(new Intent(getActivity(), UserInformationActivity.class));
-                    getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
-                }
+                startIntentLogin(userId, getActivity(), UserInformationActivity.class);
                 break;
             case R.id.rl_family:
                 //我的家庭
-
-                if (CommonUtils.isEmptyString(userId)) {
-                    startActivity(new Intent(mActivity, LoginActivity.class));
-                    getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
-                } else {
-                    startActivity(new Intent(getActivity(), UserFamilyActivity.class)
-                            .putExtra("name", user_name));
-                    getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
-                }
+                startIntentLogin(userId, getActivity(), UserFamilyActivity.class);
                 break;
             case R.id.rl_share:
                 //共享设备
-                if (CommonUtils.isEmptyString(userId)) {
-                    startActivity(new Intent(mActivity, LoginActivity.class));
-                    getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
-                } else {
-                    startActivity(new Intent(getActivity(), UserShareActivity.class));
-                    getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
-                }
+                startIntentLogin(userId, getActivity(), UserShareActivity.class);
                 break;
             case R.id.rl_help:
                 //反馈帮助
-                if (CommonUtils.isEmptyString(userId)) {
-                    startActivity(new Intent(mActivity, LoginActivity.class));
-                    getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
-                } else {
-                    startActivity(new Intent(getActivity(), UserHelpActivity.class));
-                    getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
-                }
+                startIntentLogin(userId, getActivity(), UserHelpActivity.class);
                 break;
             case R.id.rl_setting:
                 //设置
-                ToastUtil.showToast("功能开发中。请期待");
-//                startActivity(new Intent(getActivity(), UserSettingActivity.class));
-//                getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+                startIntentLogin(userId, getActivity(), UserSettingActivity.class);
                 break;
         }
     }
+
 }

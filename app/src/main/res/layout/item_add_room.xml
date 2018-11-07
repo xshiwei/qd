@@ -29,7 +29,6 @@
         android:gravity="center"
         android:paddingBottom="@dimen/y20"
         android:paddingTop="@dimen/y10"
-        android:text="客厅"
         android:textColor="@color/add_room_text"
         android:textSize="13sp" />
 

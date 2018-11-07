@@ -5,5 +5,4 @@
     <stroke android:color="@color/home_setting_text_two"
         android:width="1dp"/>    <!-- 设置按钮的四个角为弧形 -->
     <!-- android:radius 弧形的半径 -->
-    />
 </shape>

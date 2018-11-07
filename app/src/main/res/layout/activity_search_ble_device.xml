@@ -9,20 +9,43 @@
         android:id="@+id/action_bar"
         layout="@layout/common_actionbar" />
 
-    <com.qvd.smartswitch.widget.EmptyLayout
-        android:id="@+id/empty_view"
+    <com.scwang.smartrefresh.layout.SmartRefreshLayout
+        android:id="@+id/smart_refresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_above="@+id/avi_loading"
         android:layout_below="@+id/action_bar"
-        android:layout_marginBottom="@dimen/y160"
+        android:layout_marginBottom="@dimen/y20"
         android:layout_marginTop="@dimen/y20">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recyclerview"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:overScrollMode="never" />
+            android:layout_height="match_parent" />
 
-    </com.qvd.smartswitch.widget.EmptyLayout>
+    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+
+
+    <com.wang.avi.AVLoadingIndicatorView xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/avi_loading"
+        style="@style/AVLoadingIndicatorView.Large"
+        android:layout_width="@dimen/x100"
+        android:layout_height="@dimen/y100"
+        android:layout_above="@+id/tv_state"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="@dimen/y10"
+        android:visibility="visible"
+        app:indicatorColor="@color/blue_background"
+        app:indicatorName="BallSpinFadeLoaderIndicator" />
+
+    <TextView
+        android:id="@+id/tv_state"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="@dimen/y20"
+        android:textColor="@color/blue_background"
+        android:textSize="14sp" />
 
 </RelativeLayout>

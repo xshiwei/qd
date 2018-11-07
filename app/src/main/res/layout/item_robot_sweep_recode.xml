@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/y150"
+    android:layout_marginLeft="@dimen/x30"
+    android:layout_marginRight="@dimen/x30"
+    android:layout_marginTop="@dimen/y20"
+    android:background="@drawable/circle_white_five">
+
+    <ImageView
+        android:id="@+id/iv_state_pic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/x40"
+        android:src="@mipmap/robot_sweep_recode_pic"
+        tools:ignore="RtlHardcoded" />
+
+    <TextView
+        android:id="@+id/tv_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/x30"
+        android:layout_marginTop="@dimen/y30"
+        android:layout_toRightOf="@+id/iv_state_pic"
+        android:text="@string/robot_sweep_recode_example_time"
+        android:textColor="@color/home_setting_text"
+        android:textSize="15sp"
+        tools:ignore="RtlHardcoded" />
+
+    <TextView
+        android:id="@+id/tv_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/y35"
+        android:layout_marginLeft="@dimen/x30"
+        android:layout_toRightOf="@+id/iv_state_pic"
+        android:text="@string/robot_sweep_recode_example_content"
+        android:textSize="12sp"
+        tools:ignore="RtlHardcoded" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="@dimen/x10"
+        android:layout_toLeftOf="@+id/iv_more"
+        android:text="@string/robot_sweep_recode_map_details"
+        tools:ignore="RtlHardcoded" />
+
+    <ImageView
+        android:id="@+id/iv_more"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="@dimen/x30"
+        android:src="@mipmap/device_more_details"
+        tools:ignore="RtlHardcoded" />
+
+
+</RelativeLayout>

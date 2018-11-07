@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="@dimen/y130"
     android:background="@drawable/layout_seletor"
-    android:clickable="true">
+    android:clickable="true"
+    android:focusable="true">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/civ_portrait"
@@ -11,7 +13,8 @@
         android:layout_height="@dimen/y80"
         android:layout_centerVertical="true"
         android:layout_marginLeft="@dimen/x30"
-        android:src="@mipmap/user_portrait" />
+        android:src="@mipmap/user_portrait"
+        tools:ignore="RtlHardcoded" />
 
     <TextView
         android:id="@+id/tv_name"
@@ -21,7 +24,8 @@
         android:layout_marginTop="@dimen/y25"
         android:layout_toRightOf="@+id/civ_portrait"
         android:textColor="@color/home_setting_text"
-        android:textSize="14sp" />
+        android:textSize="14sp"
+        tools:ignore="RtlHardcoded" />
 
     <TextView
         android:id="@+id/tv_content"
@@ -32,7 +36,8 @@
         android:layout_marginLeft="@dimen/x20"
         android:layout_toRightOf="@+id/civ_portrait"
         android:textColor="@color/home_setting_text_two"
-        android:textSize="12sp" />
+        android:textSize="12sp"
+        tools:ignore="RtlHardcoded" />
 
     <TextView
         android:id="@+id/tv_receiver"
@@ -46,10 +51,11 @@
         android:paddingLeft="@dimen/x35"
         android:paddingRight="@dimen/x35"
         android:paddingTop="@dimen/y10"
-        android:text="接受"
+        android:text="@string/device_share_receiver_receiver"
         android:textColor="@color/add_home_background"
         android:textSize="14sp"
-        android:visibility="visible" />
+        android:visibility="visible"
+        tools:ignore="RtlHardcoded" />
 
     <TextView
         android:id="@+id/tv_already_receiver"
@@ -62,10 +68,11 @@
         android:paddingLeft="@dimen/x35"
         android:paddingRight="@dimen/x35"
         android:paddingTop="@dimen/y10"
-        android:text="已接受"
+        android:text="@string/device_share_receiver_already_receiver"
         android:textColor="@color/app_red_color"
         android:textSize="14sp"
-        android:visibility="gone" />
+        android:visibility="gone"
+        tools:ignore="RtlHardcoded" />
 
     <View
         android:layout_width="match_parent"

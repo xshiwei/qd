@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/home_manage_backgroud">
@@ -17,9 +18,9 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/x20"
         android:layout_marginTop="@dimen/y60"
-        android:contentDescription="TODO"
         android:padding="5dp"
-        android:src="@mipmap/actionbar_goback" />
+        android:src="@mipmap/actionbar_goback"
+        tools:ignore="RtlHardcoded" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -27,7 +28,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="@dimen/y60"
         android:padding="5dp"
-        android:text="设置房间"
+        android:text="@string/set_device_to_room_title"
         android:textColor="@color/home_setting_text"
         android:textSize="15sp" />
 
@@ -38,7 +39,8 @@
         android:layout_below="@+id/iv_device_pic"
         android:layout_marginTop="@dimen/y20"
         android:background="@drawable/layout_seletor"
-        android:clickable="true">
+        android:clickable="true"
+        android:focusable="true">
 
         <TextView
             android:id="@+id/tv_name_title"
@@ -46,9 +48,10 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:paddingLeft="@dimen/x30"
-            android:text="设备名称"
+            android:text="@string/set_device_to_room_device_name"
             android:textColor="@color/app_title"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            tools:ignore="RtlHardcoded" />
 
         <TextView
             android:id="@+id/tv_name"
@@ -62,7 +65,8 @@
             android:gravity="right|center"
             android:padding="5dp"
             android:textColor="@color/home_setting_text_two"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            tools:ignore="RtlHardcoded" />
 
         <ImageView
             android:id="@+id/iv_more"
@@ -71,14 +75,16 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/x30"
-            android:src="@mipmap/device_more_details" />
+            android:src="@mipmap/device_more_details"
+            tools:ignore="RtlHardcoded" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1px"
             android:layout_alignParentBottom="true"
             android:layout_marginLeft="@dimen/x50"
-            android:background="@color/black_16" />
+            android:background="@color/black_16"
+            tools:ignore="RtlHardcoded" />
 
     </RelativeLayout>
 
@@ -88,7 +94,8 @@
         android:layout_height="@dimen/y100"
         android:layout_below="@+id/rl_device_name"
         android:background="@drawable/layout_seletor"
-        android:clickable="true">
+        android:clickable="true"
+        android:focusable="true">
 
         <TextView
             android:id="@+id/tv_selete_room_title"
@@ -96,9 +103,10 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:paddingLeft="@dimen/x30"
-            android:text="选择设备所在位置"
+            android:text="@string/set_device_to_room_selete_device_location"
             android:textColor="@color/app_title"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            tools:ignore="RtlHardcoded" />
 
         <TextView
             android:id="@+id/tv_room_name"
@@ -111,9 +119,10 @@
             android:layout_toRightOf="@+id/tv_selete_room_title"
             android:gravity="right|center"
             android:padding="5dp"
-            android:text="默认房间"
+            android:text="@string/set_device_to_room_default_room"
             android:textColor="@color/home_setting_text_two"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            tools:ignore="RtlHardcoded" />
 
         <ImageView
             android:id="@+id/iv_more_two"
@@ -122,14 +131,16 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/x30"
-            android:src="@mipmap/device_more_details" />
+            android:src="@mipmap/device_more_details"
+            tools:ignore="RtlHardcoded" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1px"
             android:layout_alignParentBottom="true"
             android:layout_marginLeft="@dimen/x50"
-            android:background="@color/black_16" />
+            android:background="@color/black_16"
+            tools:ignore="RtlHardcoded" />
 
     </RelativeLayout>
 
@@ -145,8 +156,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/x30"
-            android:text="常用设备"
+            android:layout_marginStart="@dimen/x30"
+            android:text="@string/set_device_to_room_common_device"
             android:textColor="@color/app_title"
             android:textSize="14sp" />
 
@@ -158,14 +169,16 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/x20"
             android:padding="5dp"
-            android:src="@mipmap/register_selete" />
+            android:src="@mipmap/register_selete"
+            tools:ignore="RtlHardcoded" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1px"
             android:layout_alignParentBottom="true"
             android:layout_marginLeft="@dimen/x50"
-            android:background="@color/black_16" />
+            android:background="@color/black_16"
+            tools:ignore="RtlHardcoded" />
 
     </RelativeLayout>
 
@@ -179,7 +192,7 @@
         android:layout_marginRight="@dimen/x60"
         android:background="@drawable/popupwindow_edittext"
         android:gravity="center"
-        android:text="立即使用"
+        android:text="@string/set_device_to_room_complete"
         android:textColor="@color/add_capacity_text"
         android:textSize="14sp" />
 

@@ -1,6 +1,5 @@
 package com.qvd.smartswitch.activity.robot;
 
-import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -11,7 +10,6 @@ import com.qvd.smartswitch.activity.base.BaseActivity;
 import com.zcw.togglebutton.ToggleButton;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class RobotSettingDisturbanceModeActivity extends BaseActivity {
@@ -28,8 +26,6 @@ public class RobotSettingDisturbanceModeActivity extends BaseActivity {
     @BindView(R.id.rl_end_time)
     RelativeLayout rlEndTime;
 
-    private ToggleButton tlb_disturbance_mode;
-
     @Override
     protected int setLayoutId() {
         return R.layout.activity_robot_setting_disturbance_mode;
@@ -38,7 +34,7 @@ public class RobotSettingDisturbanceModeActivity extends BaseActivity {
     @Override
     protected void initData() {
         super.initData();
-        tlb_disturbance_mode = findViewById(R.id.tlb_disturbance_mode);
+        ToggleButton tlb_disturbance_mode = findViewById(R.id.tlb_disturbance_mode);
     }
 
     @Override

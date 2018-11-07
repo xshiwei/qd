@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/home_manage_backgroud"
@@ -17,15 +18,16 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/x30"
-            android:contentDescription="TODO"
-            android:src="@mipmap/user_message" />
+            android:padding="5dp"
+            android:src="@mipmap/user_message"
+            tools:ignore="RtlHardcoded" />
 
         <TextView
             android:id="@+id/tv_common_actionbar_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="我的"
+            android:text="@string/user_title"
             android:textColor="@color/app_title"
             android:textSize="15sp" />
 
@@ -37,15 +39,17 @@
         android:layout_height="@dimen/y200"
         android:layout_marginTop="@dimen/y30"
         android:background="@drawable/layout_seletor"
-        android:clickable="true">
+        android:clickable="true"
+        android:focusable="true">
 
-        <ImageView
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/iv_portrait"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/x120"
+            android:layout_height="@dimen/y120"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/x60"
-            android:src="@mipmap/user_portrait" />
+            android:src="@mipmap/user_portrait"
+            tools:ignore="RtlHardcoded" />
 
         <TextView
             android:id="@+id/tv_nickname"
@@ -55,7 +59,8 @@
             android:layout_marginTop="@dimen/y60"
             android:layout_toRightOf="@+id/iv_portrait"
             android:textColor="@color/home_setting_text"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            tools:ignore="RtlHardcoded" />
 
         <TextView
             android:id="@+id/tv_num"
@@ -66,7 +71,8 @@
             android:layout_marginLeft="@dimen/x30"
             android:layout_toRightOf="@+id/iv_portrait"
             android:textColor="@color/home_setting_text_three"
-            android:textSize="12sp" />
+            android:textSize="12sp"
+            tools:ignore="RtlHardcoded" />
 
         <ImageView
             android:layout_width="wrap_content"
@@ -74,7 +80,8 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/x30"
-            android:src="@mipmap/home_manage_right" />
+            android:src="@mipmap/home_manage_right"
+            tools:ignore="RtlHardcoded" />
 
     </RelativeLayout>
 
@@ -89,7 +96,8 @@
         android:layout_height="@dimen/y100"
         android:layout_marginTop="@dimen/y30"
         android:background="@drawable/layout_seletor"
-        android:clickable="true">
+        android:clickable="true"
+        android:focusable="true">
 
         <ImageView
             android:id="@+id/iv_family"
@@ -97,7 +105,8 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/x30"
-            android:src="@mipmap/user_message" />
+            android:src="@mipmap/user_family"
+            tools:ignore="RtlHardcoded" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -105,9 +114,10 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/x30"
             android:layout_toRightOf="@+id/iv_family"
-            android:text="我的家庭"
+            android:text="@string/user_my_family"
             android:textColor="@color/home_setting_text"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            tools:ignore="RtlHardcoded" />
 
         <ImageView
             android:layout_width="wrap_content"
@@ -115,13 +125,14 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/x30"
-            android:src="@mipmap/home_manage_right" />
+            android:src="@mipmap/home_manage_right"
+            tools:ignore="RtlHardcoded" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1px"
             android:layout_alignParentBottom="true"
-            android:layout_marginLeft="@dimen/x30"
+            android:layout_marginStart="@dimen/x30"
             android:background="@color/black_16" />
     </RelativeLayout>
 
@@ -130,7 +141,8 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/y100"
         android:background="@drawable/layout_seletor"
-        android:clickable="true">
+        android:clickable="true"
+        android:focusable="true">
 
         <ImageView
             android:id="@+id/iv_device_share"
@@ -138,7 +150,8 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/x30"
-            android:src="@mipmap/user_message" />
+            android:src="@mipmap/user_share"
+            tools:ignore="RtlHardcoded" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -146,9 +159,10 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/x30"
             android:layout_toRightOf="@+id/iv_device_share"
-            android:text="设备共享"
+            android:text="@string/user_device_share"
             android:textColor="@color/home_setting_text"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            tools:ignore="RtlHardcoded" />
 
         <ImageView
             android:layout_width="wrap_content"
@@ -156,14 +170,16 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/x30"
-            android:src="@mipmap/home_manage_right" />
+            android:src="@mipmap/home_manage_right"
+            tools:ignore="RtlHardcoded" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1px"
             android:layout_alignParentBottom="true"
             android:layout_marginLeft="@dimen/x30"
-            android:background="@color/black_16" />
+            android:background="@color/black_16"
+            tools:ignore="RtlHardcoded" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -171,7 +187,8 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/y100"
         android:background="@drawable/layout_seletor"
-        android:clickable="true">
+        android:clickable="true"
+        android:focusable="true">
 
         <ImageView
             android:id="@+id/iv_help"
@@ -179,7 +196,8 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/x30"
-            android:src="@mipmap/user_message" />
+            android:src="@mipmap/user_help"
+            tools:ignore="RtlHardcoded" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -187,9 +205,10 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/x30"
             android:layout_toRightOf="@+id/iv_help"
-            android:text="帮助与反馈"
+            android:text="@string/user_help_feedback"
             android:textColor="@color/home_setting_text"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            tools:ignore="RtlHardcoded" />
 
         <ImageView
             android:layout_width="wrap_content"
@@ -197,14 +216,16 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/x30"
-            android:src="@mipmap/home_manage_right" />
+            android:src="@mipmap/home_manage_right"
+            tools:ignore="RtlHardcoded" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1px"
             android:layout_alignParentBottom="true"
             android:layout_marginLeft="@dimen/x30"
-            android:background="@color/black_16" />
+            android:background="@color/black_16"
+            tools:ignore="RtlHardcoded" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -212,7 +233,8 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/y100"
         android:background="@drawable/layout_seletor"
-        android:clickable="true">
+        android:clickable="true"
+        android:focusable="true">
 
         <ImageView
             android:id="@+id/iv_setting"
@@ -220,7 +242,8 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/x30"
-            android:src="@mipmap/user_message" />
+            android:src="@mipmap/user_setting"
+            tools:ignore="RtlHardcoded" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -228,9 +251,10 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/x30"
             android:layout_toRightOf="@+id/iv_setting"
-            android:text="设置"
+            android:text="@string/user_setting"
             android:textColor="@color/home_setting_text"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            tools:ignore="RtlHardcoded" />
 
         <ImageView
             android:layout_width="wrap_content"
@@ -238,7 +262,8 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/x30"
-            android:src="@mipmap/home_manage_right" />
+            android:src="@mipmap/home_manage_right"
+            tools:ignore="RtlHardcoded" />
 
     </RelativeLayout>
 

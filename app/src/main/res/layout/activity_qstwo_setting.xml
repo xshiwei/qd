@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -15,16 +16,16 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/x20"
-            android:contentDescription="TODO"
             android:padding="5dp"
-            android:src="@mipmap/actionbar_goback" />
+            android:src="@mipmap/actionbar_goback"
+            tools:ignore="RtlHardcoded" />
 
         <TextView
             android:id="@+id/tv_common_actionbar_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="蓝牙智能开关"
+            android:text="@string/qstwo_setting_title"
             android:textColor="@color/app_title"
             android:textSize="15sp" />
 
@@ -35,10 +36,9 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/action_bar">
 
-
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:background="@color/white"
             android:orientation="vertical">
 
@@ -47,14 +47,14 @@
                 android:layout_height="@dimen/y100"
                 android:gravity="center|left"
                 android:paddingLeft="@dimen/x50"
-                android:text="@string/device_control_setting_function"
+                android:text="@string/qstwo_setting_use_notice"
                 android:textColor="@color/home_list_text"
-                android:textSize="12sp" />
+                android:textSize="12sp"
+                tools:ignore="RtlHardcoded" />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1px"
-                android:layout_alignParentBottom="true"
                 android:layout_marginLeft="@dimen/x50"
                 android:layout_marginRight="@dimen/x50"
                 android:background="@color/black_16" />
@@ -69,9 +69,10 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:paddingLeft="@dimen/x50"
-                    android:text="快速指南"
+                    android:text="@string/qstwo_setting_quick_tour"
                     android:textColor="@color/black"
-                    android:textSize="13sp" />
+                    android:textSize="13sp"
+                    tools:ignore="RtlHardcoded" />
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -79,8 +80,8 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="@dimen/x50"
-                    android:contentDescription="TODO"
-                    android:src="@mipmap/user_more_details" />
+                    android:src="@mipmap/user_more_details"
+                    tools:ignore="RtlHardcoded" />
 
                 <View
                     android:layout_width="match_parent"
@@ -101,8 +102,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:paddingLeft="@dimen/x50"
-                    android:text="常见问题"
+                    android:paddingStart="@dimen/x50"
+                    android:text="@string/qstwo_setting_common_question"
                     android:textColor="@color/black"
                     android:textSize="13sp" />
 
@@ -112,8 +113,8 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="@dimen/x50"
-                    android:contentDescription="TODO"
-                    android:src="@mipmap/user_more_details" />
+                    android:src="@mipmap/user_more_details"
+                    tools:ignore="RtlHardcoded" />
 
                 <View
                     android:layout_width="match_parent"
@@ -134,8 +135,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:paddingLeft="@dimen/x50"
-                    android:text="使用条款和隐私政策"
+                    android:paddingStart="@dimen/x50"
+                    android:text="@string/qstwo_setting_item_privacy"
                     android:textColor="@color/black"
                     android:textSize="13sp" />
 
@@ -145,8 +146,8 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="@dimen/x50"
-                    android:contentDescription="@string/todo"
-                    android:src="@mipmap/user_more_details" />
+                    android:src="@mipmap/user_more_details"
+                    tools:ignore="RtlHardcoded" />
 
                 <View
                     android:layout_width="match_parent"
@@ -168,8 +169,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:paddingLeft="@dimen/x50"
-                    android:text="反馈"
+                    android:paddingStart="@dimen/x50"
+                    android:text="@string/qstwo_setting_feedback"
                     android:textColor="@color/black"
                     android:textSize="13sp" />
 
@@ -179,8 +180,8 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="@dimen/x50"
-                    android:contentDescription="@string/todo"
-                    android:src="@mipmap/user_more_details" />
+                    android:src="@mipmap/user_more_details"
+                    tools:ignore="RtlHardcoded" />
 
                 <View
                     android:layout_width="match_parent"
@@ -203,9 +204,10 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:paddingLeft="@dimen/x50"
-                    android:text="关于"
+                    android:text="@string/qstwo_setting_about"
                     android:textColor="@color/black"
-                    android:textSize="13sp" />
+                    android:textSize="13sp"
+                    tools:ignore="RtlHardcoded" />
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -213,8 +215,8 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="@dimen/x50"
-                    android:contentDescription="@string/todo"
-                    android:src="@mipmap/user_more_details" />
+                    android:src="@mipmap/user_more_details"
+                    tools:ignore="RtlHardcoded" />
 
                 <View
                     android:layout_width="match_parent"
@@ -230,16 +232,15 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/y100"
-                android:gravity="center|left"
-                android:paddingLeft="@dimen/x50"
-                android:text="通用设置"
+                android:gravity="center|start"
+                android:paddingStart="@dimen/x50"
+                android:text="@string/qstwo_setting_general_setting"
                 android:textColor="@color/home_list_text"
                 android:textSize="12sp" />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1px"
-                android:layout_alignParentBottom="true"
                 android:layout_marginLeft="@dimen/x50"
                 android:layout_marginRight="@dimen/x50"
                 android:background="@color/black_16" />
@@ -253,8 +254,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:paddingLeft="@dimen/x50"
-                    android:text="重命名"
+                    android:paddingStart="@dimen/x50"
+                    android:text="@string/qstwo_setting_retry_name"
                     android:textColor="@color/black"
                     android:textSize="13sp" />
 
@@ -264,8 +265,8 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="@dimen/x50"
-                    android:contentDescription="TODO"
-                    android:src="@mipmap/user_more_details" />
+                    android:src="@mipmap/user_more_details"
+                    tools:ignore="RtlHardcoded" />
 
                 <View
                     android:layout_width="match_parent"
@@ -286,9 +287,10 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:paddingLeft="@dimen/x50"
-                    android:text="设备操作日志"
+                    android:text="@string/qstwo_setting_log"
                     android:textColor="@color/black"
-                    android:textSize="13sp" />
+                    android:textSize="13sp"
+                    tools:ignore="RtlHardcoded" />
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -296,8 +298,8 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="@dimen/x50"
-                    android:contentDescription="TODO"
-                    android:src="@mipmap/user_more_details" />
+                    android:src="@mipmap/user_more_details"
+                    tools:ignore="RtlHardcoded" />
 
                 <View
                     android:layout_width="match_parent"
@@ -319,9 +321,10 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:paddingLeft="@dimen/x50"
-                    android:text="设备共享"
+                    android:text="@string/qstwo_setting_device_share"
                     android:textColor="@color/black"
-                    android:textSize="13sp" />
+                    android:textSize="13sp"
+                    tools:ignore="RtlHardcoded" />
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -329,8 +332,8 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="@dimen/x50"
-                    android:contentDescription="TODO"
-                    android:src="@mipmap/user_more_details" />
+                    android:src="@mipmap/user_more_details"
+                    tools:ignore="RtlHardcoded" />
 
                 <View
                     android:layout_width="match_parent"
@@ -353,9 +356,10 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:paddingLeft="@dimen/x50"
-                    android:text="位置管理"
+                    android:text="@string/qstwo_setting_location_manage"
                     android:textColor="@color/black"
-                    android:textSize="13sp" />
+                    android:textSize="13sp"
+                    tools:ignore="RtlHardcoded" />
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -363,8 +367,8 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="@dimen/x50"
-                    android:contentDescription="TODO"
-                    android:src="@mipmap/user_more_details" />
+                    android:src="@mipmap/user_more_details"
+                    tools:ignore="RtlHardcoded" />
 
                 <View
                     android:layout_width="match_parent"
@@ -387,9 +391,10 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:paddingLeft="@dimen/x50"
-                    android:text="检查固件更新"
+                    android:text="@string/qstwo_setting_check_update"
                     android:textColor="@color/black"
-                    android:textSize="13sp" />
+                    android:textSize="13sp"
+                    tools:ignore="RtlHardcoded" />
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -397,8 +402,8 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="@dimen/x50"
-                    android:contentDescription="TODO"
-                    android:src="@mipmap/user_more_details" />
+                    android:src="@mipmap/user_more_details"
+                    tools:ignore="RtlHardcoded" />
 
                 <View
                     android:layout_width="match_parent"
@@ -421,9 +426,10 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:paddingLeft="@dimen/x50"
-                    android:text="删除设备"
+                    android:text="@string/qstwo_setting_delete_device"
                     android:textColor="@color/black"
-                    android:textSize="13sp" />
+                    android:textSize="13sp"
+                    tools:ignore="RtlHardcoded" />
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -431,8 +437,8 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="@dimen/x50"
-                    android:contentDescription="TODO"
-                    android:src="@mipmap/user_more_details" />
+                    android:src="@mipmap/user_more_details"
+                    tools:ignore="RtlHardcoded" />
 
                 <View
                     android:layout_width="match_parent"

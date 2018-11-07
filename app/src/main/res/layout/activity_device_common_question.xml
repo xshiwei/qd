@@ -19,9 +19,9 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/x30"
+            android:layout_marginStart="@dimen/x30"
             android:layout_marginTop="@dimen/y40"
-            android:text="常见问题"
+            android:text="@string/device_common_question_common_question"
             android:textColor="@color/home_setting_text_two"
             android:textSize="13sp"
             android:textStyle="bold" />
@@ -63,7 +63,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/iv_one"
             android:layout_centerHorizontal="true"
-            android:text="反馈问题"
+            android:text="@string/device_common_question_feedback_question"
             android:textColor="@color/home_setting_text"
             android:textSize="12sp" />
     </RelativeLayout>

@@ -6,6 +6,7 @@ import android.text.TextUtils;
 
 import com.clj.fastble.BleManager;
 import com.clj.fastble.scan.BleScanRuleConfig;
+import com.qvd.smartswitch.MyApplication;
 
 import java.util.UUID;
 
@@ -18,7 +19,7 @@ public class BleManageUtils {
     private BleManageUtils() {
     }
 
-    public static final BleManageUtils getInstance() {
+    public static BleManageUtils getInstance() {
         return BleManageUtilsHolder.INSTANCE;
     }
 
@@ -28,11 +29,11 @@ public class BleManageUtils {
     public void initBleManage() {
         BleManager.getInstance()
                 .enableLog(true)
-                .setReConnectCount(5, 5000)//设置重连次数以及相隔时间
+//                .setReConnectCount(2, 2000)//设置重连次数以及相隔时间
                 .setSplitWriteNum(20)//设置分包发送的默认字节数
                 .setMaxConnectCount(7)//设置最大连接数
-                .setOperateTimeout(4000)//设置操作超时时间
-                .setConnectOverTime(6000);//设置连接超时时间
+                .setOperateTimeout(5000)//设置操作超时时间
+                .setConnectOverTime(20000);//设置连接超时时间
     }
 
     /**
@@ -83,11 +84,9 @@ public class BleManageUtils {
      *
      * @return
      */
-    public boolean checkGPSIsOpen(Context context) {
-        LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-        if (locationManager == null)
-            return false;
-        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+    public boolean checkGPSIsOpen() {
+        LocationManager locationManager = (LocationManager) MyApplication.getContext().getSystemService(Context.LOCATION_SERVICE);
+        return locationManager != null && locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
     }
 
 
@@ -98,6 +97,5 @@ public class BleManageUtils {
         BleManager.getInstance().disconnectAllDevice();
         BleManager.getInstance().destroy();
     }
-
 
 }

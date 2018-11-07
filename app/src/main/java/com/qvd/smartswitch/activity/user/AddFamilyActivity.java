@@ -1,6 +1,5 @@
 package com.qvd.smartswitch.activity.user;
 
-import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -17,14 +16,12 @@ import com.qvd.smartswitch.utils.RegexpUtils;
 import com.qvd.smartswitch.utils.ToastUtil;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.ObservableSource;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Function;
-import io.reactivex.functions.Predicate;
 import io.reactivex.schedulers.Schedulers;
 
 public class AddFamilyActivity extends BaseActivity {
@@ -48,7 +45,7 @@ public class AddFamilyActivity extends BaseActivity {
     @Override
     protected void initData() {
         super.initData();
-        tvCommonActionbarTitle.setText("添加家人");
+        tvCommonActionbarTitle.setText(R.string.add_family_title);
         String name = getIntent().getStringExtra("name");
         etInputRelation.setText(name + "");
     }
@@ -82,18 +79,8 @@ public class AddFamilyActivity extends BaseActivity {
         RetrofitService.qdoApi.getAddShareObjectUserInfo(etInputAccount.getText().toString())
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
-                .filter(new Predicate<ShareObjectInfoVo>() {
-                    @Override
-                    public boolean test(ShareObjectInfoVo shareObjectInfoVo) throws Exception {
-                        return shareObjectInfoVo.getCode() == 200;
-                    }
-                })
-                .flatMap(new Function<ShareObjectInfoVo, ObservableSource<MessageVo>>() {
-                    @Override
-                    public ObservableSource<MessageVo> apply(ShareObjectInfoVo shareObjectInfoVo) throws Exception {
-                        return RetrofitService.qdoApi.addFamilyMember(ConfigUtils.user_id, shareObjectInfoVo.getData().getUser_id(), etInputRelation.getText().toString());
-                    }
-                })
+                .filter(shareObjectInfoVo -> shareObjectInfoVo.getCode() == 200)
+                .flatMap((Function<ShareObjectInfoVo, ObservableSource<MessageVo>>) shareObjectInfoVo -> RetrofitService.qdoApi.addFamilyMember(ConfigUtils.user_id, shareObjectInfoVo.getData().getUser_id(), etInputRelation.getText().toString()))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<MessageVo>() {
                     @Override
@@ -103,15 +90,20 @@ public class AddFamilyActivity extends BaseActivity {
 
                     @Override
                     public void onNext(MessageVo messageVo) {
-                        if (messageVo.getCode() == 200) {
-                            ToastUtil.showToast("发送邀请成功");
-                            finish();
-                        } else if (messageVo.getCode() == 203) {
-                            ToastUtil.showToast("不能添加自己");
-                        } else if (messageVo.getCode() == 205) {
-                            ToastUtil.showToast("该账号已发送邀请");
-                        } else {
-                            ToastUtil.showToast("发送邀请失败");
+                        switch (messageVo.getCode()) {
+                            case 200:
+                                ToastUtil.showToast(getString(R.string.add_family_send_invite_success));
+                                finish();
+                                break;
+                            case 203:
+                                ToastUtil.showToast(getString(R.string.add_family_not_add_self));
+                                break;
+                            case 205:
+                                ToastUtil.showToast(getString(R.string.add_family_the_account_be_send_invite));
+                                break;
+                            default:
+                                ToastUtil.showToast(getString(R.string.add_family_send_invite_fail));
+                                break;
                         }
                     }
 
@@ -136,13 +128,13 @@ public class AddFamilyActivity extends BaseActivity {
         boolean b = false;
         if (CommonUtils.isEmptyString(etInputRelation.getText().toString())) {
             b = true;
-            ToastUtil.showToast("家人名称不能为空");
+            ToastUtil.showToast(getString(R.string.add_family_family_name_not_empty));
         } else if (CommonUtils.isEmptyString(etInputAccount.getText().toString())) {
             b = true;
-            ToastUtil.showToast("家人账号不能为空");
+            ToastUtil.showToast(getString(R.string.add_family_account_not_empty));
         } else if (!RegexpUtils.isEmailNO(etInputAccount.getText().toString()) && !RegexpUtils.isMobileNO(etInputAccount.getText().toString()) && etInputAccount.getText().toString().length() != 10) {
             b = true;
-            ToastUtil.showToast("账号格式不正确");
+            ToastUtil.showToast(getString(R.string.add_family_account_type_not_correct));
         }
         return b;
     }

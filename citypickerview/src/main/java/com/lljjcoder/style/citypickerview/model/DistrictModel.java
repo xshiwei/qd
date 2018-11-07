@@ -1,6 +1,6 @@
 package com.lljjcoder.style.citypickerview.model;
 
-public class DistrictModel {
+class DistrictModel {
 	private String name;
 	private String zipcode;
 	

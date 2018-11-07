@@ -6,30 +6,27 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.bluetooth.BluetoothGatt;
 import android.content.Context;
-import android.content.res.TypedArray;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
-import android.hardware.input.InputManager;
 import android.os.Build;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresPermission;
 import android.support.v4.graphics.drawable.DrawableCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.telephony.TelephonyManager;
-import android.util.TypedValue;
 import android.view.View;
-import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.clj.fastble.BleManager;
 import com.clj.fastble.callback.BleGattCallback;
-import com.clj.fastble.callback.BleNotifyCallback;
 import com.clj.fastble.data.BleDevice;
 import com.clj.fastble.exception.BleException;
-import com.clj.fastble.utils.HexUtil;
-import com.orhanobut.logger.Logger;
+import com.qvd.smartswitch.MyApplication;
 import com.qvd.smartswitch.R;
+import com.qvd.smartswitch.activity.login.LoginActivity;
 import com.qvd.smartswitch.api.RetrofitService;
 import com.qvd.smartswitch.model.login.MessageVo;
 import com.trello.rxlifecycle2.android.ActivityEvent;
@@ -40,13 +37,13 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 import static android.Manifest.permission.READ_PHONE_STATE;
@@ -96,7 +93,7 @@ public class CommonUtils {
      */
     public static List<String> getTiming(int hour, int minute) {
         List<String> date = new ArrayList<>();
-        String strHours = "", strMinutes = "";
+        String strHours, strMinutes;
         String t = "false";
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
@@ -163,45 +160,39 @@ public class CommonUtils {
         Observable.interval(3, 3, TimeUnit.SECONDS)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .compose(activity.<Long>bindUntilEvent(ActivityEvent.DESTROY))
-                .subscribe(new Consumer<Long>() {
-                    @Override
-                    public void accept(Long aLong) throws Exception {
-                        if (!BleManager.getInstance().isConnected(bleDevice)) {
-                            dialog.show();
-                            dialog.setMessage("设备已断开，正在进行重连");
-                            BleManager.getInstance().connect(bleDevice.getMac(), new BleGattCallback() {
-                                @Override
-                                public void onStartConnect() {
+                .compose(activity.bindUntilEvent(ActivityEvent.DESTROY))
+                .subscribe(aLong -> {
+                    if (!BleManager.getInstance().isConnected(bleDevice)) {
+                        dialog.show();
+                        dialog.setMessage("设备已断开，正在进行重连");
+                        BleManager.getInstance().connect(bleDevice.getMac(), new BleGattCallback() {
+                            @Override
+                            public void onStartConnect() {
 
+                            }
+
+                            @Override
+                            public void onConnectFail(BleDevice bleDevice1, BleException exception) {
+                                final BluetoothGatt bluetoothGatt = BleManager.getInstance().getBluetoothGatt(bleDevice1);
+                                if (bluetoothGatt != null) {
+                                    new Handler().postDelayed(() -> {
+                                        bluetoothGatt.disconnect();
+                                        bluetoothGatt.close();
+                                    }, 100);
                                 }
+                            }
 
-                                @Override
-                                public void onConnectFail(BleDevice bleDevice, BleException exception) {
-                                    final BluetoothGatt bluetoothGatt = BleManager.getInstance().getBluetoothGatt(bleDevice);
-                                    if (bluetoothGatt != null) {
-                                        new Handler().postDelayed(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                bluetoothGatt.disconnect();
-                                                bluetoothGatt.close();
-                                            }
-                                        }, 100);
-                                    }
-                                }
+                            @Override
+                            public void onConnectSuccess(BleDevice bleDevice1, BluetoothGatt gatt, int status) {
+                                dialog.dismiss();
+                                SnackbarUtils.Short(view, "连接成功").show();
+                            }
 
-                                @Override
-                                public void onConnectSuccess(BleDevice bleDevice, BluetoothGatt gatt, int status) {
-                                    dialog.dismiss();
-                                    SnackbarUtils.Short(view, "连接成功").show();
-                                }
+                            @Override
+                            public void onDisConnected(boolean isActiveDisConnected, BleDevice device, BluetoothGatt gatt, int status) {
 
-                                @Override
-                                public void onDisConnected(boolean isActiveDisConnected, BleDevice device, BluetoothGatt gatt, int status) {
-
-                                }
-                            });
-                        }
+                            }
+                        });
                     }
                 });
     }
@@ -210,15 +201,11 @@ public class CommonUtils {
      * 关闭软键盘
      */
     public static void closeSoftKeyboard(Activity activity) {
-        /**
-         * 设置输入法,如果当前页面输入法打开则关闭
-         * @param activity
-         */
         View a = activity.getCurrentFocus();
         if (a != null) {
             InputMethodManager imm = (InputMethodManager) activity.getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
             try {
-                imm.hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                Objects.requireNonNull(imm).hideSoftInputFromWindow(activity.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -334,6 +321,7 @@ public class CommonUtils {
 
     /**
      * 获取分享后对象是否接受的状态
+     *
      * @param i
      * @return
      */
@@ -345,4 +333,44 @@ public class CommonUtils {
         }
     }
 
+    /**
+     * 截取字符串
+     *
+     * @param s
+     * @return
+     */
+    public static String cutDeviceName(String s) {
+        String[] split = s.split("-");
+        return split[0];
+    }
+
+    /**
+     * 跳转页面，如果没有登录就跳出弹窗提示用户登录
+     * @param userId
+     * @param packageContext
+     * @param cls
+     */
+    public static void startIntentLogin(String userId, Context packageContext, Class<?> cls) {
+        if (CommonUtils.isEmptyString(userId)) {
+            new MaterialDialog.Builder(packageContext)
+                    .content("需要登录才能使用，是否现在登录？")
+                    .negativeText("取消")
+                    .positiveText("确定")
+                    .onPositive((dialog, which) -> {
+                        packageContext.startActivity(new Intent(packageContext, LoginActivity.class));
+                        Objects.requireNonNull((Activity) packageContext).overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+                    }).show();
+        } else {
+            packageContext.startActivity(new Intent(packageContext, cls));
+            Objects.requireNonNull((Activity) packageContext).overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+        }
+    }
+
+    /**
+     * 跳转页面动画
+     * @param packageContext
+     */
+    public static void startIntentAnim(Context packageContext){
+        Objects.requireNonNull((Activity) packageContext).overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+    }
 }

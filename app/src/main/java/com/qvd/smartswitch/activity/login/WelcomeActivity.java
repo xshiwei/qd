@@ -4,7 +4,6 @@ import android.os.Bundle;
 
 import com.qvd.smartswitch.R;
 import com.qvd.smartswitch.utils.PermissionUtils;
-import com.qvd.smartswitch.utils.SysApplication;
 import com.stephentuso.welcome.BasicPage;
 import com.stephentuso.welcome.ParallaxPage;
 import com.stephentuso.welcome.WelcomeConfiguration;
@@ -15,8 +14,6 @@ public class WelcomeActivity extends com.stephentuso.welcome.WelcomeActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        SysApplication.getInstance().addActivity(this);
-//        PermissionUtils.requestPermission(this, Permission.READ_PHONE_STATE);
         PermissionUtils.requestPermission(this, Permission.Group.LOCATION);
         PermissionUtils.requestPermission(this, Permission.Group.STORAGE);
     }
@@ -54,12 +51,5 @@ public class WelcomeActivity extends com.stephentuso.welcome.WelcomeActivity {
                 .swipeToDismiss(true)
                 .exitAnimation(android.R.anim.fade_out)
                 .build();
-
-
     }
-
-    public static String welcomeKey() {
-        return "WelcomeScreen";
-    }
-
 }

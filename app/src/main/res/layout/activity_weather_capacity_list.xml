@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/home_manage_backgroud"
@@ -16,14 +17,17 @@
         android:clickable="true"
         android:gravity="center_vertical"
         android:paddingLeft="@dimen/x30"
-        android:text="日出时"
-        android:textColor="@color/add_capacity_text" />
+        android:text="@string/weather_capacity_start"
+        android:textColor="@color/add_capacity_text"
+        tools:ignore="RtlHardcoded"
+        android:focusable="true" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:layout_marginLeft="@dimen/x30"
-        android:background="@color/black_16" />
+        android:background="@color/black_16"
+        tools:ignore="RtlHardcoded" />
 
     <TextView
         android:id="@+id/tv_end"
@@ -33,8 +37,10 @@
         android:clickable="true"
         android:gravity="center_vertical"
         android:paddingLeft="@dimen/x30"
-        android:text="日落时"
-        android:textColor="@color/add_capacity_text" />
+        android:text="@string/weather_capacity_end"
+        android:textColor="@color/add_capacity_text"
+        tools:ignore="RtlHardcoded"
+        android:focusable="true" />
 
 
 </LinearLayout>

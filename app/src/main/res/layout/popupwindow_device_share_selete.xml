@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/circle_white_five"
@@ -10,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="@dimen/y30"
-        android:text="共享设备使用权限"
+        android:text="@string/popupwindow_device_share_selete_title"
         android:textColor="@color/home_setting_text"
         android:textSize="15sp" />
 
@@ -31,7 +32,8 @@
             android:layout_height="@dimen/y40"
             android:layout_marginLeft="@dimen/x20"
             android:layout_marginTop="@dimen/y20"
-            android:src="@mipmap/device_share_object_selete_more" />
+            android:src="@mipmap/device_share_object_selete_more"
+            tools:ignore="RtlHardcoded" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -40,9 +42,10 @@
             android:layout_marginTop="@dimen/y20"
             android:layout_toRightOf="@+id/iv_one"
             android:gravity="center"
-            android:text="允许控制"
+            android:text="@string/popupwindow_device_share_selete_allow_control"
             android:textColor="@color/home_setting_text"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            tools:ignore="RtlHardcoded" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -51,9 +54,10 @@
             android:layout_marginBottom="@dimen/y20"
             android:layout_marginLeft="@dimen/x20"
             android:layout_toRightOf="@+id/iv_one"
-            android:text="可浏览设备信息并可控制设备"
+            android:text="@string/popupwindow_device_share_selete_text_one"
             android:textColor="@color/home_setting_text_two"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            tools:ignore="RtlHardcoded" />
     </RelativeLayout>
 
     <View
@@ -73,7 +77,8 @@
             android:layout_marginLeft="@dimen/x20"
             android:layout_marginTop="@dimen/y20"
             android:src="@mipmap/device_share_object_selete_more"
-            android:visibility="invisible" />
+            android:visibility="invisible"
+            tools:ignore="RtlHardcoded" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -82,9 +87,10 @@
             android:layout_marginTop="@dimen/y20"
             android:layout_toRightOf="@+id/iv_two"
             android:gravity="center"
-            android:text="仅可查看"
+            android:text="@string/popupwindow_device_share_selete_just_look"
             android:textColor="@color/home_setting_text"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            tools:ignore="RtlHardcoded" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -93,9 +99,10 @@
             android:layout_marginBottom="@dimen/y20"
             android:layout_marginLeft="@dimen/x20"
             android:layout_toRightOf="@+id/iv_two"
-            android:text="可浏览设备不可控制设备"
+            android:text="@string/popupwindow_device_share_selete_text_two"
             android:textColor="@color/home_setting_text_two"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            tools:ignore="RtlHardcoded" />
     </RelativeLayout>
 
 

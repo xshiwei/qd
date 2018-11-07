@@ -1,7 +1,6 @@
 package com.qvd.smartswitch.activity.device;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -16,7 +15,6 @@ import com.qvd.smartswitch.utils.CommonUtils;
 import com.qvd.smartswitch.utils.ToastUtil;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -53,7 +51,7 @@ public class DeviceShareQevdoAccountActivity extends BaseActivity {
         deviceId = getIntent().getStringExtra("device_id");
         device_type = getIntent().getStringExtra("device_type");
         is_control = getIntent().getIntExtra("is_control", -1);
-        tvCommonActionbarTitle.setText("共享给科微多账号");
+        tvCommonActionbarTitle.setText(R.string.device_share_qevdo_account_title);
         tvName.setText(CommonUtils.getDeviceName(device_type));
     }
 
@@ -71,7 +69,7 @@ public class DeviceShareQevdoAccountActivity extends BaseActivity {
                 break;
             case R.id.tv_confirm:
                 if (CommonUtils.isEmptyString(etAccount.getText().toString())) {
-                    ToastUtil.showToast("账号不能为空");
+                    ToastUtil.showToast(getString(R.string.device_share_qevdo_account_not_empty));
                 } else {
                     getShareObjectInfo();
                 }
@@ -110,7 +108,7 @@ public class DeviceShareQevdoAccountActivity extends BaseActivity {
                                 overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
                                 finish();
                             } else {
-                                ToastUtil.showToast("没有找到对应的用户");
+                                ToastUtil.showToast(getString(R.string.device_share_qevdo_account_not_find_user));
                             }
                         }
                     }

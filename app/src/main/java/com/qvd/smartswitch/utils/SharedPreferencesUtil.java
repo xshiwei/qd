@@ -14,6 +14,7 @@ public class SharedPreferencesUtil {
     public static final String IDENTIFIER = "identifier";
     public static final String PASSWORD = "password";
     public static final String IS_HOME = "is_home";
+    public static final String KEY_APP_LANGUAGE = "app_language";
 
     /**
      * 获取是否第一次进入app
@@ -43,7 +44,7 @@ public class SharedPreferencesUtil {
                 spFileName, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = activityPreferences.edit();
         editor.putBoolean(strKey, strData);
-        editor.commit();
+        editor.apply();
     }
 
     /**
@@ -57,7 +58,7 @@ public class SharedPreferencesUtil {
         SharedPreferences sharedPreferences = context.getSharedPreferences(spFileName, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(strKey, strData);
-        editor.commit();
+        editor.apply();
     }
 
     /**
@@ -70,5 +71,10 @@ public class SharedPreferencesUtil {
     public static String getString(Context context, String strKey) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(spFileName, Context.MODE_PRIVATE);
         return sharedPreferences.getString(strKey, "");
+    }
+
+    public static String getString(Context context, String strKey, String s) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(spFileName, Context.MODE_PRIVATE);
+        return sharedPreferences.getString(strKey, s);
     }
 }

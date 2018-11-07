@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="@dimen/y200"
     android:background="@drawable/layout_seletor">
@@ -10,7 +11,8 @@
         android:layout_marginLeft="@dimen/x30"
         android:layout_marginTop="@dimen/y30"
         android:text="向手机发送通知"
-        android:textColor="@color/home_setting_text" />
+        android:textColor="@color/home_setting_text"
+        tools:ignore="RtlHardcoded" />
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/iv_one"
@@ -19,7 +21,8 @@
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="@dimen/y30"
         android:layout_marginLeft="@dimen/x40"
-        android:src="@color/black6" />
+        android:src="@color/black6"
+        tools:ignore="RtlHardcoded" />
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/iv_two"
@@ -29,7 +32,8 @@
         android:layout_marginBottom="@dimen/y40"
         android:layout_marginLeft="@dimen/x30"
         android:layout_toRightOf="@+id/iv_one"
-        android:src="@color/red" />
+        android:src="@color/red"
+        tools:ignore="RtlHardcoded" />
 
     <TextView
         android:id="@+id/tv_execute"
@@ -46,13 +50,15 @@
         android:paddingTop="@dimen/y15"
         android:text="执行"
         android:textColor="@color/capacity_tablayout_text_two"
-        android:textSize="14sp" />
+        android:textSize="14sp"
+        tools:ignore="RtlHardcoded" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:layout_alignParentBottom="true"
         android:layout_marginLeft="@dimen/x30"
-        android:background="@color/black_16" />
+        android:background="@color/black_16"
+        tools:ignore="RtlHardcoded" />
 
 </RelativeLayout>

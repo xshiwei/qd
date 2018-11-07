@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/home_manage_backgroud"
@@ -19,9 +20,10 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/x30"
-            android:text="使用条款"
+            android:text="@string/device_item_privacy_use_item"
             android:textColor="@color/home_setting_text"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            tools:ignore="RtlHardcoded" />
 
         <ImageView
             android:layout_width="wrap_content"
@@ -29,7 +31,8 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/x30"
-            android:src="@mipmap/device_more_details" />
+            android:src="@mipmap/device_more_details"
+            tools:ignore="RtlHardcoded" />
 
     </RelativeLayout>
 
@@ -37,7 +40,8 @@
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:layout_marginLeft="@dimen/x30"
-        android:background="@drawable/layout_seletor" />
+        android:background="@drawable/layout_seletor"
+        tools:ignore="RtlHardcoded" />
 
     <RelativeLayout
         android:id="@+id/rl_privacy"
@@ -49,8 +53,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/x30"
-            android:text="隐私政策"
+            android:layout_marginStart="@dimen/x30"
+            android:text="@string/device_item_privacy_privacy"
             android:textColor="@color/home_setting_text"
             android:textSize="14sp" />
 
@@ -60,7 +64,8 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/x30"
-            android:src="@mipmap/device_more_details" />
+            android:src="@mipmap/device_more_details"
+            tools:ignore="RtlHardcoded" />
 
     </RelativeLayout>
 
@@ -71,7 +76,7 @@
         android:layout_marginTop="@dimen/y30"
         android:background="@drawable/layout_seletor"
         android:gravity="center"
-        android:text="撤销“使用条款和隐私政策”授权"
+        android:text="@string/device_item_privacy_delete"
         android:textColor="@color/app_red_color"
         android:textSize="14sp" />
 </LinearLayout>

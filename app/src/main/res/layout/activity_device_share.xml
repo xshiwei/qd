@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/home_manage_backgroud"
@@ -16,9 +17,9 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/x20"
-            android:contentDescription="TODO"
             android:padding="5dp"
-            android:src="@mipmap/actionbar_goback" />
+            android:src="@mipmap/actionbar_goback"
+            tools:ignore="RtlHardcoded" />
 
         <TextView
             android:id="@+id/tv_common_actionbar_title"
@@ -32,13 +33,13 @@
             android:id="@+id/tv_manger"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="@dimen/x30"
+            android:layout_marginEnd="@dimen/x30"
             android:padding="5dp"
-            android:text="管理"
+            android:text="@string/device_share_manage"
             android:textColor="@color/add_home_background"
-            android:textSize="14sp" />
+            android:textSize="15sp" />
     </RelativeLayout>
 
     <LinearLayout
@@ -48,23 +49,26 @@
         android:layout_height="@dimen/y110"
         android:layout_marginTop="@dimen/y20"
         android:background="@drawable/layout_seletor"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:focusable="true">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="@dimen/x50"
-            android:src="@mipmap/user_portrait_message" />
+            android:src="@mipmap/user_portrait_message"
+            tools:ignore="RtlHardcoded" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:paddingLeft="@dimen/x30"
-            android:text="共享给科微多账号"
+            android:text="@string/device_share_qevdo_account"
             android:textColor="@color/home_setting_text"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            tools:ignore="RtlHardcoded" />
 
     </LinearLayout>
 
@@ -72,7 +76,8 @@
         android:layout_width="match_parent"
         android:layout_height="1px"
         android:layout_marginLeft="@dimen/x50"
-        android:background="@color/popupwindow_edittext" />
+        android:background="@color/popupwindow_edittext"
+        tools:ignore="RtlHardcoded" />
 
     <LinearLayout
         android:id="@+id/ll_family"
@@ -80,21 +85,23 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/y110"
         android:background="@drawable/layout_seletor"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:focusable="true">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="@dimen/x50"
-            android:src="@mipmap/user_portrait_message" />
+            android:src="@mipmap/user_portrait_message"
+            tools:ignore="RtlHardcoded" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
-            android:paddingLeft="@dimen/x30"
-            android:text="共享给我的家人"
+            android:paddingStart="@dimen/x30"
+            android:text="@string/device_share_my_family"
             android:textColor="@color/home_setting_text"
             android:textSize="14sp" />
 
@@ -112,15 +119,17 @@
             android:background="@color/white"
             android:gravity="center_vertical"
             android:paddingLeft="@dimen/x50"
-            android:text="最近"
+            android:text="@string/device_share_recently"
             android:textColor="@color/home_setting_text_two"
-            android:textSize="13sp" />
+            android:textSize="13sp"
+            tools:ignore="RtlHardcoded" />
 
         <View
             android:layout_width="match_parent"
             android:layout_height="3px"
             android:layout_marginLeft="@dimen/x50"
-            android:background="@color/popupwindow_edittext" />
+            android:background="@color/popupwindow_edittext"
+            tools:ignore="RtlHardcoded" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recyclerview"

@@ -20,7 +20,7 @@
         android:layout_centerHorizontal="true"
         android:gravity="center"
         android:padding="5dp"
-        android:text="正在加载"
+        android:text="@string/recycleview_loading_loading"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@color/home_setting_text_two"
         android:textSize="12sp" />

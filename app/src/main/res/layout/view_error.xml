@@ -22,11 +22,9 @@
         android:id="@+id/buttonError"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/y50"
-        android:layout_below="@+id/textViewMessage"
-        android:layout_centerHorizontal="true"
         android:layout_marginTop="@dimen/y10"
         android:background="@color/add_device_selete"
-        android:text="重新加载"
+        android:text="@string/view_error_retry_loading"
         android:textColor="@color/white"
         android:textSize="14sp" />
 

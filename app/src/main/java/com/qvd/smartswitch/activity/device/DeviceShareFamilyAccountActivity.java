@@ -1,14 +1,11 @@
 package com.qvd.smartswitch.activity.device;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.qvd.smartswitch.R;
 import com.qvd.smartswitch.activity.base.BaseActivity;
 import com.qvd.smartswitch.activity.user.UserFamilyActivity;
@@ -19,9 +16,7 @@ import com.qvd.smartswitch.model.user.FamilyListVo;
 import com.qvd.smartswitch.model.user.RecentSharePeopleListVo;
 import com.qvd.smartswitch.utils.ConfigUtils;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
-import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.header.ClassicsHeader;
-import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +39,7 @@ public class DeviceShareFamilyAccountActivity extends BaseActivity {
     SmartRefreshLayout refreshLayout;
 
     private FamilyAccountListAdapter adapter;
-    private List<FamilyListCommonVo> list = new ArrayList<>();
+    private final List<FamilyListCommonVo> list = new ArrayList<>();
     private String device_id;
     private String device_type;
 
@@ -56,7 +51,7 @@ public class DeviceShareFamilyAccountActivity extends BaseActivity {
     @Override
     protected void initData() {
         super.initData();
-        tvCommonActionbarTitle.setText("共享给我的家人");
+        tvCommonActionbarTitle.setText(R.string.device_share_family_account_title);
         device_id = getIntent().getStringExtra("device_id");
         device_type = getIntent().getStringExtra("device_type");
         recyclerview.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
@@ -65,48 +60,31 @@ public class DeviceShareFamilyAccountActivity extends BaseActivity {
         adapter.isFirstOnly(false);
         recyclerview.setAdapter(adapter);
 
-        myEmptyLayout.setTextViewMessage("您还未添加家人，点击去添加");
-        myEmptyLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(DeviceShareFamilyAccountActivity.this, UserFamilyActivity.class));
-                overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
-            }
+        myEmptyLayout.setTextViewMessage(getString(R.string.device_share_family_account_empty));
+        myEmptyLayout.setOnClickListener(v -> {
+            startActivity(new Intent(DeviceShareFamilyAccountActivity.this, UserFamilyActivity.class));
+            overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
         });
-        myErrorLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getData();
-            }
-        });
+        myErrorLayout.setOnClickListener(v -> getData());
 
         refreshLayout.setHeaderHeight(100);
         refreshLayout.setEnableHeaderTranslationContent(true);
         refreshLayout.setRefreshHeader(new ClassicsHeader(this));
-        refreshLayout.setOnRefreshListener(new OnRefreshListener() {
-            @Override
-            public void onRefresh(RefreshLayout refreshlayout) {
-                getData();
-                refreshLayout.finishRefresh(1500, true);
-            }
-        });
+        refreshLayout.setOnRefreshListener(refreshlayout -> getData());
 
-        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                FamilyListCommonVo commonVo = list.get(position);
-                RecentSharePeopleListVo.DataBean dataBean = new RecentSharePeopleListVo.DataBean();
-                dataBean.setShare_object_userid(commonVo.getFamily_userid());
-                dataBean.setUser_avatar(commonVo.getFamily_avatar());
-                dataBean.setUser_name(commonVo.getFamily_name());
-                startActivity(new Intent(DeviceShareFamilyAccountActivity.this, DeviceShareQevdoAccountFinallyActivity.class)
-                        .putExtra("person_info", dataBean)
-                        .putExtra("is_control", 1)
-                        .putExtra("device_id", device_id)
-                        .putExtra("device_type", device_type)
-                        .putExtra("type", 1));
-                overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
-            }
+        adapter.setOnItemClickListener((adapter, view, position) -> {
+            FamilyListCommonVo commonVo = list.get(position);
+            RecentSharePeopleListVo.DataBean dataBean = new RecentSharePeopleListVo.DataBean();
+            dataBean.setShare_object_userid(commonVo.getFamily_userid());
+            dataBean.setUser_avatar(commonVo.getFamily_avatar());
+            dataBean.setUser_name(commonVo.getFamily_name());
+            startActivity(new Intent(DeviceShareFamilyAccountActivity.this, DeviceShareQevdoAccountFinallyActivity.class)
+                    .putExtra("person_info", dataBean)
+                    .putExtra("is_control", 1)
+                    .putExtra("device_id", device_id)
+                    .putExtra("device_type", device_type)
+                    .putExtra("type", 1));
+            overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
         });
 
         getData();
@@ -129,6 +107,7 @@ public class DeviceShareFamilyAccountActivity extends BaseActivity {
                     @Override
                     public void onNext(FamilyListVo familyListVo) {
                         if (familyListVo.getCode() == 200) {
+                            refreshLayout.finishRefresh(true);
                             list.clear();
                             if (familyListVo.getData() != null) {
                                 List<FamilyListVo.DataBean.MasterFamilyMembersBean> master_family_members = familyListVo.getData().getMaster_family_members();

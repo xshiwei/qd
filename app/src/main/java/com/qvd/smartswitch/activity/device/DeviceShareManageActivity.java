@@ -1,8 +1,6 @@
 package com.qvd.smartswitch.activity.device;
 
 import android.content.Intent;
-import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -10,30 +8,23 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.qvd.smartswitch.R;
 import com.qvd.smartswitch.activity.base.BaseActivity;
 import com.qvd.smartswitch.adapter.DeviceShareManageListAdapter;
 import com.qvd.smartswitch.api.RetrofitService;
 import com.qvd.smartswitch.model.login.MessageVo;
 import com.qvd.smartswitch.model.user.DeviceShareManageListVo;
-import com.qvd.smartswitch.model.user.UserFeedbackListVo;
 import com.qvd.smartswitch.utils.CommonUtils;
 import com.qvd.smartswitch.utils.ConfigUtils;
 import com.qvd.smartswitch.utils.ToastUtil;
-import com.scwang.smartrefresh.header.MaterialHeader;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
-import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.header.ClassicsHeader;
-import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -55,7 +46,7 @@ public class DeviceShareManageActivity extends BaseActivity {
 
     private String device_id;
     private DeviceShareManageListAdapter adapter;
-    private List<DeviceShareManageListVo.DataBean> list = new ArrayList<>();
+    private final List<DeviceShareManageListVo.DataBean> list = new ArrayList<>();
     private String device_type;
 
     @Override
@@ -79,28 +70,15 @@ public class DeviceShareManageActivity extends BaseActivity {
         smartRefresh.setHeaderHeight(100);
         smartRefresh.setEnableHeaderTranslationContent(true);
         smartRefresh.setRefreshHeader(new ClassicsHeader(this));
-        smartRefresh.setOnRefreshListener(new OnRefreshListener() {
-            @Override
-            public void onRefresh(RefreshLayout refreshlayout) {
-                getData();
-                smartRefresh.finishRefresh(1000, true);
-            }
+        smartRefresh.setOnRefreshListener(refreshlayout -> {
+            getData();
+            smartRefresh.finishRefresh(1000, true);
         });
 
-        myErrorLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getData();
-            }
-        });
-        myEmptyLayout.setTextViewMessage("您当前没有共享该设备");
+        myErrorLayout.setOnClickListener(v -> getData());
+        myEmptyLayout.setTextViewMessage(getString(R.string.device_share_manage_not_share_device));
 
-        adapter.setOnItemChildClickListener(new BaseQuickAdapter.OnItemChildClickListener() {
-            @Override
-            public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
-                showDeleteDialog(position);
-            }
-        });
+        adapter.setOnItemChildClickListener((adapter, view, position) -> showDeleteDialog(position));
     }
 
     @Override
@@ -111,9 +89,9 @@ public class DeviceShareManageActivity extends BaseActivity {
 
     private void showDeleteDialog(int position) {
         new MaterialDialog.Builder(this)
-                .content("您确定取消授权吗")
-                .negativeText("取消")
-                .positiveText("确定")
+                .content(R.string.device_share_manage_cancel_accredit)
+                .negativeText(R.string.common_cancel)
+                .positiveText(R.string.common_confirm)
                 .onNegative((dialog, which) -> {
 
                 })
@@ -133,10 +111,10 @@ public class DeviceShareManageActivity extends BaseActivity {
                     @Override
                     public void onNext(MessageVo messageVo) {
                         if (messageVo.getCode() == 200) {
-                            ToastUtil.showToast("删除成功");
+                            ToastUtil.showToast(getString(R.string.common_delete_success));
                             getData();
                         } else {
-                            ToastUtil.showToast("删除失败");
+                            ToastUtil.showToast(getString(R.string.common_delete_fail));
                         }
                     }
 
@@ -169,20 +147,24 @@ public class DeviceShareManageActivity extends BaseActivity {
                     @Override
                     public void onNext(DeviceShareManageListVo deviceShareManageListVo) {
                         list.clear();
-                        if (deviceShareManageListVo.getCode() == 200) {
-                            if (deviceShareManageListVo.getData() != null) {
-                                list.addAll(deviceShareManageListVo.getData());
-                                smartRefresh.setEnableRefresh(true);
-                            } else {
-                                smartRefresh.setEnableRefresh(false);
+                        switch (deviceShareManageListVo.getCode()) {
+                            case 200:
+                                if (deviceShareManageListVo.getData() != null) {
+                                    list.addAll(deviceShareManageListVo.getData());
+                                    smartRefresh.setEnableRefresh(true);
+                                } else {
+                                    smartRefresh.setEnableRefresh(true);
+                                    adapter.setEmptyView(myEmptyLayout);
+                                }
+                                break;
+                            case 201:
                                 adapter.setEmptyView(myEmptyLayout);
-                            }
-                        } else if (deviceShareManageListVo.getCode() == 201) {
-                            adapter.setEmptyView(myEmptyLayout);
-                            smartRefresh.setEnableRefresh(false);
-                        } else {
-                            adapter.setEmptyView(myErrorLayout);
-                            smartRefresh.setEnableRefresh(false);
+                                smartRefresh.setEnableRefresh(false);
+                                break;
+                            default:
+                                adapter.setEmptyView(myErrorLayout);
+                                smartRefresh.setEnableRefresh(false);
+                                break;
                         }
                         adapter.notifyDataSetChanged();
                     }

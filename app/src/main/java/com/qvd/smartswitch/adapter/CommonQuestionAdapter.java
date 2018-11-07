@@ -1,20 +1,11 @@
 package com.qvd.smartswitch.adapter;
 
-import android.content.Context;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.qvd.smartswitch.R;
 import com.qvd.smartswitch.model.device.DeviceCommonQuestionVo;
-import com.qvd.smartswitch.model.home.RoomPicListVo;
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
 

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/home_manage_backgroud"
@@ -19,8 +20,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/y60"
-            android:contentDescription="TODO"
-            android:src="@mipmap/actionbar_goback" />
+            android:src="@mipmap/actionbar_goback"
+            tools:ignore="RtlHardcoded" />
 
         <TextView
             android:visibility="gone"
@@ -30,9 +31,10 @@
             android:layout_alignParentRight="true"
             android:layout_marginRight="@dimen/x30"
             android:layout_marginTop="@dimen/y90"
-            android:text="中国大陆"
+            android:text="@string/signup_china_region"
             android:textColor="@color/white"
-            android:textSize="15sp" />
+            android:textSize="15sp"
+            tools:ignore="RtlHardcoded" />
 
 
     </RelativeLayout>
@@ -49,7 +51,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="手机注册"
+            android:text="@string/signup_phone_register"
             android:textColor="@color/capacity_tablayout_text_two"
             android:textSize="14sp" />
 
@@ -64,7 +66,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:text="邮箱注册"
+            android:text="@string/signup_email_register"
             android:textColor="@color/capacity_tablayout_text"
             android:textSize="14sp" />
     </LinearLayout>
@@ -92,7 +94,8 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="@dimen/x40"
-                android:src="@mipmap/login_user_unselete" />
+                android:src="@mipmap/login_user_unselete"
+                tools:ignore="RtlHardcoded" />
 
             <EditText
                 android:maxLength="20"
@@ -103,10 +106,11 @@
                 android:layout_marginLeft="@dimen/x30"
                 android:layout_toRightOf="@+id/iv_phone"
                 android:background="@null"
-                android:hint="手机号码"
+                android:hint="@string/signup_hint_phone"
                 android:inputType="phone"
                 android:textColor="@color/home_manage_text"
-                android:textSize="13sp" />
+                android:textSize="13sp"
+                tools:ignore="RtlHardcoded" />
 
         </RelativeLayout>
 
@@ -119,7 +123,8 @@
             android:padding="5dp"
             android:textColor="@color/orangered"
             android:textSize="12sp"
-            android:visibility="gone" />
+            android:visibility="gone"
+            tools:ignore="RtlHardcoded" />
 
 
         <RelativeLayout
@@ -138,7 +143,8 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="@dimen/x40"
-                android:src="@mipmap/login_user_unselete" />
+                android:src="@mipmap/login_user_unselete"
+                tools:ignore="RtlHardcoded" />
 
             <EditText
                 android:id="@+id/et_input_code"
@@ -149,10 +155,11 @@
                 android:layout_toLeftOf="@+id/tv_phone_code"
                 android:layout_toRightOf="@+id/iv_code"
                 android:background="@null"
-                android:hint="验证码"
+                android:hint="@string/signup_hint_vaild_code"
                 android:inputType="number"
                 android:textColor="@color/home_manage_text"
-                android:textSize="13sp" />
+                android:textSize="13sp"
+                tools:ignore="RtlHardcoded" />
 
             <TextView
                 android:id="@+id/tv_phone_code"
@@ -165,9 +172,10 @@
                 android:paddingLeft="@dimen/x30"
                 android:paddingRight="@dimen/x30"
                 android:paddingTop="@dimen/y10"
-                android:text="发送验证码"
+                android:text="@string/signup_send_code"
                 android:textColor="@color/orangered"
-                android:textSize="13sp" />
+                android:textSize="13sp"
+                tools:ignore="RtlHardcoded" />
 
         </RelativeLayout>
 
@@ -183,9 +191,10 @@
             android:background="@drawable/login_text_selector"
             android:clickable="true"
             android:gravity="center"
-            android:text="下一步"
+            android:text="@string/signup_next"
             android:textColor="@color/white"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            android:focusable="true" />
     </RelativeLayout>
 
 
@@ -211,7 +220,8 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="@dimen/x40"
-                android:src="@mipmap/login_user_unselete" />
+                android:src="@mipmap/login_user_unselete"
+                tools:ignore="RtlHardcoded" />
 
             <EditText
                 android:id="@+id/et_input_email"
@@ -221,10 +231,11 @@
                 android:layout_marginLeft="@dimen/x30"
                 android:layout_toRightOf="@+id/iv_email"
                 android:background="@null"
-                android:hint="邮箱"
+                android:hint="@string/signup_hint_email"
                 android:inputType="textEmailAddress"
                 android:textColor="@color/home_manage_text"
-                android:textSize="13sp" />
+                android:textSize="13sp"
+                tools:ignore="RtlHardcoded" />
 
         </RelativeLayout>
 
@@ -233,9 +244,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/rl_input_email"
-            android:layout_marginLeft="@dimen/x70"
+            android:layout_marginStart="@dimen/x70"
             android:padding="5dp"
-            android:text="该邮箱已被注册"
+            android:text="@string/signup_email_error"
             android:textColor="@color/orangered"
             android:textSize="12sp"
             android:visibility="gone" />
@@ -255,7 +266,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="@dimen/x40"
+                android:layout_marginStart="@dimen/x40"
                 android:src="@mipmap/login_user_unselete" />
 
             <EditText
@@ -267,10 +278,11 @@
                 android:layout_toLeftOf="@+id/tv_email_code"
                 android:layout_toRightOf="@+id/iv_email_code"
                 android:background="@null"
-                android:hint="验证码"
+                android:hint="@string/signup_hint_vaild_code"
                 android:inputType="number"
                 android:textColor="@color/home_manage_text"
-                android:textSize="13sp" />
+                android:textSize="13sp"
+                tools:ignore="RtlHardcoded" />
 
             <TextView
                 android:id="@+id/tv_email_code"
@@ -283,9 +295,10 @@
                 android:paddingLeft="@dimen/x30"
                 android:paddingRight="@dimen/x30"
                 android:paddingTop="@dimen/y10"
-                android:text="发送验证码"
+                android:text="@string/signup_send_code"
                 android:textColor="@color/orangered"
-                android:textSize="13sp" />
+                android:textSize="13sp"
+                tools:ignore="RtlHardcoded" />
 
         </RelativeLayout>
 
@@ -301,9 +314,10 @@
             android:background="@drawable/login_text_selector"
             android:clickable="true"
             android:gravity="center"
-            android:text="下一步"
+            android:text="@string/signup_next"
             android:textColor="@color/white"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            android:focusable="true" />
     </RelativeLayout>
 
 

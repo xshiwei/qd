@@ -10,7 +10,6 @@
     android:paddingLeft="@dimen/x40"
     android:paddingRight="@dimen/x40"
     android:paddingTop="@dimen/y10"
-    android:text="你是"
     android:textColor="@color/black"
     android:textSize="14sp">
 

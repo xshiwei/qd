@@ -3,19 +3,13 @@ package com.qvd.smartswitch.activity.qsThree;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.clj.fastble.BleManager;
-import com.clj.fastble.callback.BleWriteCallback;
-import com.clj.fastble.data.BleDevice;
-import com.clj.fastble.exception.BleException;
-import com.clj.fastble.utils.HexUtil;
-import com.google.gson.Gson;
+import com.bumptech.glide.Glide;
 import com.iflytek.cloud.ErrorCode;
 import com.iflytek.cloud.GrammarListener;
 import com.iflytek.cloud.InitListener;
@@ -28,28 +22,24 @@ import com.iflytek.sunflower.FlowerCollector;
 import com.orhanobut.logger.Logger;
 import com.qvd.smartswitch.R;
 import com.qvd.smartswitch.activity.base.BaseActivity;
-import com.qvd.smartswitch.model.mqtt.WifiSmartNotifyVo;
 import com.qvd.smartswitch.utils.CommonUtils;
 import com.qvd.smartswitch.utils.FucUtil;
 import com.qvd.smartswitch.utils.JsonParser;
-import com.qvd.smartswitch.utils.MqttUtils;
+import com.qvd.smartswitch.utils.MqttAndroidUtils;
 import com.qvd.smartswitch.utils.RuntimeRationale;
 import com.qvd.smartswitch.utils.SnackbarUtils;
 import com.qvd.smartswitch.utils.ToastUtil;
-import com.squareup.picasso.Picasso;
-import com.yanzhenjie.permission.Action;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.Permission;
 
-import java.util.List;
+import org.eclipse.paho.android.service.MqttAndroidClient;
+import org.eclipse.paho.client.mqttv3.IMqttActionListener;
+import org.eclipse.paho.client.mqttv3.IMqttToken;
+import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
+import org.eclipse.paho.client.mqttv3.MqttMessage;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import top.fighter_lee.mqttlibs.connect.MqttManager;
-import top.fighter_lee.mqttlibs.mqttv3.IMqttDeliveryToken;
-import top.fighter_lee.mqttlibs.mqttv3.MqttCallback;
-import top.fighter_lee.mqttlibs.mqttv3.MqttException;
-import top.fighter_lee.mqttlibs.mqttv3.MqttMessage;
 
 public class QsThreeSoundControlActivity extends BaseActivity {
     @BindView(R.id.tv_text)
@@ -75,13 +65,15 @@ public class QsThreeSoundControlActivity extends BaseActivity {
     private static final String GRAMMAR_TYPE_ABNF = "abnf";
     private static final String GRAMMAR_TYPE_BNF = "bnf";
 
-    private String mEngineType = SpeechConstant.TYPE_CLOUD;
+    private final String mEngineType = SpeechConstant.TYPE_CLOUD;
     // 语法、词典临时变量
-    String mContent;
+    private String mContent;
     // 函数调用返回值
-    int ret = 0;
-    private static String TAG = QsThreeSoundControlActivity.class.getSimpleName();
+    private int ret = 0;
+    private static final String TAG = QsThreeSoundControlActivity.class.getSimpleName();
     private String device_id;
+    private MqttAndroidClient mqttAndroidClient;
+    private MqttConnectOptions mqttConnectOptions;
 
     @Override
     protected int setLayoutId() {
@@ -92,6 +84,8 @@ public class QsThreeSoundControlActivity extends BaseActivity {
     protected void initData() {
         super.initData();
         // 初始化识别对象
+        mqttAndroidClient = MqttAndroidUtils.getInstance().getMqttAndroidClient(MqttAndroidUtils.MqttServerUri);
+        mqttConnectOptions = MqttAndroidUtils.getInstance().getMqttConnectOptions();
         device_id = getIntent().getStringExtra("device_id");
         mAsr = SpeechRecognizer.createRecognizer(this, mInitListener);
         mCloudGrammar = FucUtil.readFile(this, "grammar_sample.abnf", "utf-8");
@@ -123,22 +117,24 @@ public class QsThreeSoundControlActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (!MqttManager.getInstance().isConneect()) {
+        if (!mqttAndroidClient.isConnected()) {
             //连接
             try {
-                MqttUtils.getInstance().connect(new MqttUtils.IMqttResultListener() {
+                mqttAndroidClient.connect(mqttConnectOptions, null, new IMqttActionListener() {
                     @Override
-                    public void success() {
+                    public void onSuccess(IMqttToken asyncActionToken) {
+
                     }
 
                     @Override
-                    public void fail() {
+                    public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
 
                     }
                 });
-            } catch (MqttException e) {
+            } catch (org.eclipse.paho.client.mqttv3.MqttException e) {
                 e.printStackTrace();
             }
+
         }
         FlowerCollector.onResume(this);
         FlowerCollector.onPageStart(TAG);
@@ -154,11 +150,7 @@ public class QsThreeSoundControlActivity extends BaseActivity {
             return;
         }
 
-        if (null == mEngineType) {
-            Logger.e("请先选择识别引擎类型");
-            return;
-        }
-        mContent = new String(mCloudGrammar);
+        mContent = mCloudGrammar;
         //指定引擎类型
         mAsr.setParameter(SpeechConstant.ENGINE_TYPE, mEngineType);
         mAsr.setParameter(SpeechConstant.TEXT_ENCODING, "utf-8");
@@ -176,35 +168,29 @@ public class QsThreeSoundControlActivity extends BaseActivity {
         ret = mAsr.startListening(mRecognizerListener);
         if (ret != ErrorCode.SUCCESS) {
             Logger.e("识别失败,错误码: " + ret);
-            return;
         }
     }
 
     /**
      * 初始化监听器。
      */
-    private InitListener mInitListener = new InitListener() {
-
-        @Override
-        public void onInit(int code) {
-            if (code != ErrorCode.SUCCESS) {
-                Logger.e("初始化失败,错误码：" + code);
-            }
+    private final InitListener mInitListener = code -> {
+        if (code != ErrorCode.SUCCESS) {
+            Logger.e("初始化失败,错误码：" + code);
         }
     };
 
     /**
      * 云端构建语法监听器。
      */
-    private GrammarListener mCloudGrammarListener = new GrammarListener() {
+    private final GrammarListener mCloudGrammarListener = new GrammarListener() {
         @Override
         public void onBuildFinish(String grammarId, SpeechError error) {
             if (error == null) {
-                String grammarID = new String(grammarId);
                 SharedPreferences.Editor editor = mSharedPreferences.edit();
                 if (!TextUtils.isEmpty(grammarId))
-                    editor.putString(KEY_GRAMMAR_ABNF_ID, grammarID);
-                editor.commit();
+                    editor.putString(KEY_GRAMMAR_ABNF_ID, grammarId);
+                editor.apply();
             } else {
                 Logger.e("语法构建失败,错误码：" + error.getErrorCode());
             }
@@ -214,14 +200,14 @@ public class QsThreeSoundControlActivity extends BaseActivity {
     /**
      * 识别监听器。
      */
-    private RecognizerListener mRecognizerListener = new RecognizerListener() {
+    private final RecognizerListener mRecognizerListener = new RecognizerListener() {
 
         @Override
         public void onVolumeChanged(int volume, byte[] data) {
             if (volume < 10) {
-                Picasso.with(QsThreeSoundControlActivity.this).load(R.mipmap.voice_empty).into(ivSound);
+                Glide.with(QsThreeSoundControlActivity.this).load(R.mipmap.voice_empty).into(ivSound);
             } else {
-                Picasso.with(QsThreeSoundControlActivity.this).load(R.mipmap.voice_full).into(ivSound);
+                Glide.with(QsThreeSoundControlActivity.this).load(R.mipmap.voice_full).into(ivSound);
             }
         }
 
@@ -229,11 +215,7 @@ public class QsThreeSoundControlActivity extends BaseActivity {
         public void onResult(final RecognizerResult result, boolean isLast) {
             if (null != result) {
                 String text;
-                if ("cloud".equalsIgnoreCase(mEngineType)) {
-                    text = JsonParser.parseIatResult(result.getResultString());
-                } else {
-                    text = JsonParser.parseLocalGrammarResult(result.getResultString());
-                }
+                text = JsonParser.parseIatResult(result.getResultString());
                 Logger.e(text);
                 tvText.setText(text);
                 if (text.contains("一")) {
@@ -321,19 +303,22 @@ public class QsThreeSoundControlActivity extends BaseActivity {
      * @param s
      */
     private void publish(String s) {
+        MqttMessage message = new MqttMessage();
+        message.setQos(2);
+        message.setPayload(s.getBytes());
         try {
-            MqttUtils.getInstance().pub(s, MqttUtils.TOPIC_ONE, new MqttUtils.IMqttResultListener() {
+            mqttAndroidClient.publish(MqttAndroidUtils.TOPIC_ONE, message, null, new IMqttActionListener() {
                 @Override
-                public void success() {
+                public void onSuccess(IMqttToken asyncActionToken) {
 
                 }
 
                 @Override
-                public void fail() {
+                public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
 
                 }
             });
-        } catch (MqttException e) {
+        } catch (org.eclipse.paho.client.mqttv3.MqttException e) {
             e.printStackTrace();
         }
     }
@@ -343,29 +328,14 @@ public class QsThreeSoundControlActivity extends BaseActivity {
                 .runtime()
                 .permission(Permission.RECORD_AUDIO)
                 .rationale(new RuntimeRationale())
-                .onGranted(new Action<List<String>>() {
-                    @Override
-                    public void onAction(List<String> data) {
-                        SnackbarUtils.Short(tvText, "授权成功").show();
-                    }
-                })
-                .onDenied(new Action<List<String>>() {
-                    @Override
-                    public void onAction(List<String> data) {
-                        SnackbarUtils.Short(tvText, "授权失败").show();
-                    }
-                })
+                .onGranted(data -> SnackbarUtils.Short(tvText, "授权成功").show())
+                .onDenied(data -> SnackbarUtils.Short(tvText, "授权失败").show())
                 .start();
     }
 
 
     private void showTip(final String str) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                SnackbarUtils.Short(tvText, str).show();
-            }
-        });
+        runOnUiThread(() -> SnackbarUtils.Short(tvText, str).show());
     }
 
     /**
@@ -373,22 +343,20 @@ public class QsThreeSoundControlActivity extends BaseActivity {
      *
      * @return
      */
-    public boolean setParam() {
-        boolean result = false;
+    private boolean setParam() {
+        boolean result;
         //设置识别引擎
         mAsr.setParameter(SpeechConstant.ENGINE_TYPE, mEngineType);
         //设置返回结果为json格式
         mAsr.setParameter(SpeechConstant.RESULT_TYPE, "json");
 
-        if ("cloud".equalsIgnoreCase(mEngineType)) {
-            String grammarId = mSharedPreferences.getString(KEY_GRAMMAR_ABNF_ID, null);
-            if (TextUtils.isEmpty(grammarId)) {
-                result = false;
-            } else {
-                //设置云端识别使用的语法id
-                mAsr.setParameter(SpeechConstant.CLOUD_GRAMMAR, grammarId);
-                result = true;
-            }
+        String grammarId = mSharedPreferences.getString(KEY_GRAMMAR_ABNF_ID, null);
+        if (TextUtils.isEmpty(grammarId)) {
+            result = false;
+        } else {
+            //设置云端识别使用的语法id
+            mAsr.setParameter(SpeechConstant.CLOUD_GRAMMAR, grammarId);
+            result = true;
         }
 
         // 设置音频保存路径，保存音频格式支持pcm、wav，设置路径为sd卡请注意WRITE_EXTERNAL_STORAGE权限

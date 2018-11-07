@@ -1,7 +1,9 @@
 package com.qvd.smartswitch.activity.home;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -39,7 +41,6 @@ import com.qvd.smartswitch.activity.login.LoginActivity;
 import com.qvd.smartswitch.activity.qsThree.QsThreeControlActivity;
 import com.qvd.smartswitch.adapter.HomeMenuAdapter;
 import com.qvd.smartswitch.adapter.HomeTabLayoutAdapter;
-import com.qvd.smartswitch.adapter.TabLayoutAdapter;
 import com.qvd.smartswitch.api.RetrofitService;
 import com.qvd.smartswitch.model.home.DefaultRoomVo;
 import com.qvd.smartswitch.model.home.HomeLeftListVo;
@@ -47,28 +48,21 @@ import com.qvd.smartswitch.model.home.HomeListVo;
 import com.qvd.smartswitch.model.login.MessageVo;
 import com.qvd.smartswitch.utils.CommonUtils;
 import com.qvd.smartswitch.utils.ConfigUtils;
-import com.qvd.smartswitch.utils.PermissionUtils;
 import com.qvd.smartswitch.utils.ToastUtil;
 import com.scwang.smartrefresh.header.MaterialHeader;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
-import com.scwang.smartrefresh.layout.api.RefreshLayout;
-import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
-import com.yanzhenjie.permission.Permission;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.Unbinder;
 import io.reactivex.ObservableSource;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
-import io.reactivex.functions.Predicate;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -120,14 +114,10 @@ public class HomeFragment extends BaseFragment implements AppBarLayout.OnOffsetC
     private boolean mIsAvatarShown = true;
     private int mMaxScrollSize;
 
-    //声明WeatherSearchQuery对象
-    private WeatherSearchQuery weatherSearchQuery = null;
-    //声明WeatherSearch对象
-    private WeatherSearch mweathersearch = null;
     //声明AMapLocationClient类对象
-    public AMapLocationClient mLocationClient = null;
+    private AMapLocationClient mLocationClient = null;
     //声明AMapLocationClientOption对象
-    public AMapLocationClientOption mLocationOption = null;
+    private AMapLocationClientOption mLocationOption = null;
 
     /**
      * tabLayout适配器
@@ -137,17 +127,17 @@ public class HomeFragment extends BaseFragment implements AppBarLayout.OnOffsetC
     /**
      * 装载的fragment List
      */
-    private List<HomeDeviceFragment> fragmentList = new ArrayList<>();
+    private final List<HomeDeviceFragment> fragmentList = new ArrayList<>();
 
     /**
      * tabLayout 标题list
      */
-    private List<String> titleList = new ArrayList<>();
+    private final List<String> titleList = new ArrayList<>();
 
     /**
      * 列表数据源
      */
-    private List<HomeLeftListVo.DataBean> list = new ArrayList<>();
+    private  List<HomeLeftListVo.DataBean> list = new ArrayList<>();
 
     /**
      * 点击设置后显示弹窗
@@ -156,11 +146,7 @@ public class HomeFragment extends BaseFragment implements AppBarLayout.OnOffsetC
     /**
      * menu家庭列表数据
      */
-    private List<HomeListVo.DataBean> menuList = new ArrayList<>();
-    /**
-     * menu数据适配器
-     */
-    private HomeMenuAdapter menuAdapter;
+    private final List<HomeListVo.DataBean> menuList = new ArrayList<>();
 
     public static HomeFragment newInstance(String param1) {
         HomeFragment fragment = new HomeFragment();
@@ -185,13 +171,10 @@ public class HomeFragment extends BaseFragment implements AppBarLayout.OnOffsetC
         smartRefresh.setFooterHeight(1);
         smartRefresh.setEnableHeaderTranslationContent(false);//是否上拉Footer的时候向上平移列表或者内容
         //设置头部样式
-        smartRefresh.setRefreshHeader(new MaterialHeader(getActivity()));
-        smartRefresh.setOnRefreshListener(new OnRefreshListener() {
-            @Override
-            public void onRefresh(RefreshLayout refreshlayout) {
-                initEvent();
-                smartRefresh.finishRefresh(2000, true);
-            }
+        smartRefresh.setRefreshHeader(new MaterialHeader(Objects.requireNonNull(getActivity())));
+        smartRefresh.setOnRefreshListener(refreshlayout -> {
+            initEvent();
+            smartRefresh.finishRefresh(2000, true);
         });
     }
 
@@ -228,12 +211,9 @@ public class HomeFragment extends BaseFragment implements AppBarLayout.OnOffsetC
      */
     private void initEvent() {
         //初始化定位
-        mLocationClient = new AMapLocationClient(getActivity().getApplicationContext());
+        mLocationClient = new AMapLocationClient(Objects.requireNonNull(getActivity()).getApplicationContext());
         //初始化AMapLocationClientOption对象
         mLocationOption = new AMapLocationClientOption();
-        /**
-         * 设置定位场景，目前支持三种场景（签到、出行、运动，默认无场景）
-         */
         mLocationOption.setLocationPurpose(AMapLocationClientOption.AMapLocationPurpose.Sport);
         //设置定位模式为低功耗
         mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Battery_Saving);
@@ -255,7 +235,7 @@ public class HomeFragment extends BaseFragment implements AppBarLayout.OnOffsetC
     /**
      * 定位监听
      */
-    AMapLocationListener locationListener = new AMapLocationListener() {
+    private final AMapLocationListener locationListener = new AMapLocationListener() {
         @Override
         public void onLocationChanged(AMapLocation aMapLocation) {
             if (aMapLocation != null) {
@@ -266,8 +246,8 @@ public class HomeFragment extends BaseFragment implements AppBarLayout.OnOffsetC
                         tvCity.setText("位置: NULL");
                     } else {
                         tvCity.setText("位置: " + city);
-                        weatherSearchQuery = new WeatherSearchQuery(city, WeatherSearchQuery.WEATHER_TYPE_LIVE);
-                        mweathersearch = new WeatherSearch(getActivity());
+                        WeatherSearchQuery weatherSearchQuery = new WeatherSearchQuery(city, WeatherSearchQuery.WEATHER_TYPE_LIVE);
+                        WeatherSearch mweathersearch = new WeatherSearch(getActivity());
                         mweathersearch.setOnWeatherSearchListener(HomeFragment.this);
                         mweathersearch.setQuery(weatherSearchQuery);
                         mweathersearch.searchWeatherAsyn(); //异步搜索
@@ -290,10 +270,6 @@ public class HomeFragment extends BaseFragment implements AppBarLayout.OnOffsetC
      */
     private void destroyLocation() {
         if (null != mLocationClient) {
-            /**
-             * 如果AMapLocationClient是在当前Activity实例化的，
-             * 在Activity的onDestroy中一定要执行AMapLocationClient的onDestroy
-             */
             mLocationClient.onDestroy();
             mLocationClient = null;
         }
@@ -312,86 +288,59 @@ public class HomeFragment extends BaseFragment implements AppBarLayout.OnOffsetC
         RetrofitService.qdoApi.getFamilyList(ConfigUtils.user_id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnNext(new Consumer<HomeListVo>() {
-                    @Override
-                    public void accept(HomeListVo homeListVo) throws Exception {
-                        if (homeListVo != null) {
-                            menuList.clear();
-                            if (homeListVo.getCode() == 200) {
-                                for (HomeListVo.DataBean dataBean : homeListVo.getData()) {
-                                    if (dataBean.getIs_opened() == 1) {
-                                        tvFamily.setText(dataBean.getFamily_name());
-                                        ConfigUtils.family_locate = dataBean;
-                                    }
-                                    menuList.add(dataBean);
+                .doOnNext(homeListVo -> {
+                    if (homeListVo != null) {
+                        menuList.clear();
+                        if (homeListVo.getCode() == 200) {
+                            for (HomeListVo.DataBean dataBean : homeListVo.getData()) {
+                                if (dataBean.getIs_opened() == 1) {
+                                    tvFamily.setText(dataBean.getFamily_name());
+                                    ConfigUtils.family_locate = dataBean;
                                 }
-                            } else if (homeListVo.getCode() == 400) {
-                                tvFamily.setText("网络错误");
+                                menuList.add(dataBean);
                             }
+                        } else if (homeListVo.getCode() == 400) {
+                            tvFamily.setText("网络错误");
                         }
                     }
                 })
                 .observeOn(Schedulers.io())
-                .filter(new Predicate<HomeListVo>() {
-                    @Override
-                    public boolean test(HomeListVo homeListVo) throws Exception {
-                        return homeListVo.getCode() == 200;
-                    }
-                })
+                .filter(homeListVo -> homeListVo.getCode() == 200)
                 .observeOn(Schedulers.io())
-                .concatMap(new Function<HomeListVo, ObservableSource<HomeLeftListVo>>() {
-                    @Override
-                    public ObservableSource<HomeLeftListVo> apply(HomeListVo homeListVo) throws Exception {
-                        return RetrofitService.qdoApi.getHomeRoomList(ConfigUtils.family_locate.getFamily_id(), ConfigUtils.user_id);
-                    }
-                })
+                .concatMap((Function<HomeListVo, ObservableSource<HomeLeftListVo>>) homeListVo -> RetrofitService.qdoApi.getHomeRoomList(ConfigUtils.family_locate.getFamily_id(), ConfigUtils.user_id))
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnNext(new Consumer<HomeLeftListVo>() {
-                    @Override
-                    public void accept(HomeLeftListVo homeLeftListVo) throws Exception {
-                        if (homeLeftListVo.getData() != null && homeLeftListVo.getCode() == 200) {
-                            list.clear();
-                            //移除之前的Fragment
-                            FragmentManager fm = getChildFragmentManager();
-                            if (fragmentList.size() > 0) {
-                                FragmentTransaction ft = fm.beginTransaction();
-                                for (Fragment f : fragmentList) {
-                                    ft.remove(f);
-                                }
-                                ft.commit();
-                                ft = null;
-                                fm.executePendingTransactions();
+                .doOnNext(homeLeftListVo -> {
+                    if (homeLeftListVo.getData() != null && homeLeftListVo.getCode() == 200) {
+                        list.clear();
+                        //移除之前的Fragment
+                        FragmentManager fm = getChildFragmentManager();
+                        if (fragmentList.size() > 0) {
+                            FragmentTransaction ft = fm.beginTransaction();
+                            for (Fragment f : fragmentList) {
+                                ft.remove(f);
                             }
-                            fragmentList.clear();
-                            titleList.clear();
-                            list.addAll(homeLeftListVo.getData());
-                            //设置tabLayout
-                            for (HomeLeftListVo.DataBean dataBean : homeLeftListVo.getData()) {
-                                HomeDeviceFragment fragment = HomeDeviceFragment.newInstance(dataBean);
-                                fragmentList.add(fragment);
-                                titleList.add(dataBean.getRoom_name());
-                            }
-                            viewPager.setOffscreenPageLimit(3);
-                            adapter = new HomeTabLayoutAdapter(getChildFragmentManager(), fragmentList, titleList);
-                            viewPager.setAdapter(adapter);
-                            tabLayout.setupWithViewPager(viewPager);
+                            ft.commit();
+                            fm.executePendingTransactions();
                         }
+                        fragmentList.clear();
+                        titleList.clear();
+                        list.addAll(homeLeftListVo.getData());
+                        //设置tabLayout
+                        for (HomeLeftListVo.DataBean dataBean : homeLeftListVo.getData()) {
+                            HomeDeviceFragment fragment = HomeDeviceFragment.newInstance(dataBean);
+                            fragmentList.add(fragment);
+                            titleList.add(dataBean.getRoom_name());
+                        }
+                        viewPager.setOffscreenPageLimit(3);
+                        adapter = new HomeTabLayoutAdapter(getChildFragmentManager(), fragmentList, titleList);
+                        viewPager.setAdapter(adapter);
+                        tabLayout.setupWithViewPager(viewPager);
                     }
                 })
                 .observeOn(Schedulers.io())
-                .filter(new Predicate<HomeLeftListVo>() {
-                    @Override
-                    public boolean test(HomeLeftListVo homeLeftListVo) throws Exception {
-                        return homeLeftListVo.getCode() == 200;
-                    }
-                })
+                .filter(homeLeftListVo -> homeLeftListVo.getCode() == 200)
                 .observeOn(Schedulers.io())
-                .concatMap(new Function<HomeLeftListVo, ObservableSource<DefaultRoomVo>>() {
-                    @Override
-                    public ObservableSource<DefaultRoomVo> apply(HomeLeftListVo homeLeftListVo) throws Exception {
-                        return RetrofitService.qdoApi.getDefaultRoomId(ConfigUtils.family_locate.getFamily_id());
-                    }
-                })
+                .concatMap((Function<HomeLeftListVo, ObservableSource<DefaultRoomVo>>) homeLeftListVo -> RetrofitService.qdoApi.getDefaultRoomId(ConfigUtils.family_locate.getFamily_id()))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<DefaultRoomVo>() {
                     @Override
@@ -453,7 +402,7 @@ public class HomeFragment extends BaseFragment implements AppBarLayout.OnOffsetC
         view.getBackground().setAlpha(80);
         popupWindow = new PopupWindow(view, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, false);
         // 需要设置一下此参数，点击外边可消失
-        popupWindow.setBackgroundDrawable(new BitmapDrawable());
+        popupWindow.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         // 设置点击窗口外边窗口消失
         popupWindow.setOutsideTouchable(true);
         // 设置此参数获得焦点，否则无法点击
@@ -461,26 +410,21 @@ public class HomeFragment extends BaseFragment implements AppBarLayout.OnOffsetC
         RecyclerView recycleView = view.findViewById(R.id.recyclerview);
         RelativeLayout rl_home_manage = view.findViewById(R.id.rl_home_manage);
         recycleView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-        menuAdapter = new HomeMenuAdapter(getActivity(), menuList);
+        /*
+      menu数据适配器
+     */
+        HomeMenuAdapter menuAdapter = new HomeMenuAdapter(menuList);
         recycleView.setAdapter(menuAdapter);
-        menuAdapter.setOnItemClickListener(new HomeMenuAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                popupWindow.dismiss();
-                //切换家庭
-                replaceFamily(menuList.get(position).getFamily_id());
-            }
-
-            @Override
-            public void onItemLongClickListener(View view, int position) {
-
-            }
+        menuAdapter.setOnItemClickListener((adapter, view1, position) -> {
+            popupWindow.dismiss();
+            //切换家庭
+            replaceFamily(menuList.get(position).getFamily_id());
         });
         //家庭管理设置
         rl_home_manage.setOnClickListener(v -> {
             popupWindow.dismiss();
             startActivity(new Intent(getActivity(), HomeManageActivity.class));
-            getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+            Objects.requireNonNull(getActivity()).overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
         });
     }
 
@@ -528,7 +472,7 @@ public class HomeFragment extends BaseFragment implements AppBarLayout.OnOffsetC
                 //用户注册后默认是有一个房间的，不存在为空。
                 if (CommonUtils.isEmptyString(ConfigUtils.user_id)) {
                     startActivity(new Intent(getActivity(), LoginActivity.class));
-                    getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+                    Objects.requireNonNull(getActivity()).overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
                 } else {
                     shouPopupwindow();
                     popupWindow.showAsDropDown(tvFamily, 30, 0);
@@ -541,15 +485,15 @@ public class HomeFragment extends BaseFragment implements AppBarLayout.OnOffsetC
                 //添加设备
                 if (CommonUtils.isEmptyString(ConfigUtils.user_id)) {
                     startActivity(new Intent(getActivity(), LoginActivity.class));
-                    getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+                    Objects.requireNonNull(getActivity()).overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
                 } else {
                     startActivity(new Intent(getActivity(), DeviceAddActivity.class));
-                    getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+                    Objects.requireNonNull(getActivity()).overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
                 }
                 break;
             case R.id.tv_login_two:
                 startActivity(new Intent(getActivity(), LoginActivity.class));
-                getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+                Objects.requireNonNull(getActivity()).overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
                 break;
         }
     }

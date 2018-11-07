@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/home_manage_backgroud">
@@ -22,16 +23,18 @@
             android:paddingLeft="@dimen/x20"
             android:paddingRight="@dimen/x20"
             android:paddingTop="@dimen/y15"
-            android:text="取消"
+            android:text="@string/update_room_details_cancel"
             android:textColor="@color/home_setting_text_two"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            tools:ignore="RtlHardcoded"
+            android:focusable="true" />
 
         <TextView
             android:id="@+id/tv_common_actionbar_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="编辑房间"
+            android:text="@string/update_room_details_title"
             android:textColor="@color/app_title"
             android:textSize="15sp" />
 
@@ -49,9 +52,11 @@
             android:paddingLeft="@dimen/x20"
             android:paddingRight="@dimen/x20"
             android:paddingTop="@dimen/y15"
-            android:text="保存"
+            android:text="@string/update_room_details_save"
             android:textColor="@color/home_setting_text_two"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            tools:ignore="RtlHardcoded"
+            android:focusable="true" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -61,7 +66,8 @@
         android:layout_below="@+id/rl_actionbar"
         android:layout_marginTop="@dimen/y50"
         android:background="@drawable/layout_seletor"
-        android:clickable="true">
+        android:clickable="true"
+        android:focusable="true">
 
         <TextView
             android:id="@+id/tv_name_title"
@@ -69,9 +75,10 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:paddingLeft="@dimen/x30"
-            android:text="房间名称"
+            android:text="@string/update_room_details_room_name"
             android:textColor="@color/home_setting_text"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            tools:ignore="RtlHardcoded" />
 
         <TextView
             android:id="@+id/tv_name"
@@ -84,7 +91,8 @@
             android:gravity="right|center"
             android:padding="5dp"
             android:textColor="@color/home_setting_text_two"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            tools:ignore="RtlHardcoded" />
 
 
         <ImageView
@@ -94,7 +102,8 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/x30"
-            android:src="@mipmap/device_more_details" />
+            android:src="@mipmap/device_more_details"
+            tools:ignore="RtlHardcoded" />
 
     </RelativeLayout>
 
@@ -106,7 +115,8 @@
         android:layout_below="@+id/rl_room_name"
         android:layout_marginTop="@dimen/y5"
         android:background="@drawable/layout_seletor"
-        android:clickable="true">
+        android:clickable="true"
+        android:focusable="true">
 
         <TextView
             android:id="@+id/tv_pic_title"
@@ -114,9 +124,10 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:paddingLeft="@dimen/x30"
-            android:text="房间图标"
+            android:text="@string/update_room_details_room_pic"
             android:textColor="@color/home_setting_text"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            tools:ignore="RtlHardcoded" />
 
 
         <RelativeLayout
@@ -125,7 +136,7 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/x20"
             android:layout_toLeftOf="@+id/iv_more_two"
-            android:background="@color/popupwindow_edittext">
+            tools:ignore="RtlHardcoded">
 
             <ImageView
                 android:id="@+id/iv_pic"
@@ -142,7 +153,8 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/x30"
-            android:src="@mipmap/device_more_details" />
+            android:src="@mipmap/device_more_details"
+            tools:ignore="RtlHardcoded" />
 
     </RelativeLayout>
 
@@ -153,24 +165,16 @@
         android:layout_below="@+id/rl_room_pic"
         android:layout_marginLeft="@dimen/x30"
         android:layout_marginTop="@dimen/y40"
-        android:text="已选中0个设备移除该房间 "
+        android:text="@string/update_room_details_selete_device_move"
         android:textColor="@color/home_setting_text_three"
-        android:textSize="12sp" />
+        android:textSize="12sp"
+        tools:ignore="RtlHardcoded" />
 
-    <com.qvd.smartswitch.widget.EmptyLayout
-        android:id="@+id/emptylayout"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerview"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/tv_text"
-        android:layout_marginTop="@dimen/y25">
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recyclerview"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/tv_home_name"></android.support.v7.widget.RecyclerView>
-
-    </com.qvd.smartswitch.widget.EmptyLayout>
-
+        android:layout_marginTop="@dimen/y25" />
 
 </RelativeLayout>

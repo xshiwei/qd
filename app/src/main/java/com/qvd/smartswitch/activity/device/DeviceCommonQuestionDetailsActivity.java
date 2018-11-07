@@ -8,10 +8,7 @@ import com.qvd.smartswitch.activity.base.BaseActivity;
 import com.qvd.smartswitch.model.device.DeviceCommonQuestionVo;
 import com.qvd.smartswitch.utils.CommonUtils;
 
-import java.io.Serializable;
-
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class DeviceCommonQuestionDetailsActivity extends BaseActivity {
@@ -26,8 +23,6 @@ public class DeviceCommonQuestionDetailsActivity extends BaseActivity {
     @BindView(R.id.iv_image)
     ImageView ivImage;
 
-    private DeviceCommonQuestionVo.DataBean data;
-
     @Override
     protected int setLayoutId() {
         return R.layout.activity_device_common_question_detail;
@@ -41,7 +36,7 @@ public class DeviceCommonQuestionDetailsActivity extends BaseActivity {
     @Override
     protected void initData() {
         super.initData();
-        data = (DeviceCommonQuestionVo.DataBean) getIntent().getSerializableExtra("data");
+        DeviceCommonQuestionVo.DataBean data = (DeviceCommonQuestionVo.DataBean) getIntent().getSerializableExtra("data");
         tvCommonActionbarTitle.setText(CommonUtils.getDeviceName(data.getDevice_no()));
         tvTitle.setText(data.getQuestion_title());
         tvContent.setText(data.getQuestion_content());

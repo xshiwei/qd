@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -24,7 +25,8 @@
             android:layout_marginLeft="@dimen/x30"
             android:layout_marginTop="@dimen/y60"
             android:textColor="@color/home_manage_text"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            tools:ignore="RtlHardcoded" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -40,7 +42,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:background="@null"
-                android:hint="常用联系方式（必填）"
+                android:hint="@string/user_feedback_hint_common_contract"
                 android:inputType="phone|textEmailAddress"
                 android:paddingLeft="@dimen/x30"
                 android:paddingRight="@dimen/x30"
@@ -62,13 +64,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@null"
-                android:hint="想跟我们说些什么呢？"
+                android:hint="@string/user_feedback_hint_content"
                 android:maxLength="120"
                 android:paddingLeft="@dimen/x30"
                 android:paddingRight="@dimen/x30"
                 android:paddingTop="@dimen/y30"
                 android:textColor="@color/home_setting_text_three"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                android:inputType=""
+                tools:ignore="RtlHardcoded" />
         </LinearLayout>
 
         <LinearLayout
@@ -95,7 +99,7 @@
                     android:layout_centerInParent="true"
                     android:background="@drawable/feedback_unselete"
                     android:gravity="center"
-                    android:text="提 交"
+                    android:text="@string/user_feedback_commit"
                     android:textColor="@color/home_setting_text_two"
                     android:textSize="14sp" />
             </com.andexert.library.RippleView>

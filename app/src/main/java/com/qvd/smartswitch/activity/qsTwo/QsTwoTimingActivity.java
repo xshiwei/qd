@@ -1,17 +1,12 @@
 package com.qvd.smartswitch.activity.qsTwo;
 
 
-import android.app.ProgressDialog;
-import android.os.Handler;
-import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.clj.fastble.BleManager;
-import com.clj.fastble.callback.BleNotifyCallback;
 import com.clj.fastble.callback.BleWriteCallback;
 import com.clj.fastble.data.BleDevice;
 import com.clj.fastble.exception.BleException;
@@ -23,13 +18,10 @@ import com.qvd.smartswitch.activity.base.BaseActivity;
 import com.qvd.smartswitch.api.RetrofitService;
 import com.qvd.smartswitch.model.device.DeviceAddTimingVo;
 import com.qvd.smartswitch.model.login.MessageVo;
-import com.qvd.smartswitch.utils.BleManageUtils;
 import com.qvd.smartswitch.utils.CommonUtils;
-import com.qvd.smartswitch.utils.SnackbarUtils;
 import com.qvd.smartswitch.utils.ToastUtil;
 import com.qvd.smartswitch.widget.MyProgressDialog;
 
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -62,16 +54,8 @@ public class QsTwoTimingActivity extends BaseActivity {
     TextView tvOpenLight;
     @BindView(R.id.tv_close_light)
     TextView tvCloseLight;
-    @BindView(R.id.tv_device_one)
-    TextView tvDeviceOne;
-    @BindView(R.id.tv_device_two)
-    TextView tvDeviceTwo;
 
     private BleDevice bledevice;
-    /**
-     * 判断当前选择哪个设备
-     */
-    private int isDevice = 1;
 
     private NumberPickerView pickerHour;
     private NumberPickerView pickerMinute;
@@ -99,7 +83,6 @@ public class QsTwoTimingActivity extends BaseActivity {
     private String hourTime;
     private String minuteTime;
 
-    private GregorianCalendar calendar;
     private String device_id;
 
     /**
@@ -123,49 +106,37 @@ public class QsTwoTimingActivity extends BaseActivity {
         device_id = getIntent().getStringExtra("device_id");
         state = getIntent().getBooleanExtra("state", false);
         timing_id = getIntent().getStringExtra("timing_id");
-        tvCommonActionbarTitle.setText("蓝牙智能开关定时");
+        tvCommonActionbarTitle.setText(R.string.qstwo_timing_title);
         progressDialog = MyProgressDialog.createProgressDialog(this, 5000,
-                new MyProgressDialog.OnTimeOutListener() {
-                    @Override
-                    public void onTimeOut(ProgressDialog dialog) {
-                        dialog.dismiss();
-                        ToastUtil.showToast("设置失败");
-                    }
+                dialog -> {
+                    dialog.dismiss();
+                    ToastUtil.showToast(getString(R.string.common_set_fail));
                 });
-        calendar = new GregorianCalendar();
+        GregorianCalendar calendar = new GregorianCalendar();
         int hour = calendar.get(Calendar.HOUR_OF_DAY);
         int minute = calendar.get(Calendar.MINUTE);
-        setData(pickerHour, 0, 23, hour);
-        setData(pickerMinute, 0, 59, minute);
-        pickerHour.setOnValueChangeListenerInScrolling(new NumberPickerView.OnValueChangeListenerInScrolling() {
-            @Override
-            public void onValueChangeInScrolling(NumberPickerView picker, int oldVal, int newVal) {
-                newHour = oldVal;
-                newMinute = pickerMinute.getValue();
-                List<String> timing = CommonUtils.getTiming(newHour, newMinute);
-                hourTime = timing.get(0);
-                minuteTime = timing.get(1);
-                tvText.setText(timing.get(0) + "小时" + timing.get(1) + "分钟后");
-            }
+        setData(pickerHour, 23, hour);
+        setData(pickerMinute, 59, minute);
+        pickerHour.setOnValueChangeListenerInScrolling((picker, oldVal, newVal) -> {
+            newHour = oldVal;
+            newMinute = pickerMinute.getValue();
+            List<String> timing = CommonUtils.getTiming(newHour, newMinute);
+            hourTime = timing.get(0);
+            minuteTime = timing.get(1);
+            tvText.setText(timing.get(0) + getString(R.string.common_hour) + timing.get(1) + getString(R.string.comon_minute));
         });
-        pickerMinute.setOnValueChangeListenerInScrolling(new NumberPickerView.OnValueChangeListenerInScrolling() {
-            @Override
-            public void onValueChangeInScrolling(NumberPickerView picker, int oldVal, int newVal) {
-                newMinute = oldVal;
-                newHour = pickerHour.getValue();
-                List<String> timing = CommonUtils.getTiming(newHour, newMinute);
-                hourTime = timing.get(0);
-                minuteTime = timing.get(1);
-                tvText.setText(timing.get(0) + "小时" + timing.get(1) + "分钟后");
-            }
+        pickerMinute.setOnValueChangeListenerInScrolling((picker, oldVal, newVal) -> {
+            newMinute = oldVal;
+            newHour = pickerHour.getValue();
+            List<String> timing = CommonUtils.getTiming(newHour, newMinute);
+            hourTime = timing.get(0);
+            minuteTime = timing.get(1);
+            tvText.setText(timing.get(0) + getString(R.string.common_hour) + timing.get(1) + getString(R.string.comon_minute));
         });
-//        if (bledevice != null) {
-//            CommonUtils.getConnectNotify(this, bledevice, tvCommonActionbarTitle);
-//        }
     }
 
-    private void setData(NumberPickerView picker, int minValue, int maxValue, int value) {
-        picker.setMinValue(minValue);
+    private void setData(NumberPickerView picker, int maxValue, int value) {
+        picker.setMinValue(0);
         picker.setMaxValue(maxValue);
         picker.setValue(value);
     }
@@ -183,24 +154,16 @@ public class QsTwoTimingActivity extends BaseActivity {
      */
     private void setTiming() {
         String one;
-        if (isDevice == 1) {
-            if (isState) {
-                one = "11";
-            } else {
-                one = "10";
-            }
+        if (isState) {
+            one = "11";
         } else {
-            if (isState) {
-                one = "21";
-            } else {
-                one = "20";
-            }
+            one = "10";
         }
         String s = "fe0304" + one + hourTime + minuteTime + "ffffffffffffffffffffffffffff";
         if (BleManager.getInstance().isConnected(bledevice)) {
             writeToBle(s);
         } else {
-            ToastUtil.showToast("当前设备已断开");
+            ToastUtil.showToast(getString(R.string.common_current_device_disconnect));
         }
 
     }
@@ -230,12 +193,18 @@ public class QsTwoTimingActivity extends BaseActivity {
 
                     @Override
                     public void onNext(MessageVo messageVo) {
-
+                        if (messageVo != null) {
+                            if (messageVo.getCode() == 200) {
+                                ToastUtil.showToast(getString(R.string.common_timing_success));
+                                finish();
+                            } else {
+                                ToastUtil.showToast(getString(R.string.common_timing_fail));
+                            }
+                        }
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        ToastUtil.showToast("定时失败");
                     }
 
                     @Override
@@ -254,15 +223,13 @@ public class QsTwoTimingActivity extends BaseActivity {
      * @param s
      */
     private void writeToBle(String s) {
-        progressDialog.setMessage("正在设置");
+        progressDialog.setMessage(getString(R.string.common_setting));
         progressDialog.show();
         BleManager.getInstance().write(bledevice, "0000fff0-0000-1000-8000-00805f9b34fb", "0000fff7-0000-1000-8000-00805f9b34fb", HexUtil.hexStringToBytes(s), new BleWriteCallback() {
             @Override
             public void onWriteSuccess(int current, int total, byte[] justWrite) {
                 progressDialog.dismiss();
                 setTimingData();
-                ToastUtil.showToast("定时成功");
-                finish();
             }
 
             @Override
@@ -273,20 +240,14 @@ public class QsTwoTimingActivity extends BaseActivity {
     }
 
     private String getContent() {
-        String text1 = "";
-        String text2 = "";
-        String content = "";
+        String text1;
+        String content;
         if (isState) {
             text1 = "打开";
         } else {
             text1 = "关闭";
         }
-        if (isDevice == 1) {
-            text2 = "电灯一";
-        } else {
-            text2 = "电灯二";
-        }
-        content = "定时设置在" + hourTime + "小时" + minuteTime + "分钟后" + text1 + text2;
+        content = "定时设置在" + hourTime + "小时" + minuteTime + "分钟后" + text1;
         return content;
     }
 
@@ -295,21 +256,13 @@ public class QsTwoTimingActivity extends BaseActivity {
      */
     private void showDialogTip() {
         new MaterialDialog.Builder(this)
-                .content("您当前有一个定时正在执行，蓝牙设备只支持设置一个定时，您是否确认取消上一个定时来设置当前定时？")
-                .negativeText("取消")
-                .positiveText("确认")
-                .onNegative(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                .content(R.string.common_timing_tip)
+                .negativeText(R.string.common_cancel)
+                .positiveText(R.string.common_confirm)
+                .onNegative((dialog, which) -> {
 
-                    }
                 })
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        updateTimingState();
-                    }
-                }).show();
+                .onPositive((dialog, which) -> updateTimingState()).show();
     }
 
     /**
@@ -330,13 +283,12 @@ public class QsTwoTimingActivity extends BaseActivity {
                         if (messageVo.getCode() == 200) {
                             setTiming();
                         } else {
-                            ToastUtil.showToast("设置失败");
+                            ToastUtil.showToast(getString(R.string.common_set_fail));
                         }
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        ToastUtil.showToast("设置失败");
                     }
 
                     @Override
@@ -354,8 +306,8 @@ public class QsTwoTimingActivity extends BaseActivity {
                 break;
             case R.id.tv_device_timing_save:
                 //实现定时功能
-                if (newHour == 00 && newMinute == 00) {
-                    ToastUtil.showToast("时间不能设置为零");
+                if (newHour == 0 && newMinute == 0) {
+                    ToastUtil.showToast(getString(R.string.common_time_not_zero));
                     return;
                 }
                 if (bledevice != null) {
@@ -365,7 +317,7 @@ public class QsTwoTimingActivity extends BaseActivity {
                         setTiming();
                     }
                 } else {
-                    ToastUtil.showToast("设备未连接，不能设置定时");
+                    ToastUtil.showToast(getString(R.string.common_device_disconnect_and_set_timing));
                 }
                 break;
             case R.id.tv_open_light:
@@ -381,20 +333,6 @@ public class QsTwoTimingActivity extends BaseActivity {
                 tvOpenLight.setBackground(getResources().getDrawable(R.drawable.circle_white_five));
                 tvCloseLight.setBackground(getResources().getDrawable(R.drawable.circle_green_five));
                 isState = false;
-                break;
-            case R.id.tv_device_one:
-                tvDeviceOne.setTextColor(getResources().getColor(R.color.white));
-                tvDeviceTwo.setTextColor(getResources().getColor(R.color.home_setting_text));
-                tvDeviceOne.setBackground(getResources().getDrawable(R.drawable.circle_green_five));
-                tvDeviceTwo.setBackground(getResources().getDrawable(R.drawable.circle_white_five));
-                isDevice = 1;
-                break;
-            case R.id.tv_device_two:
-                tvDeviceOne.setTextColor(getResources().getColor(R.color.home_setting_text));
-                tvDeviceTwo.setTextColor(getResources().getColor(R.color.white));
-                tvDeviceOne.setBackground(getResources().getDrawable(R.drawable.circle_white_five));
-                tvDeviceTwo.setBackground(getResources().getDrawable(R.drawable.circle_green_five));
-                isDevice = 2;
                 break;
         }
     }

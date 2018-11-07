@@ -1,8 +1,7 @@
 package com.qvd.smartswitch.activity.device.Ble;
 
 import android.content.Intent;
-import android.os.CountDownTimer;
-import android.os.Handler;
+import android.os.Message;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -11,6 +10,8 @@ import android.widget.TextView;
 
 import com.qvd.smartswitch.R;
 import com.qvd.smartswitch.activity.base.BaseActivity;
+import com.qvd.smartswitch.activity.base.BaseHandler;
+import com.qvd.smartswitch.activity.base.BaseRunnable;
 import com.qvd.smartswitch.activity.device.DeviceSetRoomActivity;
 import com.qvd.smartswitch.api.RetrofitService;
 import com.qvd.smartswitch.model.device.AddQS02Vo;
@@ -81,6 +82,20 @@ public class DeviceBleConnectActivity extends BaseActivity {
      */
     private String device_id;
 
+    private final MyHandle myHandle = new MyHandle(this);
+
+    private static class MyHandle extends BaseHandler<DeviceBleConnectActivity> {
+
+        MyHandle(DeviceBleConnectActivity reference) {
+            super(reference);
+        }
+
+        @Override
+        protected void handleMessage(DeviceBleConnectActivity reference, Message msg) {
+
+        }
+    }
+
 
     @Override
     protected int setLayoutId() {
@@ -97,7 +112,7 @@ public class DeviceBleConnectActivity extends BaseActivity {
     protected void initData() {
         super.initData();
         tvComplete = findViewById(R.id.tv_complete);
-        tvCommonActionbarTitle.setText("添加设备");
+        tvCommonActionbarTitle.setText(R.string.device_ble_connect_title);
         bleDevice = (ScanResultVo) getIntent().getSerializableExtra("ScanResultVo");
         initDeviceConnect();
     }
@@ -153,33 +168,31 @@ public class DeviceBleConnectActivity extends BaseActivity {
                     @Override
                     public void onNext(AddQS02Vo messageVo) {
                         if (messageVo != null) {
-                            if (messageVo.getCode() == 200) {
-                                aviTwo.hide();
-                                llThree.setVisibility(View.VISIBLE);
-                                new Handler().postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
+                            switch (messageVo.getCode()) {
+                                case 200:
+                                    aviTwo.hide();
+                                    llThree.setVisibility(View.VISIBLE);
+                                    myHandle.postDelayed(new BaseRunnable(() -> {
                                         aviThree.hide();
                                         llFour.setVisibility(View.VISIBLE);
-                                    }
-                                }, 1000);
-                                new Handler().postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
+                                    }), 1000);
+                                    myHandle.postDelayed(new BaseRunnable(() -> {
                                         aviFour.hide();
                                         llComplete.setVisibility(View.VISIBLE);
                                         device_id = messageVo.getDevice_id();
                                         setDefault();
-                                    }
-                                }, 1000);
-                            } else if (messageVo.getCode() == 500) {
-                                aviTwo.hide();
-                                llComplete.setVisibility(View.VISIBLE);
-                                tvComplete.setText("该设备已被人绑定");
-                            } else {
-                                aviTwo.hide();
-                                llComplete.setVisibility(View.VISIBLE);
-                                tvComplete.setText("添加失败，请重试");
+                                    }), 1000);
+                                    break;
+                                case 500:
+                                    aviTwo.hide();
+                                    llComplete.setVisibility(View.VISIBLE);
+                                    tvComplete.setText(R.string.device_ble_connect_isbinging);
+                                    break;
+                                default:
+                                    aviTwo.hide();
+                                    llComplete.setVisibility(View.VISIBLE);
+                                    tvComplete.setText(R.string.device_ble_connect_add_fail);
+                                    break;
                             }
                         }
 
@@ -189,7 +202,7 @@ public class DeviceBleConnectActivity extends BaseActivity {
                     public void onError(Throwable e) {
                         aviTwo.hide();
                         llComplete.setVisibility(View.VISIBLE);
-                        tvComplete.setText("添加失败，请重试");
+                        tvComplete.setText(R.string.device_ble_connect_add_fail);
                     }
 
                     @Override
@@ -207,7 +220,7 @@ public class DeviceBleConnectActivity extends BaseActivity {
         Observable.intervalRange(1, 3, 0, 1, TimeUnit.SECONDS)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .compose(this.<Long>bindUntilEvent(ActivityEvent.DESTROY))
+                .compose(this.bindUntilEvent(ActivityEvent.DESTROY))
                 .subscribe(new Observer<Long>() {
                     @Override
                     public void onSubscribe(Disposable d) {
@@ -244,13 +257,13 @@ public class DeviceBleConnectActivity extends BaseActivity {
                 break;
             case R.id.tv_complete:
                 //失败
-                if (tvComplete.getText().equals("添加失败，请重试")) {
+                if (tvComplete.getText().toString().equals(R.string.device_ble_connect_add_fail)) {
                     llOne.setVisibility(View.GONE);
                     llTwo.setVisibility(View.GONE);
                     llThree.setVisibility(View.GONE);
                     llFour.setVisibility(View.GONE);
                     initDeviceConnect();
-                } else if (tvComplete.getText().equals("该设备已被人绑定")) {
+                } else if (tvComplete.getText().toString().equals(getString(R.string.device_ble_connect_isbinging))) {
                     finish();
                 } else {
                     //成功则跳转到设置房间里

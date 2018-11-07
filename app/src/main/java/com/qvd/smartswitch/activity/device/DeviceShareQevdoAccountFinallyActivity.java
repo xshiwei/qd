@@ -4,16 +4,15 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.qvd.smartswitch.R;
 import com.qvd.smartswitch.activity.base.BaseActivity;
 import com.qvd.smartswitch.api.RetrofitService;
 import com.qvd.smartswitch.model.device.ShareSuccessVo;
-import com.qvd.smartswitch.model.login.MessageVo;
 import com.qvd.smartswitch.model.user.RecentSharePeopleListVo;
 import com.qvd.smartswitch.utils.CommonUtils;
 import com.qvd.smartswitch.utils.ConfigUtils;
 import com.qvd.smartswitch.utils.ToastUtil;
-import com.squareup.picasso.Picasso;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -44,7 +43,7 @@ public class DeviceShareQevdoAccountFinallyActivity extends BaseActivity {
     private int is_control;
 
     /**
-     * 1为普通账户 2为家人
+     * 0为普通账户 1为家人
      */
     private int type;
 
@@ -56,15 +55,15 @@ public class DeviceShareQevdoAccountFinallyActivity extends BaseActivity {
     @Override
     protected void initData() {
         super.initData();
-        tvCommonActionbarTitle.setText("共享给科微多账号");
+        tvCommonActionbarTitle.setText(R.string.device_share_qevdo_account_finally_title);
         dataBean = (RecentSharePeopleListVo.DataBean) getIntent().getSerializableExtra("person_info");
         deviceId = getIntent().getStringExtra("device_id");
         device_type = getIntent().getStringExtra("device_type");
         is_control = getIntent().getIntExtra("is_control", -1);
-        type = getIntent().getIntExtra("type", -1);
+        type = Integer.parseInt(getIntent().getStringExtra("type"));
         if (dataBean != null) {
             if (!CommonUtils.isEmptyString(dataBean.getUser_avatar())) {
-                Picasso.with(this).load(dataBean.getUser_avatar()).into(ivDevicePic);
+                Glide.with(this).load(dataBean.getUser_avatar()).into(ivDevicePic);
             }
             tvName.setText(dataBean.getUser_name());
             if (is_control == 1) {
@@ -113,23 +112,27 @@ public class DeviceShareQevdoAccountFinallyActivity extends BaseActivity {
 
                     @Override
                     public void onNext(ShareSuccessVo messageVo) {
-                        if (messageVo.getCode() == 200) {
-                            ToastUtil.showToast("分享成功");
-                            finish();
-                        } else if (messageVo.getCode() == 203) {
-                            ToastUtil.showToast("不能分享给自己");
-                        } else if (messageVo.getCode() == 205) {
-                            if (messageVo.getIs_share() == 0) {
-                                ToastUtil.showToast("该设备已分享，请等待对方同意");
-                            } else {
-                                ToastUtil.showToast("该设备已分享");
-                            }
+                        switch (messageVo.getCode()) {
+                            case 200:
+                                ToastUtil.showToast(getString(R.string.common_share_success));
+                                finish();
+                                break;
+                            case 203:
+                                ToastUtil.showToast(getString(R.string.common_not_share_self));
+                                break;
+                            case 205:
+                                if (messageVo.getIs_share() == 0) {
+                                    ToastUtil.showToast(getString(R.string.device_share_family_wait_agree));
+                                } else {
+                                    ToastUtil.showToast(getString(R.string.device_share_family_have_to_share));
+                                }
+                                break;
                         }
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        ToastUtil.showToast("分享失败");
+                        ToastUtil.showToast(getString(R.string.common_share_fail));
                     }
 
                     @Override
@@ -155,23 +158,27 @@ public class DeviceShareQevdoAccountFinallyActivity extends BaseActivity {
 
                     @Override
                     public void onNext(ShareSuccessVo messageVo) {
-                        if (messageVo.getCode() == 200) {
-                            ToastUtil.showToast("分享成功");
-                            finish();
-                        } else if (messageVo.getCode() == 203) {
-                            ToastUtil.showToast("不能分享给自己");
-                        } else if (messageVo.getCode() == 205) {
-                            if (messageVo.getIs_share() == 0) {
-                                ToastUtil.showToast("该设备已分享，请等待对方同意");
-                            } else {
-                                ToastUtil.showToast("该设备已分享");
-                            }
+                        switch (messageVo.getCode()) {
+                            case 200:
+                                ToastUtil.showToast(getString(R.string.common_share_success));
+                                finish();
+                                break;
+                            case 203:
+                                ToastUtil.showToast(getString(R.string.common_not_share_self));
+                                break;
+                            case 205:
+                                if (messageVo.getIs_share() == 0) {
+                                    ToastUtil.showToast(getString(R.string.device_share_family_wait_agree));
+                                } else {
+                                    ToastUtil.showToast(getString(R.string.device_share_family_have_to_share));
+                                }
+                                break;
                         }
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        ToastUtil.showToast("分享失败");
+                        ToastUtil.showToast(getString(R.string.common_share_fail));
                     }
 
                     @Override

@@ -2,7 +2,6 @@ package com.qvd.smartswitch.adapter;
 
 
 import android.content.Context;
-import android.graphics.Color;
 import android.view.View;
 import android.widget.TextView;
 
@@ -35,13 +34,13 @@ public class AddDeviceSortAdapter extends AddDeviceAdapter<String> {
 
     private class SortHolder extends AddDeviceHolder<String> {
 
-        private TextView tvName;
-        private View mView;
+        private final TextView tvName;
+        private final View mView;
 
         SortHolder(View itemView, int type, AddDeviceListener listener) {
             super(itemView, type, listener);
             this.mView = itemView;
-            tvName = (TextView) itemView.findViewById(R.id.tv_sort);
+            tvName = itemView.findViewById(R.id.tv_sort);
         }
 
         @Override

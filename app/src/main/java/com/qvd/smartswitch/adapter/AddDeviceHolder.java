@@ -5,17 +5,12 @@ import android.view.View;
 
 
 public abstract class AddDeviceHolder<T> extends RecyclerView.ViewHolder {
-    protected AddDeviceListener mListener;
+    private final AddDeviceListener mListener;
 
-    public AddDeviceHolder(View itemView, int type, AddDeviceListener listener) {
+    AddDeviceHolder(View itemView, int type, AddDeviceListener listener) {
         super(itemView);
         this.mListener = listener;
-        itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mListener.onItemClick(v.getId(), getAdapterPosition());
-            }
-        });
+        itemView.setOnClickListener(v -> mListener.onItemClick(v.getId(), getAdapterPosition()));
     }
 
     public abstract void bindHolder(T t, int position);

@@ -14,7 +14,6 @@ import com.qvd.smartswitch.utils.CommonUtils;
 import com.qvd.smartswitch.utils.ToastUtil;
 
 import java.util.HashMap;
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -56,7 +55,7 @@ public class ResetPasswordThreeActivity extends BaseActivity {
         super.initData();
         type = getIntent().getIntExtra("type", -1);
         account = getIntent().getStringExtra("account");
-        tvCommonActionbarTitle.setText("科微多账号-科微多安全验证");
+        tvCommonActionbarTitle.setText(R.string.reset_password_three_title);
         map = new HashMap<>();
         if (type == 1) {
             map.put("username", account);
@@ -88,7 +87,7 @@ public class ResetPasswordThreeActivity extends BaseActivity {
                     public void onNext(MessageVo messageVo) {
                         if (messageVo.getCode() == 200) {
                             countDownTimer.start();
-                            ToastUtil.showToast("发送成功");
+                            ToastUtil.showToast(getString(R.string.reset_password_three_send_success));
                         }
                     }
 
@@ -124,9 +123,9 @@ public class ResetPasswordThreeActivity extends BaseActivity {
             case R.id.tv_confirm:
                 //确认
                 if (CommonUtils.isEmptyString(etInputCode.getText().toString())) {
-                    ToastUtil.showToast("验证码不能为空");
+                    ToastUtil.showToast(getString(R.string.reset_password_three_code_not_empty));
                 } else if (etInputCode.getText().toString().length() != 6) {
-                    ToastUtil.showToast("验证码长度错误");
+                    ToastUtil.showToast(getString(R.string.reset_password_three_code_length_error));
                 } else {
                     vaildCode();
                 }
@@ -175,9 +174,9 @@ public class ResetPasswordThreeActivity extends BaseActivity {
     /**
      * 创建手机号验证码定时器
      */
-    public class CountDownTimer extends android.os.CountDownTimer {
+    class CountDownTimer extends android.os.CountDownTimer {
 
-        public CountDownTimer(long millisInFuture, long countDownInterval) {
+        CountDownTimer(long millisInFuture, long countDownInterval) {
             super(millisInFuture, countDownInterval);
         }
 
@@ -191,7 +190,7 @@ public class ResetPasswordThreeActivity extends BaseActivity {
         @Override
         public void onFinish() {
             //重新给Button设置文字
-            tvPhoneCode.setText("发送验证码");
+            tvPhoneCode.setText(R.string.reset_password_three_send_code);
             //设置可点击
             tvPhoneCode.setClickable(true);
         }

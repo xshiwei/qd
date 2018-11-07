@@ -14,7 +14,7 @@ import com.qvd.smartswitch.adapter.SpaceManageListAdapter;
 import com.qvd.smartswitch.api.RetrofitService;
 import com.qvd.smartswitch.model.home.HomeListVo;
 import com.qvd.smartswitch.utils.ConfigUtils;
-import com.qvd.smartswitch.utils.SnackbarUtils;
+import com.qvd.smartswitch.utils.ToastUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +43,7 @@ public class SpaceManageActivity extends BaseActivity {
     /**
      * 家庭列表
      */
-    private List<HomeListVo.DataBean> list = new ArrayList<>();
+    private final List<HomeListVo.DataBean> list = new ArrayList<>();
     private SpaceManageListAdapter adapter;
 
     @Override
@@ -60,7 +60,7 @@ public class SpaceManageActivity extends BaseActivity {
     @Override
     protected void initData() {
         super.initData();
-        tvCommonActionbarTitle.setText("空间管理");
+        tvCommonActionbarTitle.setText(R.string.space_manage_title);
 
     }
 
@@ -105,10 +105,8 @@ public class SpaceManageActivity extends BaseActivity {
                                 list.clear();
                                 list.addAll(homeListVo.getData());
                                 adapter.notifyDataSetChanged();
-                            } else if (homeListVo.getCode() == 400) {
-                                SnackbarUtils.Short(tvCommonActionbarTitle, "获取失败").show();
                             } else {
-                                SnackbarUtils.Short(tvCommonActionbarTitle, "连接超时").show();
+                                ToastUtil.showToast(getString(R.string.common_server_error));
                             }
                         }
                     }

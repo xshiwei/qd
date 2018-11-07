@@ -7,12 +7,10 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
-import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 
 import com.qvd.smartswitch.model.device.ScanResultVo;
-import com.qvd.smartswitch.utils.CommonUtils;
 
 import java.util.LinkedList;
 import java.util.Random;
@@ -40,8 +38,6 @@ public class RandomTextView extends FrameLayout
     private int width;
     private int height;
     private int mode = RippleView.MODE_OUT;
-    private int fontColor = 0xffF8FCFB;
-    private int shadowColor = 0xddF8FCFB;
 
     public interface OnRippleViewClickListener {
         void onRippleViewClicked(int position);
@@ -65,8 +61,8 @@ public class RandomTextView extends FrameLayout
     }
 
     @TargetApi(21)
-    public RandomTextView(Context context, AttributeSet attrs, int defStyleAttr,
-                          int defStyleRes) {
+    private RandomTextView(Context context, AttributeSet attrs, int defStyleAttr,
+                           int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         init(attrs, context);
     }
@@ -106,7 +102,7 @@ public class RandomTextView extends FrameLayout
 
     private void init(AttributeSet attrs, Context context) {
         random = new Random();
-        vecKeywords = new Vector<ScanResultVo>(MAX);
+        vecKeywords = new Vector<>(MAX);
         getViewTreeObserver().addOnGlobalLayoutListener(this);
 
     }
@@ -146,12 +142,10 @@ public class RandomTextView extends FrameLayout
             for (int i = 0; i < size; i++) {
                 String keyword = vecKeywords.get(i).getDeviceName();
                 // 随机颜色  
-                int ranColor = fontColor;
-                // 随机位置，糙值  
+                // 随机位置，糙值
                 int xy[] = randomXY(random, listX, listY, xItem);
 
-                int txtSize = TEXT_SIZE;
-                // 实例化RippleOutView  
+                // 实例化RippleOutView
                 final RippleView txt = new RippleView(getContext());
                 if (mode == RippleView.MODE_IN) {
                     txt.setMode(RippleView.MODE_IN);
@@ -160,16 +154,14 @@ public class RandomTextView extends FrameLayout
                 }
 
                 final int finalI = i;
-                txt.setOnClickListener(new OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        if (onRippleOutViewClickListener != null)
-                            onRippleOutViewClickListener.onRippleViewClicked(finalI);
-                    }
+                txt.setOnClickListener(view -> {
+                    if (onRippleOutViewClickListener != null)
+                        onRippleOutViewClickListener.onRippleViewClicked(finalI);
                 });
                 txt.setText(keyword);
-                txt.setTextColor(ranColor);
-                txt.setTextSize(TypedValue.COMPLEX_UNIT_SP, txtSize);
+                txt.setTextColor(0xffF8FCFB);
+                txt.setTextSize(TypedValue.COMPLEX_UNIT_SP, TEXT_SIZE);
+                int shadowColor = 0xddF8FCFB;
                 txt.setShadowLayer(1, 1, 1, shadowColor);
                 txt.setGravity(Gravity.CENTER);
                 txt.startRippleAnimation();
@@ -217,7 +209,6 @@ public class RandomTextView extends FrameLayout
             // 对于最靠近中心点的，其值不会大于yItem<br/>  
             // 对于可以一路下降到中心点的，则该值也是其应调整的大小<br/>  
             int yMove = Math.abs(yDistance);
-            inner:
             for (int k = i - 1; k >= 0; k--) {
                 int[] kXY = (int[]) listTxt.get(k).getTag();
                 int startX = kXY[IDX_X];
@@ -233,7 +224,7 @@ public class RandomTextView extends FrameLayout
                             // 取消默认值。  
                             yMove = 0;
                         }
-                        break inner;
+                        break;
                     }
                 }
             }

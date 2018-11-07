@@ -16,7 +16,7 @@ import com.qvd.smartswitch.api.RetrofitService;
 import com.qvd.smartswitch.model.login.MessageVo;
 import com.qvd.smartswitch.utils.CommonUtils;
 import com.qvd.smartswitch.utils.RegexpUtils;
-import com.qvd.smartswitch.utils.SnackbarUtils;
+import com.qvd.smartswitch.utils.ToastUtil;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -27,9 +27,7 @@ import io.reactivex.ObservableSource;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
 import io.reactivex.functions.Function;
-import io.reactivex.functions.Predicate;
 import io.reactivex.schedulers.Schedulers;
 
 /**
@@ -160,7 +158,7 @@ public class SignupActivity extends BaseActivity {
                 //手机号下一步
                 if (CommonUtils.isEmptyString(etInputPhone.getText().toString().trim()) ||
                         CommonUtils.isEmptyString(etInputCode.getText().toString().trim())) {
-                    SnackbarUtils.Short(btnPhoneNext, "手机号或验证码不能为空").show();
+                    ToastUtil.showToast(getString(R.string.signup_phone_vaild_not_empty));
                     return;
                 }
                 isVerificationCode(2, etInputPhone.getText().toString(), etInputCode.getText().toString());
@@ -172,7 +170,7 @@ public class SignupActivity extends BaseActivity {
             case R.id.btn_email_next:
                 //邮箱下一步
                 if (CommonUtils.isEmptyString(etInputEmail.getText().toString().trim()) || CommonUtils.isEmptyString(etInputEmailCode.getText().toString().trim())) {
-                    SnackbarUtils.Short(btnEmailNext, "邮箱不能为空").show();
+                    ToastUtil.showToast(getString(R.string.signup_email_not_empty));
                     return;
                 }
                 isVerificationCode(1, etInputEmail.getText().toString(), etInputEmailCode.getText().toString());
@@ -218,14 +216,13 @@ public class SignupActivity extends BaseActivity {
                                     overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
                                 }
                             } else {
-                                SnackbarUtils.Short(btnEmailNext, "验证码与账号不匹配");
+                                ToastUtil.showToast(getString(R.string.signup_vaild_account_not_vaild));
                             }
                         }
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        SnackbarUtils.Short(btnEmailNext, "网络连接失败");
                     }
 
                     @Override
@@ -262,44 +259,33 @@ public class SignupActivity extends BaseActivity {
         RetrofitService.qdoApi.isSameUserName(username)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnNext(new Consumer<MessageVo>() {
-                    @Override
-                    public void accept(MessageVo messageVo) throws Exception {
-                        if (messageVo.getCode() == 200) {
-                            if (type == 1) {
-                                tvEmailError.setVisibility(View.VISIBLE);
-                                tvEmailError.setText("该邮箱已被注册");
-                            } else {
-                                tvPhoneError.setVisibility(View.VISIBLE);
-                                tvPhoneError.setText("该手机号已被注册");
-                            }
-                        }
-                    }
-                })
-                .filter(new Predicate<MessageVo>() {
-                    @Override
-                    public boolean test(MessageVo messageVo) throws Exception {
-                        return messageVo.getCode() != 200;
-                    }
-                })
-                .observeOn(Schedulers.io())
-                .concatMap(new Function<MessageVo, ObservableSource<MessageVo>>() {
-                    @Override
-                    public ObservableSource<MessageVo> apply(MessageVo messageVo) throws Exception {
+                .doOnNext(messageVo -> {
+                    if (messageVo.getCode() == 200) {
                         if (type == 1) {
-                            //表示邮箱获取验证码
-                            Map<String, Object> map = new HashMap<>();
-                            map.put("username", username);
-                            map.put("identity_type", "1");
-                            return RetrofitService.qdoApi.isUsernameValidation(map);
+                            tvEmailError.setVisibility(View.VISIBLE);
+                            tvEmailError.setText(R.string.common_email_be_registered);
                         } else {
-                            //表示手机号获取验证码
-                            Map<String, Object> map = new HashMap<>();
-                            map.put("username", username);
-                            map.put("identity_type", "2");
-                            map.put("sms_type", 0);
-                            return RetrofitService.qdoApi.isUsernameValidation(map);
+                            tvPhoneError.setVisibility(View.VISIBLE);
+                            tvPhoneError.setText(R.string.common_phone_be_registered);
                         }
+                    }
+                })
+                .filter(messageVo -> messageVo.getCode() != 200)
+                .observeOn(Schedulers.io())
+                .concatMap((Function<MessageVo, ObservableSource<MessageVo>>) messageVo -> {
+                    if (type == 1) {
+                        //表示邮箱获取验证码
+                        Map<String, Object> map = new HashMap<>();
+                        map.put("username", username);
+                        map.put("identity_type", "1");
+                        return RetrofitService.qdoApi.isUsernameValidation(map);
+                    } else {
+                        //表示手机号获取验证码
+                        Map<String, Object> map = new HashMap<>();
+                        map.put("username", username);
+                        map.put("identity_type", "2");
+                        map.put("sms_type", 0);
+                        return RetrofitService.qdoApi.isUsernameValidation(map);
                     }
                 })
                 .observeOn(AndroidSchedulers.mainThread())
@@ -311,25 +297,26 @@ public class SignupActivity extends BaseActivity {
 
                     @Override
                     public void onNext(MessageVo messageVo) {
-                        if (messageVo.getCode() == 200) {
-                            if (type == 1) {
-                                emailCountDownTimer.start();
-                            } else {
-                                phoneCountDownTimer.start();
-                            }
-                            SnackbarUtils.Short(btnEmailNext, "验证码发送成功").show();
-                        } else if (messageVo.getCode() == 400) {
-                            SnackbarUtils.Short(btnEmailNext, "验证码发送失败").show();
-                        } else if (messageVo.getCode() == 405) {
-                            SnackbarUtils.Short(btnEmailNext, "验证码不能重复发送").show();
-                        } else {
-                            SnackbarUtils.Short(btnEmailNext, "网络连接超时").show();
+                        switch (messageVo.getCode()) {
+                            case 200:
+                                if (type == 1) {
+                                    emailCountDownTimer.start();
+                                } else {
+                                    phoneCountDownTimer.start();
+                                }
+                                ToastUtil.showToast(getString(R.string.common_code_send_success));
+                                break;
+                            case 400:
+                                ToastUtil.showToast(getString(R.string.common_code_send_fail));
+                                break;
+                            case 405:
+                                ToastUtil.showToast(getString(R.string.common_vaild_not_repeat_send));
+                                break;
                         }
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        SnackbarUtils.Short(btnEmailNext, "网络连接失败");
                     }
 
                     @Override
@@ -348,11 +335,11 @@ public class SignupActivity extends BaseActivity {
         if (CommonUtils.isEmptyString(phone)) {
             valid = false;
             tvPhoneError.setVisibility(View.VISIBLE);
-            tvPhoneError.setText("手机号码不能为空");
+            tvPhoneError.setText(R.string.common_phone_not_empty);
         } else if (!RegexpUtils.isMobileNO(phone)) {
             valid = false;
             tvPhoneError.setVisibility(View.VISIBLE);
-            tvPhoneError.setText("手机号码格式不正确");
+            tvPhoneError.setText(R.string.common_phone_type_error);
         } else {
             tvPhoneError.setVisibility(View.GONE);
         }
@@ -380,11 +367,11 @@ public class SignupActivity extends BaseActivity {
         if (CommonUtils.isEmptyString(email)) {
             valid = false;
             tvEmailError.setVisibility(View.VISIBLE);
-            tvEmailError.setText("邮箱不能为空");
+            tvEmailError.setText(R.string.common_email_not_empty);
         } else if (!RegexpUtils.isEmailNO(email)) {
             valid = false;
             tvEmailError.setVisibility(View.VISIBLE);
-            tvEmailError.setText("邮箱格式不正确");
+            tvEmailError.setText(R.string.common_email_type_error);
         } else {
             tvEmailError.setVisibility(View.GONE);
         }
@@ -394,9 +381,9 @@ public class SignupActivity extends BaseActivity {
     /**
      * 创建手机号验证码定时器
      */
-    public class PhoneCountDownTimer extends CountDownTimer {
+    class PhoneCountDownTimer extends CountDownTimer {
 
-        public PhoneCountDownTimer(long millisInFuture, long countDownInterval) {
+        PhoneCountDownTimer(long millisInFuture, long countDownInterval) {
             super(millisInFuture, countDownInterval);
         }
 
@@ -410,7 +397,7 @@ public class SignupActivity extends BaseActivity {
         @Override
         public void onFinish() {
             //重新给Button设置文字
-            tvPhoneCode.setText("发送验证码");
+            tvPhoneCode.setText(R.string.reset_password_three_send_code);
             //设置可点击
             tvPhoneCode.setClickable(true);
         }
@@ -419,9 +406,9 @@ public class SignupActivity extends BaseActivity {
     /**
      * 创建邮箱验证码定时器
      */
-    public class EmailCountDownTimer extends CountDownTimer {
+    class EmailCountDownTimer extends CountDownTimer {
 
-        public EmailCountDownTimer(long millisInFuture, long countDownInterval) {
+        EmailCountDownTimer(long millisInFuture, long countDownInterval) {
             super(millisInFuture, countDownInterval);
         }
 
@@ -435,7 +422,7 @@ public class SignupActivity extends BaseActivity {
         @Override
         public void onFinish() {
             //重新给Button设置文字
-            tvEmailCode.setText("发送邮箱验证码");
+            tvEmailCode.setText(R.string.reset_password_three_send_code);
             //设置可点击
             tvEmailCode.setClickable(true);
         }

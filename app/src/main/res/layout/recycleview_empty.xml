@@ -18,7 +18,7 @@
         android:layout_centerHorizontal="true"
         android:gravity="center"
         android:padding="5dp"
-        android:text="未获取到数据，点击立即刷新"
+        android:text="@string/recycleview_empty_text"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@color/home_setting_text_two"
         android:textSize="12sp" />

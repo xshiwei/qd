@@ -2,7 +2,7 @@ package com.lljjcoder.style.citypickerview.model;
 
 import java.util.List;
 
-public class ProvinceModel {
+class ProvinceModel {
 	private String name;
 	private List<CityModel> cityList;
 	

@@ -12,7 +12,6 @@
         android:background="@drawable/city_bg_l"
         android:padding="10dp"
         android:gravity="center"
-        android:text="hello"
         android:textSize="14sp"
         android:textStyle="bold"/>
 </LinearLayout>

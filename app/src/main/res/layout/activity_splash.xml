@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <ImageView
+        android:id="@+id/iv_splash"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="centerCrop"
-        android:src="@mipmap/home_splash" />
+        android:scaleType="centerCrop" />
 
     <com.qvd.smartswitch.widget.SimpleButton
         android:id="@+id/sb_skip"
@@ -22,6 +23,7 @@
         app:sb_border_color="@color/black6"
         app:sb_shape="arc"
         app:sb_text="跳过 3"
-        app:sb_text_color="@android:color/white" />
+        app:sb_text_color="@android:color/white"
+        tools:ignore="RtlHardcoded" />
 
 </FrameLayout>

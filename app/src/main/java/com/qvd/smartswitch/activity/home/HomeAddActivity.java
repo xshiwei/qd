@@ -1,7 +1,6 @@
 package com.qvd.smartswitch.activity.home;
 
 import android.content.Intent;
-import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -9,7 +8,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.lljjcoder.Interface.OnCityItemClickListener;
 import com.lljjcoder.bean.CityBean;
@@ -17,7 +15,6 @@ import com.lljjcoder.bean.DistrictBean;
 import com.lljjcoder.bean.ProvinceBean;
 import com.lljjcoder.citywheel.CityConfig;
 import com.lljjcoder.style.citypickerview.CityPickerView;
-import com.orhanobut.logger.Logger;
 import com.qvd.smartswitch.R;
 import com.qvd.smartswitch.activity.MainActivity;
 import com.qvd.smartswitch.activity.base.BaseActivity;
@@ -25,14 +22,13 @@ import com.qvd.smartswitch.adapter.HomeSettingPicAdapter;
 import com.qvd.smartswitch.api.RetrofitService;
 import com.qvd.smartswitch.model.home.AddHomeVo;
 import com.qvd.smartswitch.model.home.HomeBackgroundVo;
-import com.qvd.smartswitch.model.login.MessageVo;
 import com.qvd.smartswitch.utils.CommonUtils;
 import com.qvd.smartswitch.utils.ConfigUtils;
-import com.qvd.smartswitch.utils.SharedPreferencesUtil;
-import com.qvd.smartswitch.utils.SnackbarUtils;
+import com.qvd.smartswitch.utils.ToastUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -66,7 +62,7 @@ public class HomeAddActivity extends BaseActivity {
     /**
      * 声明城市选择器
      */
-    private CityPickerView mPicker = new CityPickerView();
+    private final CityPickerView mPicker = new CityPickerView();
     private String provinceName;   //省
     private String cityName;       //市
     private String districtName;   //区
@@ -75,8 +71,7 @@ public class HomeAddActivity extends BaseActivity {
      * 图片集合
      */
     private List<HomeBackgroundVo> list = new ArrayList<>();
-    private HomeSettingPicAdapter adapter;
-
+    private HomeSettingPicAdapter picAdapter;
 
     @Override
     protected int setLayoutId() {
@@ -92,7 +87,7 @@ public class HomeAddActivity extends BaseActivity {
     @Override
     protected void initData() {
         super.initData();
-        tvCommonActionbarTitle.setText("添加家庭");
+        tvCommonActionbarTitle.setText(R.string.home_add_title);
         setRecycleView();
         mPicker.init(this);
     }
@@ -119,7 +114,7 @@ public class HomeAddActivity extends BaseActivity {
                 //确认
                 //判断名字或者地址有没有填
                 if (CommonUtils.isEmptyString(tvName.getText().toString()) || CommonUtils.isEmptyString(tvLocation.getText().toString())) {
-                    SnackbarUtils.Short(tvConfirm, "名字或位置不能为空").show();
+                    ToastUtil.showToast(getString(R.string.home_add_not_empty));
                 } else {
                     addFamily();
                 }
@@ -132,20 +127,12 @@ public class HomeAddActivity extends BaseActivity {
      */
     private void showPopupWindowBack() {
         new MaterialDialog.Builder(this)
-                .content("您当前创建的家庭还没有保存，是否放弃编辑并退出？")
-                .negativeText("退出")
-                .positiveText("继续编辑")
-                .onNegative(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        finish();
-                    }
-                })
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                .content(R.string.home_add_abandon_edit_and_exit)
+                .negativeText(R.string.common_exit)
+                .positiveText(R.string.common_continue_edit)
+                .onNegative((dialog, which) -> finish())
+                .onPositive((dialog, which) -> {
 
-                    }
                 })
                 .show();
     }
@@ -158,19 +145,9 @@ public class HomeAddActivity extends BaseActivity {
         list.add(new HomeBackgroundVo(R.color.red));
         list.add(new HomeBackgroundVo(R.color.orange));
         recyclerview.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-        adapter = new HomeSettingPicAdapter(this, list);
-        recyclerview.setAdapter(adapter);
-        adapter.setOnItemClickListener(new HomeSettingPicAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                adapter.setSelection(position);
-            }
-
-            @Override
-            public void onItemLongClickListener(View view, int position) {
-
-            }
-        });
+        picAdapter = new HomeSettingPicAdapter(list);
+        recyclerview.setAdapter(picAdapter);
+        picAdapter.setOnItemClickListener((adapter, view, position) -> picAdapter.setSelection(position));
     }
 
     /**
@@ -189,18 +166,18 @@ public class HomeAddActivity extends BaseActivity {
                     @Override
                     public void onNext(AddHomeVo messageVo) {
                         //判断有没有添加成功，添加成功则跳出一个弹窗提示。
-                        if (messageVo.getCode() == 200) {
-                            showPopupWindowConfirm(messageVo);
-                        } else if (messageVo.getCode() == 400) {
-                            SnackbarUtils.Short(tvCommonActionbarTitle, "保存失败");
-                        } else {
-                            SnackbarUtils.Short(tvCommonActionbarTitle, "网络连接超时");
+                        if (messageVo != null) {
+                            if (messageVo.getCode() == 200) {
+                                showPopupWindowConfirm(messageVo);
+                            } else {
+                                ToastUtil.showToast(getString(R.string.common_save_fail));
+                            }
                         }
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        Logger.e(e.getMessage());
+                        ToastUtil.showToast(getString(R.string.common_save_fail));
                     }
 
                     @Override
@@ -253,25 +230,19 @@ public class HomeAddActivity extends BaseActivity {
     private void showPopupWindowConfirm(AddHomeVo addHomeVo) {
         new MaterialDialog.Builder(this)
                 .title("已成功创建- " + tvName.getText().toString())
-                .content("是否现在立刻去设置新家庭")
-                .negativeText("稍后再说")
-                .positiveText("立即设置")
-                .onNegative(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        startActivity(new Intent(HomeAddActivity.this, MainActivity.class));
-                        overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
-                        finish();
-                    }
+                .content(R.string.home_add_immediately_set_family)
+                .negativeText(R.string.common_talk_about_later)
+                .positiveText(R.string.common_immediately_setting)
+                .onNegative((dialog, which) -> {
+                    startActivity(new Intent(HomeAddActivity.this, MainActivity.class));
+                    overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+                    finish();
                 })
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        startActivity(new Intent(HomeAddActivity.this, RoomAddListActivity.class)
-                                .putExtra("family_id", addHomeVo.getFamily_id()));
-                        overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
-                        finish();
-                    }
+                .onPositive((dialog, which) -> {
+                    startActivity(new Intent(HomeAddActivity.this, RoomAddListActivity.class)
+                            .putExtra("family_id", addHomeVo.getFamily_id()));
+                    overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+                    finish();
                 })
                 .show();
     }
@@ -282,28 +253,17 @@ public class HomeAddActivity extends BaseActivity {
      */
     private void showPopupWindowName() {
         new MaterialDialog.Builder(this)
-                .title("设置家庭名称")
-                .negativeText("取消")
-                .positiveText("确定")
+                .content(R.string.home_add_set_family_name)
+                .negativeText(R.string.common_cancel)
+                .positiveText(R.string.common_confirm)
                 .inputRange(1, 20, getResources().getColor(R.color.red))
-                .input(tvName.getText().toString(), null, false, new MaterialDialog.InputCallback() {
-                    @Override
-                    public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
+                .input(tvName.getText().toString(), null, false, (dialog, input) -> {
 
-                    }
                 })
-                .onNegative(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        CommonUtils.closeSoftKeyboard(HomeAddActivity.this);
-                    }
-                })
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        tvName.setText(dialog.getInputEditText().getText().toString());
-                        CommonUtils.closeSoftKeyboard(HomeAddActivity.this);
-                    }
+                .onNegative((dialog, which) -> CommonUtils.closeSoftKeyboard(HomeAddActivity.this))
+                .onPositive((dialog, which) -> {
+                    tvName.setText(Objects.requireNonNull(dialog.getInputEditText()).getText().toString());
+                    CommonUtils.closeSoftKeyboard(HomeAddActivity.this);
                 })
                 .show();
     }

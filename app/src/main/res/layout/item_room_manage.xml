@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="@dimen/y120"
     android:background="@drawable/layout_seletor"
-    android:clickable="true">
+    android:clickable="true"
+    android:focusable="true">
 
     <ImageView
         android:id="@+id/iv_pic"
@@ -11,7 +13,8 @@
         android:layout_height="@dimen/y60"
         android:layout_centerVertical="true"
         android:layout_marginLeft="@dimen/x30"
-        android:src="@mipmap/home_setting" />
+        android:src="@mipmap/home_setting"
+        tools:ignore="RtlHardcoded" />
 
     <TextView
         android:id="@+id/tv_text"
@@ -20,9 +23,9 @@
         android:layout_marginLeft="@dimen/x30"
         android:layout_marginTop="@dimen/y20"
         android:layout_toRightOf="@+id/iv_pic"
-        android:text="电动牙刷"
         android:textColor="@color/black"
-        android:textSize="14sp" />
+        android:textSize="14sp"
+        tools:ignore="RtlHardcoded" />
 
     <TextView
         android:id="@+id/tv_device_num"
@@ -30,9 +33,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="@dimen/y25"
-        android:layout_marginLeft="@dimen/x30"
-        android:layout_toRightOf="@+id/iv_pic"
-        android:text="0个设备"
+        android:layout_marginStart="@dimen/x30"
+        android:layout_toEndOf="@+id/iv_pic"
         android:textColor="@color/home_setting_text_two"
         android:textSize="12sp" />
 
@@ -43,7 +45,8 @@
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:layout_marginRight="@dimen/x30"
-        android:src="@mipmap/home_manage_right" />
+        android:src="@mipmap/home_manage_right"
+        tools:ignore="RtlHardcoded" />
 
     <View
         android:layout_width="match_parent"

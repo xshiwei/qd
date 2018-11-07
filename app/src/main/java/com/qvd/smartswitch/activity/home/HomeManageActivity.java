@@ -1,7 +1,6 @@
 package com.qvd.smartswitch.activity.home;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -17,14 +16,11 @@ import com.qvd.smartswitch.api.RetrofitService;
 import com.qvd.smartswitch.model.home.HomeListVo;
 import com.qvd.smartswitch.utils.ConfigUtils;
 import com.qvd.smartswitch.utils.SharedPreferencesUtil;
-import com.qvd.smartswitch.utils.SnackbarUtils;
-import com.qvd.smartswitch.widget.EmptyLayout;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -47,17 +43,11 @@ public class HomeManageActivity extends BaseActivity {
     @BindView(R.id.rl_add)
     RelativeLayout rlAdd;
 
-    private EmptyLayout emptylayout;
-
-
     /**
      * 家庭列表
      */
     private List<HomeListVo.DataBean> list = new ArrayList<>();
     private HomeManageListAdapter adapter;
-    private String userId;
-
-    private boolean isHome = false;
 
     @Override
     protected int setLayoutId() {
@@ -73,51 +63,33 @@ public class HomeManageActivity extends BaseActivity {
     @Override
     protected void initData() {
         super.initData();
-        tvCommonActionbarTitle.setText("家庭管理");
-        emptylayout = findViewById(R.id.emptylayout);
+
+        tvCommonActionbarTitle.setText(R.string.home_manage_title);
+        recyclerview.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        adapter = new HomeManageListAdapter(list);
+        recyclerview.setAdapter(adapter);
+        adapter.setOnItemClickListener((adapter, view, position) -> {
+            startActivity(new Intent(HomeManageActivity.this, HomeSettingActivity.class)
+                    .putExtra("family_id", list.get(position).getFamily_id())
+                    .putExtra("family_num", list.size()));
+            overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+        });
+        myErrorLayout.setOnClickListener(v -> {
+            getHomeList();
+        });
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        userId = SharedPreferencesUtil.getString(this, SharedPreferencesUtil.USER_ID);
         getHomeList();
-        recyclerview.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        adapter = new HomeManageListAdapter(this, list);
-        recyclerview.setAdapter(adapter);
-        adapter.setOnItemClickListener(new HomeManageListAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                startActivity(new Intent(HomeManageActivity.this, HomeSettingActivity.class)
-                        .putExtra("family_id", list.get(position).getFamily_id())
-                        .putExtra("family_num", list.size()));
-                overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
-            }
-
-            @Override
-            public void onItemLongClickListener(View view, int position) {
-
-            }
-        });
-    }
-
-    @Override
-    public void onNetChange(int netMobile) {
-        super.onNetChange(netMobile);
-        if (netMobile == -1) {
-            isHome = false;
-        } else {
-            isHome = true;
-            getHomeList();
-        }
     }
 
     /**
      * 获取家庭列表
      */
     private void getHomeList() {
-        CacheSetting.getCache().getHomeManger(RetrofitService.qdoApi.getFamilyList(ConfigUtils.user_id),
-                new DynamicKey(userId), new EvictDynamicKey(isHome))
+        RetrofitService.qdoApi.getFamilyList(ConfigUtils.user_id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<HomeListVo>() {
@@ -134,22 +106,22 @@ public class HomeManageActivity extends BaseActivity {
                                     list.clear();
                                     list.addAll(homeListVo.getData());
                                     adapter.notifyDataSetChanged();
-                                    emptylayout.hide();
+                                } else {
+                                    adapter.setEmptyView(myEmptyLayout);
                                 }
                             } else {
-                                emptylayout.showError();
+                                adapter.setEmptyView(myErrorLayout);
                             }
                         }
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        emptylayout.showError();
+                        adapter.setEmptyView(myErrorLayout);
                     }
 
                     @Override
                     public void onComplete() {
-
                     }
                 });
     }

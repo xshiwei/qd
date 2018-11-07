@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -17,15 +18,16 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/x20"
             android:padding="5dp"
-            android:src="@mipmap/actionbar_goback" />
+            android:src="@mipmap/actionbar_goback"
+            tools:ignore="RtlHardcoded" />
 
         <TextView
             android:id="@+id/tv_add_device_nearby"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/x220"
-            android:text="附近设备"
+            android:layout_marginStart="@dimen/x220"
+            android:text="@string/add_device_nearby_device"
             android:textColor="@color/add_device_title"
             android:textSize="15sp" />
 
@@ -36,9 +38,10 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/x220"
-            android:text="手动添加"
+            android:text="@string/add_device_manual"
             android:textColor="@color/add_device_selete"
-            android:textSize="15sp" />
+            android:textSize="15sp"
+            tools:ignore="RtlHardcoded" />
 
         <ImageView
             android:id="@+id/iv_add_device_search"
@@ -48,7 +51,8 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/x20"
             android:src="@mipmap/home_search"
-            android:visibility="gone" />
+            android:visibility="gone"
+            tools:ignore="RtlHardcoded" />
 
     </RelativeLayout>
 
@@ -85,7 +89,7 @@
                 app:fallingDelay="10"
                 app:flakeDensity="100"
                 app:flakeScale="2"
-                app:flakeSrc="@mipmap/add_device_background_pic"></com.dingmouren.fallingview.FallingView>
+                app:flakeSrc="@mipmap/add_device_background_pic" />
 
             <com.qvd.smartswitch.widget.RadarScanView
                 android:id="@+id/radar_scanview"
@@ -96,14 +100,14 @@
                 android:id="@+id/random_textview"
                 android:layout_width="@dimen/x700"
                 android:layout_height="@dimen/y880"
-                android:layout_centerInParent="true"></com.qvd.smartswitch.widget.RandomTextView>
+                android:layout_centerInParent="true" />
 
             <TextView
                 android:id="@+id/tv_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
-                android:text="下拉可以重新扫描"
+                android:text="@string/add_device_pulldown_retry_scan"
                 android:textColor="@color/home_setting_text_two"
                 android:textSize="16sp"
                 android:visibility="gone" />
@@ -132,7 +136,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="4"
-            android:background="@color/white"></FrameLayout>
+            android:background="@color/white" />
     </LinearLayout>
 
 

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="@dimen/y120"
     android:background="@color/white">
@@ -9,8 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="@dimen/x30"
-        android:contentDescription="TODO"
+        android:layout_marginStart="@dimen/x30"
         android:src="@mipmap/device_unconnect" />
 
     <TextView
@@ -24,9 +24,9 @@
         android:layout_toRightOf="@+id/iv_item_device_pic"
         android:ellipsize="end"
         android:lines="1"
-        android:text="11111"
         android:textColor="@color/home_setting_text"
-        android:textSize="14sp" />
+        android:textSize="14sp"
+        tools:ignore="RtlHardcoded" />
 
     <TextView
         android:id="@+id/tv_decive_rssi"
@@ -40,19 +40,18 @@
         android:layout_toRightOf="@+id/iv_item_device_pic"
         android:ellipsize="end"
         android:lines="1"
-        android:text="信号"
         android:textColor="@color/home_setting_text_three"
-        android:textSize="12sp" />
+        android:textSize="12sp"
+        tools:ignore="RtlHardcoded" />
 
 
     <ImageView
         android:id="@+id/iv_item_device_more"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
-        android:layout_marginRight="@dimen/x30"
-        android:contentDescription="TODO"
+        android:layout_marginEnd="@dimen/x30"
         android:src="@mipmap/device_more_details" />
 
     <View

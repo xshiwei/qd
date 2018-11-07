@@ -46,7 +46,7 @@
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="@dimen/y30"
-            android:text="添加共享"
+            android:text="@string/device_share_manage_add_share"
             android:textColor="@color/home_setting_text"
             android:textSize="12sp" />
     </RelativeLayout>

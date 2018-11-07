@@ -17,16 +17,10 @@
         android:layout_marginBottom="@dimen/y30"
         android:layout_marginTop="@dimen/y20">
 
-        <com.qvd.smartswitch.widget.EmptyLayout
-            android:id="@+id/emptylayout"
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerview"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/recyclerview"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
-        </com.qvd.smartswitch.widget.EmptyLayout>
+            android:layout_height="match_parent" />
 
     </com.scwang.smartrefresh.layout.SmartRefreshLayout>
 
@@ -38,7 +32,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="@dimen/y30"
         android:drawableTop="@mipmap/device_add_timing"
-        android:text="添加定时"
+        android:text="@string/device_ble_timing_add_timing"
         android:textColor="@color/home_setting_text"
         android:textSize="14sp" />
 

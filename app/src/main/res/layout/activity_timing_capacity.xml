@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -16,16 +17,17 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/x30"
-            android:text="取消"
+            android:text="@string/timing_capacity_cancel"
             android:textColor="@color/home_setting_text_two"
-            android:textSize="15sp" />
+            android:textSize="15sp"
+            tools:ignore="RtlHardcoded" />
 
         <TextView
             android:id="@+id/tv_common_actionbar_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="定时"
+            android:text="@string/timing_capacity_timing"
             android:textColor="@color/app_title"
             android:textSize="15sp" />
 
@@ -36,9 +38,10 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/x30"
-            android:text="确定"
+            android:text="@string/timing_capacity_confirm"
             android:textColor="@color/home_voice_normal"
-            android:textSize="15sp" />
+            android:textSize="15sp"
+            tools:ignore="RtlHardcoded" />
 
     </RelativeLayout>
 
@@ -55,9 +58,9 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/x50"
+            android:layout_marginStart="@dimen/x50"
             android:layout_marginTop="@dimen/y25"
-            android:text="重复"
+            android:text="@string/timing_capacity_repeat"
             android:textColor="@color/black"
             android:textSize="14sp" />
 
@@ -68,9 +71,10 @@
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="@dimen/y25"
             android:layout_marginLeft="@dimen/x50"
-            android:text="只执行一次"
+            android:text="@string/timing_capacity_default_content"
             android:textColor="@color/home_setting_text_two"
-            android:textSize="12sp" />
+            android:textSize="12sp"
+            tools:ignore="RtlHardcoded" />
 
         <ImageView
             android:layout_width="wrap_content"
@@ -78,7 +82,8 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/x30"
-            android:src="@mipmap/home_manage_right" />
+            android:src="@mipmap/home_manage_right"
+            tools:ignore="RtlHardcoded" />
     </RelativeLayout>
 
 
@@ -92,13 +97,10 @@
             android:id="@+id/picker_hour"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
             android:layout_weight="1"
             android:background="@color/white"
-            android:contentDescription="test_number_picker_view"
             app:npv_DividerColor="@color/black_16"
-            app:npv_HintText="时"
+            app:npv_HintText="@string/timing_capacity_hour"
             app:npv_ItemPaddingVertical="@dimen/y25"
             app:npv_RespondChangeOnDetached="false"
             app:npv_ShowCount="5"
@@ -120,13 +122,10 @@
             android:id="@+id/picker_minute"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
             android:layout_weight="1"
             android:background="@color/white"
-            android:contentDescription="test_number_picker_view"
             app:npv_DividerColor="@color/black_16"
-            app:npv_HintText="分"
+            app:npv_HintText="@string/timing_capacity_minute"
             app:npv_ItemPaddingVertical="@dimen/y25"
             app:npv_RespondChangeOnDetached="false"
             app:npv_ShowCount="5"

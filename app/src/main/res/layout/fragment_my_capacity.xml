@@ -17,7 +17,7 @@
             android:layout_marginTop="@dimen/y20"
             android:background="@drawable/home_shape"
             android:gravity="center"
-            android:text="筛选"
+            android:text="@string/my_capacity_screen"
             android:textColor="@color/capacity_tablayout_text"
             android:textSize="14sp" />
     </LinearLayout>

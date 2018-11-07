@@ -3,8 +3,6 @@ package com.qvd.smartswitch.activity.user;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,9 +14,7 @@ import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
-import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.qvd.smartswitch.R;
 import com.qvd.smartswitch.activity.base.BaseActivity;
 import com.qvd.smartswitch.adapter.MyFamilyMasterListAdapter;
@@ -30,15 +26,13 @@ import com.qvd.smartswitch.utils.CommonUtils;
 import com.qvd.smartswitch.utils.ConfigUtils;
 import com.qvd.smartswitch.utils.ToastUtil;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
-import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.header.ClassicsHeader;
-import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -76,10 +70,9 @@ public class UserFamilyActivity extends BaseActivity {
     private MyFamilyMasterListAdapter masterListAdapter;
     private MyFamilySlaveListAdapter slaveListAdapter;
 
-    private List<FamilyListVo.DataBean.MasterFamilyMembersBean> list = new ArrayList<>();
-    private List<FamilyListVo.DataBean.SlaveFamilyMembersBean> list2 = new ArrayList<>();
+    private final List<FamilyListVo.DataBean.MasterFamilyMembersBean> list = new ArrayList<>();
+    private final List<FamilyListVo.DataBean.SlaveFamilyMembersBean> list2 = new ArrayList<>();
     private PopupWindow popupWindow;
-    private String name;
 
     @Override
     protected int setLayoutId() {
@@ -95,8 +88,7 @@ public class UserFamilyActivity extends BaseActivity {
     @Override
     protected void initData() {
         super.initData();
-        name = getIntent().getStringExtra("name");
-        tvCommonActionbarTitle.setText("我的家人");
+        tvCommonActionbarTitle.setText(R.string.user_family_title);
         recyclerviewOne.setLayoutManager(new GridLayoutManager(this, 2, LinearLayoutManager.VERTICAL, false));
         recyclerviewOne.setNestedScrollingEnabled(true);
         masterListAdapter = new MyFamilyMasterListAdapter(list);
@@ -112,65 +104,48 @@ public class UserFamilyActivity extends BaseActivity {
         smartRefresh.setHeaderHeight(100);
         smartRefresh.setEnableHeaderTranslationContent(true);
         smartRefresh.setRefreshHeader(new ClassicsHeader(this));
-        smartRefresh.setOnRefreshListener(new OnRefreshListener() {
-            @Override
-            public void onRefresh(RefreshLayout refreshlayout) {
-                getData();
-                smartRefresh.finishRefresh(1500, true);
+        smartRefresh.setOnRefreshListener(refreshlayout -> getData());
+
+        slaveListAdapter.setOnItemClickListener((adapter, view, position) -> {
+            if (list2.get(position).getIs_agree() == 0) {
+                //还未同意
+                showAgreeDialog(position);
+            } else {
+                //用户id
+                startActivity(new Intent(UserFamilyActivity.this, FamilyShareDetailsActivity.class)
+                        .putExtra("family_id", list2.get(position).getUser_id()));
+                overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
             }
         });
 
-        slaveListAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                if (list2.get(position).getIs_agree() == 0) {
-                    //还未同意
-                    showAgreeDialog(position);
+        slaveListAdapter.setOnItemLongClickListener((adapter, view, position) -> {
+            if (list2.get(position).getIs_agree() == 1) {
+                showDialogTwo(list2.get(position).getFamily_members_id(), list2.get(position).getFamily_members_relation());
+                popupWindow.showAtLocation(getWindow().getDecorView(), Gravity.BOTTOM, 0, 0);
+            }
+            return true;
+        });
+
+        masterListAdapter.setOnItemClickListener((adapter, view, position) -> {
+            if (position == 0) {
+            } else {
+                if (list.get(position).getIs_agree() == 0) {
+                    ToastUtil.showToast(getString(R.string.user_family_not_agree));
                 } else {
+                    //用户id
                     startActivity(new Intent(UserFamilyActivity.this, FamilyShareDetailsActivity.class)
-                            .putExtra("family_id", list2.get(position).getUser_id()));
+                            .putExtra("family_id", list.get(position).getFamily_members_userid()));
                     overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
                 }
             }
         });
 
-        slaveListAdapter.setOnItemLongClickListener(new BaseQuickAdapter.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(BaseQuickAdapter adapter, View view, int position) {
-                if (list2.get(position).getIs_agree() == 1) {
-                    showDialogTwo(list2.get(position).getFamily_members_id(), list2.get(position).getFamily_members_relation());
-                    popupWindow.showAtLocation(getWindow().getDecorView(), Gravity.BOTTOM, 0, 0);
-                }
-                return true;
+        masterListAdapter.setOnItemLongClickListener((adapter, view, position) -> {
+            if (list.get(position).getIs_agree() == 1) {
+                showDialogTwo(list.get(position).getFamily_members_id(), list.get(position).getFamily_members_relation());
+                popupWindow.showAtLocation(getWindow().getDecorView(), Gravity.BOTTOM, 0, 0);
             }
-        });
-
-        masterListAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                if (position == 0) {
-                    return;
-                } else {
-                    if (list.get(position).getIs_agree() == 0) {
-                        ToastUtil.showToast("对方还未同意你的邀请");
-                    } else {
-                        startActivity(new Intent(UserFamilyActivity.this, FamilyShareDetailsActivity.class)
-                                .putExtra("family_id", list.get(position).getFamily_members_userid()));
-                        overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
-                    }
-                }
-            }
-        });
-
-        masterListAdapter.setOnItemLongClickListener(new BaseQuickAdapter.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(BaseQuickAdapter adapter, View view, int position) {
-                if (list.get(position).getIs_agree() == 1) {
-                    showDialogTwo(list.get(position).getFamily_members_id(), list.get(position).getFamily_members_relation());
-                    popupWindow.showAtLocation(getWindow().getDecorView(), Gravity.BOTTOM, 0, 0);
-                }
-                return true;
-            }
+            return true;
         });
     }
 
@@ -192,27 +167,16 @@ public class UserFamilyActivity extends BaseActivity {
         TextView tv_one = view.findViewById(R.id.tv_one);
         TextView tv_two = view.findViewById(R.id.tv_two);
 
-        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
-            @Override
-            public void onDismiss() {
-                CommonUtils.setBackgroundAlpha(UserFamilyActivity.this, 1.0f);
-            }
+        popupWindow.setOnDismissListener(() -> CommonUtils.setBackgroundAlpha(UserFamilyActivity.this, 1.0f));
+
+        tv_one.setOnClickListener(v -> {
+            showDeleteDialog(id);
+            popupWindow.dismiss();
         });
 
-        tv_one.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showDeleteDialog(id);
-                popupWindow.dismiss();
-            }
-        });
-
-        tv_two.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showUpdateDialog(id, name);
-                popupWindow.dismiss();
-            }
+        tv_two.setOnClickListener(v -> {
+            showUpdateDialog(id, name);
+            popupWindow.dismiss();
         });
     }
 
@@ -221,22 +185,14 @@ public class UserFamilyActivity extends BaseActivity {
      */
     private void showUpdateDialog(String id, String name) {
         new MaterialDialog.Builder(this)
-                .title("修改家人关系")
+                .content(R.string.user_family_update_relation)
                 .inputRange(1, 20, getResources().getColor(R.color.red))
-                .input(name, null, false, new MaterialDialog.InputCallback() {
-                    @Override
-                    public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
+                .input(name, null, false, (dialog, input) -> {
 
-                    }
                 })
-                .positiveText("确定")
-                .negativeText("取消")
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        UpdateRelation(id, dialog.getInputEditText().getText().toString());
-                    }
-                }).show();
+                .positiveText(R.string.common_confirm)
+                .negativeText(R.string.common_cancel)
+                .onPositive((dialog, which) -> UpdateRelation(id, Objects.requireNonNull(dialog.getInputEditText()).getText().toString())).show();
     }
 
 
@@ -256,10 +212,10 @@ public class UserFamilyActivity extends BaseActivity {
                     @Override
                     public void onNext(MessageVo messageVo) {
                         if (messageVo.getCode() == 200) {
-                            ToastUtil.showToast("修改成功");
+                            ToastUtil.showToast(getString(R.string.common_update_success));
                             getData();
                         } else {
-                            ToastUtil.showToast("修改失败");
+                            ToastUtil.showToast(getString(R.string.common_update_fail));
                         }
                     }
 
@@ -280,15 +236,10 @@ public class UserFamilyActivity extends BaseActivity {
      */
     private void showDeleteDialog(String id) {
         new MaterialDialog.Builder(this)
-                .title("你确定要解除和他/她的关系吗")
-                .negativeText("取消")
-                .positiveText("确定")
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        deleteFamily(id);
-                    }
-                }).show();
+                .content(R.string.user_family_relieve_relation)
+                .negativeText(R.string.common_cancel)
+                .positiveText(R.string.common_confirm)
+                .onPositive((dialog, which) -> deleteFamily(id)).show();
     }
 
     /**
@@ -309,7 +260,7 @@ public class UserFamilyActivity extends BaseActivity {
                         if (messageVo.getCode() == 200) {
                             getData();
                         } else {
-                            ToastUtil.showToast("解除失败");
+                            ToastUtil.showToast(getString(R.string.user_family_relieve_fail));
                         }
                     }
 
@@ -330,15 +281,10 @@ public class UserFamilyActivity extends BaseActivity {
      */
     private void showAgreeDialog(int position) {
         new MaterialDialog.Builder(this)
-                .title("你确定同意这个邀请吗")
-                .negativeText("取消")
-                .positiveText("确定")
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        agreeFamilyRelation(position);
-                    }
-                }).show();
+                .content(R.string.user_family_agree_the_invite)
+                .negativeText(R.string.common_cancel)
+                .positiveText(R.string.common_confirm)
+                .onPositive((dialog, which) -> agreeFamilyRelation(position)).show();
     }
 
     /**
@@ -400,7 +346,8 @@ public class UserFamilyActivity extends BaseActivity {
                             list.clear();
                             list2.clear();
                             FamilyListVo.DataBean.MasterFamilyMembersBean membersBean = new FamilyListVo.DataBean.MasterFamilyMembersBean();
-                            membersBean.setUser_name(name);
+                            membersBean.setUser_name(ConfigUtils.USERNAME);
+                            membersBean.setUser_avatar(ConfigUtils.USERAVATAR);
                             membersBean.setIs_agree(1);
                             list.add(membersBean);
                             if (familyListVo.getData() != null) {
@@ -413,12 +360,13 @@ public class UserFamilyActivity extends BaseActivity {
                             }
                             masterListAdapter.notifyDataSetChanged();
                             slaveListAdapter.notifyDataSetChanged();
+                            smartRefresh.finishRefresh(true);
                         }
                     }
 
                     @Override
                     public void onError(Throwable e) {
-
+                        smartRefresh.finishRefresh(false);
                     }
 
                     @Override

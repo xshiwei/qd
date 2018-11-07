@@ -1,6 +1,5 @@
 package com.qvd.smartswitch.activity.login;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -14,12 +13,12 @@ import com.qvd.smartswitch.R;
 import com.qvd.smartswitch.activity.MainActivity;
 import com.qvd.smartswitch.activity.base.BaseActivity;
 import com.qvd.smartswitch.api.RetrofitService;
-import com.qvd.smartswitch.model.login.MessageVo;
 import com.qvd.smartswitch.model.login.RegisterVo;
 import com.qvd.smartswitch.utils.CommonUtils;
 import com.qvd.smartswitch.utils.ConfigUtils;
 import com.qvd.smartswitch.utils.SharedPreferencesUtil;
 import com.qvd.smartswitch.utils.SnackbarUtils;
+import com.qvd.smartswitch.utils.ToastUtil;
 import com.qvd.smartswitch.widget.MyProgressDialog;
 
 import butterknife.BindView;
@@ -129,14 +128,11 @@ public class SetPasswordActivity extends BaseActivity {
      */
     private void register() {
         final MyProgressDialog progressDialog = MyProgressDialog.createProgressDialog(this, 5000,
-                new MyProgressDialog.OnTimeOutListener() {
-                    @Override
-                    public void onTimeOut(ProgressDialog dialog) {
-                        dialog.dismiss();
-                        SnackbarUtils.Short(tvPasswordError, "登录失败,请重试");
-                    }
+                dialog -> {
+                    dialog.dismiss();
+                    ToastUtil.showToast(getString(R.string.common_login_fail));
                 });
-        progressDialog.setMessage("登录中");
+        progressDialog.setMessage(getString(R.string.common_login));
         progressDialog.show();
         RetrofitService.qdoApi.register(userName, etPassword.getText().toString().trim(), etRepassword.getText().toString().trim(), identity_type)
                 .subscribeOn(Schedulers.io())
@@ -158,11 +154,11 @@ public class SetPasswordActivity extends BaseActivity {
                                 startActivity(new Intent(SetPasswordActivity.this, MainActivity.class));
                                 overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
                             } else if (messageVo.getCode() == 400) {
-                                SnackbarUtils.Short(btnComplete, "注册失败").show();
+                                SnackbarUtils.Short(btnComplete, getString(R.string.common_register_fail)).show();
                             } else if (messageVo.getCode() == 800) {
-                                SnackbarUtils.Short(btnComplete, "连接超时").show();
+                                SnackbarUtils.Short(btnComplete, getString(R.string.common_time_out)).show();
                             } else if (messageVo.getCode() == 402) {
-                                SnackbarUtils.Short(btnComplete, "您当前邮箱未验证").show();
+                                SnackbarUtils.Short(btnComplete, getString(R.string.set_password_email_not_vaild)).show();
                             }
                         }
                     }
@@ -191,15 +187,15 @@ public class SetPasswordActivity extends BaseActivity {
         if (CommonUtils.isEmptyString(password) || CommonUtils.isEmptyString(rePassword)) {
             vaild = false;
             tvPasswordError.setVisibility(View.VISIBLE);
-            tvPasswordError.setText("密码不能为空");
+            tvPasswordError.setText(getString(R.string.common_password_not_empty));
         } else if (password.length() > 16 || password.length() < 6 || rePassword.length() > 16 || rePassword.length() < 6) {
             vaild = false;
             tvPasswordError.setVisibility(View.VISIBLE);
-            tvPasswordError.setText("密码长度不少于6个字符，不大于16个字符");
+            tvPasswordError.setText(R.string.reset_password_four_vaild_three);
         } else if (!password.equals(rePassword)) {
             vaild = false;
             tvPasswordError.setVisibility(View.VISIBLE);
-            tvPasswordError.setText("两次密码不一致");
+            tvPasswordError.setText(R.string.set_password_inconformity);
         }
         return vaild;
     }

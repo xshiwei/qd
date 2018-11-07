@@ -1,17 +1,11 @@
 package com.qvd.smartswitch.activity.device;
 
-import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.orhanobut.logger.Logger;
 import com.qvd.smartswitch.R;
 import com.qvd.smartswitch.activity.base.BaseActivity;
 import com.qvd.smartswitch.adapter.ShareDeviceFamilyListAdapter;
@@ -27,7 +21,6 @@ import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -43,7 +36,7 @@ public class DeviceShareFamilyActivity extends BaseActivity {
     RecyclerView recyclerview;
 
     private ShareDeviceFamilyListAdapter adapter;
-    private List<DeviceListVo.DataBean> list = new ArrayList<>();
+    private final List<DeviceListVo.DataBean> list = new ArrayList<>();
     private String family_id;
 
     @Override
@@ -54,29 +47,19 @@ public class DeviceShareFamilyActivity extends BaseActivity {
     @Override
     protected void initData() {
         super.initData();
-        tvCommonActionbarTitle.setText("分享给家人");
+        tvCommonActionbarTitle.setText(R.string.device_share_family_title);
         family_id = getIntent().getStringExtra("family_id");
         recyclerview.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         adapter = new ShareDeviceFamilyListAdapter(list);
         adapter.openLoadAnimation();
         adapter.isFirstOnly(false);
         recyclerview.setAdapter(adapter);
-        myEmptyLayout.setTextViewMessage("您还没有添加设备");
-        myErrorLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getDeviceList();
-            }
-        });
+        myEmptyLayout.setTextViewMessage(getString(R.string.device_share_family_empty));
+        myErrorLayout.setOnClickListener(v -> getDeviceList());
 
         getDeviceList();
 
-        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                showShareDialog(position);
-            }
-        });
+        adapter.setOnItemClickListener((adapter, view, position) -> showShareDialog(position));
     }
 
     /**
@@ -84,15 +67,10 @@ public class DeviceShareFamilyActivity extends BaseActivity {
      */
     private void showShareDialog(int position) {
         new MaterialDialog.Builder(this)
-                .title("您要把该设备分享出去吗")
-                .negativeText("取消")
-                .positiveText("确定")
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        addFamilyDevice(position);
-                    }
-                }).show();
+                .content(R.string.device_share_family_share_device)
+                .negativeText(R.string.common_cancel)
+                .positiveText(R.string.common_confirm)
+                .onPositive((dialog, which) -> addFamilyDevice(position)).show();
     }
 
     /**
@@ -111,23 +89,27 @@ public class DeviceShareFamilyActivity extends BaseActivity {
 
                     @Override
                     public void onNext(ShareSuccessVo messageVo) {
-                        if (messageVo.getCode() == 200) {
-                            ToastUtil.showToast("分享成功");
-                            finish();
-                        } else if (messageVo.getCode() == 203) {
-                            ToastUtil.showToast("不能分享给自己");
-                        } else if (messageVo.getCode() == 205) {
-                            if (messageVo.getIs_share() == 0) {
-                                ToastUtil.showToast("该设备已分享，请等待对方同意");
-                            } else {
-                                ToastUtil.showToast("该设备已分享");
-                            }
+                        switch (messageVo.getCode()) {
+                            case 200:
+                                ToastUtil.showToast(getString(R.string.common_share_success));
+                                finish();
+                                break;
+                            case 203:
+                                ToastUtil.showToast(getString(R.string.common_not_share_self));
+                                break;
+                            case 205:
+                                if (messageVo.getIs_share() == 0) {
+                                    ToastUtil.showToast(getString(R.string.device_share_family_wait_agree));
+                                } else {
+                                    ToastUtil.showToast(getString(R.string.device_share_family_have_to_share));
+                                }
+                                break;
                         }
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        ToastUtil.showToast("分享失败");
+                        ToastUtil.showToast(getString(R.string.common_share_fail));
                     }
 
                     @Override
@@ -152,7 +134,7 @@ public class DeviceShareFamilyActivity extends BaseActivity {
     /**
      * 获取设备列表
      */
-    public void getDeviceList() {
+    private void getDeviceList() {
         adapter.setEmptyView(myLoadingLayout);
         Map<String, String> map = new HashMap<>();
         map.put("user_id", ConfigUtils.user_id);

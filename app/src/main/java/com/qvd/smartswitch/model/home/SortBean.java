@@ -61,7 +61,7 @@ public class SortBean implements Parcelable {
 
     private ArrayList<CategoryOneArrayBean> categoryOneArray;
 
-    protected SortBean(Parcel in) {
+    private SortBean(Parcel in) {
         name = in.readString();
         tag = in.readString();
         isTitle = in.readByte() != 0;
@@ -130,7 +130,7 @@ public class SortBean implements Parcelable {
         private String cacode;
         private List<CategoryTwoArrayBean> categoryTwoArray;
 
-        protected CategoryOneArrayBean(Parcel in) {
+        CategoryOneArrayBean(Parcel in) {
             name = in.readString();
             imgsrc = in.readString();
             cacode = in.readString();
@@ -203,7 +203,7 @@ public class SortBean implements Parcelable {
             private String imgsrc;
             private String cacode;
 
-            protected CategoryTwoArrayBean(Parcel in) {
+            CategoryTwoArrayBean(Parcel in) {
                 name = in.readString();
                 imgsrc = in.readString();
                 cacode = in.readString();

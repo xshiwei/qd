@@ -6,7 +6,7 @@ import com.orhanobut.logger.Logger;
  * Created by Administrator on 2018/4/26 0026.
  */
 
-public class CommandUtils {
+class CommandUtils {
     /**
      * 十六进制与一般数据类型之间的互相转换
      */
@@ -21,14 +21,14 @@ public class CommandUtils {
      * @param input
      * @return
      */
-    public static String encode(byte[] input) {
+    private static String encode(byte[] input) {
         if (input == null)
             throw new IllegalArgumentException("input should not be null");
 
         StringBuilder builder = new StringBuilder(input.length * 2);
-        for (int i = 0; i < input.length; i++) {
-            builder.append(HEX_DIGITS[input[i] >>> 4 & 0xf]);
-            builder.append(HEX_DIGITS[input[i] & 0xf]);
+        for (byte anInput : input) {
+            builder.append(HEX_DIGITS[anInput >>> 4 & 0xf]);
+            builder.append(HEX_DIGITS[anInput & 0xf]);
         }
         return builder.toString();
     }
@@ -39,7 +39,7 @@ public class CommandUtils {
      * @param input
      * @return
      */
-    public static byte[] decodeToByteArray(String input) {
+    private static byte[] decodeToByteArray(String input) {
         if (input == null)
             throw new IllegalArgumentException("input should not be null");
 
@@ -126,7 +126,7 @@ public class CommandUtils {
      * @param input
      * @return
      */
-    public static String encode(int input) {
+    private static String encode(int input) {
         return encode(new byte[]{
                 (byte) (input >>> 24 & 0xff),
                 (byte) (input >>> 16 & 0xff),

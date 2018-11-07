@@ -614,7 +614,7 @@ public class SimpleButton extends View {
         mCheckListener = onCheckedChangeListener;
     }
 
-    public interface OnCheckedChangeListener {
+    interface OnCheckedChangeListener {
         void onCheckedChanged(boolean isChecked);
     }
 }

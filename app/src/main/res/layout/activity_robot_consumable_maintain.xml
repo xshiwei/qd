@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/home_manage_backgroud">
+
+    <RelativeLayout
+        android:id="@+id/action_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y80"
+        android:background="@color/home_list_background">
+
+        <ImageView
+            android:id="@+id/iv_common_actionbar_goback"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/x20"
+            android:padding="5dp"
+            android:src="@mipmap/actionbar_goback"
+            tools:ignore="RtlHardcoded" />
+
+        <TextView
+            android:id="@+id/tv_common_actionbar_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="@string/robot_consumable_maintain_title"
+            android:textColor="@color/app_title"
+            android:textSize="15sp" />
+
+    </RelativeLayout>
+
+    <com.scwang.smartrefresh.layout.SmartRefreshLayout
+        android:id="@+id/smart_refresh"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/riv_immediately_buy"
+        android:layout_below="@+id/action_bar"
+        android:layout_marginBottom="@dimen/y30">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+
+    <com.andexert.library.RippleView
+        android:id="@+id/riv_immediately_buy"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/y70"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/y30"
+        android:layout_marginLeft="@dimen/x80"
+        android:layout_marginRight="@dimen/x80"
+        app:rv_centered="true">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/login_selete_background"
+            android:gravity="center"
+            android:text="@string/robot_consumable_maintain_immediately_buy"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
+
+    </com.andexert.library.RippleView>
+
+</RelativeLayout>

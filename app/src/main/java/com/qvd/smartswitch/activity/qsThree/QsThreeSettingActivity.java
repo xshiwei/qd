@@ -1,14 +1,12 @@
 package com.qvd.smartswitch.activity.qsThree;
 
 import android.content.Intent;
-import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.qvd.smartswitch.R;
 import com.qvd.smartswitch.activity.MainActivity;
@@ -18,6 +16,8 @@ import com.qvd.smartswitch.api.RetrofitService;
 import com.qvd.smartswitch.model.login.MessageVo;
 import com.qvd.smartswitch.utils.CommonUtils;
 import com.qvd.smartswitch.utils.ToastUtil;
+
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -82,56 +82,45 @@ public class QsThreeSettingActivity extends BaseActivity {
      */
     private void showPopupwindowName() {
         new MaterialDialog.Builder(this)
-                .title("设置设备名称")
+                .content("设置设备名称")
                 .inputRange(1, 20, getResources().getColor(R.color.red))
-                .input("设置昵称", null, false, new MaterialDialog.InputCallback() {
-                    @Override
-                    public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
+                .input("设置昵称", null, false, (dialog, input) -> {
 
-                    }
                 })
                 .negativeText("取消")
                 .positiveText("确定")
-                .onNegative(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        CommonUtils.closeSoftKeyboard(QsThreeSettingActivity.this);
-                    }
-                })
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        //修改设备名称
-                        EditText inputEditText = dialog.getInputEditText();
-                        RetrofitService.qdoApi.updateSpecificDeviceName(device_id, inputEditText.getText().toString(), "qs03")
-                                .subscribeOn(Schedulers.io())
-                                .observeOn(AndroidSchedulers.mainThread())
-                                .subscribe(new Observer<MessageVo>() {
-                                    @Override
-                                    public void onSubscribe(Disposable d) {
+                .onNegative((dialog, which) -> CommonUtils.closeSoftKeyboard(QsThreeSettingActivity.this))
+                .onPositive((dialog, which) -> {
+                    //修改设备名称
+                    EditText inputEditText = dialog.getInputEditText();
+                    RetrofitService.qdoApi.updateSpecificDeviceName(device_id, Objects.requireNonNull(inputEditText).getText().toString(), "qs03")
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(new Observer<MessageVo>() {
+                                @Override
+                                public void onSubscribe(Disposable d) {
 
-                                    }
+                                }
 
-                                    @Override
-                                    public void onNext(MessageVo messageVo) {
-                                        if (messageVo.getCode() == 200) {
-                                            ToastUtil.showToast("修改成功");
-                                        } else {
-                                            ToastUtil.showToast("网络失败");
-                                        }
-                                    }
-
-                                    @Override
-                                    public void onError(Throwable e) {
+                                @Override
+                                public void onNext(MessageVo messageVo) {
+                                    if (messageVo.getCode() == 200) {
+                                        ToastUtil.showToast("修改成功");
+                                    } else {
                                         ToastUtil.showToast("网络失败");
                                     }
+                                }
 
-                                    @Override
-                                    public void onComplete() {
+                                @Override
+                                public void onError(Throwable e) {
+                                    ToastUtil.showToast("网络失败");
+                                }
 
-                                    }
-                                });
-                    }
+                                @Override
+                                public void onComplete() {
+
+                                }
+                            });
                 })
                 .show();
     }
@@ -141,45 +130,40 @@ public class QsThreeSettingActivity extends BaseActivity {
      */
     private void deleteDevice() {
         new MaterialDialog.Builder(this)
-                .title("您确定要删除该设备吗")
+                .content("您确定要删除该设备吗")
                 .negativeText("取消")
                 .positiveText("确定")
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        RetrofitService.qdoApi.deleteDevice(device_id)
-                                .subscribeOn(Schedulers.io())
-                                .observeOn(AndroidSchedulers.mainThread())
-                                .subscribe(new Observer<MessageVo>() {
-                                    @Override
-                                    public void onSubscribe(Disposable d) {
+                .onPositive((dialog, which) -> RetrofitService.qdoApi.deleteDevice(device_id)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Observer<MessageVo>() {
+                            @Override
+                            public void onSubscribe(Disposable d) {
 
-                                    }
+                            }
 
-                                    @Override
-                                    public void onNext(MessageVo messageVo) {
-                                        if (messageVo.getCode() == 200) {
-                                            ToastUtil.showToast("删除成功");
-                                            startActivity(new Intent(QsThreeSettingActivity.this, MainActivity.class));
-                                            overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
-                                            finish();
-                                        } else {
-                                            ToastUtil.showToast("网络错误");
-                                        }
-                                    }
+                            @Override
+                            public void onNext(MessageVo messageVo) {
+                                if (messageVo.getCode() == 200) {
+                                    ToastUtil.showToast("删除成功");
+                                    startActivity(new Intent(QsThreeSettingActivity.this, MainActivity.class));
+                                    overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+                                    finish();
+                                } else {
+                                    ToastUtil.showToast("网络错误");
+                                }
+                            }
 
-                                    @Override
-                                    public void onError(Throwable e) {
-                                        ToastUtil.showToast("网络错误");
-                                    }
+                            @Override
+                            public void onError(Throwable e) {
+                                ToastUtil.showToast("网络错误");
+                            }
 
-                                    @Override
-                                    public void onComplete() {
+                            @Override
+                            public void onComplete() {
 
-                                    }
-                                });
-                    }
-                })
+                            }
+                        }))
                 .show();
     }
 

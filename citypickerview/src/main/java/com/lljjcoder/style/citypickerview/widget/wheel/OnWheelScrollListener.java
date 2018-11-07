@@ -19,7 +19,7 @@ package com.lljjcoder.style.citypickerview.widget.wheel;
 /**
  * Wheel scrolled listener interface.
  */
-public interface OnWheelScrollListener {
+interface OnWheelScrollListener {
 	/**
 	 * Callback method to be invoked when scrolling started.
 	 * @param wheel the wheel view whose state has changed.

@@ -1,5 +1,6 @@
 package com.qvd.smartswitch.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
@@ -11,17 +12,13 @@ import android.widget.FrameLayout;
 
 import com.ashokvarma.bottomnavigation.BottomNavigationBar;
 import com.ashokvarma.bottomnavigation.BottomNavigationItem;
-import com.clj.fastble.BleManager;
-import com.orhanobut.logger.Logger;
 import com.qvd.smartswitch.R;
 import com.qvd.smartswitch.activity.base.BaseActivity;
-import com.qvd.smartswitch.activity.capacity.CapacityFragment;
 import com.qvd.smartswitch.activity.home.HomeFragmentTest;
-import com.qvd.smartswitch.activity.login.WelcomeActivity;
 import com.qvd.smartswitch.activity.user.UserFragment;
-import com.qvd.smartswitch.utils.SysApplication;
+import com.qvd.smartswitch.service.LogService;
+import com.qvd.smartswitch.utils.ActivityManager;
 import com.qvd.smartswitch.utils.ToastUtil;
-import com.stephentuso.welcome.WelcomeHelper;
 import com.wenming.library.LogReport;
 
 import butterknife.BindView;
@@ -41,10 +38,7 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
 
     private long firstTime = 0;
 
-    /**
-     * 别的页面返回时显示的fragment
-     */
-    private int index;
+    private Intent intent;
 
 
     @Override
@@ -64,7 +58,8 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
         super.onCreate(savedInstanceState);
         //开启日志
         LogReport.getInstance().upload(this);
-        Logger.e("oncreate");
+        intent = new Intent(this, LogService.class);
+        startService(intent);
     }
 
     @Override
@@ -74,7 +69,6 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
 
     @Override
     protected void initView() {
-        SysApplication.getInstance().addActivity(this);
         bottomNavigationBar
                 .setActiveColor(R.color.deepskyblue)
                 .setInActiveColor(R.color.gray)
@@ -83,15 +77,15 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
         bottomNavigationBar.setMode(BottomNavigationBar.MODE_DEFAULT);
         int lastSelectedPosition = 0;
         bottomNavigationBar
-                .addItem(new BottomNavigationItem(R.mipmap.home_navgationbar_selete, "首页").setInactiveIcon(ContextCompat.getDrawable(this, R.mipmap.home_navgationbar_unselete)))
+                .addItem(new BottomNavigationItem(R.mipmap.home_navgationbar_selete, getString(R.string.common_home)).setInactiveIcon(ContextCompat.getDrawable(this, R.mipmap.home_navgationbar_unselete)))
 //                .addItem(new BottomNavigationItem(R.mipmap.device_navgationbar_unselete, "智能").setInactiveIcon(ContextCompat.getDrawable(this, R.mipmap.device_navgationbar_selete)))
-                .addItem(new BottomNavigationItem(R.mipmap.user_navgationbar_selete, "我的").setInactiveIcon(ContextCompat.getDrawable(this, R.mipmap.user_navgationbar_unselete)))
+                .addItem(new BottomNavigationItem(R.mipmap.user_navgationbar_selete, getString(R.string.common_user)).setInactiveIcon(ContextCompat.getDrawable(this, R.mipmap.user_navgationbar_unselete)))
                 .setFirstSelectedPosition(lastSelectedPosition)
                 .initialise();
         bottomNavigationBar.setTabSelectedListener(this);
 //        setDefaultFragment();
         onTabSelected(0);
-        bottomNavigationBar.selectTab(0);
+//        bottomNavigationBar.selectTab(0);
     }
 
     @Override
@@ -107,7 +101,8 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
                     firstTime = secondTime;//更新firstTime
                     return true;
                 } else {
-                    SysApplication.getInstance().exit();
+                    stopService(intent);
+                    ActivityManager.getInstance().exitApp();
                 }
 
                 break;
@@ -158,7 +153,7 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
         switch (position) {
             case 0:
                 if (homeFragment == null) {
-                    assert homeFragment != null;
+                    assert false;
                     homeFragment = HomeFragmentTest.newInstance("home");
 //                    homeFragment = HomeFragment.newInstance("home");
                 }
@@ -178,7 +173,7 @@ public class MainActivity extends BaseActivity implements BottomNavigationBar.On
 //                break;
             case 1:
                 if (userFragment == null) {
-                    assert userFragment != null;
+                    assert false;
                     userFragment = UserFragment.newInstance("user");
                 }
                 mImmersionBar.fitsSystemWindows(true).statusBarColor(R.color.white).statusBarDarkFont(true, 1).init();

@@ -29,7 +29,7 @@ import com.lljjcoder.style.citypickerview.widget.wheel.WheelAdapter;
 public class AdapterWheel extends AbstractWheelTextAdapter {
 
     // Source adapter
-    private WheelAdapter adapter;
+    private final WheelAdapter adapter;
     
     /**
      * Constructor

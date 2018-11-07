@@ -1,9 +1,5 @@
 package com.qvd.smartswitch.widget;
 
-/**
- * Created by Administrator on 2018/4/14 0014.
- */
-
 import android.content.Context;
 import android.graphics.Color;
 import android.view.View;
@@ -61,7 +57,7 @@ public class MyToast {
     public MyToast setToastColor(int messageColor, int backgroundColor) {
         View view = toast.getView();
         if (view != null) {
-            TextView message = ((TextView) view.findViewById(android.R.id.message));
+            TextView message = view.findViewById(android.R.id.message);
             message.setBackgroundColor(backgroundColor);
             message.setTextColor(messageColor);
         }
@@ -79,12 +75,10 @@ public class MyToast {
     public MyToast setToastBackground(int messageColor, int background) {
         View view = toast.getView();
         view.setBackgroundColor(Color.TRANSPARENT);
-        if (view != null) {
-            TextView message = ((TextView) view.findViewById(android.R.id.message));
-            message.setBackgroundResource(background);
-            message.setTextColor(messageColor);
-            message.setPadding(30,30,30,30);
-        }
+        TextView message = view.findViewById(android.R.id.message);
+        message.setBackgroundResource(background);
+        message.setTextColor(messageColor);
+        message.setPadding(30,30,30,30);
         return this;
     }
 
@@ -188,9 +182,8 @@ public class MyToast {
      *
      * @return
      */
-    public MyToast show() {
+    public void show() {
         toast.show();
-        return this;
     }
 
     /**

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="@dimen/x250"
     android:layout_height="@dimen/y70"
     android:background="@color/home_menu">
@@ -10,7 +11,8 @@
         android:layout_height="@dimen/y50"
         android:layout_centerVertical="true"
         android:paddingLeft="@dimen/x10"
-        android:src="@mipmap/home_menu" />
+        android:src="@mipmap/home_menu"
+        tools:ignore="RtlHardcoded" />
 
     <TextView
         android:ellipsize="end"
@@ -21,9 +23,9 @@
         android:layout_centerVertical="true"
         android:layout_toRightOf="@+id/iv_home"
         android:padding="5dp"
-        android:text="扫一扫"
         android:textColor="@color/white"
-        android:textSize="11sp" />
+        android:textSize="11sp"
+        tools:ignore="RtlHardcoded" />
 
     <View
         android:layout_width="@dimen/x250"

@@ -1,7 +1,6 @@
 package com.qvd.smartswitch.activity.user;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -9,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.qvd.smartswitch.R;
 import com.qvd.smartswitch.activity.base.BaseActivity;
 import com.qvd.smartswitch.activity.device.DeviceShareFamilyActivity;
@@ -17,13 +17,11 @@ import com.qvd.smartswitch.api.RetrofitService;
 import com.qvd.smartswitch.model.device.FamilyDetailsVo;
 import com.qvd.smartswitch.utils.CommonUtils;
 import com.qvd.smartswitch.utils.ConfigUtils;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.reactivex.Observer;
@@ -50,7 +48,7 @@ public class FamilyShareDetailsActivity extends BaseActivity {
 
     private String family_id;
     private FamilyShareDeviceListAdapter adapter;
-    private List<FamilyDetailsVo.DataBean.ShareDevicesDataBean> list = new ArrayList<>();
+    private final List<FamilyDetailsVo.DataBean.ShareDevicesDataBean> list = new ArrayList<>();
 
 
     @Override
@@ -61,7 +59,7 @@ public class FamilyShareDetailsActivity extends BaseActivity {
     @Override
     protected void initData() {
         super.initData();
-        tvCommonActionbarTitle.setText("家人详情");
+        tvCommonActionbarTitle.setText(R.string.family_share_details_title);
         family_id = getIntent().getStringExtra("family_id");
         recyclerview.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         adapter = new FamilyShareDeviceListAdapter(list);
@@ -96,7 +94,7 @@ public class FamilyShareDetailsActivity extends BaseActivity {
                                 tvName.setText(familyDetailsVo.getData().getUser_name());
                                 tvShareNum.setText("已共享" + familyDetailsVo.getData().getShare_devices_count() + "个设备");
                                 if (!CommonUtils.isEmptyString(familyDetailsVo.getData().getUser_avatar())) {
-                                    Picasso.with(FamilyShareDetailsActivity.this).load(familyDetailsVo.getData().getUser_avatar()).into(civPortrait);
+                                    Glide.with(FamilyShareDetailsActivity.this).load(familyDetailsVo.getData().getUser_avatar()).into(civPortrait);
                                 }
                                 if (familyDetailsVo.getData().getShare_devices_data() != null) {
                                     list.addAll(familyDetailsVo.getData().getShare_devices_data());

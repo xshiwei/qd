@@ -1,9 +1,5 @@
 package com.qvd.smartswitch.widget;
 
-/**
- * Created by xushiwei on 2018/2/1.
- */
-
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
@@ -37,10 +33,6 @@ public class EmptyLayout extends LinearLayout {
     private ViewGroup mLoadingView;
     private ViewGroup mEmptyView;
     private ViewGroup mErrorView;
-
-    private TextView mLoadingMessageView;
-    private TextView mEmptyMessageView;
-    private TextView mErrorMessageView;
 
 
     private RelativeLayout mEmptyRelativeLayout;
@@ -723,18 +715,18 @@ public class EmptyLayout extends LinearLayout {
     private void refreshMessages() {
 
         if (mEmptyMessageViewId > 0 && mEmptyMessage != null) {
-            mEmptyMessageView = mEmptyView.findViewById(mEmptyMessageViewId);
+            TextView mEmptyMessageView = mEmptyView.findViewById(mEmptyMessageViewId);
             mEmptyMessageView.setText(mEmptyMessage);
             setTopDrawables(mEmptyMessageView, mEmptyDrawable);
 
         }
         if (mLoadingMessageViewId > 0 && mLoadingMessage != null) {
-            mLoadingMessageView = mLoadingView.findViewById(mLoadingMessageViewId);
+            TextView mLoadingMessageView = mLoadingView.findViewById(mLoadingMessageViewId);
             mLoadingMessageView.setText(mLoadingMessage);
 //            setTopDrawables(mLoadingMessageView,mLoadingDrawable);// loading 不能已经有loading image view ，不能直接设置TopDrawable
         }
         if (mErrorMessageViewId > 0 && mErrorMessage != null) {
-            mErrorMessageView = mErrorView.findViewById(mErrorMessageViewId);
+            TextView mErrorMessageView = mErrorView.findViewById(mErrorMessageViewId);
             mErrorMessageView.setText(mErrorMessage);
             setTopDrawables(mErrorMessageView, mErrorDrawable);
         }

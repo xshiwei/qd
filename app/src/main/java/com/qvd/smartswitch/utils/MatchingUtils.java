@@ -4,7 +4,7 @@ package com.qvd.smartswitch.utils;
  * Created by Administrator on 2018/4/13 0013.
  */
 
-public class MatchingUtils {
+class MatchingUtils {
     /**
      * 匹配日志中的设备状态
      *

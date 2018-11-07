@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/device_background_four">
@@ -9,9 +11,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/x30"
-        android:layout_marginTop="@dimen/y60"
+        android:layout_marginTop="@dimen/y80"
         android:padding="5dp"
-        android:text="取消"
+        android:text="@string/device_wifi_setting_cancel"
+        android:textColor="@color/white"
+        android:textSize="15sp"
+        tools:ignore="RtlHardcoded" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/y80"
+        android:padding="5dp"
+        android:text="@string/device_wifi_setting_title"
         android:textColor="@color/white"
         android:textSize="15sp" />
 
@@ -32,7 +45,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/y50"
             android:padding="5dp"
-            android:text="输入家中的Wi-Fi密码"
+            android:text="@string/device_wifi_setting_input_wifi_password"
             android:textColor="@color/home_setting_text"
             android:textSize="16sp"
             android:textStyle="bold" />
@@ -53,7 +66,8 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="@dimen/x40"
-                android:src="@mipmap/login_password_unselete" />
+                android:src="@mipmap/login_password_unselete"
+                tools:ignore="RtlHardcoded" />
 
             <EditText
                 android:id="@+id/et_password"
@@ -63,10 +77,11 @@
                 android:layout_marginLeft="@dimen/x30"
                 android:layout_toRightOf="@+id/iv_password"
                 android:background="@null"
-                android:hint="密码"
+                android:hint="@string/device_wifi_setting_hint_password"
                 android:inputType="textPassword"
                 android:textColor="@color/app_title"
-                android:textSize="13sp" />
+                android:textSize="13sp"
+                tools:ignore="RtlHardcoded" />
 
         </RelativeLayout>
 
@@ -77,9 +92,10 @@
             android:layout_below="@+id/rl_password"
             android:layout_marginLeft="@dimen/x40"
             android:layout_marginTop="@dimen/y30"
-            android:text="当前Wi-Fi:"
+            android:text="@string/device_wifi_setting_current_wifi"
             android:textColor="@color/home_setting_text_two"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            tools:ignore="RtlHardcoded" />
 
         <TextView
             android:id="@+id/tv_change_network"
@@ -89,9 +105,10 @@
             android:layout_below="@+id/rl_password"
             android:layout_marginRight="@dimen/x40"
             android:layout_marginTop="@dimen/y30"
-            android:text="更换网络"
+            android:text="@string/device_wifi_setting_change_network"
             android:textColor="@color/room_manage_add_text"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            tools:ignore="RtlHardcoded" />
 
         <View
             android:id="@+id/view_line"
@@ -107,7 +124,7 @@
             android:layout_height="@dimen/y80"
             android:layout_below="@+id/view_line"
             android:gravity="center"
-            android:text="确 认"
+            android:text="@string/device_wifi_setting_confirm"
             android:textColor="@color/room_manage_add_text"
             android:textSize="16sp" />
 
@@ -120,7 +137,7 @@
         android:layout_below="@+id/rl_setting_wifi_password"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="@dimen/y30"
-        android:text="仅支持2.4G Wi-Fi网络"
+        android:text="@string/device_wifi_setting_support_network"
         android:textColor="@color/white" />
 
     <RelativeLayout
@@ -140,30 +157,38 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/y50"
             android:padding="5dp"
-            android:text="正在连接"
+            android:text="@string/device_wifi_setting_connecting"
             android:textColor="@color/home_setting_text"
             android:textSize="16sp"
             android:textStyle="bold" />
 
-        <com.wang.avi.AVLoadingIndicatorView xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/avi_loading"
-            style="@style/AVLoadingIndicatorView.Large"
-            android:layout_width="@dimen/x180"
-            android:layout_height="@dimen/y180"
+        <com.qvd.smartswitch.widget.WaveProgress
+            android:id="@+id/wave_progress_bar"
+            android:layout_width="@dimen/x250"
+            android:layout_height="@dimen/y250"
             android:layout_below="@+id/tv_title_two"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/y30"
-            app:indicatorColor="@color/add_device_selete"
-            app:indicatorName="CubeTransitionIndicator" />
+            app:circleColorprogress="@color/add_home_background"
+            app:darkWaveAnimTime="1000"
+            app:darkWaveColor="@color/dark"
+            app:lightWaveAnimTime="2000"
+            app:lightWaveColor="@color/poster_details"
+            app:lightWaveDirect="R2L"
+            app:lockWave="true"
+            app:maxValue="100"
+            app:valueSize="35sp"
+            app:waveHeight="15dp"
+            app:waveNum="1" />
 
         <TextView
             android:id="@+id/tv_text_two"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/avi_loading"
+            android:layout_below="@+id/wave_progress_bar"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/y50"
-            android:text="路由器、手机、设备尽量靠的近"
+            android:text="@string/device_wifi_setting_near_tip"
             android:textColor="@color/home_manage_text"
             android:textSize="14sp" />
 
@@ -174,7 +199,7 @@
             android:layout_below="@+id/tv_text_two"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/y30"
-            android:text="找到设备"
+            android:text="@string/device_wifi_setting_find_device"
             android:textColor="@color/home_setting_text_two"
             android:textSize="13sp" />
 
@@ -184,7 +209,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/tv_find_device"
             android:layout_centerHorizontal="true"
-            android:text="设备注册到服务器"
+            android:text="@string/device_wifi_setting_device_register"
             android:textColor="@color/home_setting_text_two"
             android:textSize="13sp" />
 
@@ -195,7 +220,7 @@
             android:layout_below="@+id/tv_device_register"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="@dimen/y50"
-            android:text="设备初始化"
+            android:text="@string/device_wifi_setting_init"
             android:textColor="@color/home_setting_text_two"
             android:textSize="13sp" />
 

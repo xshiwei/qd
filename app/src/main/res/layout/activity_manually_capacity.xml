@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -16,7 +17,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/y50"
             android:gravity="center_horizontal"
-            android:text="如果条件满足时就做什么"
+            android:text="@string/manually_capacity_text_one"
             android:textColor="@color/add_capacity_text"
             android:textSize="18sp" />
 
@@ -26,7 +27,7 @@
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="@dimen/y50"
             android:gravity="center_horizontal"
-            android:text="比如：打开主卧灯"
+            android:text="@string/manually_capacity_text_two"
             android:textColor="@color/home_setting_text_three"
             android:textSize="14sp" />
 
@@ -51,8 +52,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginLeft="@dimen/x30"
-                android:text="通用"
+                android:layout_marginStart="@dimen/x30"
+                android:text="@string/manually_capacity_general"
                 android:textColor="@color/add_capacity_text_two"
                 android:textSize="14sp" />
 
@@ -62,7 +63,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1px"
-            android:layout_marginLeft="@dimen/x30"
+            android:layout_marginStart="@dimen/x30"
             android:background="@color/black_16" />
 
         <RelativeLayout
@@ -70,7 +71,8 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/y130"
             android:background="@drawable/layout_seletor"
-            android:clickable="true">
+            android:clickable="true"
+            android:focusable="true">
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/iv_one"
@@ -78,7 +80,8 @@
                 android:layout_height="@dimen/y80"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="@dimen/x50"
-                android:src="@color/black_16" />
+                android:src="@color/black_16"
+                tools:ignore="RtlHardcoded" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -86,9 +89,10 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="@dimen/x50"
                 android:layout_toRightOf="@+id/iv_one"
-                android:text="开关某条智能"
+                android:text="@string/manually_capacity_switch"
                 android:textColor="@color/add_capacity_text"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                tools:ignore="RtlHardcoded" />
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -96,14 +100,16 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="@dimen/x30"
-                android:src="@mipmap/home_manage_right" />
+                android:src="@mipmap/home_manage_right"
+                tools:ignore="RtlHardcoded" />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1px"
                 android:layout_alignParentBottom="true"
                 android:layout_marginLeft="@dimen/x30"
-                android:background="@color/black_16" />
+                android:background="@color/black_16"
+                tools:ignore="RtlHardcoded" />
 
         </RelativeLayout>
 
@@ -112,7 +118,8 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/y130"
             android:background="@drawable/layout_seletor"
-            android:clickable="true">
+            android:clickable="true"
+            android:focusable="true">
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/iv_two"
@@ -120,7 +127,8 @@
                 android:layout_height="@dimen/y80"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="@dimen/x50"
-                android:src="@color/black_16" />
+                android:src="@color/black_16"
+                tools:ignore="RtlHardcoded" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -128,9 +136,10 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="@dimen/x50"
                 android:layout_toRightOf="@+id/iv_two"
-                android:text="向手机发送通知"
+                android:text="@string/manually_capacity_notification"
                 android:textColor="@color/add_capacity_text"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                tools:ignore="RtlHardcoded" />
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -138,13 +147,14 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="@dimen/x30"
-                android:src="@mipmap/home_manage_right" />
+                android:src="@mipmap/home_manage_right"
+                tools:ignore="RtlHardcoded" />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1px"
                 android:layout_alignParentBottom="true"
-                android:layout_marginLeft="@dimen/x30"
+                android:layout_marginStart="@dimen/x30"
                 android:background="@color/black_16" />
 
         </RelativeLayout>
@@ -154,14 +164,15 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/y130"
             android:background="@drawable/layout_seletor"
-            android:clickable="true">
+            android:clickable="true"
+            android:focusable="true">
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/iv_three"
                 android:layout_width="@dimen/x80"
                 android:layout_height="@dimen/y80"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="@dimen/x50"
+                android:layout_marginStart="@dimen/x50"
                 android:src="@color/black_16" />
 
             <TextView
@@ -170,9 +181,10 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="@dimen/x50"
                 android:layout_toRightOf="@+id/iv_three"
-                android:text="延时"
+                android:text="@string/manually_capacity_delay"
                 android:textColor="@color/add_capacity_text"
-                android:textSize="14sp" />
+                android:textSize="14sp"
+                tools:ignore="RtlHardcoded" />
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -180,14 +192,16 @@
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="@dimen/x30"
-                android:src="@mipmap/home_manage_right" />
+                android:src="@mipmap/home_manage_right"
+                tools:ignore="RtlHardcoded" />
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1px"
                 android:layout_alignParentBottom="true"
                 android:layout_marginLeft="@dimen/x30"
-                android:background="@color/black_16" />
+                android:background="@color/black_16"
+                tools:ignore="RtlHardcoded" />
 
         </RelativeLayout>
 
@@ -208,9 +222,10 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/x30"
-            android:text="智能设备"
+            android:text="@string/manually_capacity_device"
             android:textColor="@color/add_capacity_text_two"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            tools:ignore="RtlHardcoded" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -218,9 +233,10 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/x30"
-            android:text="筛选"
+            android:text="@string/manually_capacity_screen"
             android:textColor="@color/room_manage_add_text"
-            android:textSize="13sp" />
+            android:textSize="13sp"
+            tools:ignore="RtlHardcoded" />
     </RelativeLayout>
 
     <View

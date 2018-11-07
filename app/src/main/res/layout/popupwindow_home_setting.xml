@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/black_16"
@@ -18,7 +19,7 @@
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recyclerview"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
+            android:layout_height="match_parent" />
 
 
     </LinearLayout>
@@ -35,7 +36,8 @@
             android:layout_height="@dimen/x50"
             android:layout_centerVertical="true"
             android:paddingLeft="@dimen/x10"
-            android:src="@mipmap/home_menu" />
+            android:src="@mipmap/home_menu"
+            tools:ignore="RtlHardcoded" />
 
         <TextView
             android:ellipsize="end"
@@ -46,7 +48,7 @@
             android:layout_centerVertical="true"
             android:layout_toRightOf="@+id/iv_home"
             android:padding="5dp"
-            android:text="家庭房间管理"
+            android:text="@string/popupwindow_home_setting_home_room_manager"
             android:textColor="@color/white"
             android:textSize="11sp" />
 

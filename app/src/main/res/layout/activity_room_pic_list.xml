@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -10,12 +11,12 @@
         android:id="@+id/tv_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/rl_room_pic"
         android:layout_marginLeft="@dimen/x30"
         android:layout_marginTop="@dimen/y40"
-        android:text="全部图标"
+        android:text="@string/room_pic_list_all_pic"
         android:textColor="@color/home_setting_text_three"
-        android:textSize="12sp" />
+        android:textSize="12sp"
+        tools:ignore="RtlHardcoded" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerview"
@@ -24,6 +25,6 @@
         android:layout_marginLeft="@dimen/x10"
         android:layout_marginRight="@dimen/x10"
         android:layout_marginTop="@dimen/y20"
-        android:background="@color/white"></android.support.v7.widget.RecyclerView>
+        android:background="@color/white" />
 
 </LinearLayout>

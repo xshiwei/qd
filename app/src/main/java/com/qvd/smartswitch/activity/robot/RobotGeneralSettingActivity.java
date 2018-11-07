@@ -1,6 +1,6 @@
 package com.qvd.smartswitch.activity.robot;
 
-import android.os.Bundle;
+import android.content.Intent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -8,9 +8,9 @@ import android.widget.TextView;
 
 import com.qvd.smartswitch.R;
 import com.qvd.smartswitch.activity.base.BaseActivity;
+import com.qvd.smartswitch.activity.device.DeviceNetworkMessageActivity;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class RobotGeneralSettingActivity extends BaseActivity {
@@ -64,6 +64,8 @@ public class RobotGeneralSettingActivity extends BaseActivity {
             case R.id.rl_delete_robot:
                 break;
             case R.id.rl_network_message:
+                startActivity(new Intent(this, DeviceNetworkMessageActivity.class));
+                overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
                 break;
             case R.id.rl_robot_time_zone:
                 break;

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/root"
     android:layout_width="match_parent"
     android:layout_height="@dimen/y60"
@@ -13,7 +14,8 @@
         android:layout_width="@dimen/x10"
         android:layout_height="@dimen/y15"
         android:layout_marginLeft="@dimen/x15"
-        android:background="@color/add_device_selete" />
+        android:background="@color/add_device_selete"
+        tools:ignore="RtlHardcoded" />
 
     <TextView
         android:id="@+id/tv_title"
@@ -24,7 +26,8 @@
         android:paddingRight="@dimen/x20"
         android:text=""
         android:textColor="@android:color/black"
-        android:textSize="13sp" />
+        android:textSize="13sp"
+        tools:ignore="RtlHardcoded" />
 
     <ImageView
         android:layout_width="wrap_content"

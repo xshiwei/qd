@@ -1,14 +1,12 @@
 package com.qvd.smartswitch.activity.device;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.qvd.smartswitch.R;
 import com.qvd.smartswitch.activity.base.BaseActivity;
 import com.qvd.smartswitch.activity.user.UserFeedbackActivity;
@@ -16,13 +14,11 @@ import com.qvd.smartswitch.adapter.CommonQuestionAdapter;
 import com.qvd.smartswitch.api.RetrofitService;
 import com.qvd.smartswitch.model.device.DeviceCommonQuestionVo;
 import com.qvd.smartswitch.utils.CommonUtils;
-import com.qvd.smartswitch.widget.EmptyLayout;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -37,7 +33,7 @@ public class DeviceCommonQuestionActivity extends BaseActivity {
     @BindView(R.id.recyclerview)
     RecyclerView recyclerview;
 
-    private List<DeviceCommonQuestionVo.DataBean> list = new ArrayList<>();
+    private final List<DeviceCommonQuestionVo.DataBean> list = new ArrayList<>();
     private CommonQuestionAdapter adapter;
     private String type;
 
@@ -57,26 +53,13 @@ public class DeviceCommonQuestionActivity extends BaseActivity {
         adapter.isFirstOnly(false);
         recyclerview.setAdapter(adapter);
 
-        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                startActivity(new Intent(DeviceCommonQuestionActivity.this, DeviceCommonQuestionDetailsActivity.class)
-                        .putExtra("data", list.get(position)));
-                overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
-            }
+        adapter.setOnItemClickListener((adapter, view, position) -> {
+            startActivity(new Intent(DeviceCommonQuestionActivity.this, DeviceCommonQuestionDetailsActivity.class)
+                    .putExtra("data", list.get(position)));
+            overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
         });
-        myEmptyLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getQuestion();
-            }
-        });
-        myErrorLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getQuestion();
-            }
-        });
+        myEmptyLayout.setOnClickListener(v -> getQuestion());
+        myErrorLayout.setOnClickListener(v -> getQuestion());
         getQuestion();
     }
 

@@ -18,7 +18,7 @@
         android:layout_height="@dimen/y40"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="@dimen/y20"
-        android:layout_marginLeft="@dimen/x20"
+        android:layout_marginStart="@dimen/x20"
         android:src="@mipmap/device_log_selete" />
 
 

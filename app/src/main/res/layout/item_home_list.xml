@@ -7,12 +7,12 @@
     <ImageView
         android:layout_centerHorizontal="true"
         android:id="@+id/iv_item_pic"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:scaleType="fitXY"
+        android:layout_width="@dimen/x40"
+        android:layout_height="@dimen/y32"
         android:src="@mipmap/test" />
 
     <TextView
-
         android:ellipsize="end"
         android:lines="1"
         android:id="@+id/tv_item_text"
@@ -21,7 +21,6 @@
         android:layout_below="@+id/iv_item_pic"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="@dimen/y10"
-        android:text="常用"
         android:textColor="@color/home_content_text"
         android:textSize="10sp" />
 

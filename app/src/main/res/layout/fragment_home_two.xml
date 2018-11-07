@@ -1,16 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 
+<!--suppress ALL -->
 <com.scwang.smartrefresh.layout.SmartRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/refreshLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@mipmap/home_background"
     app:srlHeaderHeight="0dp">
+
+
 
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+        <ImageView
+            android:src="@mipmap/home_background"
+            android:scaleType="fitXY"
+            android:id="@+id/iv_home_pic"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
         <android.support.design.widget.AppBarLayout
             android:id="@+id/materialup_appbar"
@@ -58,41 +67,15 @@
                     android:src="@mipmap/home_add_pic"
                     android:visibility="gone" />
 
-                <LinearLayout
-                    android:id="@+id/ll_weather"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="@dimen/y140">
-
-                    <com.wang.avi.AVLoadingIndicatorView
-                        android:id="@+id/avi_weather"
-                        style="@style/AVLoadingIndicatorView.Large"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        app:indicatorColor="@color/white"
-                        app:indicatorName="PacmanIndicator" />
-
-                    <TextView
-                        android:id="@+id/tv_text"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginLeft="@dimen/x30"
-                        android:text="正在加载天气信息..."
-                        android:textColor="@color/white"
-                        android:textSize="16sp" />
-
-                </LinearLayout>
-
                 <RelativeLayout
                     android:id="@+id/rl_weather"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginTop="@dimen/y140"
-                    android:visibility="gone">
+                    android:visibility="visible">
 
                     <TextView
+                        android:text="_ _"
                         android:id="@+id/tv_temperature"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -104,23 +87,13 @@
                         android:textStyle="normal" />
 
                     <TextView
-                        android:id="@+id/tv_temperature_title"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignBottom="@+id/tv_temperature"
-                        android:layout_toRightOf="@+id/tv_temperature"
-                        android:paddingBottom="@dimen/y20"
-                        android:paddingLeft="@dimen/x10"
-                        android:textColor="@color/white_home_text"
-                        android:textSize="13sp"
-                        android:textStyle="normal" />
-
-                    <TextView
+                        android:layout_marginLeft="@dimen/x30"
+                        android:text="城市: _ _"
                         android:id="@+id/tv_city"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignTop="@+id/tv_temperature"
-                        android:layout_toRightOf="@+id/tv_temperature_title"
+                        android:layout_toRightOf="@+id/tv_temperature"
                         android:paddingLeft="@dimen/x20"
                         android:paddingTop="@dimen/y40"
                         android:textColor="@color/white_home_text"
@@ -128,10 +101,11 @@
                         android:textStyle="normal" />
 
                     <TextView
+                        android:text="日期: _ _"
                         android:id="@+id/tv_day"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignBottom="@+id/tv_temperature_title"
+                        android:layout_alignBottom="@+id/tv_temperature"
                         android:layout_alignLeft="@+id/tv_city"
                         android:paddingBottom="@dimen/y20"
                         android:paddingLeft="@dimen/x20"
@@ -149,6 +123,7 @@
 
 
                         <TextView
+                            android:text="天气: _ _"
                             android:id="@+id/tv_outdoor_air"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -164,6 +139,7 @@
                             android:background="@color/white" />
 
                         <TextView
+                            android:text="风向: _ _"
                             android:id="@+id/tv_water_quality"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -179,6 +155,7 @@
                             android:background="@color/white" />
 
                         <TextView
+                            android:text="温度: _ _"
                             android:id="@+id/tv_humidness"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -256,7 +233,7 @@
                     android:layout_toRightOf="@+id/rv_list"
                     android:alpha="0.75"
                     android:nestedScrollingEnabled="false"
-                    android:visibility="visible"></android.support.v7.widget.RecyclerView>
+                    android:visibility="visible" />
             </RelativeLayout>
         </android.support.v4.widget.NestedScrollView>
 

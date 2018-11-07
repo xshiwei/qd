@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/light_background_two">
@@ -16,16 +17,16 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/x20"
-            android:contentDescription="TODO"
             android:padding="5dp"
-            android:src="@mipmap/actionbar_goback_white" />
+            android:src="@mipmap/actionbar_goback_white"
+            tools:ignore="RtlHardcoded" />
 
         <TextView
             android:id="@+id/tv_device_control_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="WI-FI智能开关"
+            android:text="@string/qsthree_control_title"
             android:textColor="@color/white"
             android:textSize="15sp" />
 
@@ -36,9 +37,9 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/x20"
-            android:contentDescription="TODO"
             android:padding="5dp"
-            android:src="@mipmap/actionbar_more_detail_white" />
+            android:src="@mipmap/actionbar_more_detail_white"
+            tools:ignore="RtlHardcoded" />
 
     </RelativeLayout>
 
@@ -60,7 +61,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="@dimen/y30"
-                android:text="设备已断开，正在重连"
+                android:text="@string/qsthree_control_text"
                 android:textColor="@color/white"
                 android:textSize="12sp"
                 android:visibility="gone" />
@@ -78,7 +79,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="@dimen/y100"
-                    android:text="电灯一"
+                    android:text="@string/qsthree_control_light_one"
                     android:textColor="@color/white"
                     android:textSize="14sp" />
 
@@ -104,7 +105,7 @@
             <RelativeLayout
                 android:layout_width="@dimen/x350"
                 android:layout_height="match_parent"
-                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
                 android:layout_below="@+id/tv_connect_text"
                 android:layout_marginBottom="@dimen/y100"
                 android:layout_marginTop="@dimen/y30">
@@ -115,7 +116,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="@dimen/y100"
-                    android:text="电灯二"
+                    android:text="@string/qsthree_control_light_two"
                     android:textColor="@color/white"
                     android:textSize="14sp" />
 
@@ -147,7 +148,7 @@
     <com.nightonke.boommenu.BoomMenuButton
         android:id="@+id/bmb"
         android:layout_width="wrap_content"
-        android:layout_height="@dimen/y170"
+        android:layout_height="@dimen/y180"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
         android:layout_marginBottom="@dimen/y50"
@@ -157,13 +158,14 @@
         app:bmb_buttonPlaceAlignmentEnum="buttonPlaceAlignment_bottom"
         app:bmb_buttonPlaceEnum="buttonPlace_sc_3_4"
         app:bmb_normalColor="@color/notification_text"
-        app:bmb_piecePlaceEnum="piecePlace_dot_3_1">
+        app:bmb_piecePlaceEnum="piecePlace_dot_3_1"
+        tools:ignore="RtlHardcoded">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|center_horizontal"
-            android:text="功能选择"
+            android:text="@string/qsthree_control_selete"
             android:textColor="@color/white"
             android:textSize="14sp" />
     </com.nightonke.boommenu.BoomMenuButton>

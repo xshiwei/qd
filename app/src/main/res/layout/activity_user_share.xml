@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/home_manage_backgroud"
@@ -17,9 +18,9 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/x20"
-            android:contentDescription="TODO"
             android:padding="5dp"
-            android:src="@mipmap/actionbar_goback" />
+            android:src="@mipmap/actionbar_goback"
+            tools:ignore="RtlHardcoded" />
 
         <android.support.design.widget.TabLayout
             android:id="@+id/tbl_share"
@@ -30,7 +31,7 @@
             app:tabBackground="@color/white"
             app:tabIndicatorColor="@color/capacity_tablayout_text_two"
             app:tabSelectedTextColor="@color/capacity_tablayout_text_two"
-            app:tabTextColor="@color/capacity_tablayout_text"></android.support.design.widget.TabLayout>
+            app:tabTextColor="@color/capacity_tablayout_text" />
 
     </RelativeLayout>
 

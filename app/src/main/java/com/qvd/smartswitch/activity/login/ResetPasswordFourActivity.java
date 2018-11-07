@@ -15,7 +15,6 @@ import com.qvd.smartswitch.utils.RegexpUtils;
 import com.qvd.smartswitch.utils.ToastUtil;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -35,7 +34,6 @@ public class ResetPasswordFourActivity extends BaseActivity {
     TextView tvCommit;
 
 
-    private int type;
     private String account;
 
     @Override
@@ -46,9 +44,9 @@ public class ResetPasswordFourActivity extends BaseActivity {
     @Override
     protected void initData() {
         super.initData();
-        type = getIntent().getIntExtra("type", -1);
+        int type = getIntent().getIntExtra("type", -1);
         account = getIntent().getStringExtra("account");
-        tvCommonActionbarTitle.setText("科微多账号-重置密码");
+        tvCommonActionbarTitle.setText(R.string.reset_password_four_title);
     }
 
     @Override
@@ -79,7 +77,7 @@ public class ResetPasswordFourActivity extends BaseActivity {
      */
     private void setPassword() {
         if (CommonUtils.isEmptyString(etNewPassword.getText().toString()) || CommonUtils.isEmptyString(etConfirmPassword.getText().toString())) {
-            ToastUtil.showToast("密码不能为空");
+            ToastUtil.showToast(getString(R.string.common_password_not_empty));
         } else {
             RetrofitService.qdoApi.userSetNewPassword(account, etNewPassword.getText().toString(), etConfirmPassword.getText().toString())
                     .subscribeOn(Schedulers.io())
@@ -95,7 +93,9 @@ public class ResetPasswordFourActivity extends BaseActivity {
                             if (messageVo.getCode() == 200) {
                                 startActivity(new Intent(ResetPasswordFourActivity.this, LoginActivity.class));
                                 overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
-                                ToastUtil.showToast("重置密码成功");
+                                ToastUtil.showToast(getString(R.string.reset_password_four_success));
+                            } else {
+                                ToastUtil.showToast("重置密码失败");
                             }
                         }
 
@@ -119,13 +119,13 @@ public class ResetPasswordFourActivity extends BaseActivity {
         boolean b = false;
         if (!etNewPassword.getText().toString().equals(etConfirmPassword.getText().toString())) {
             b = true;
-            ToastUtil.showToast("两次输入的密码不一致");
+            ToastUtil.showToast(getString(R.string.reset_password_four_vaild_one));
         } else if (!RegexpUtils.isLetterDigit(etNewPassword.getText().toString())) {
             b = true;
-            ToastUtil.showToast("密码中必须同时包含数字和字母");
-        } else if (etNewPassword.getText().toString().length() < 8) {
+            ToastUtil.showToast(getString(R.string.reset_password_four_vaild_two));
+        } else if (etNewPassword.getText().toString().length() < 6 || etNewPassword.getText().toString().length() > 16) {
             b = true;
-            ToastUtil.showToast("密码长度不能小于8");
+            ToastUtil.showToast(getString(R.string.reset_password_four_vaild_three));
         }
         return b;
     }

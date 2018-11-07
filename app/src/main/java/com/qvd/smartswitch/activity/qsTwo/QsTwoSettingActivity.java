@@ -1,14 +1,12 @@
 package com.qvd.smartswitch.activity.qsTwo;
 
 import android.content.Intent;
-import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.qvd.smartswitch.R;
 import com.qvd.smartswitch.activity.MainActivity;
@@ -26,7 +24,7 @@ import com.qvd.smartswitch.utils.BleManageUtils;
 import com.qvd.smartswitch.utils.CommonUtils;
 import com.qvd.smartswitch.utils.ToastUtil;
 
-import java.io.Serializable;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -66,7 +64,6 @@ public class QsTwoSettingActivity extends BaseActivity {
     RelativeLayout rlDeviceDelete;
 
     private ScanResultVo scanResult;
-    private int is_control;
 
     @Override
     protected int setLayoutId() {
@@ -77,7 +74,7 @@ public class QsTwoSettingActivity extends BaseActivity {
     protected void initData() {
         super.initData();
         scanResult = (ScanResultVo) getIntent().getSerializableExtra("scanResult");
-        is_control = getIntent().getIntExtra("is_control", -1);
+        int is_control = getIntent().getIntExtra("is_control", -1);
         if (is_control == 1) {
             rlRetryName.setVisibility(View.GONE);
             rlDeviceShare.setVisibility(View.GONE);
@@ -97,56 +94,44 @@ public class QsTwoSettingActivity extends BaseActivity {
      */
     private void showPopupwindowName() {
         new MaterialDialog.Builder(this)
-                .title("设置设备名称")
+                .title(R.string.common_set_device_name)
                 .inputRange(1, 20, getResources().getColor(R.color.red))
-                .input("设置昵称", null, false, new MaterialDialog.InputCallback() {
-                    @Override
-                    public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
+                .input(getString(R.string.common_set_name), null, false, (dialog, input) -> {
 
-                    }
                 })
-                .negativeText("取消")
-                .positiveText("确定")
-                .onNegative(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        CommonUtils.closeSoftKeyboard(QsTwoSettingActivity.this);
-                    }
-                })
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        //修改设备名称
-                        EditText inputEditText = dialog.getInputEditText();
-                        RetrofitService.qdoApi.updateSpecificDeviceName(scanResult.getDeviceId(), inputEditText.getText().toString(), scanResult.getDeviceNo())
-                                .subscribeOn(Schedulers.io())
-                                .observeOn(AndroidSchedulers.mainThread())
-                                .subscribe(new Observer<MessageVo>() {
-                                    @Override
-                                    public void onSubscribe(Disposable d) {
+                .negativeText(R.string.common_cancel)
+                .positiveText(R.string.common_confirm)
+                .onNegative((dialog, which) -> CommonUtils.closeSoftKeyboard(QsTwoSettingActivity.this))
+                .onPositive((dialog, which) -> {
+                    //修改设备名称
+                    EditText inputEditText = dialog.getInputEditText();
+                    RetrofitService.qdoApi.updateSpecificDeviceName(scanResult.getDeviceId(), Objects.requireNonNull(inputEditText).getText().toString(), scanResult.getDeviceNo())
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(new Observer<MessageVo>() {
+                                @Override
+                                public void onSubscribe(Disposable d) {
 
+                                }
+
+                                @Override
+                                public void onNext(MessageVo messageVo) {
+                                    if (messageVo.getCode() == 200) {
+                                        ToastUtil.showToast(getString(R.string.common_update_success));
+                                    } else {
+                                        ToastUtil.showToast(getString(R.string.common_update_fail));
                                     }
+                                }
 
-                                    @Override
-                                    public void onNext(MessageVo messageVo) {
-                                        if (messageVo.getCode() == 200) {
-                                            ToastUtil.showToast("修改成功");
-                                        } else {
-                                            ToastUtil.showToast("网络失败");
-                                        }
-                                    }
+                                @Override
+                                public void onError(Throwable e) {
+                                }
 
-                                    @Override
-                                    public void onError(Throwable e) {
-                                        ToastUtil.showToast("网络失败");
-                                    }
+                                @Override
+                                public void onComplete() {
 
-                                    @Override
-                                    public void onComplete() {
-
-                                    }
-                                });
-                    }
+                                }
+                            });
                 })
                 .show();
     }
@@ -156,46 +141,40 @@ public class QsTwoSettingActivity extends BaseActivity {
      */
     private void deleteDevice() {
         new MaterialDialog.Builder(this)
-                .title("您确定要删除该设备吗")
-                .negativeText("取消")
-                .positiveText("确定")
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        RetrofitService.qdoApi.deleteDevice(scanResult.getDeviceId())
-                                .subscribeOn(Schedulers.io())
-                                .observeOn(AndroidSchedulers.mainThread())
-                                .subscribe(new Observer<MessageVo>() {
-                                    @Override
-                                    public void onSubscribe(Disposable d) {
+                .title(R.string.common_delete_device)
+                .negativeText(R.string.common_cancel)
+                .positiveText(R.string.common_confirm)
+                .onPositive((dialog, which) -> RetrofitService.qdoApi.deleteDevice(scanResult.getDeviceId())
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(new Observer<MessageVo>() {
+                            @Override
+                            public void onSubscribe(Disposable d) {
 
-                                    }
+                            }
 
-                                    @Override
-                                    public void onNext(MessageVo messageVo) {
-                                        if (messageVo.getCode() == 200) {
-                                            ToastUtil.showToast("删除成功");
-                                            startActivity(new Intent(QsTwoSettingActivity.this, MainActivity.class));
-                                            overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
-                                            BleManageUtils.getInstance().DestroyBleManage();
-                                            finish();
-                                        } else {
-                                            ToastUtil.showToast("网络错误");
-                                        }
-                                    }
+                            @Override
+                            public void onNext(MessageVo messageVo) {
+                                if (messageVo.getCode() == 200) {
+                                    ToastUtil.showToast(getString(R.string.common_delete_success));
+                                    startActivity(new Intent(QsTwoSettingActivity.this, MainActivity.class));
+                                    overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+                                    BleManageUtils.getInstance().DestroyBleManage();
+                                    finish();
+                                } else {
+                                    ToastUtil.showToast(getString(R.string.common_delete_fail));
+                                }
+                            }
 
-                                    @Override
-                                    public void onError(Throwable e) {
-                                        ToastUtil.showToast("网络错误");
-                                    }
+                            @Override
+                            public void onError(Throwable e) {
+                            }
 
-                                    @Override
-                                    public void onComplete() {
+                            @Override
+                            public void onComplete() {
 
-                                    }
-                                });
-                    }
-                })
+                            }
+                        }))
                 .show();
     }
 
@@ -227,7 +206,7 @@ public class QsTwoSettingActivity extends BaseActivity {
                 break;
             case R.id.rl_about:
                 //关于
-                ToastUtil.showToast("功能开发中，敬请期待。。。");
+                ToastUtil.showToast(getString(R.string.common_features_being_development));
                 break;
             case R.id.rl_retry_name:
                 //修改名称
@@ -242,11 +221,11 @@ public class QsTwoSettingActivity extends BaseActivity {
                 break;
             case R.id.rl_location_manager:
                 //位置管理
-                ToastUtil.showToast("功能开发中，敬请期待。。。");
+                ToastUtil.showToast(getString(R.string.common_features_being_development));
                 break;
             case R.id.rl_check_update:
                 //检查更新
-                ToastUtil.showToast("功能开发中，敬请期待。。。");
+                ToastUtil.showToast(getString(R.string.common_features_being_development));
                 break;
             case R.id.rl_device_delete:
                 //设备删除

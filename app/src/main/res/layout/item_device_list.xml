@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="@dimen/y120"
     android:background="@color/white">
@@ -10,8 +11,8 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_marginLeft="@dimen/x30"
-        android:contentDescription="TODO"
-        android:src="@mipmap/device_unconnect" />
+        android:src="@mipmap/device_unconnect"
+        tools:ignore="RtlHardcoded" />
 
     <TextView
         android:id="@+id/tv_decive_name"
@@ -24,9 +25,9 @@
         android:layout_toRightOf="@+id/iv_item_device_pic"
         android:ellipsize="end"
         android:lines="1"
-        android:text="11111"
         android:textColor="@color/home_setting_text"
-        android:textSize="14sp" />
+        android:textSize="14sp"
+        tools:ignore="RtlHardcoded" />
 
     <TextView
         android:id="@+id/tv_decive_state"
@@ -40,9 +41,9 @@
         android:layout_toRightOf="@+id/iv_item_device_pic"
         android:ellipsize="end"
         android:lines="1"
-        android:text="已连接"
         android:textColor="@color/home_setting_text_three"
-        android:textSize="12sp" />
+        android:textSize="12sp"
+        tools:ignore="RtlHardcoded" />
 
 
     <ImageView
@@ -52,8 +53,8 @@
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:layout_marginRight="@dimen/x30"
-        android:contentDescription="TODO"
-        android:src="@mipmap/device_more_details" />
+        android:src="@mipmap/device_more_details"
+        tools:ignore="RtlHardcoded" />
 
 
     <TextView
@@ -65,10 +66,10 @@
         android:layout_toLeftOf="@+id/iv_item_device_more"
         android:background="@drawable/circle_orange_ten"
         android:gravity="center"
-        android:text="断开连接"
         android:textColor="@color/white"
         android:textSize="13sp"
-        android:visibility="gone" />
+        android:visibility="gone"
+        tools:ignore="RtlHardcoded" />
 
     <ProgressBar
         android:id="@+id/progress"
@@ -77,7 +78,8 @@
         android:layout_centerVertical="true"
         android:layout_marginRight="@dimen/x10"
         android:layout_toLeftOf="@+id/tv_connecting"
-        android:visibility="gone" />
+        android:visibility="gone"
+        tools:ignore="RtlHardcoded" />
 
     <TextView
         android:id="@+id/tv_connecting"
@@ -86,10 +88,10 @@
         android:layout_centerVertical="true"
         android:layout_marginRight="@dimen/x10"
         android:layout_toLeftOf="@+id/iv_item_device_more"
-        android:text="正在连接"
         android:textColor="@color/home_setting_text_three"
         android:textSize="13sp"
-        android:visibility="gone" />
+        android:visibility="gone"
+        tools:ignore="RtlHardcoded" />
 
     <View
         android:layout_width="match_parent"

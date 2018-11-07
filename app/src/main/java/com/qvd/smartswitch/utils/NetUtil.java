@@ -2,7 +2,6 @@ package com.qvd.smartswitch.utils;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -52,12 +51,9 @@ public class NetUtil {
         if (!NetUtil.isNetworkAvalible(activity)) {
             TextView msg = new TextView(activity);
             msg.setText("当前没有可以使用的网络，请设置网络！");
-            new AlertDialog.Builder(activity).setIcon(R.mipmap.ic_launcher).setTitle("网络状态提示").setView(msg).setPositiveButton("确定", new DialogInterface.OnClickListener() {
-
-                public void onClick(DialogInterface dialog, int whichButton) {
-                    // 跳转到设置界面
-                    activity.startActivityForResult(new Intent(Settings.ACTION_WIRELESS_SETTINGS), 0);
-                }
+            new AlertDialog.Builder(activity).setIcon(R.mipmap.ic_launcher).setTitle("网络状态提示").setView(msg).setPositiveButton("确定", (dialog, whichButton) -> {
+                // 跳转到设置界面
+                activity.startActivityForResult(new Intent(Settings.ACTION_WIRELESS_SETTINGS), 0);
             }).create().show();
         }
     }
@@ -71,7 +67,7 @@ public class NetUtil {
         assert connManager != null;
         NetworkInfo networkInfo = connManager.getActiveNetworkInfo();
         // 获取当前的网络连接是否可用
-        boolean available = false;
+        boolean available;
         try {
             available = networkInfo.isAvailable();
         } catch (Exception e) {

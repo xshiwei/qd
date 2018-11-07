@@ -14,7 +14,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 
-public class ScreenUtil {
+import java.util.Objects;
+
+class ScreenUtil {
 
     private ScreenUtil() {
         /* cannot be instantiated */
@@ -42,7 +44,7 @@ public class ScreenUtil {
     public static int getScreenWidth(Context context) {
         WindowManager manager = (WindowManager) context
                 .getSystemService(Context.WINDOW_SERVICE);
-        Display display = manager.getDefaultDisplay();
+        Display display = Objects.requireNonNull(manager).getDefaultDisplay();
         return display.getWidth();
     }
 
@@ -54,7 +56,7 @@ public class ScreenUtil {
     public static int getScreenHeight(Context context) {
         WindowManager manager = (WindowManager) context
                 .getSystemService(Context.WINDOW_SERVICE);
-        Display display = manager.getDefaultDisplay();
+        Display display = Objects.requireNonNull(manager).getDefaultDisplay();
         return display.getHeight();
     }
 
@@ -111,16 +113,16 @@ public class ScreenUtil {
         int actionBarHeight=0;
         if(context instanceof AppCompatActivity &&((AppCompatActivity) context).getSupportActionBar()!=null) {
             Log.d("isAppCompatActivity", "==AppCompatActivity");
-            actionBarHeight = ((AppCompatActivity) context).getSupportActionBar().getHeight();
+            actionBarHeight = Objects.requireNonNull(((AppCompatActivity) context).getSupportActionBar()).getHeight();
         }else if(context instanceof Activity && ((Activity) context).getActionBar()!=null) {
             Log.d("isActivity","==Activity");
-            actionBarHeight = ((Activity) context).getActionBar().getHeight();
+            actionBarHeight = Objects.requireNonNull(((Activity) context).getActionBar()).getHeight();
         }else if(context instanceof ActivityGroup){
             Log.d("ActivityGroup","==ActivityGroup");
             if (((ActivityGroup) context).getCurrentActivity() instanceof AppCompatActivity && ((AppCompatActivity) ((ActivityGroup) context).getCurrentActivity()).getSupportActionBar()!=null){
-                actionBarHeight = ((AppCompatActivity) ((ActivityGroup) context).getCurrentActivity()).getSupportActionBar().getHeight();
-            }else if (((ActivityGroup) context).getCurrentActivity() instanceof Activity && ((Activity) ((ActivityGroup) context).getCurrentActivity()).getActionBar()!=null){
-                actionBarHeight = ((Activity) ((ActivityGroup) context).getCurrentActivity()).getActionBar().getHeight();
+                actionBarHeight = Objects.requireNonNull(((AppCompatActivity) ((ActivityGroup) context).getCurrentActivity()).getSupportActionBar()).getHeight();
+            }else if (((ActivityGroup) context).getCurrentActivity() != null && ((ActivityGroup) context).getCurrentActivity().getActionBar()!=null){
+                actionBarHeight = Objects.requireNonNull(((ActivityGroup) context).getCurrentActivity().getActionBar()).getHeight();
             }
         }
         if (actionBarHeight != 0)
@@ -129,11 +131,8 @@ public class ScreenUtil {
         if(context.getTheme().resolveAttribute( android.support.v7.appcompat.R.attr.actionBarSize, tv, true)){
             if (context.getTheme().resolveAttribute(android.support.v7.appcompat.R.attr.actionBarSize, tv, true))
                 actionBarHeight = TypedValue.complexToDimensionPixelSize(tv.data, context.getResources().getDisplayMetrics());
-        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+        } else {
             if (context.getTheme().resolveAttribute(android.R.attr.actionBarSize, tv, true))
-                actionBarHeight = TypedValue.complexToDimensionPixelSize(tv.data, context.getResources().getDisplayMetrics());
-        }else {
-            if (context.getTheme().resolveAttribute(android.support.v7.appcompat.R.attr.actionBarSize, tv, true))
                 actionBarHeight = TypedValue.complexToDimensionPixelSize(tv.data, context.getResources().getDisplayMetrics());
         }
         Log.d("actionBarHeight","===="+actionBarHeight);

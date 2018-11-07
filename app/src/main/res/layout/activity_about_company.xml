@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -12,7 +13,7 @@
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="@dimen/y150"
         android:src="@mipmap/qvedo_app_icon"
-        android:contentDescription="TODO" />
+        />
 
     <TextView
         android:id="@+id/tv_about_appversion"
@@ -39,7 +40,8 @@
             android:paddingLeft="@dimen/x30"
             android:text="@string/about_company_grade"
             android:textColor="@color/black"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            tools:ignore="RtlHardcoded" />
 
         <ImageView
             android:layout_width="wrap_content"
@@ -48,7 +50,7 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/x30"
             android:src="@mipmap/user_more_details"
-            android:contentDescription="TODO" />
+            tools:ignore="RtlHardcoded" />
 
         <View
             android:layout_width="match_parent"
@@ -68,7 +70,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:paddingLeft="@dimen/x30"
+            android:paddingStart="@dimen/x30"
             android:text="@string/about_company_privacy"
             android:textColor="@color/black"
             android:textSize="14sp" />
@@ -80,7 +82,7 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/x30"
             android:src="@mipmap/user_more_details"
-            android:contentDescription="TODO" />
+            tools:ignore="RtlHardcoded" />
 
         <View
             android:layout_width="match_parent"

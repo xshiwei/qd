@@ -62,7 +62,7 @@
             android:layout_marginRight="@dimen/x30"
             android:background="@drawable/circle_green_five"
             android:gravity="center"
-            android:text="确定"
+            android:text="@string/device_share_qevdo_account_fnally_confirm"
             android:textColor="@color/white"
             android:textSize="14sp" />
     </LinearLayout>

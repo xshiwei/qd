@@ -1,16 +1,13 @@
 package com.qvd.smartswitch.activity.device;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.wifi.ScanResult;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.Message;
 import android.provider.Settings;
-import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
@@ -22,15 +19,17 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.clj.fastble.BleManager;
 import com.clj.fastble.callback.BleScanCallback;
 import com.clj.fastble.data.BleDevice;
 import com.isupatches.wisefy.WiseFy;
 import com.isupatches.wisefy.callbacks.GetNearbyAccessPointsCallbacks;
+import com.orhanobut.logger.Logger;
 import com.qvd.smartswitch.R;
 import com.qvd.smartswitch.activity.base.BaseActivity;
+import com.qvd.smartswitch.activity.base.BaseHandler;
+import com.qvd.smartswitch.activity.base.BaseRunnable;
 import com.qvd.smartswitch.activity.device.Ble.DeviceBleConnectActivity;
 import com.qvd.smartswitch.activity.device.wifi.DeviceWifiSettingActivity;
 import com.qvd.smartswitch.adapter.AddDeviceSortAdapter;
@@ -41,9 +40,7 @@ import com.qvd.smartswitch.model.login.MessageVo;
 import com.qvd.smartswitch.utils.BleManageUtils;
 import com.qvd.smartswitch.utils.CommonUtils;
 import com.qvd.smartswitch.utils.ConfigUtils;
-import com.qvd.smartswitch.utils.NetUtil;
 import com.qvd.smartswitch.utils.PermissionUtils;
-import com.qvd.smartswitch.utils.SnackbarUtils;
 import com.qvd.smartswitch.utils.ToastUtil;
 import com.qvd.smartswitch.widget.CheckListener;
 import com.qvd.smartswitch.widget.ItemHeaderDecoration;
@@ -51,10 +48,10 @@ import com.qvd.smartswitch.widget.RadarScanView;
 import com.qvd.smartswitch.widget.RandomTextView;
 import com.scwang.smartrefresh.header.MaterialHeader;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
-import com.scwang.smartrefresh.layout.api.RefreshLayout;
-import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.yanzhenjie.permission.Permission;
 
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,8 +64,6 @@ import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
-
-import static android.media.CamcorderProfile.get;
 
 /**
  * Created by Administrator on 2018/6/11 0011.
@@ -91,8 +86,6 @@ public class DeviceAddActivity extends BaseActivity implements CheckListener {
     LinearLayout llAddDeviceList;
     @BindView(R.id.rl_add_device_nearby)
     RelativeLayout rlAddDeviceNearby;
-    @BindView(R.id.radar_scanview)
-    RadarScanView radarScanView;
     @BindView(R.id.smart_refresh)
     SmartRefreshLayout refreshLayout;
 
@@ -109,6 +102,8 @@ public class DeviceAddActivity extends BaseActivity implements CheckListener {
      * 点击左边某一个具体的item的位置
      */
     private int targetPosition;
+
+    private RadarScanView radarScanView;
     /**
      * 判断是否移出
      */
@@ -126,32 +121,40 @@ public class DeviceAddActivity extends BaseActivity implements CheckListener {
 
     private RandomTextView randomTextview;
 
-    private static final int REQUEST_CODE_OPEN_GPS = 1;
+    private final int REQUEST_CODE_OPEN_GPS = 1;
 
-    public final int REQUEST_ENABLE_BT = 110;
+    private final int REQUEST_ENABLE_BT = 110;
 
     private int selete = 1;
 
     private TextView tv_text;
 
-    @SuppressLint("HandlerLeak")
-    private Handler handler = new Handler() {
+    private final MyHandle myHandle = new MyHandle(this);
+
+    private static class MyHandle extends BaseHandler<DeviceAddActivity> {
+
+        MyHandle(DeviceAddActivity reference) {
+            super(reference);
+        }
+
         @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            switch (msg.what) {
-                case 1:
-                    randomTextview.show();
-                    break;
+        protected void handleMessage(DeviceAddActivity reference, Message msg) {
+            if (reference != null) {
+                switch (msg.what) {
+                    case 1:
+                        reference.randomTextview.show();
+                        break;
+                }
             }
         }
-    };
+    }
 
     /**
      * 左侧数据集合
      */
     private List<AddDeviceListVo.DataBean> categoryOneArray;
     private BluetoothAdapter bluetoothAdapter;
+    private MaterialDialog dialog;
 
     @Override
     protected int setLayoutId() {
@@ -169,16 +172,15 @@ public class DeviceAddActivity extends BaseActivity implements CheckListener {
         super.initData();
         tv_text = findViewById(R.id.tv_text);
         randomTextview = findViewById(R.id.random_textview);
-        wiseFy = new WiseFy.brains(this).logging(true).getSmarts();
+        radarScanView = findViewById(R.id.radar_scanview);
+        radarScanView = new RadarScanView(this);
+        wiseFy = new WiseFy.Brains(this).logging(true).getSmarts();
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
         //判断是否支持蓝牙功能
         if (bluetoothAdapter == null) {
-            ToastUtil.showToast("您的手机不支持蓝牙功能");
+            ToastUtil.showToast(getString(R.string.common_phone_nonsupport_ble));
             return;
         }
-        /**
-         * 去打开蓝牙，否则直接扫描设备
-         */
         if (!bluetoothAdapter.isEnabled()) {
             showOpenBlePopupWindow();
         }
@@ -191,44 +193,13 @@ public class DeviceAddActivity extends BaseActivity implements CheckListener {
         refreshLayout.setEnableHeaderTranslationContent(false);//是否上拉Footer的时候向上平移列表或者内容
         //设置头部样式
         refreshLayout.setRefreshHeader(new MaterialHeader(this));
-        refreshLayout.setOnRefreshListener(new OnRefreshListener() {
-            @Override
-            public void onRefresh(RefreshLayout refreshlayout) {
-                tv_text.setVisibility(View.GONE);
-                randomTextview.removeKeyWords();
-                startScanWifi();
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        startScan();
-                    }
-                }, 500);
-                radarScanView.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        tv_text.setVisibility(View.VISIBLE);
-                    }
-                }, 6000);
-                refreshLayout.finishRefresh(1500, true);
-            }
+        refreshLayout.setOnRefreshListener(refreshlayout -> {
+            tv_text.setVisibility(View.GONE);
+            randomTextview.removeKeyWords();
+            startScanWifi();
+            myHandle.postDelayed(new BaseRunnable(this::startScan), 500);
+            myHandle.postDelayed(new BaseRunnable(() -> tv_text.setVisibility(View.VISIBLE)), 6000);
         });
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-//        randomTextview.removeKeyWords();
-//        if (bluetoothAdapter.isEnabled()) {
-//            new Handler().postDelayed(new Runnable() {
-//                @Override
-//                public void run() {
-//                    startScan();
-//                }
-//            }, 1000);
-//        }
-//        if (BleManageUtils.getInstance().checkGPSIsOpen(this) && wiseFy.isWifiEnabled()) {
-//            startScanWifi();
-//        }
     }
 
     /**
@@ -236,14 +207,11 @@ public class DeviceAddActivity extends BaseActivity implements CheckListener {
      */
     private void showPopupWindowOpenGPS() {
         new MaterialDialog.Builder(this)
-                .content("检测到您的GPS未打开，可能导致搜索不到设备,是否去打开？")
-                .negativeText("取消")
-                .positiveText("确认")
-                .onNegative(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                .content(R.string.common_gps_not_open)
+                .negativeText(getString(R.string.common_cancel))
+                .positiveText(getString(R.string.common_confirm))
+                .onNegative((dialog, which) -> {
 
-                    }
                 })
                 .onPositive((dialog, which) -> {
                     Intent intent = new Intent(
@@ -263,22 +231,24 @@ public class DeviceAddActivity extends BaseActivity implements CheckListener {
         randomTextview.setOnRippleViewClickListener(position -> {
             //搜索的设备跳转到连接页面
             Vector<ScanResultVo> keyWords = randomTextview.getKeyWords();
-            ScanResultVo resultVo = null;
+            ScanResultVo resultVo;
             if (keyWords != null) {
                 resultVo = keyWords.get(position);
                 switch (resultVo.getConnectType()) {
                     case 1:
                         startActivity(new Intent(DeviceAddActivity.this, DeviceBleConnectActivity.class)
                                 .putExtra("ScanResultVo", resultVo));
+                        CommonUtils.startIntentAnim(this);
                         break;
                     case 2:
                         startActivity(new Intent(DeviceAddActivity.this, DeviceWifiSettingActivity.class)
                                 .putExtra("wifi_ssid", resultVo.getDeviceNo()));
+                        CommonUtils.startIntentAnim(this);
                         break;
                 }
                 overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
             } else {
-                ToastUtil.showToast("该设备可能已经离线，请重新刷新");
+                ToastUtil.showToast(getString(R.string.common_device_possible_offline));
             }
         });
     }
@@ -290,7 +260,7 @@ public class DeviceAddActivity extends BaseActivity implements CheckListener {
         randomTextview.removeKeyWords();
         PermissionUtils.requestPermission(this, Permission.Group.LOCATION);
         //判断用户是否打开GPS
-        if (!BleManageUtils.getInstance().checkGPSIsOpen(this)) {
+        if (!BleManageUtils.getInstance().checkGPSIsOpen()) {
             showPopupWindowOpenGPS();
         }
         checkPermission();
@@ -317,18 +287,19 @@ public class DeviceAddActivity extends BaseActivity implements CheckListener {
         }
         wiseFy.getNearbyAccessPoints(false, new GetNearbyAccessPointsCallbacks() {
             @Override
-            public void getNearbyAccessPointsWiseFyFailure(int i) {
+            public void wisefyFailure(int i) {
 
             }
 
             @Override
-            public void retrievedNearbyAccessPoints(List<ScanResult> list) {
+            public void retrievedNearbyAccessPoints(@NotNull List<ScanResult> list) {
                 for (ScanResult result : list) {
                     switch (result.SSID) {
                         case "qs03":
+                            Logger.e("wifi mac ==" + result.BSSID);
                             ScanResultVo resultVo = new ScanResultVo(result.SSID, CommonUtils.getDeviceName(result.SSID), result.BSSID, 2, -1, null);
                             randomTextview.addKeyWord(resultVo);
-                            handler.sendEmptyMessage(1);
+                            myHandle.sendEmptyMessage(1);
                             break;
                     }
                 }
@@ -341,21 +312,13 @@ public class DeviceAddActivity extends BaseActivity implements CheckListener {
      */
     private void showOpenWifiPopupWindow() {
         new MaterialDialog.Builder(this)
-                .content("您当前Wi-Fi网络未开启，不能扫描连接Wi_Fi设备,点击确定开启Wi-Fi。")
-                .negativeText("取消")
-                .positiveText("确定")
-                .onNegative(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                .content(R.string.common_open_wifi)
+                .negativeText(R.string.common_cancel)
+                .positiveText(R.string.common_confirm)
+                .onNegative((dialog, which) -> {
 
-                    }
                 })
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        wiseFy.enableWifi();
-                    }
-                })
+                .onPositive((dialog, which) -> wiseFy.enableWifi())
                 .show();
     }
 
@@ -363,20 +326,17 @@ public class DeviceAddActivity extends BaseActivity implements CheckListener {
      * 展示打开Wifi的popouwindow
      */
     private void showOpenBlePopupWindow() {
-        new MaterialDialog.Builder(this)
-                .content("您当前蓝牙未开启，不能扫描连接蓝牙设备,点击确定开启蓝牙。")
-                .negativeText("取消")
-                .positiveText("确定")
-                .onNegative(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+        dialog = new MaterialDialog.Builder(this)
+                .content(R.string.common_open_ble_content)
+                .negativeText(R.string.common_cancel)
+                .positiveText(R.string.common_confirm)
+                .onNegative((dialog, which) -> {
 
-                    }
                 })
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        bluetoothAdapter.enable();
+                .onPositive((dialog, which) -> {
+                    if (bluetoothAdapter == null || !bluetoothAdapter.isEnabled()) {
+                        Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                        startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
                     }
                 })
                 .show();
@@ -388,12 +348,9 @@ public class DeviceAddActivity extends BaseActivity implements CheckListener {
     private void checkPermission() {
         //判断是否支持蓝牙功能
         if (bluetoothAdapter == null) {
-            ToastUtil.showToast("您的手机不支持蓝牙功能");
+            ToastUtil.showToast(getString(R.string.common_phone_nonsupport_ble));
             return;
         }
-        /**
-         * 去打开蓝牙，否则直接扫描设备
-         */
         if (!bluetoothAdapter.isEnabled()) {
             showOpenBlePopupWindow();
         } else {
@@ -409,7 +366,7 @@ public class DeviceAddActivity extends BaseActivity implements CheckListener {
         BleManager.getInstance().scan(new BleScanCallback() {
             @Override
             public void onScanStarted(boolean success) {
-
+                refreshLayout.finishRefresh();
             }
 
             @Override
@@ -443,9 +400,9 @@ public class DeviceAddActivity extends BaseActivity implements CheckListener {
                     public void onNext(MessageVo messageVo) {
                         if (messageVo != null) {
                             if (messageVo.getCode() == 400) {
-                                ScanResultVo resultVo = new ScanResultVo(bleDevice.getName(), CommonUtils.getDeviceName(bleDevice.getName()), bleDevice.getMac(), 1,-1,null);
+                                ScanResultVo resultVo = new ScanResultVo(bleDevice.getName(), CommonUtils.getDeviceName(bleDevice.getName()), bleDevice.getMac(), 1, -1, null);
                                 randomTextview.addKeyWord(resultVo);
-                                handler.sendEmptyMessage(1);
+                                myHandle.sendEmptyMessage(1);
                             }
                         }
                     }
@@ -465,7 +422,7 @@ public class DeviceAddActivity extends BaseActivity implements CheckListener {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_CODE_OPEN_GPS) {
-            if (BleManageUtils.getInstance().checkGPSIsOpen(this)) {
+            if (BleManageUtils.getInstance().checkGPSIsOpen()) {
                 getNearByData();
             }
         }
@@ -533,9 +490,9 @@ public class DeviceAddActivity extends BaseActivity implements CheckListener {
     /**
      * 创建Fragment
      */
-    public void createFragment() {
+    private void createFragment() {
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-        mDeviceSortDetailFragment = new DeviceSortDetailFragment();
+        mDeviceSortDetailFragment = DeviceSortDetailFragment.newInstance("add");
         Bundle bundle = new Bundle();
         bundle.putSerializable("right", mSortBean);
         mDeviceSortDetailFragment.setArguments(bundle);
@@ -598,12 +555,7 @@ public class DeviceAddActivity extends BaseActivity implements CheckListener {
                     tvAddDeviceNearby.setTextColor(getResources().getColor(R.color.add_device_selete));
                     tvAddDeviceManual.setTextColor(getResources().getColor(R.color.add_device_title));
                     getNearByData();
-                    radarScanView.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            tv_text.setVisibility(View.VISIBLE);
-                        }
-                    }, 8000);
+                    myHandle.postDelayed(new BaseRunnable(() -> tv_text.setVisibility(View.VISIBLE)), 8000);
                 }
                 break;
             case R.id.tv_add_device_manual:
@@ -631,8 +583,12 @@ public class DeviceAddActivity extends BaseActivity implements CheckListener {
     protected void onDestroy() {
         super.onDestroy();
         if (radarScanView != null) {
+            radarScanView.destory();
             radarScanView = null;
         }
         BleManageUtils.getInstance().DestroyBleManage();
+        if (dialog != null) {
+            dialog.dismiss();
+        }
     }
 }

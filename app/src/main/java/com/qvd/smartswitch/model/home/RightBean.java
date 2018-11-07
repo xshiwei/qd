@@ -32,7 +32,7 @@ public class RightBean implements Parcelable {
         this.name = name;
     }
 
-    protected RightBean(Parcel in) {
+    private RightBean(Parcel in) {
         name = in.readString();
         titleName = in.readString();
         tag = in.readString();

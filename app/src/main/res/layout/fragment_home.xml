@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.scwang.smartrefresh.layout.SmartRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/smart_refresh"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -16,7 +17,6 @@
             android:layout_height="wrap_content"
             android:background="@color/white"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
-            ​
 
             <android.support.design.widget.CollapsingToolbarLayout
                 android:id="@+id/main_collapsing"
@@ -26,7 +26,6 @@
                 app:expandedTitleMarginEnd="64dp"
                 app:expandedTitleMarginStart="48dp"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed">
-                ​
 
                 <ImageView
                     android:id="@+id/materialup_profile_backdrop"
@@ -38,7 +37,6 @@
                     app:layout_collapseMode="pin" />
 
             </android.support.design.widget.CollapsingToolbarLayout>
-            ​
 
             <LinearLayout
                 android:id="@+id/materialup_title_container"
@@ -46,8 +44,7 @@
                 android:layout_height="0dp"
                 android:layout_marginTop="@dimen/y80"
                 android:orientation="horizontal"
-                app:layout_scrollFlags="scroll|enterAlways|snap"></LinearLayout>
-            ​
+                app:layout_scrollFlags="scroll|enterAlways|snap" />
 
             <android.support.design.widget.TabLayout
                 android:id="@+id/materialup_tabs"
@@ -63,7 +60,6 @@
                 app:tabTextColor="@color/home_setting_text_two" />
         </android.support.design.widget.AppBarLayout>
         ​
-
         <android.support.v4.view.ViewPager
             android:id="@+id/materialup_viewpager"
             android:layout_width="match_parent"
@@ -105,7 +101,8 @@
                 android:layout_toRightOf="@+id/tv_login_text"
                 android:text="登录"
                 android:textColor="@color/app_red_color"
-                android:textSize="13sp" />
+                android:textSize="13sp"
+                tools:ignore="RtlHardcoded" />
         </RelativeLayout>
         ​
 
@@ -120,7 +117,9 @@
             android:visibility="gone"
             app:fab_colorNormal="@color/home_voice_normal"
             app:fab_colorPressed="@color/add_device_background"
-            app:fab_type="normal" />
+            app:fab_type="normal"
+            tools:ignore="RtlHardcoded"
+            tools:targetApi="lollipop" />
 
 
         <RelativeLayout
@@ -148,7 +147,8 @@
                     android:layout_marginLeft="@dimen/x30"
                     android:layout_marginTop="@dimen/y20"
                     android:layout_toRightOf="@+id/iv_pic"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    tools:ignore="RtlHardcoded">
 
                     <ImageView
                         android:layout_width="wrap_content"
@@ -165,7 +165,8 @@
                         android:text="subtitle_mup"
                         android:textAppearance="@style/TextAppearance.AppCompat.Widget.ActionBar.Subtitle"
                         android:textColor="@color/home_setting_text"
-                        android:textSize="16sp" />
+                        android:textSize="16sp"
+                        tools:ignore="RtlHardcoded" />
 
                 </LinearLayout>
 
@@ -174,7 +175,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="@dimen/y150"
                     android:layout_above="@+id/tv_add_device"
-                    android:layout_toRightOf="@+id/iv_pic">
+                    android:layout_toRightOf="@+id/iv_pic"
+                    tools:ignore="RtlHardcoded">
 
                     <TextView
                         android:id="@+id/tv_temperature"
@@ -186,7 +188,8 @@
                         android:text="温度: NUll"
                         android:textColor="@color/app_red_color"
                         android:textSize="16sp"
-                        android:textStyle="italic" />
+                        android:textStyle="italic"
+                        tools:ignore="RtlHardcoded" />
 
                     <TextView
                         android:id="@+id/tv_weather"
@@ -223,7 +226,8 @@
                         android:text="日期:NULL"
                         android:textColor="@color/app_red_color"
                         android:textSize="16sp"
-                        android:textStyle="italic" />
+                        android:textStyle="italic"
+                        tools:ignore="RtlHardcoded" />
 
                     <TextView
                         android:id="@+id/tv_humidity"
@@ -248,7 +252,8 @@
                         android:text="风向:NULL"
                         android:textColor="@color/app_red_color"
                         android:textSize="16sp"
-                        android:textStyle="italic" />
+                        android:textStyle="italic"
+                        tools:ignore="RtlHardcoded" />
 
                 </RelativeLayout>
 

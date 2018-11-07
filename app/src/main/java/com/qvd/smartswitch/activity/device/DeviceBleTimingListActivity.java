@@ -1,16 +1,12 @@
 package com.qvd.smartswitch.activity.device;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
-import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.clj.fastble.BleManager;
 import com.clj.fastble.callback.BleWriteCallback;
@@ -25,15 +21,10 @@ import com.qvd.smartswitch.adapter.BleTimingAdapter;
 import com.qvd.smartswitch.api.RetrofitService;
 import com.qvd.smartswitch.model.device.DeviceTimingVo;
 import com.qvd.smartswitch.model.login.MessageVo;
-import com.qvd.smartswitch.utils.CommonUtils;
 import com.qvd.smartswitch.utils.ToastUtil;
-import com.qvd.smartswitch.widget.EmptyLayout;
 import com.qvd.smartswitch.widget.MyProgressDialog;
-import com.scwang.smartrefresh.header.MaterialHeader;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
-import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.header.ClassicsHeader;
-import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,13 +45,11 @@ public class DeviceBleTimingListActivity extends BaseActivity {
     RecyclerView recyclerview;
     @BindView(R.id.tv_add_timing)
     TextView tvAddTiming;
-    @BindView(R.id.emptylayout)
-    EmptyLayout emptyLayout;
     @BindView(R.id.smart_refresh)
     SmartRefreshLayout smartRefreshLayout;
 
     private BleTimingAdapter adapter;
-    private List<DeviceTimingVo.DataBean> list = new ArrayList<>();
+    private final List<DeviceTimingVo.DataBean> list = new ArrayList<>();
     private BleDevice bledevice;
     private String device_id;
     private DeviceTimingVo.DataBean seleteDataBean;
@@ -74,16 +63,13 @@ public class DeviceBleTimingListActivity extends BaseActivity {
     @Override
     protected void initData() {
         super.initData();
-        tvCommonActionbarTitle.setText("蓝牙开关定时");
+        tvCommonActionbarTitle.setText(R.string.device_ble_timing_list_title);
         bledevice = getIntent().getParcelableExtra("bledevice");
         device_id = getIntent().getStringExtra("device_id");
         progressDialog = MyProgressDialog.createProgressDialog(this, 5000,
-                new MyProgressDialog.OnTimeOutListener() {
-                    @Override
-                    public void onTimeOut(ProgressDialog dialog) {
-                        dialog.dismiss();
-                        ToastUtil.showToast("取消失败");
-                    }
+                dialog -> {
+                    dialog.dismiss();
+                    ToastUtil.showToast(getString(R.string.device_ble_timing_list_cancel_fail));
                 });
         //设置刷新控件头部高度
         smartRefreshLayout.setHeaderHeight(100);
@@ -91,13 +77,7 @@ public class DeviceBleTimingListActivity extends BaseActivity {
         smartRefreshLayout.setEnableHeaderTranslationContent(true);
         //设置头部样式
         smartRefreshLayout.setRefreshHeader(new ClassicsHeader(this));
-        smartRefreshLayout.setOnRefreshListener(new OnRefreshListener() {
-            @Override
-            public void onRefresh(RefreshLayout refreshlayout) {
-                getData();
-                smartRefreshLayout.finishRefresh(2000, true);
-            }
-        });
+        smartRefreshLayout.setOnRefreshListener(refreshlayout -> getData());
 
     }
 
@@ -110,26 +90,23 @@ public class DeviceBleTimingListActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        getData();
         recyclerview.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        adapter = new BleTimingAdapter(this, list);
+        adapter = new BleTimingAdapter(list);
+        adapter.openLoadAnimation();
+        adapter.isFirstOnly(false);
+        adapter.setHasStableIds(true);
         recyclerview.setAdapter(adapter);
-        adapter.setOnItemClickListener(new BleTimingAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                seleteDataBean = list.get(position);
-                if (seleteDataBean.getTiming_state().equals("1")) {
-                    showCancelDialog();
-                } else {
-                    showDeleteDialog();
-                }
-            }
-
-            @Override
-            public void onItemLongClickListener(View view, int position) {
-
+        adapter.setOnItemClickListener((adapter, view, position) -> {
+            seleteDataBean = list.get(position);
+            if (seleteDataBean.getTiming_state().equals("1")) {
+                showCancelDialog();
+            } else {
+                showDeleteDialog();
             }
         });
+        myEmptyLayout.setTextViewMessage(getString(R.string.device_ble_timing_list_not_set));
+        myErrorLayout.setOnClickListener(v -> getData());
+        getData();
     }
 
     /**
@@ -137,23 +114,17 @@ public class DeviceBleTimingListActivity extends BaseActivity {
      */
     private void showDeleteDialog() {
         new MaterialDialog.Builder(this)
-                .content("您确定要删除这条定时记录吗？")
-                .negativeText("取消")
-                .positiveText("确定")
-                .onNegative(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                .content(R.string.device_ble_timing_list_delete_timing)
+                .negativeText(R.string.common_cancel)
+                .positiveText(R.string.common_confirm)
+                .onNegative((dialog, which) -> {
 
-                    }
                 })
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        if (BleManager.getInstance().isConnected(bledevice)) {
-                            deleteTiming();
-                        } else {
-                            ToastUtil.showToast("设备已掉线");
-                        }
+                .onPositive((dialog, which) -> {
+                    if (BleManager.getInstance().isConnected(bledevice)) {
+                        deleteTiming();
+                    } else {
+                        ToastUtil.showToast(getString(R.string.common_device_offline));
                     }
                 }).show();
     }
@@ -177,15 +148,15 @@ public class DeviceBleTimingListActivity extends BaseActivity {
                         if (messageVo.getCode() == 200) {
                             list.remove(seleteDataBean);
                             adapter.notifyDataSetChanged();
-                            ToastUtil.showToast("删除成功");
+                            ToastUtil.showToast(getString(R.string.common_delete_success));
                         } else {
-                            ToastUtil.showToast("删除失败");
+                            ToastUtil.showToast(getString(R.string.common_delete_fail));
                         }
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        ToastUtil.showToast("删除失败");
+                        ToastUtil.showToast(getString(R.string.common_delete_fail));
                     }
 
                     @Override
@@ -200,21 +171,13 @@ public class DeviceBleTimingListActivity extends BaseActivity {
      */
     private void showCancelDialog() {
         new MaterialDialog.Builder(this)
-                .content("您确定要取消定时吗？")
-                .negativeText("取消")
-                .positiveText("确定")
-                .onNegative(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                .content(R.string.device_ble_timing_list_cancel_timing)
+                .negativeText(R.string.common_cancel)
+                .positiveText(R.string.common_confirm)
+                .onNegative((dialog, which) -> {
 
-                    }
                 })
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        writeToBle();
-                    }
-                }).show();
+                .onPositive((dialog, which) -> writeToBle()).show();
     }
 
     /**
@@ -234,7 +197,7 @@ public class DeviceBleTimingListActivity extends BaseActivity {
                     public void onNext(MessageVo messageVo) {
                         if (messageVo.getCode() == 200) {
                             getData();
-                            ToastUtil.showToast("取消成功");
+                            ToastUtil.showToast(getString(R.string.common_cancel_success));
                         }
                     }
 
@@ -255,10 +218,10 @@ public class DeviceBleTimingListActivity extends BaseActivity {
      */
     private void writeToBle() {
         if (bledevice == null) {
-            ToastUtil.showToast("设备未连接，不能取消定时");
+            ToastUtil.showToast(getString(R.string.device_ble_timing_list_not_cancel_timing));
             return;
         }
-        progressDialog.setMessage("正在设置");
+        progressDialog.setMessage(getString(R.string.common_is_set));
         progressDialog.show();
         BleManager.getInstance().write(bledevice, "0000fff0-0000-1000-8000-00805f9b34fb", "0000fff7-0000-1000-8000-00805f9b34fb", HexUtil.hexStringToBytes("FE030408FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF"), new BleWriteCallback() {
             @Override
@@ -291,22 +254,25 @@ public class DeviceBleTimingListActivity extends BaseActivity {
                     @Override
                     public void onNext(DeviceTimingVo deviceTimingVo) {
                         if (deviceTimingVo.getCode() == 200) {
-                            if (deviceTimingVo.getData() != null) {
+                            if (deviceTimingVo.getData() != null && deviceTimingVo.getData().size() > 0) {
                                 list.clear();
                                 list.addAll(deviceTimingVo.getData());
                                 adapter.notifyDataSetChanged();
-                                emptyLayout.hide();
+                                smartRefreshLayout.finishRefresh(true);
                             } else {
-                                emptyLayout.showEmpty();
+                                smartRefreshLayout.finishRefresh(true);
+                                adapter.setEmptyView(myEmptyLayout);
                             }
                         } else {
-                            emptyLayout.showError();
+                            smartRefreshLayout.finishRefresh(2000,true);
+                            adapter.setEmptyView(myErrorLayout);
                         }
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        emptyLayout.showError();
+                        smartRefreshLayout.finishRefresh(2000,true);
+                        adapter.setEmptyView(myErrorLayout);
                     }
 
                     @Override
@@ -331,12 +297,16 @@ public class DeviceBleTimingListActivity extends BaseActivity {
                         s = dataBean.getTiming_id();
                     }
                 }
-                startActivity(new Intent(this, QsTwoTimingActivity.class)
-                        .putExtra("bledevice", bledevice)
-                        .putExtra("device_id", device_id)
-                        .putExtra("state", b)
-                        .putExtra("timing_id", s));
-                overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+                switch (bledevice.getName()) {
+                    case "qs02":
+                        startActivity(new Intent(this, QsTwoTimingActivity.class)
+                                .putExtra("bledevice", bledevice)
+                                .putExtra("device_id", device_id)
+                                .putExtra("state", b)
+                                .putExtra("timing_id", s));
+                        overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+                        break;
+                }
                 break;
         }
     }

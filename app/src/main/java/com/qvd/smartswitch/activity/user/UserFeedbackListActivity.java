@@ -2,22 +2,16 @@ package com.qvd.smartswitch.activity.user;
 
 import android.content.Intent;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.callback.ItemDragAndSwipeCallback;
 import com.chad.library.adapter.base.listener.OnItemSwipeListener;
 import com.google.gson.Gson;
-import com.orhanobut.logger.Logger;
 import com.qvd.smartswitch.R;
 import com.qvd.smartswitch.activity.base.BaseActivity;
 import com.qvd.smartswitch.adapter.UserFeedbackListAdapter;
@@ -27,18 +21,13 @@ import com.qvd.smartswitch.model.user.DeleteFeedBackVo;
 import com.qvd.smartswitch.model.user.UserFeedbackListVo;
 import com.qvd.smartswitch.utils.ConfigUtils;
 import com.qvd.smartswitch.utils.ToastUtil;
-import com.qvd.smartswitch.widget.MyEmptyLayout;
-import com.scwang.smartrefresh.header.MaterialHeader;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
-import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.header.ClassicsHeader;
-import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -62,8 +51,7 @@ public class UserFeedbackListActivity extends BaseActivity {
     SmartRefreshLayout smartRefresh;
 
     private UserFeedbackListAdapter adapter;
-    private List<UserFeedbackListVo.DataBean> list = new ArrayList<>();
-    private Paint paint;
+    private final List<UserFeedbackListVo.DataBean> list = new ArrayList<>();
 
     @Override
     protected int setLayoutId() {
@@ -79,7 +67,7 @@ public class UserFeedbackListActivity extends BaseActivity {
     @Override
     protected void initData() {
         super.initData();
-        tvCommonActionbarTitle.setText("反馈记录");
+        tvCommonActionbarTitle.setText(R.string.user_feedback_list_title);
         recyclerview.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         adapter = new UserFeedbackListAdapter(list);
         adapter.openLoadAnimation();
@@ -96,35 +84,19 @@ public class UserFeedbackListActivity extends BaseActivity {
         smartRefresh.setHeaderHeight(100);
         smartRefresh.setEnableHeaderTranslationContent(true);
         smartRefresh.setRefreshHeader(new ClassicsHeader(this));
-        smartRefresh.setOnRefreshListener(new OnRefreshListener() {
-            @Override
-            public void onRefresh(RefreshLayout refreshlayout) {
-                getData();
-                smartRefresh.finishRefresh(1000, true);
-            }
+        smartRefresh.setOnRefreshListener(refreshlayout -> {
+            getData();
+            smartRefresh.finishRefresh(1000, true);
         });
 
-        myErrorLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getData();
-            }
-        });
+        myErrorLayout.setOnClickListener(v -> getData());
 
-        myEmptyLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getData();
-            }
-        });
+        myEmptyLayout.setOnClickListener(v -> getData());
 
-        adapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                startActivity(new Intent(UserFeedbackListActivity.this, UserFeedBackDetailsActivity.class)
-                        .putExtra("data", list.get(position)));
-                overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
-            }
+        adapter.setOnItemClickListener((adapter, view, position) -> {
+            startActivity(new Intent(UserFeedbackListActivity.this, UserFeedBackDetailsActivity.class)
+                    .putExtra("data", list.get(position)));
+            overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
         });
     }
 
@@ -150,22 +122,26 @@ public class UserFeedbackListActivity extends BaseActivity {
 
                     @Override
                     public void onNext(UserFeedbackListVo userFeedbackListVo) {
-                        if (userFeedbackListVo.getCode() == 200) {
-                            if (userFeedbackListVo.getData() != null) {
-                                list.clear();
-                                list.addAll(userFeedbackListVo.getData());
-                                adapter.notifyDataSetChanged();
-                                smartRefresh.setEnableRefresh(true);
-                            } else {
-                                smartRefresh.setEnableRefresh(false);
+                        switch (userFeedbackListVo.getCode()) {
+                            case 200:
+                                if (userFeedbackListVo.getData() != null) {
+                                    list.clear();
+                                    list.addAll(userFeedbackListVo.getData());
+                                    adapter.notifyDataSetChanged();
+                                    smartRefresh.setEnableRefresh(true);
+                                } else {
+                                    smartRefresh.setEnableRefresh(true);
+                                    adapter.setEmptyView(myEmptyLayout);
+                                }
+                                break;
+                            case 201:
                                 adapter.setEmptyView(myEmptyLayout);
-                            }
-                        } else if (userFeedbackListVo.getCode() == 201) {
-                            adapter.setEmptyView(myEmptyLayout);
-                            smartRefresh.setEnableRefresh(false);
-                        } else {
-                            adapter.setEmptyView(myErrorLayout);
-                            smartRefresh.setEnableRefresh(false);
+                                smartRefresh.setEnableRefresh(false);
+                                break;
+                            default:
+                                adapter.setEmptyView(myErrorLayout);
+                                smartRefresh.setEnableRefresh(false);
+                                break;
                         }
                     }
 
@@ -191,7 +167,7 @@ public class UserFeedbackListActivity extends BaseActivity {
     /**
      * 回调接口
      */
-    private OnItemSwipeListener onItemSwipeListener = new OnItemSwipeListener() {
+    private final OnItemSwipeListener onItemSwipeListener = new OnItemSwipeListener() {
         @Override
         public void onItemSwipeStart(RecyclerView.ViewHolder viewHolder, int pos) {
 
@@ -240,15 +216,14 @@ public class UserFeedbackListActivity extends BaseActivity {
                     @Override
                     public void onNext(MessageVo messageVo) {
                         if (messageVo.getCode() == 200) {
-                            ToastUtil.showToast("删除成功");
+                            ToastUtil.showToast(getString(R.string.common_delete_success));
                         } else {
-                            ToastUtil.showToast("删除失败");
+                            ToastUtil.showToast(getString(R.string.common_delete_fail));
                         }
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        ToastUtil.showToast("删除失败");
                     }
 
                     @Override

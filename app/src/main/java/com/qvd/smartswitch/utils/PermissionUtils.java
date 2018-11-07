@@ -2,12 +2,12 @@ package com.qvd.smartswitch.utils;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.qvd.smartswitch.R;
-import com.yanzhenjie.permission.Action;
 import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.Permission;
 import com.yanzhenjie.permission.Setting;
@@ -26,18 +26,12 @@ public class PermissionUtils {
                 .runtime()
                 .permission(permissions)
                 .rationale(new RuntimeRationale())
-                .onGranted(new Action<List<String>>() {
-                    @Override
-                    public void onAction(List<String> permissions) {
+                .onGranted(permissions12 -> {
 
-                    }
                 })
-                .onDenied(new Action<List<String>>() {
-                    @Override
-                    public void onAction(@NonNull List<String> permissions) {
-                        if (AndPermission.hasAlwaysDeniedPermission(context, permissions)) {
-                            showSettingDialog(context, permissions);
-                        }
+                .onDenied(permissions1 -> {
+                    if (AndPermission.hasAlwaysDeniedPermission(context, permissions1)) {
+                        showSettingDialog(context, permissions1);
                     }
                 })
                 .start();
@@ -48,24 +42,15 @@ public class PermissionUtils {
      */
     private static void showSettingDialog(final Context context, final List<String> permissions) {
         List<String> permissionNames = Permission.transformText(context, permissions);
-        String message = context.getString(R.string.message_permission_always_failed) + TextUtils.join("\n", permissionNames);
+        String message = context.getString(R.string.message_permission_always_failed) + TextUtils.join("\n", permissionNames) + "权限才能使用此功能";
 
-        new AlertDialog.Builder(context)
-                .setCancelable(false)
-                .setTitle("申请权限")
-                .setMessage(message)
-                .setPositiveButton("设置", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        setPermission(context);
-                    }
-                })
-                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                    }
-                })
+        new MaterialDialog.Builder(context)
+                .autoDismiss(false)
+                .title("我们需要申请以下权限")
+                .content(message)
+                .positiveText("去设置")
+                .negativeText("取消")
+                .onPositive((dialog, which) -> setPermission(context))
                 .show();
     }
 
@@ -79,7 +64,6 @@ public class PermissionUtils {
                 .onComeback(new Setting.Action() {
                     @Override
                     public void onAction() {
-                        ToastUtil.showToast("设置权限");
                     }
                 })
                 .start();

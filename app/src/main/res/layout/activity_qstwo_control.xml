@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/light_background_two">
@@ -16,9 +17,9 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/x20"
-            android:contentDescription="TODO"
             android:padding="5dp"
-            android:src="@mipmap/actionbar_goback_white" />
+            android:src="@mipmap/actionbar_goback_white"
+            tools:ignore="RtlHardcoded" />
 
         <TextView
             android:id="@+id/tv_device_control_title"
@@ -38,9 +39,9 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/x20"
-            android:contentDescription="TODO"
             android:padding="5dp"
-            android:src="@mipmap/actionbar_more_detail_white" />
+            android:src="@mipmap/actionbar_more_detail_white"
+            tools:ignore="RtlHardcoded" />
 
     </RelativeLayout>
 
@@ -48,8 +49,9 @@
         android:id="@+id/smart_refresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@+id/bmb"
-        android:layout_below="@+id/action_bar">
+        android:layout_above="@+id/rl_bottom"
+        android:layout_below="@+id/action_bar"
+        app:srlHeaderHeight="@dimen/y80">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -60,117 +62,127 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="@dimen/y10"
                 android:textColor="@color/white"
                 android:textSize="12sp"
                 android:visibility="visible" />
 
-            <RelativeLayout
-                android:id="@+id/rl_light_one"
-                android:layout_width="@dimen/x350"
-                android:layout_height="match_parent"
+            <com.wang.avi.AVLoadingIndicatorView
+                android:id="@+id/avi_loading"
+                style="@style/AVLoadingIndicatorView"
+                android:layout_width="@dimen/x50"
+                android:layout_height="@dimen/y40"
                 android:layout_below="@+id/tv_connect_text"
-                android:layout_marginBottom="@dimen/y30"
-                android:layout_marginTop="@dimen/y10">
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="@dimen/y5"
+                android:visibility="visible"
+                app:indicatorColor="@color/white"
+                app:indicatorName="BallPulseIndicator" />
 
-                <TextView
-                    android:id="@+id/tv_one"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="@dimen/y100"
-                    android:text="电灯一"
-                    android:textColor="@color/white"
-                    android:textSize="14sp" />
+            <ImageView
+                android:id="@+id/iv_light_one"
+                android:layout_width="@dimen/x330"
+                android:layout_height="@dimen/y500"
+                android:layout_below="@+id/avi_loading"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="@dimen/y100" />
 
-                <ImageView
-                    android:id="@+id/iv_light_one"
-                    android:layout_width="@dimen/x300"
-                    android:layout_height="@dimen/y400"
-                    android:layout_below="@+id/tv_one"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="@dimen/y50"
-                    android:src="@mipmap/device_light_off" />
-
-                <ImageView
-                    android:id="@+id/iv_switch_one"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/iv_light_one"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="@dimen/y50"
-                    android:src="@mipmap/device_switch_off" />
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/rl_light_two"
-                android:layout_width="@dimen/x350"
-                android:layout_height="match_parent"
-                android:layout_alignParentRight="true"
-                android:layout_below="@+id/tv_connect_text"
-                android:layout_marginBottom="@dimen/y30"
-                android:layout_marginTop="@dimen/y10">
-
-                <TextView
-                    android:id="@+id/tv_two"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="@dimen/y100"
-                    android:text="电灯二"
-                    android:textColor="@color/white"
-                    android:textSize="14sp" />
-
-
-                <ImageView
-                    android:id="@+id/iv_light_two"
-                    android:layout_width="@dimen/x300"
-                    android:layout_height="@dimen/y400"
-                    android:layout_below="@+id/tv_two"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="@dimen/y50"
-                    android:src="@mipmap/device_light_off" />
-
-                <ImageView
-                    android:id="@+id/iv_switch_two"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/iv_light_two"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="@dimen/y50"
-                    android:src="@mipmap/device_switch_off" />
-
-            </RelativeLayout>
-
+            <ImageView
+                android:id="@+id/iv_switch_one"
+                android:layout_width="@dimen/x160"
+                android:layout_height="@dimen/y100"
+                android:layout_below="@+id/iv_light_one"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="@dimen/y50" />
 
         </RelativeLayout>
 
     </com.scwang.smartrefresh.layout.SmartRefreshLayout>
 
-
-    <com.nightonke.boommenu.BoomMenuButton
-        android:id="@+id/bmb"
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/y180"
+    <RelativeLayout
+        android:id="@+id/rl_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginBottom="@dimen/y50"
-        android:layout_marginRight="@dimen/x30"
-        app:bmb_buttonBottomMargin="@dimen/y100"
-        app:bmb_buttonEnum="textOutsideCircle"
-        app:bmb_buttonPlaceAlignmentEnum="buttonPlaceAlignment_bottom"
-        app:bmb_buttonPlaceEnum="buttonPlace_sc_3_4"
-        app:bmb_normalColor="@color/notification_text"
-        app:bmb_piecePlaceEnum="piecePlace_dot_3_1">
+        android:layout_marginBottom="@dimen/y50">
 
-        <TextView
+        <LinearLayout
+            android:id="@+id/ll_log"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|center_horizontal"
-            android:text="功能选择"
-            android:textColor="@color/white"
-            android:textSize="14sp" />
-    </com.nightonke.boommenu.BoomMenuButton>
+            android:layout_marginLeft="@dimen/x100"
+            android:orientation="vertical"
+            tools:ignore="RtlHardcoded">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_width="@dimen/x80"
+                android:layout_height="@dimen/y80"
+                android:layout_gravity="center_horizontal"
+                android:src="@mipmap/qstwo_log_pic"
+                app:civ_border_color="@color/home_setting_text_two"
+                app:civ_border_width="@dimen/x2" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/y30"
+                android:text="@string/qsone_control_switch"
+                android:textColor="@color/white"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_sounding"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:orientation="vertical">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_width="@dimen/x80"
+                android:layout_height="@dimen/y80"
+                android:layout_gravity="center_horizontal"
+                android:src="@mipmap/device_sound_pic"
+                app:civ_border_color="@color/home_setting_text_two"
+                app:civ_border_width="@dimen/x2" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/y30"
+                android:text="@string/qsone_control_sound"
+                android:textColor="@color/white"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_timing"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/x100"
+            android:orientation="vertical"
+            tools:ignore="RtlHardcoded">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_width="@dimen/x80"
+                android:layout_height="@dimen/y80"
+                android:layout_gravity="center_horizontal"
+                android:src="@mipmap/device_timing_pic"
+                app:civ_border_color="@color/home_setting_text_two"
+                app:civ_border_width="@dimen/x2" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/y30"
+                android:text="@string/qsone_control_timing"
+                android:textColor="@color/white"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+    </RelativeLayout>
 
 </RelativeLayout>

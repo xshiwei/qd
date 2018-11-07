@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="@dimen/y120"
     android:clickable="true"
-    android:background="@drawable/layout_seletor">
+    android:background="@drawable/layout_seletor"
+    android:focusable="true">
 
     <TextView
         android:id="@+id/tv_text"
@@ -11,9 +13,9 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:paddingLeft="@dimen/x50"
-        android:text="如何识别电源指示灯状态"
         android:textColor="@color/home_manage_text"
-        android:textSize="14sp" />
+        android:textSize="14sp"
+        tools:ignore="RtlHardcoded" />
 
 
     <ImageView
@@ -22,7 +24,8 @@
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:layout_marginRight="@dimen/x50"
-        android:src="@mipmap/home_manage_right" />
+        android:src="@mipmap/home_manage_right"
+        tools:ignore="RtlHardcoded" />
 
     <View
         android:layout_width="match_parent"

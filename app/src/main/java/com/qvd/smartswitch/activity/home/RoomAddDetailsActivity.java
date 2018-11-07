@@ -1,7 +1,6 @@
 package com.qvd.smartswitch.activity.home;
 
 import android.content.Intent;
-import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -9,30 +8,27 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.orhanobut.logger.Logger;
 import com.qvd.smartswitch.R;
 import com.qvd.smartswitch.activity.base.BaseActivity;
 import com.qvd.smartswitch.adapter.AddRoomDeviceListAdapter;
 import com.qvd.smartswitch.api.RetrofitService;
-import com.qvd.smartswitch.model.device.RoomDeviceListVo;
 import com.qvd.smartswitch.model.device.UpdateDeviceRoomVo;
 import com.qvd.smartswitch.model.home.AddRomeVo;
 import com.qvd.smartswitch.model.home.DeviceListVo;
 import com.qvd.smartswitch.model.login.MessageVo;
 import com.qvd.smartswitch.utils.CommonUtils;
 import com.qvd.smartswitch.utils.ConfigUtils;
-import com.qvd.smartswitch.utils.SnackbarUtils;
 import com.qvd.smartswitch.utils.ToastUtil;
-import com.qvd.smartswitch.widget.EmptyLayout;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -41,7 +37,6 @@ import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Function;
-import io.reactivex.functions.Predicate;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
@@ -71,10 +66,8 @@ public class RoomAddDetailsActivity extends BaseActivity {
     TextView tvHomeName;
     @BindView(R.id.recyclerview)
     RecyclerView recyclerview;
-    @BindView(R.id.emptylayout)
-    EmptyLayout emptylayout;
 
-    private List<DeviceListVo.DataBean> list = new ArrayList<>();
+    private final List<DeviceListVo.DataBean> list = new ArrayList<>();
     private AddRoomDeviceListAdapter adapter;
 
     /**
@@ -86,10 +79,6 @@ public class RoomAddDetailsActivity extends BaseActivity {
      * 判断是否改动
      */
     private boolean isUpdate = true;
-    /**
-     * 名字
-     */
-    private String name;
     /**
      * 图标
      */
@@ -114,20 +103,23 @@ public class RoomAddDetailsActivity extends BaseActivity {
     @Override
     protected void initData() {
         super.initData();
-        name = getIntent().getStringExtra("name");
+        String name = getIntent().getStringExtra("name");
         pic = getIntent().getStringExtra("pic");
         family_id = getIntent().getStringExtra("family_id");
+        tvName.setText(name);
         tvHomeName.setText(ConfigUtils.family_locate.getFamily_name());
-        Picasso.with(this).load(pic).into(ivPic);
-        getDeviceList();
+        Glide.with(this).load(pic).into(ivPic);
         recyclerview.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        adapter = new AddRoomDeviceListAdapter(this, list);
+        adapter = new AddRoomDeviceListAdapter(list);
+        adapter.openLoadAnimation();
+        adapter.isFirstOnly(false);
+        adapter.setHasStableIds(true);
         recyclerview.setAdapter(adapter);
-        adapter.setOnItemClickListener((pos, myLiveList) -> {
-            DeviceListVo.DataBean bean = myLiveList.get(pos);
+        adapter.setOnItemClickListener((adapter, view, position) -> {
+            DeviceListVo.DataBean bean = (DeviceListVo.DataBean) adapter.getData().get(position);
             boolean selete = bean.isIs_selete();
             if (!selete) {
-                showPopupwindowConfirm(bean);
+                RoomAddDetailsActivity.this.showPopupwindowConfirm(bean);
             } else {
                 index--;
                 bean.setIs_selete(false);
@@ -136,6 +128,9 @@ public class RoomAddDetailsActivity extends BaseActivity {
             }
             isUpdate = true;
         });
+        myEmptyLayout.setTextViewMessage(getString(R.string.room_add_details_empty));
+        myErrorLayout.setOnClickListener(v -> getDeviceList());
+        getDeviceList();
     }
 
     /**
@@ -145,22 +140,16 @@ public class RoomAddDetailsActivity extends BaseActivity {
         String title = "该设备已关联到" + dataBean.getRoom_name() + "确定要移动到[" + tvName.getText().toString() + "]吗？";
         new MaterialDialog.Builder(this)
                 .content(title)
-                .negativeText("取消")
-                .positiveText("确定")
-                .onNegative(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                .negativeText(R.string.common_cancel)
+                .positiveText(R.string.common_confirm)
+                .onNegative((dialog, which) -> {
 
-                    }
                 })
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        index++;
-                        dataBean.setIs_selete(true);
-                        tvText.setText("已选中" + index + "个设备");
-                        adapter.notifyDataSetChanged();
-                    }
+                .onPositive((dialog, which) -> {
+                    index++;
+                    dataBean.setIs_selete(true);
+                    tvText.setText("已选中" + index + "个设备");
+                    adapter.notifyDataSetChanged();
                 })
                 .show();
     }
@@ -168,7 +157,7 @@ public class RoomAddDetailsActivity extends BaseActivity {
     /**
      * 获取设备列表
      */
-    public void getDeviceList() {
+    private void getDeviceList() {
         Map<String, String> map = new HashMap<>();
         map.put("user_id", ConfigUtils.user_id);
         map.put("family_id", family_id);
@@ -184,26 +173,21 @@ public class RoomAddDetailsActivity extends BaseActivity {
                     @Override
                     public void onNext(DeviceListVo deviceListVo) {
                         if (deviceListVo.getCode() == 200) {
-                            if (deviceListVo.getData() != null) {
-                                for (DeviceListVo.DataBean dataBean : deviceListVo.getData()) {
-                                    list.add(dataBean);
-                                }
-                                emptylayout.hide();
+                            if (deviceListVo.getData() != null && deviceListVo.getData().size() > 0) {
+                                list.addAll(deviceListVo.getData());
                                 adapter.notifyDataSetChanged();
                             } else {
-                                emptylayout.showEmpty();
+                                adapter.setEmptyView(myEmptyLayout);
                             }
-                        } else if (deviceListVo.getCode() == 400) {
-                            ToastUtil.showToast("连接失败");
                         } else {
-                            ToastUtil.showToast("连接超时");
+                            adapter.setEmptyView(myErrorLayout);
                         }
                     }
 
                     @Override
                     public void onError(Throwable e) {
                         Logger.e(e.getMessage());
-                        ToastUtil.showToast("网络连接错误");
+                        adapter.setEmptyView(myErrorLayout);
                     }
 
                     @Override
@@ -227,7 +211,7 @@ public class RoomAddDetailsActivity extends BaseActivity {
             case R.id.tv_save:
                 //保存
                 if (CommonUtils.isEmptyString(tvName.getText().toString())) {
-                    ToastUtil.showToast("房间名称不能为空");
+                    ToastUtil.showToast(getString(R.string.common_room_name_not_empty));
                 } else {
                     addRoom();
                 }
@@ -251,28 +235,20 @@ public class RoomAddDetailsActivity extends BaseActivity {
         RetrofitService.qdoApi.addRoom(tvName.getText().toString(), pic, family_id)
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
-                .filter(new Predicate<AddRomeVo>() {
-                    @Override
-                    public boolean test(AddRomeVo messageVo) throws Exception {
-                        return messageVo.getCode() == 200;
-                    }
-                })
+                .filter(messageVo -> messageVo.getCode() == 200)
                 .observeOn(Schedulers.io())
-                .concatMap(new Function<AddRomeVo, ObservableSource<MessageVo>>() {
-                    @Override
-                    public ObservableSource<MessageVo> apply(AddRomeVo messageVo) throws Exception {
-                        Gson gson = new Gson();
-                        List<String> list = new ArrayList<>();
-                        for (DeviceListVo.DataBean dataBean : getSeleteList()) {
-                            list.add(dataBean.getDevice_id());
-                        }
-                        UpdateDeviceRoomVo updateDeviceRoomVo = new UpdateDeviceRoomVo();
-                        updateDeviceRoomVo.setRoom_id(messageVo.getRoom_id());
-                        updateDeviceRoomVo.setDevice_id(list);
-                        String body = gson.toJson(updateDeviceRoomVo);
-                        RequestBody requestBody = RequestBody.create(MediaType.parse("Content-Type: application/json"), body);
-                        return RetrofitService.qdoApi.updateDeviceRoom(requestBody);
+                .concatMap((Function<AddRomeVo, ObservableSource<MessageVo>>) messageVo -> {
+                    Gson gson = new Gson();
+                    List<String> list = new ArrayList<>();
+                    for (DeviceListVo.DataBean dataBean : getSeleteList()) {
+                        list.add(dataBean.getDevice_id());
                     }
+                    UpdateDeviceRoomVo updateDeviceRoomVo = new UpdateDeviceRoomVo();
+                    updateDeviceRoomVo.setRoom_id(messageVo.getRoom_id());
+                    updateDeviceRoomVo.setDevice_id(list);
+                    String body = gson.toJson(updateDeviceRoomVo);
+                    RequestBody requestBody = RequestBody.create(MediaType.parse("Content-Type: application/json"), body);
+                    return RetrofitService.qdoApi.updateDeviceRoom(requestBody);
                 })
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<MessageVo>() {
@@ -284,10 +260,10 @@ public class RoomAddDetailsActivity extends BaseActivity {
                     @Override
                     public void onNext(MessageVo messageVo) {
                         if (messageVo.getCode() == 200) {
-                            ToastUtil.showToast("房间保存成功");
+                            ToastUtil.showToast(getString(R.string.common_room_save_success));
                             finish();
                         } else {
-                            ToastUtil.showToast("房间保存成功，设备移动失败");
+                            ToastUtil.showToast(getString(R.string.common_room_save_success_and_device_move_fail));
                             finish();
                         }
                     }
@@ -295,7 +271,7 @@ public class RoomAddDetailsActivity extends BaseActivity {
                     @Override
                     public void onError(Throwable e) {
                         Logger.e(e.getMessage());
-                        ToastUtil.showToast("保存失败");
+                        ToastUtil.showToast(getString(R.string.common_server_error));
                     }
 
                     @Override
@@ -310,22 +286,14 @@ public class RoomAddDetailsActivity extends BaseActivity {
      */
     private void showPopupwindowDelete() {
         new MaterialDialog.Builder(this)
-                .title("房间编辑信息未保存")
-                .content("房间被编辑还未保存，请确认是否要保存编辑信息")
-                .negativeText("取消")
-                .positiveText("确定")
-                .onNegative(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        finish();
-                    }
-                })
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        SnackbarUtils.Short(tvCommonActionbarTitle, "保存成功").show();
-                        finish();
-                    }
+                .title(R.string.room_add_details_edit_not_save)
+                .content(R.string.room_add_details_confirm_save_content)
+                .negativeText(R.string.common_cancel)
+                .positiveText(R.string.common_confirm)
+                .onNegative((dialog, which) -> finish())
+                .onPositive((dialog, which) -> {
+                    ToastUtil.showToast(getString(R.string.common_save_success));
+                    finish();
                 })
                 .show();
     }
@@ -335,31 +303,20 @@ public class RoomAddDetailsActivity extends BaseActivity {
      */
     private void showPopupwindowName() {
         new MaterialDialog.Builder(this)
-                .title("设置房间名称")
-                .negativeText("取消")
-                .positiveText("确定")
+                .content(R.string.room_add_details_set_room_name)
+                .negativeText(R.string.common_cancel)
+                .positiveText(R.string.common_confirm)
                 .inputRange(1, 20, getResources().getColor(R.color.red))
-                .input(tvName.getText().toString(), null, false, new MaterialDialog.InputCallback() {
-                    @Override
-                    public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
+                .input(tvName.getText().toString(), null, false, (dialog, input) -> {
 
-                    }
                 })
-                .onNegative(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        CommonUtils.closeSoftKeyboard(RoomAddDetailsActivity.this);
-                    }
-                })
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        tvName.setText(dialog.getInputEditText().getText().toString());
-                        isUpdate = true;
-                        tvSave.setTextColor(getResources().getColor(R.color.white));
-                        tvSave.setBackground(getResources().getDrawable(R.drawable.seletor_circle_green_gray_five));
-                        CommonUtils.closeSoftKeyboard(RoomAddDetailsActivity.this);
-                    }
+                .onNegative((dialog, which) -> CommonUtils.closeSoftKeyboard(RoomAddDetailsActivity.this))
+                .onPositive((dialog, which) -> {
+                    tvName.setText(Objects.requireNonNull(dialog.getInputEditText()).getText().toString());
+                    isUpdate = true;
+                    tvSave.setTextColor(getResources().getColor(R.color.white));
+                    tvSave.setBackground(getResources().getDrawable(R.drawable.seletor_circle_green_gray_five));
+                    CommonUtils.closeSoftKeyboard(RoomAddDetailsActivity.this);
                 })
                 .show();
     }
@@ -369,9 +326,9 @@ public class RoomAddDetailsActivity extends BaseActivity {
      */
     private List<DeviceListVo.DataBean> getSeleteList() {
         List<DeviceListVo.DataBean> roomDeviceList = new ArrayList<>();
-        for (int i = 0; i < adapter.getAllList().size(); i++) {
-            if (adapter.getAllList().get(i).isIs_selete()) {
-                roomDeviceList.add(adapter.getAllList().get(i));
+        for (int i = 0; i < adapter.getData().size(); i++) {
+            if (adapter.getData().get(i).isIs_selete()) {
+                roomDeviceList.add(adapter.getData().get(i));
             }
         }
         return roomDeviceList;
@@ -383,7 +340,7 @@ public class RoomAddDetailsActivity extends BaseActivity {
         if (isUpdate) {
             showPopupwindowDelete();
         } else {
-            SnackbarUtils.Short(tvSave, "保存成功").show();
+            ToastUtil.showToast(getString(R.string.common_save_success));
             finish();
         }
     }

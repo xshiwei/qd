@@ -1,7 +1,6 @@
 package com.qvd.smartswitch.activity.capacity;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -11,7 +10,6 @@ import com.qvd.smartswitch.R;
 import com.qvd.smartswitch.activity.base.BaseActivity;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**

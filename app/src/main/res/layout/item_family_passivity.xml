@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="@dimen/y130"
     android:background="@color/white">
@@ -10,7 +11,8 @@
         android:layout_height="@dimen/y75"
         android:layout_centerVertical="true"
         android:layout_marginLeft="@dimen/x50"
-        android:src="@mipmap/user_portrait" />
+        android:src="@mipmap/user_portrait"
+        tools:ignore="RtlHardcoded" />
 
     <TextView
         android:id="@+id/tv_name"
@@ -19,9 +21,9 @@
         android:layout_marginLeft="@dimen/x30"
         android:layout_marginTop="@dimen/y25"
         android:layout_toRightOf="@+id/civ_portrait"
-        android:text="纯粹慵懒"
         android:textColor="@color/home_setting_text"
-        android:textSize="14sp" />
+        android:textSize="14sp"
+        tools:ignore="RtlHardcoded" />
 
     <TextView
         android:id="@+id/tv_relation"
@@ -31,9 +33,9 @@
         android:layout_marginBottom="@dimen/y30"
         android:layout_marginLeft="@dimen/x30"
         android:layout_toRightOf="@+id/civ_portrait"
-        android:text="你是他的同居密友"
         android:textColor="@color/home_setting_text_two"
-        android:textSize="12sp" />
+        android:textSize="12sp"
+        tools:ignore="RtlHardcoded" />
 
     <ImageView
         android:id="@+id/iv_more"
@@ -42,7 +44,8 @@
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:layout_marginRight="@dimen/x50"
-        android:src="@mipmap/device_more_details" />
+        android:src="@mipmap/device_more_details"
+        tools:ignore="RtlHardcoded" />
 
     <View
         android:layout_width="match_parent"

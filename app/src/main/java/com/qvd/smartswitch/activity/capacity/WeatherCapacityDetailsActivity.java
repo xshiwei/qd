@@ -1,8 +1,6 @@
 package com.qvd.smartswitch.activity.capacity;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -10,11 +8,7 @@ import android.widget.TextView;
 import com.qvd.smartswitch.R;
 import com.qvd.smartswitch.activity.base.BaseActivity;
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.carbswang.android.numberpickerview.library.NumberPickerView;
 
@@ -30,13 +24,6 @@ public class WeatherCapacityDetailsActivity extends BaseActivity {
     @BindView(R.id.tv_save)
     TextView tvSave;
 
-    private NumberPickerView picker;
-    private int type;
-    /**
-     * 传过来显示标题的名称
-     */
-    private String name;
-
     @Override
     protected int setLayoutId() {
         return R.layout.activity_weather_capacity_details;
@@ -51,10 +38,13 @@ public class WeatherCapacityDetailsActivity extends BaseActivity {
     @Override
     protected void initData() {
         super.initData();
-        picker = findViewById(R.id.picker);
+        NumberPickerView picker = findViewById(R.id.picker);
         Intent intent = getIntent();
-        type = intent.getIntExtra("type", -1);
-        name = intent.getStringExtra("name");
+        int type = intent.getIntExtra("type", -1);
+        /*
+      传过来显示标题的名称
+     */
+        String name = intent.getStringExtra("name");
         tvCommonActionbarTitle.setText(name);
         switch (type) {
             case 2:

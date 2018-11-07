@@ -1,13 +1,14 @@
 <resources>
 
     <!-- Base application theme. -->
+    <!--suppress AndroidDomInspection -->
     <style name="MyTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/white</item>
         <item name="colorAccent">@color/my_red</item>
-        <item name="md_title_color">@color/home_menu</item>
-        <item name="md_content_color">@color/home_setting_text_three</item>
+        <item name="md_title_color">@color/add_device_title</item>
+        <item name="md_content_color">@color/home_content_text_two</item>
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:listDivider">@drawable/recyclerview_decoration</item>
     </style>
@@ -16,6 +17,7 @@
         <item name="android:windowEnterAnimation">@anim/push_bottom_in</item>
         <item name="android:windowExitAnimation">@anim/push_bottom_out</item>
     </style>
+
     <style name="ToolBarWithNavigationBack">
         <item name="navigationIcon">@drawable/abc_ic_ab_back_material</item>
     </style>
@@ -31,5 +33,14 @@
         <item name="welcomeTitleTextStyle">@style/WelcomeScreenText.Title.Centered</item>
         <item name="welcomeLargeTextStyle">@style/WelcomeScreenText.Large.Centered</item>
         <item name="welcomeNormalTextStyle">@style/WelcomeScreenText.Centered</item>
+    </style>
+
+    <style name="def_remote_controller">
+        <item name="rcv_text_color">#A9D9F5</item>
+        <item name="rcv_shadow_color">#A9D9F5</item>
+        <item name="rcv_stroke_color">#A9D9F5</item>
+        <item name="rcv_text_size">14sp</item>
+        <item name="rcv_stroke_width">1px</item>
+        <item name="rcv_oval_degree">90</item>
     </style>
 </resources>

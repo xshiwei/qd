@@ -3,7 +3,6 @@ package com.qvd.smartswitch.adapter;
 import android.support.annotation.Nullable;
 
 import com.chad.library.adapter.base.BaseItemDraggableAdapter;
-import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
 import com.qvd.smartswitch.R;
 import com.qvd.smartswitch.model.user.UserFeedbackListVo;

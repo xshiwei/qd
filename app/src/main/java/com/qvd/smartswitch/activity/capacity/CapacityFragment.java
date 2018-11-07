@@ -1,6 +1,5 @@
 package com.qvd.smartswitch.activity.capacity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -32,19 +31,10 @@ public class CapacityFragment extends BaseFragment {
     @BindView(R.id.vp_capacity)
     ViewPager vpCapacity;
 
-    private TabLayoutAdapter adapter;
-    /**
-     * 定义要装fragment的列表
-     */
-    private List<Fragment> list_fragment;
     /**
      * 定义tablayout的title集合
      */
     private final List<String> list_title = new ArrayList<>();
-
-    private RecommendCapacityFragment recommendCapacityFragment;
-    private MyCapacityFragment myCapacityFragment;
-    private LogCapacityFragment logCapacityFragment;
 
 
     public static CapacityFragment newInstance(String param1) {
@@ -69,11 +59,14 @@ public class CapacityFragment extends BaseFragment {
     @Override
     protected void initData() {
         super.initData();
-        recommendCapacityFragment = RecommendCapacityFragment.newInstance("recommend");
-        myCapacityFragment = MyCapacityFragment.newInstance("my");
-        logCapacityFragment = LogCapacityFragment.newInstance("log");
+        RecommendCapacityFragment recommendCapacityFragment = RecommendCapacityFragment.newInstance("recommend");
+        MyCapacityFragment myCapacityFragment = MyCapacityFragment.newInstance("my");
+        LogCapacityFragment logCapacityFragment = LogCapacityFragment.newInstance("log");
 
-        list_fragment = new ArrayList<>();
+        /*
+      定义要装fragment的列表
+     */
+        List<Fragment> list_fragment = new ArrayList<>();
         list_fragment.add(recommendCapacityFragment);
         list_fragment.add(myCapacityFragment);
         list_fragment.add(logCapacityFragment);
@@ -90,7 +83,7 @@ public class CapacityFragment extends BaseFragment {
         tblCapacity.addTab(tblCapacity.newTab().setText(list_title.get(1)));
         tblCapacity.addTab(tblCapacity.newTab().setText(list_title.get(2)));
 
-        adapter = new TabLayoutAdapter(getChildFragmentManager(), list_fragment, list_title);
+        TabLayoutAdapter adapter = new TabLayoutAdapter(getChildFragmentManager(), list_fragment, list_title);
         //viewpager加载adapter
         vpCapacity.setAdapter(adapter);
         vpCapacity.setCurrentItem(0);

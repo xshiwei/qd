@@ -20,7 +20,7 @@ public class RegexpUtils {
      */
     public static boolean isMobileNO(String mobiles) {
         Pattern p = Pattern
-                .compile("^((13[0-9])|(14[5,7])|(15[0-3,5-9])|(16[6])|(17[0,1,3,5-8])|(18[0-9])|(19[8,9]))\\d{8}$");
+                .compile("13\\d{9}|14[57]\\d{8}|15[012356789]\\d{8}|18[01256789]\\d{8}|17[0678]\\d{8}");
         Matcher m = p.matcher(mobiles);
 
         return m.matches();
@@ -95,7 +95,7 @@ public class RegexpUtils {
      * @return
      */
     public static String formatCard(String cardNo) {
-        String card = "";
+        String card;
         card = cardNo.substring(0, 4) + " **** **** ";
         card += cardNo.substring(cardNo.length() - 4);
         return card;
@@ -141,8 +141,7 @@ public class RegexpUtils {
             }
         }
         String regex = "^[a-zA-Z0-9]+$";
-        boolean isRight = isDigit && isLetter && str.matches(regex);
-        return isRight;
+        return isDigit && isLetter && str.matches(regex);
     }
 
 

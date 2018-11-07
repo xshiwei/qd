@@ -1,7 +1,6 @@
 package com.qvd.smartswitch.activity.robot;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -12,7 +11,6 @@ import com.qvd.smartswitch.activity.base.BaseActivity;
 import com.zcw.togglebutton.ToggleButton;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class RobotSelfSettingActivity extends BaseActivity {
@@ -29,9 +27,6 @@ public class RobotSelfSettingActivity extends BaseActivity {
     @BindView(R.id.tv_time_zone)
     TextView tvTimeZone;
 
-    private ToggleButton tlb_carpet_boost_mode;
-    private ToggleButton tlb_mopping_mode;
-
     @Override
     protected int setLayoutId() {
         return R.layout.activity_robot_self_setting;
@@ -40,8 +35,8 @@ public class RobotSelfSettingActivity extends BaseActivity {
     @Override
     protected void initData() {
         super.initData();
-        tlb_carpet_boost_mode = findViewById(R.id.tlb_carpet_boost_mode);
-        tlb_mopping_mode = findViewById(R.id.tlb_mopping_mode);
+        ToggleButton tlb_carpet_boost_mode = findViewById(R.id.tlb_carpet_boost_mode);
+        ToggleButton tlb_mopping_mode = findViewById(R.id.tlb_mopping_mode);
     }
 
     @Override

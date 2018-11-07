@@ -14,18 +14,11 @@ import com.qvd.smartswitch.activity.base.BaseActivity;
 import com.qvd.smartswitch.adapter.LogDeviceListAdapter;
 import com.qvd.smartswitch.api.RetrofitService;
 import com.qvd.smartswitch.model.device.DeviceLogVo;
-import com.qvd.smartswitch.utils.ToastUtil;
 import com.qvd.smartswitch.widget.EmptyLayout;
-import com.scwang.smartrefresh.header.MaterialHeader;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
-import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.constant.SpinnerStyle;
 import com.scwang.smartrefresh.layout.footer.BallPulseFooter;
 import com.scwang.smartrefresh.layout.header.ClassicsHeader;
-import com.scwang.smartrefresh.layout.listener.OnLoadmoreListener;
-import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
-import com.vivian.timelineitemdecoration.itemdecoration.DotItemDecoration;
-import com.vivian.timelineitemdecoration.itemdecoration.SpanIndexListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -52,13 +45,10 @@ public class DeviceLogActivity extends BaseActivity {
     CoordinatorLayout coordinatorLayout;
     @BindView(R.id.smart_refresh)
     SmartRefreshLayout smartRefresh;
-    @BindView(R.id.emptylayout)
-    EmptyLayout emptylayout;
 
-    private List<DeviceLogVo.DataBean> list = new ArrayList<>();
-    private List<DeviceLogVo.DataBean> addMoreList = new ArrayList<>();
+    private final List<DeviceLogVo.DataBean> list = new ArrayList<>();
+    private final List<DeviceLogVo.DataBean> addMoreList = new ArrayList<>();
     private LogDeviceListAdapter adapter;
-    private DotItemDecoration mItemDecoration;
 
     /**
      * 设备ID
@@ -78,6 +68,8 @@ public class DeviceLogActivity extends BaseActivity {
      */
     private String device_type;
 
+    private EmptyLayout empty_layout;
+
     @Override
     protected int setLayoutId() {
         return R.layout.activity_device_log;
@@ -86,51 +78,29 @@ public class DeviceLogActivity extends BaseActivity {
     @Override
     protected void initData() {
         super.initData();
-        tvCommonActionbarTitle.setText("操作日志");
+        empty_layout = findViewById(R.id.empty_layout);
+        tvCommonActionbarTitle.setText(R.string.device_log_title);
         deviceId = getIntent().getStringExtra("device_id");
         device_type = getIntent().getStringExtra("device_type");
-        getfirstData();
+        initMode();
+        getlastData();
         fab.attachToRecyclerView(recyclerview);
+        empty_layout.setEmptyMessage(getString(R.string.device_log_log_empty), R.id.textViewMessage);
+        empty_layout.setErrorButtonClickListener(v -> getlastData());
         smartRefresh.setHeaderHeight(100);
         smartRefresh.setFooterHeight(100);
         smartRefresh.setEnableLoadmoreWhenContentNotFull(true);//是否在列表不满一页时候开启上拉加载功能
-        smartRefresh.setRefreshHeader(new ClassicsHeader(this).setAccentColor(getResources().getColor(R.color.white)));
+        smartRefresh.setRefreshHeader(new ClassicsHeader(this).setAccentColor(getResources().getColor(R.color.home_setting_text)));
         smartRefresh.setRefreshFooter(new BallPulseFooter(this).setSpinnerStyle(SpinnerStyle.Scale));
         refreshlayout();
+
     }
 
     private void initMode() {
-        mItemDecoration = new DotItemDecoration
-                .Builder(this)
-                .setOrientation(DotItemDecoration.VERTICAL) //设置方向
-                .setItemStyle(DotItemDecoration.STYLE_DRAW)
-                .setTopDistance(20)//设置距离顶部高度
-                .setItemInterVal(10)
-                .setItemPaddingLeft(10)
-                .setItemPaddingRight(10)
-                .setDotColor(getResources().getColor(R.color.capacity_tablayout_text_two))
-                .setDotRadius(5)  //设置圆点的半径
-                .setDotPaddingTop(20)//设置第一个点距离上部高度
-                .setDotInItemOrientationCenter(false)
-                .setLineColor(getResources().getColor(R.color.home_setting_text_two))
-                .setLineWidth(1)//设置线的宽度
-                .setEndText("END")  //设置结尾的文字
-                .setTextColor(getResources().getColor(R.color.home_content_text_two))
-                .setTextSize(10)//设置结尾文字大小
-                .setDotPaddingText(2)
-                .setBottomDistance(40)//结尾线的高度
-                .create();
-
-        mItemDecoration.setSpanIndexListener(new SpanIndexListener() {
-            @Override
-            public void onSpanIndexChange(View view, int spanIndex) {
-                view.setBackgroundResource(spanIndex == 0 ? R.drawable.device_log_left : R.drawable.device_log_right);
-            }
-        });
-        recyclerview.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
-        recyclerview.addItemDecoration(mItemDecoration);
-        adapter = new LogDeviceListAdapter(DeviceLogActivity.this, list);
+        recyclerview.setLayoutManager(new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL));
+        adapter = new LogDeviceListAdapter(list);
         recyclerview.setAdapter(adapter);
+        recyclerview.setHasFixedSize(true);
     }
 
     @Override
@@ -139,37 +109,24 @@ public class DeviceLogActivity extends BaseActivity {
         mImmersionBar.fitsSystemWindows(true).statusBarColor(R.color.white).init();
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-    }
-
     /**
      * 刷新数据
      */
     private void refreshlayout() {
         //刷新数据
-        smartRefresh.setOnRefreshListener(new OnRefreshListener() {
-            @Override
-            public void onRefresh(RefreshLayout refreshlayout) {
-                //传入true表示刷新成功，false表示刷新失败
-                if (list.size() > 0) {
-                    list.clear();
-                    page = 1;
-                    getlastData();
-                }
-                refreshlayout.finishRefresh(2000, true);
+        smartRefresh.setOnRefreshListener(refreshlayout -> {
+            //传入true表示刷新成功，false表示刷新失败
+            if (list.size() > 0) {
+                list.clear();
+                page = 1;
+                getlastData();
             }
         });
         //加载数据
-        smartRefresh.setOnLoadmoreListener(new OnLoadmoreListener() {
-            @Override
-            public void onLoadmore(RefreshLayout refreshlayout) {
-                //传入true表示刷新成功，false表示刷新失败
-                page++;
-                getMoreData();
-                refreshlayout.finishLoadmore(2000, true);
-            }
+        smartRefresh.setOnLoadmoreListener(refreshlayout -> {
+            //传入true表示刷新成功，false表示刷新失败
+            page++;
+            getMoreData();
         });
     }
 
@@ -202,14 +159,14 @@ public class DeviceLogActivity extends BaseActivity {
                             position = list.size();
                             list.addAll(position, addMoreList);
                             adapter.notifyItemInserted(position);
-                            emptylayout.hide();
+                            smartRefresh.finishLoadmore(true);
                         }
                     }
 
                     @Override
                     public void onError(Throwable e) {
                         Logger.e(e.getMessage());
-                        ToastUtil.showToast("加载失败");
+                        smartRefresh.finishLoadmore(false);
                     }
 
                     @Override
@@ -218,60 +175,12 @@ public class DeviceLogActivity extends BaseActivity {
                     }
                 });
     }
-
-    /**
-     * 获取刷新数据
-     */
-    private void getfirstData() {
-        Map<String, Object> map = new HashMap<>();
-        map.put("device_id", deviceId);
-        map.put("device_type", device_type);
-        map.put("current_page", page);
-        map.put("per_page_count", 10);
-        RetrofitService.qdoApi.getDeviceLog(map)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<DeviceLogVo>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-
-                    }
-
-                    @Override
-                    public void onNext(DeviceLogVo deviceLogVo) {
-                        if (deviceLogVo != null) {
-                            if (deviceLogVo.getData() != null && deviceLogVo.getCode() == 200) {
-                                list.clear();
-                                list.addAll(deviceLogVo.getData());
-                                initMode();
-                                adapter.notifyDataSetChanged();
-                                emptylayout.hide();
-                            } else {
-                                emptylayout.showEmpty();
-                            }
-                        } else {
-                            emptylayout.showError();
-                        }
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Logger.e(e.getMessage());
-                        emptylayout.showError();
-                    }
-
-                    @Override
-                    public void onComplete() {
-
-                    }
-                });
-    }
-
 
     /**
      * 获取刷新数据
      */
     private void getlastData() {
+        empty_layout.showLoading(R.mipmap.home_loading, getString(R.string.loading_view_message));
         Map<String, Object> map = new HashMap<>();
         map.put("device_id", deviceId);
         map.put("device_type", device_type);
@@ -289,23 +198,29 @@ public class DeviceLogActivity extends BaseActivity {
                     @Override
                     public void onNext(DeviceLogVo deviceLogVo) {
                         if (deviceLogVo != null) {
-                            if (deviceLogVo.getData() != null && deviceLogVo.getCode() == 200) {
-                                list.clear();
-                                list.addAll(deviceLogVo.getData());
-                                adapter.notifyDataSetChanged();
-                                emptylayout.hide();
+                            if (deviceLogVo.getCode() == 200) {
+                                if (deviceLogVo.getData() != null) {
+                                    list.clear();
+                                    list.addAll(deviceLogVo.getData());
+                                    empty_layout.hide();
+                                    adapter.notifyDataSetChanged();
+                                    smartRefresh.finishRefresh(true);
+                                } else {
+                                    smartRefresh.finishRefresh(true);
+                                    empty_layout.showEmpty();
+                                }
                             } else {
-                                emptylayout.showEmpty();
+                                smartRefresh.finishRefresh(2000);
+                                empty_layout.showError();
                             }
-                        } else {
-                            emptylayout.showError();
                         }
                     }
 
                     @Override
                     public void onError(Throwable e) {
                         Logger.e(e.getMessage());
-                        emptylayout.showError();
+                        smartRefresh.finishRefresh(2000);
+                        empty_layout.showError();
                     }
 
                     @Override

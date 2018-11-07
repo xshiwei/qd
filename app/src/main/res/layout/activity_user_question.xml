@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -14,8 +15,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:contentDescription="TODO"
-            android:paddingLeft="@dimen/x20"
+            android:paddingStart="@dimen/x20"
             android:src="@mipmap/actionbar_goback" />
 
         <TextView
@@ -33,7 +33,8 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/x30"
-            android:src="@mipmap/user_help_message" />
+            android:src="@mipmap/user_help_message"
+            tools:ignore="RtlHardcoded" />
 
     </RelativeLayout>
 
@@ -53,10 +54,11 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/x50"
             android:layout_marginTop="@dimen/y60"
-            android:text="常见问题"
+            android:text="@string/user_question_common_question"
             android:textColor="@color/add_room_text"
             android:textSize="12sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            tools:ignore="RtlHardcoded" />
 
         <View
             android:layout_width="match_parent"
@@ -69,7 +71,7 @@
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recyclerview"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
+            android:layout_height="match_parent" />
 
     </LinearLayout>
 

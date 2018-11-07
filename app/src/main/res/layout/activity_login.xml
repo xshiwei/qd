@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/home_manage_backgroud">
@@ -14,7 +15,7 @@
             android:id="@+id/goback"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/x30"
+            android:layout_marginStart="@dimen/x30"
             android:layout_marginTop="@dimen/y60"
             android:padding="5dp"
             android:src="@mipmap/actionbar_goback" />
@@ -26,10 +27,11 @@
             android:layout_alignParentRight="true"
             android:layout_marginRight="@dimen/x30"
             android:layout_marginTop="@dimen/y60"
-            android:text="中国大陆"
+            android:text="@string/login_china"
             android:textColor="@color/white"
             android:textSize="14sp"
-            android:visibility="gone" />
+            android:visibility="gone"
+            tools:ignore="RtlHardcoded" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -48,7 +50,8 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/x40"
-            android:src="@mipmap/login_user_unselete" />
+            android:src="@mipmap/login_user_unselete"
+            tools:ignore="RtlHardcoded" />
 
         <EditText
             android:id="@+id/et_account"
@@ -58,9 +61,11 @@
             android:layout_marginLeft="@dimen/x30"
             android:layout_toRightOf="@+id/iv_user"
             android:background="@null"
-            android:hint="手机号/账号/邮箱"
+            android:hint="@string/login_hint_account"
             android:textColor="@color/home_manage_text"
-            android:textSize="13sp" />
+            android:textSize="13sp"
+            android:inputType=""
+            tools:ignore="RtlHardcoded" />
 
 
     </RelativeLayout>
@@ -82,7 +87,8 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/x40"
-            android:src="@mipmap/login_password_unselete" />
+            android:src="@mipmap/login_password_unselete"
+            tools:ignore="RtlHardcoded" />
 
         <EditText
             android:id="@+id/et_password"
@@ -92,10 +98,11 @@
             android:layout_marginLeft="@dimen/x30"
             android:layout_toRightOf="@+id/iv_password"
             android:background="@null"
-            android:hint="密码"
+            android:hint="@string/login_hint_password"
             android:inputType="textPassword"
             android:textColor="@color/home_manage_text"
-            android:textSize="13sp" />
+            android:textSize="13sp"
+            tools:ignore="RtlHardcoded" />
 
     </RelativeLayout>
 
@@ -111,9 +118,10 @@
         android:background="@drawable/login_text_selector"
         android:clickable="true"
         android:gravity="center"
-        android:text="登 录"
+        android:text="@string/login_login"
         android:textColor="@color/white"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        android:focusable="true" />
 
 
     <RelativeLayout
@@ -130,9 +138,10 @@
             android:layout_marginRight="@dimen/x40"
             android:layout_toLeftOf="@+id/view_line"
             android:padding="5dp"
-            android:text="忘记密码？"
+            android:text="@string/login_forget_password"
             android:textColor="@color/home_setting_text_three"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            tools:ignore="RtlHardcoded" />
 
         <View
             android:id="@+id/view_line"
@@ -149,9 +158,10 @@
             android:layout_marginLeft="@dimen/x40"
             android:layout_toRightOf="@+id/view_line"
             android:padding="5dp"
-            android:text="现在注册 >"
+            android:text="@string/login_register"
             android:textColor="@color/home_setting_text_three"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            tools:ignore="RtlHardcoded" />
 
     </RelativeLayout>
 
@@ -181,7 +191,8 @@
             android:layout_marginRight="@dimen/x60"
             android:layout_toLeftOf="@+id/iv_wechat"
             android:padding="5dp"
-            android:src="@mipmap/login_qq" />
+            android:src="@mipmap/login_qq"
+            tools:ignore="RtlHardcoded" />
 
         <ImageView
             android:id="@+id/iv_weibo"
@@ -191,7 +202,8 @@
             android:layout_marginLeft="@dimen/x60"
             android:layout_toRightOf="@+id/iv_wechat"
             android:padding="5dp"
-            android:src="@mipmap/login_weibo" />
+            android:src="@mipmap/login_weibo"
+            tools:ignore="RtlHardcoded" />
 
     </RelativeLayout>
 

@@ -1,13 +1,11 @@
 package com.qvd.smartswitch.activity.device;
 
 import android.content.Intent;
-import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.google.gson.Gson;
 import com.qvd.smartswitch.R;
@@ -26,6 +24,7 @@ import com.qvd.smartswitch.utils.ToastUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -34,7 +33,6 @@ import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Function;
-import io.reactivex.functions.Predicate;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
@@ -147,28 +145,17 @@ public class DeviceSetRoomActivity extends BaseActivity {
      */
     private void showPopupWindowName() {
         new MaterialDialog.Builder(this)
-                .title("设置设备名称")
-                .negativeText("取消")
-                .positiveText("确定")
+                .content(R.string.device_set_room_set_device_name)
+                .negativeText(R.string.common_cancel)
+                .positiveText(R.string.common_confirm)
                 .inputRange(1, 20, getResources().getColor(R.color.red))
-                .input(tvName.getText().toString(), null, false, new MaterialDialog.InputCallback() {
-                    @Override
-                    public void onInput(@NonNull MaterialDialog dialog, CharSequence input) {
+                .input(tvName.getText().toString(), null, false, (dialog, input) -> {
 
-                    }
                 })
-                .onNegative(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        CommonUtils.closeSoftKeyboard(DeviceSetRoomActivity.this);
-                    }
-                })
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        tvName.setText(dialog.getInputEditText().getText().toString());
-                        CommonUtils.closeSoftKeyboard(DeviceSetRoomActivity.this);
-                    }
+                .onNegative((dialog, which) -> CommonUtils.closeSoftKeyboard(DeviceSetRoomActivity.this))
+                .onPositive((dialog, which) -> {
+                    tvName.setText(Objects.requireNonNull(dialog.getInputEditText()).getText().toString());
+                    CommonUtils.closeSoftKeyboard(DeviceSetRoomActivity.this);
                 })
                 .show();
     }
@@ -178,72 +165,47 @@ public class DeviceSetRoomActivity extends BaseActivity {
      */
     private void showCancelPopupWindow() {
         new MaterialDialog.Builder(this)
-                .content("是否保存本次修改")
-                .negativeText("取消")
-                .positiveText("确定")
-                .onNegative(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                .content(R.string.common_save_update)
+                .negativeText(R.string.common_cancel)
+                .positiveText(R.string.common_confirm)
+                .onNegative((dialog, which) -> {
 
-                    }
                 })
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        update(2);
-                        startActivity(new Intent(DeviceSetRoomActivity.this, MainActivity.class));
-                        overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
-                        finish();
-                    }
+                .onPositive((dialog, which) -> {
+                    update(2);
+                    startActivity(new Intent(DeviceSetRoomActivity.this, MainActivity.class));
+                    overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+                    finish();
                 })
                 .show();
     }
-
 
     /**
      * 保存
      */
     private void update(int i) {
         MaterialDialog dialog = new MaterialDialog.Builder(this)
-                .content("正在保存相关配置")
+                .content(R.string.device_set_room_save_setting)
                 .progress(true, 0)
                 .show();
         RetrofitService.qdoApi.updateSpecificDeviceName(resultVo.getDeviceId(), tvName.getText().toString(), tableType)
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
-                .filter(new Predicate<MessageVo>() {
-                    @Override
-                    public boolean test(MessageVo messageVo) throws Exception {
-                        return messageVo.getCode() == 200;
-                    }
-                })
+                .filter(messageVo -> messageVo.getCode() == 200)
                 .observeOn(Schedulers.io())
-                .flatMap(new Function<MessageVo, ObservableSource<MessageVo>>() {
-                    @Override
-                    public ObservableSource<MessageVo> apply(MessageVo messageVo) throws Exception {
-                        Gson gson = new Gson();
-                        List<String> list = new ArrayList<>();
-                        list.add(resultVo.getDeviceId());
-                        UpdateDeviceRoomVo updateDeviceRoomVo = new UpdateDeviceRoomVo();
-                        updateDeviceRoomVo.setRoom_id(roomId);
-                        updateDeviceRoomVo.setDevice_id(list);
-                        String body = gson.toJson(updateDeviceRoomVo);
-                        RequestBody requestBody = RequestBody.create(MediaType.parse("Content-Type: application/json"), body);
-                        return RetrofitService.qdoApi.updateDeviceRoom(requestBody);
-                    }
+                .flatMap((Function<MessageVo, ObservableSource<MessageVo>>) messageVo -> {
+                    Gson gson = new Gson();
+                    List<String> list = new ArrayList<>();
+                    list.add(resultVo.getDeviceId());
+                    UpdateDeviceRoomVo updateDeviceRoomVo = new UpdateDeviceRoomVo();
+                    updateDeviceRoomVo.setRoom_id(roomId);
+                    updateDeviceRoomVo.setDevice_id(list);
+                    String body = gson.toJson(updateDeviceRoomVo);
+                    RequestBody requestBody = RequestBody.create(MediaType.parse("Content-Type: application/json"), body);
+                    return RetrofitService.qdoApi.updateDeviceRoom(requestBody);
                 })
-                .filter(new Predicate<MessageVo>() {
-                    @Override
-                    public boolean test(MessageVo messageVo) throws Exception {
-                        return messageVo.getCode() == 200;
-                    }
-                })
-                .flatMap(new Function<MessageVo, ObservableSource<MessageVo>>() {
-                    @Override
-                    public ObservableSource<MessageVo> apply(MessageVo messageVo) throws Exception {
-                        return RetrofitService.qdoApi.setCommonDevice(resultVo.getDeviceId(), isCommon);
-                    }
-                })
+                .filter(messageVo -> messageVo.getCode() == 200)
+                .flatMap((Function<MessageVo, ObservableSource<MessageVo>>) messageVo -> RetrofitService.qdoApi.setCommonDevice(resultVo.getDeviceId(), isCommon))
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<MessageVo>() {
                     @Override
@@ -272,17 +234,17 @@ public class DeviceSetRoomActivity extends BaseActivity {
                                         break;
                                 }
                             } else {
-                                ToastUtil.showToast("保存成功");
+                                ToastUtil.showToast(getString(R.string.common_save_success));
                             }
                         } else {
-                            ToastUtil.showToast("保存失败");
+                            ToastUtil.showToast(getString(R.string.common_save_fail));
                         }
                     }
 
                     @Override
                     public void onError(Throwable e) {
                         dialog.dismiss();
-                        ToastUtil.showToast("保存失败");
+                        ToastUtil.showToast(getString(R.string.common_save_fail));
                     }
 
                     @Override

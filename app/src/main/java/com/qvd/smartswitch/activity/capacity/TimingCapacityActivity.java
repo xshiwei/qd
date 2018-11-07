@@ -1,6 +1,5 @@
 package com.qvd.smartswitch.activity.capacity;
 
-import android.os.Bundle;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -12,7 +11,6 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.carbswang.android.numberpickerview.library.NumberPickerView;
 
@@ -53,12 +51,12 @@ public class TimingCapacityActivity extends BaseActivity {
         GregorianCalendar calendar = (GregorianCalendar) GregorianCalendar.getInstance();
         int h = calendar.get(Calendar.HOUR_OF_DAY);
         int m = calendar.get(Calendar.MINUTE);
-        setData(pickerHour, 0, 23, h);
-        setData(pickerMinute, 0, 59, m);
+        setData(pickerHour, 23, h);
+        setData(pickerMinute, 59, m);
     }
 
-    private void setData(NumberPickerView picker, int minValue, int maxValue, int value) {
-        picker.setMinValue(minValue);
+    private void setData(NumberPickerView picker, int maxValue, int value) {
+        picker.setMinValue(0);
         picker.setMaxValue(maxValue);
         picker.setValue(value);
     }

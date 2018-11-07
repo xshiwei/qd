@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/home_manage_backgroud"
     android:orientation="vertical">
 
 
-    <include
-        layout="@layout/common_actionbar" />
+    <include layout="@layout/common_actionbar" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -15,7 +15,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <TextView
@@ -23,9 +23,10 @@
                 android:layout_height="wrap_content"
                 android:paddingLeft="@dimen/x30"
                 android:paddingTop="@dimen/y40"
-                android:text="更新"
+                android:text="@string/user_setting_update"
                 android:textColor="@color/home_setting_text_three"
-                android:textSize="12sp" />
+                android:textSize="12sp"
+                tools:ignore="RtlHardcoded" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -36,9 +37,9 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/x30"
+                    android:layout_marginStart="@dimen/x30"
                     android:layout_marginTop="@dimen/y15"
-                    android:text="插件自动更新"
+                    android:text="@string/user_setting_adt_auto_update"
                     android:textColor="@color/home_setting_text"
                     android:textSize="14sp" />
 
@@ -46,28 +47,32 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
+                    android:layout_marginStart="@dimen/x30"
                     android:layout_marginBottom="@dimen/y15"
-                    android:layout_marginLeft="@dimen/x30"
-                    android:text="WLAN环境下自动更新"
+                    android:text="@string/user_setting_adt_auto_update_text"
                     android:textColor="@color/home_setting_text_three"
                     android:textSize="12sp" />
 
                 <Switch
+                    android:id="@+id/switch_plug_auto_update"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginRight="@dimen/x30" />
+                    android:layout_marginRight="@dimen/x30"
+                    tools:ignore="RtlHardcoded" />
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1px"
                     android:layout_alignParentBottom="true"
                     android:layout_marginLeft="@dimen/x30"
-                    android:background="@color/black_16" />
+                    android:background="@color/black_16"
+                    tools:ignore="RtlHardcoded" />
             </RelativeLayout>
 
             <RelativeLayout
+                android:id="@+id/rl_check_update"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/y100"
                 android:background="@color/white">
@@ -77,9 +82,10 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/x30"
-                    android:text="检查更新"
+                    android:text="@string/user_setting_check_update"
                     android:textColor="@color/home_setting_text"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"
+                    tools:ignore="RtlHardcoded" />
 
 
                 <ImageView
@@ -88,16 +94,17 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="@dimen/x30"
-                    android:src="@mipmap/home_manage_right" />
+                    android:src="@mipmap/home_manage_right"
+                    tools:ignore="RtlHardcoded" />
 
             </RelativeLayout>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingLeft="@dimen/x30"
+                android:paddingStart="@dimen/x30"
                 android:paddingTop="@dimen/y40"
-                android:text="首页"
+                android:text="@string/user_setting_home"
                 android:textColor="@color/home_setting_text_three"
                 android:textSize="12sp" />
 
@@ -112,28 +119,65 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/x30"
-                    android:text="常用快捷开关音效"
+                    android:text="@string/user_setting_common_voice_switch"
                     android:textColor="@color/home_setting_text"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"
+                    tools:ignore="RtlHardcoded" />
+
+
+                <Switch
+                    android:id="@+id/switch_common_voice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/x30"
+                    tools:ignore="RtlHardcoded" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginStart="@dimen/x30"
+                    android:background="@color/black_16" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/y100"
+                android:background="@color/white"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/x30"
+                    android:text="@string/user_setting_show_space_name"
+                    android:textColor="@color/home_setting_text"
+                    android:textSize="14sp"
+                    tools:ignore="RtlHardcoded" />
 
 
                 <Switch
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginRight="@dimen/x30" />
+                    android:layout_marginEnd="@dimen/x30" />
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1px"
                     android:layout_alignParentBottom="true"
-                    android:layout_marginLeft="@dimen/x30"
+                    android:layout_marginStart="@dimen/x30"
                     android:background="@color/black_16" />
 
             </RelativeLayout>
 
             <RelativeLayout
+                android:id="@+id/rl_family_manage"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/y100"
                 android:background="@color/white">
@@ -143,40 +187,10 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/x30"
-                    android:text="侧边栏显示空间名称"
+                    android:text="@string/user_setting_family_manage"
                     android:textColor="@color/home_setting_text"
-                    android:textSize="14sp" />
-
-
-                <Switch
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="@dimen/x30" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1px"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginLeft="@dimen/x30"
-                    android:background="@color/black_16" />
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/y100"
-                android:background="@color/white">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="@dimen/x30"
-                    android:text="家庭管理"
-                    android:textColor="@color/home_setting_text"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"
+                    tools:ignore="RtlHardcoded" />
 
                 <ImageView
                     android:layout_width="wrap_content"
@@ -184,69 +198,15 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="@dimen/x30"
-                    android:src="@mipmap/home_manage_right" />
+                    android:src="@mipmap/home_manage_right"
+                    tools:ignore="RtlHardcoded" />
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1px"
                     android:layout_alignParentBottom="true"
-                    android:layout_marginLeft="@dimen/x30"
+                    android:layout_marginStart="@dimen/x30"
                     android:background="@color/black_16" />
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/y100"
-                android:background="@color/white">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="@dimen/x30"
-                    android:text="房间管理"
-                    android:textColor="@color/home_setting_text"
-                    android:textSize="14sp" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="@dimen/x30"
-                    android:src="@mipmap/home_manage_right" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1px"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginLeft="@dimen/x30"
-                    android:background="@color/black_16" />
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/y100"
-                android:background="@color/white">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="@dimen/x30"
-                    android:text="状态管理"
-                    android:textColor="@color/home_setting_text"
-                    android:textSize="14sp" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="@dimen/x30"
-                    android:src="@mipmap/home_manage_right" />
 
             </RelativeLayout>
 
@@ -255,11 +215,120 @@
                 android:layout_height="wrap_content"
                 android:paddingLeft="@dimen/x30"
                 android:paddingTop="@dimen/y40"
-                android:text="设备"
+                android:text="@string/user_setting_device"
                 android:textColor="@color/home_setting_text_three"
-                android:textSize="12sp" />
+                android:textSize="12sp"
+                tools:ignore="RtlHardcoded" />
 
             <RelativeLayout
+                android:id="@+id/rl_device_operation_recode"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/y100"
+                android:layout_marginTop="@dimen/y25"
+                android:background="@color/white">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="@dimen/x30"
+                    android:text="@string/device_operation_recode"
+                    android:textColor="@color/home_setting_text"
+                    android:textSize="14sp" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/x30"
+                    android:src="@mipmap/home_manage_right"
+                    tools:ignore="RtlHardcoded" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginLeft="@dimen/x30"
+                    android:background="@color/black_16"
+                    tools:ignore="RtlHardcoded" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rl_message_setting"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/y100"
+                android:background="@color/white">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/x30"
+                    android:text="@string/user_setting_message_setting"
+                    android:textColor="@color/home_setting_text"
+                    android:textSize="14sp"
+                    tools:ignore="RtlHardcoded" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/x30"
+                    android:src="@mipmap/home_manage_right"
+                    tools:ignore="RtlHardcoded" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1px"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginLeft="@dimen/x30"
+                    android:background="@color/black_16"
+                    tools:ignore="RtlHardcoded" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/rl_privacy_setting"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/y100"
+                android:background="@color/white">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="@dimen/x30"
+                    android:text="@string/user_setting_privacy_setting"
+                    android:textColor="@color/home_setting_text"
+                    android:textSize="14sp"
+                    tools:ignore="RtlHardcoded" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/x30"
+                    android:src="@mipmap/home_manage_right"
+                    tools:ignore="RtlHardcoded" />
+
+            </RelativeLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/x30"
+                android:paddingTop="@dimen/y40"
+                android:text="@string/user_setting_region_and_language"
+                android:textColor="@color/home_setting_text_three"
+                android:textSize="12sp"
+                tools:ignore="RtlHardcoded" />
+
+            <RelativeLayout
+                android:id="@+id/rl_region"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/y100"
                 android:layout_marginTop="@dimen/y25"
@@ -270,85 +339,22 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/x30"
-                    android:text="通知栏快捷开关"
+                    android:text="@string/user_setting_region"
                     android:textColor="@color/home_setting_text"
-                    android:textSize="14sp" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="@dimen/x30"
-                    android:src="@mipmap/home_manage_right" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1px"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginLeft="@dimen/x30"
-                    android:background="@color/black_16" />
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/y100"
-                android:background="@color/white">
+                    android:textSize="14sp"
+                    tools:ignore="RtlHardcoded" />
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="@dimen/x30"
-                    android:text="消息设置"
-                    android:textColor="@color/home_setting_text"
-                    android:textSize="14sp" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="@dimen/x30"
-                    android:src="@mipmap/home_manage_right" />
-
-
-            </RelativeLayout>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingLeft="@dimen/x30"
-                android:paddingTop="@dimen/y40"
-                android:text="地区和语言"
-                android:textColor="@color/home_setting_text_three"
-                android:textSize="12sp" />
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/y100"
-                android:layout_marginTop="@dimen/y25"
-                android:background="@color/white">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginLeft="@dimen/x30"
-                    android:text="地区"
-                    android:textColor="@color/home_setting_text"
-                    android:textSize="14sp" />
-
-                <TextView
+                    android:id="@+id/tv_region"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="@dimen/x20"
                     android:layout_toLeftOf="@+id/iv_one"
-                    android:text="大陆地区"
+                    android:text="@string/user_setting_china_region"
                     android:textColor="@color/home_setting_text_three"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"
+                    tools:ignore="RtlHardcoded" />
 
                 <ImageView
                     android:id="@+id/iv_one"
@@ -357,18 +363,20 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="@dimen/x30"
-                    android:src="@mipmap/home_manage_right" />
+                    android:src="@mipmap/home_manage_right"
+                    tools:ignore="RtlHardcoded" />
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1px"
                     android:layout_alignParentBottom="true"
-                    android:layout_marginLeft="@dimen/x30"
+                    android:layout_marginStart="@dimen/x30"
                     android:background="@color/black_16" />
 
             </RelativeLayout>
 
             <RelativeLayout
+                android:id="@+id/rl_language"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/y100"
                 android:background="@color/white">
@@ -378,19 +386,22 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginLeft="@dimen/x30"
-                    android:text="语言"
+                    android:text="@string/user_setting_language"
                     android:textColor="@color/home_setting_text"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"
+                    tools:ignore="RtlHardcoded" />
 
                 <TextView
+                    android:id="@+id/tv_language"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="@dimen/x20"
                     android:layout_toLeftOf="@+id/iv_two"
-                    android:text="默认"
+                    android:text="@string/user_setting_default"
                     android:textColor="@color/home_setting_text_three"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"
+                    tools:ignore="RtlHardcoded" />
 
                 <ImageView
                     android:id="@+id/iv_two"
@@ -399,30 +410,32 @@
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="@dimen/x30"
-                    android:src="@mipmap/home_manage_right" />
+                    android:src="@mipmap/home_manage_right"
+                    tools:ignore="RtlHardcoded" />
 
             </RelativeLayout>
 
 
             <TextView
+                android:id="@+id/tv_item_privacy"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="@dimen/y50"
-                android:text="使用条款和隐私政策"
+                android:text="@string/user_setting_item_privacy"
                 android:textColor="@color/capacity_tablayout_text_two"
-                android:textSize="14sp" />
+                android:textSize="12sp" />
 
             <TextView
+                android:id="@+id/tv_current_version"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="@dimen/y50"
                 android:layout_marginTop="@dimen/y5"
-                android:text="当前版本：1.1.0"
+                android:layout_marginBottom="@dimen/y20"
+                android:text="@string/user_setting_now_version"
                 android:textColor="@color/home_setting_text_two"
-                android:textSize="14sp" />
-
+                android:textSize="13sp" />
 
         </LinearLayout>
     </ScrollView>

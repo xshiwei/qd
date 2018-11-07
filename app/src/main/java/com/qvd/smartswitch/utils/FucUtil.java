@@ -22,8 +22,8 @@ public class FucUtil {
 	 */
 	public static String readFile(Context mContext,String file,String code)
 	{
-		int len = 0;
-		byte []buf = null;
+		int len;
+		byte []buf;
 		String result = "";
 		try {
 			InputStream in = mContext.getAssets().open(file);			
@@ -46,7 +46,7 @@ public class FucUtil {
 	 */
 	public ArrayList<byte[]> splitBuffer(byte[] buffer,int length,int spsize)
 	{
-		ArrayList<byte[]> array = new ArrayList<byte[]>();
+		ArrayList<byte[]> array = new ArrayList<>();
 		if(spsize <= 0 || length <= 0 || buffer == null || buffer.length < length)
 			return array;
 		int size = 0;

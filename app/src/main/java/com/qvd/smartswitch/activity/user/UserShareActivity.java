@@ -29,18 +29,10 @@ public class UserShareActivity extends BaseActivity {
     ViewPager vpShare;
 
 
-    private TabLayoutAdapter adapter;
-    /**
-     * 定义要装fragment的列表
-     */
-    private List<Fragment> list_fragment;
     /**
      * 定义tablayout的title集合
      */
     private final List<String> list_title = new ArrayList<>();
-
-    private ShareFragment shareFragment;
-    private ReceiveFragment receiveFragment;
 
     @Override
     protected int setLayoutId() {
@@ -56,15 +48,18 @@ public class UserShareActivity extends BaseActivity {
     @Override
     protected void initData() {
         super.initData();
-        shareFragment = ShareFragment.newInstance("share");
-        receiveFragment = ReceiveFragment.newInstance("receive");
+        ShareFragment shareFragment = ShareFragment.newInstance("share");
+        ReceiveFragment receiveFragment = ReceiveFragment.newInstance("receive");
 
-        list_fragment = new ArrayList<>();
+        /*
+      定义要装fragment的列表
+     */
+        List<Fragment> list_fragment = new ArrayList<>();
         list_fragment.add(shareFragment);
         list_fragment.add(receiveFragment);
 
-        list_title.add("共享");
-        list_title.add("接受");
+        list_title.add(getString(R.string.common_share));
+        list_title.add(getString(R.string.common_receive));
 
         tblShare.setTabMode(View.FOCUSABLES_TOUCH_MODE);
         //TabLayout加载viewpager
@@ -73,7 +68,7 @@ public class UserShareActivity extends BaseActivity {
         tblShare.addTab(tblShare.newTab().setText(list_title.get(0)));
         tblShare.addTab(tblShare.newTab().setText(list_title.get(1)));
 
-        adapter = new TabLayoutAdapter(getSupportFragmentManager(), list_fragment, list_title);
+        TabLayoutAdapter adapter = new TabLayoutAdapter(getSupportFragmentManager(), list_fragment, list_title);
         //viewpager加载adapter
         vpShare.setAdapter(adapter);
         vpShare.setCurrentItem(0);

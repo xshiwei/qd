@@ -126,9 +126,6 @@ public class CityConfig {
     private int lineHeigh = 2;
 
     /**
-     * 默认显示的城市数据，只包含省市区名称
-     */
-    /**
      * 定义显示省市区三种滚轮的显示状态
      * PRO:只显示省份的一级选择器
      * PRO_CITY:显示省份和城市二级联动的选择器
@@ -146,7 +143,7 @@ public class CityConfig {
     /**
      * 定义默认显示省市区三级联动的滚轮选择器
      */
-    public WheelType mWheelType = WheelType.PRO_CITY_DIS;
+    private WheelType mWheelType = WheelType.PRO_CITY_DIS;
 
     public CityConfig.WheelType getWheelType() {
         return mWheelType;
@@ -344,18 +341,10 @@ public class CityConfig {
         isShowBackground = showBackground;
     }
 
-    public CityConfig(Builder builder) {
+    private CityConfig(Builder builder) {
 
         //        this.mContext = builder.mContext;
 
-        /**
-         * 标题栏相关的属性：
-         * 0、标题栏背景颜色
-         * 1、标题文字、大小、颜色
-         *
-         * 2、取消字体的颜色、大小、内容
-         * 3、确认字体的颜色、大小、内容
-         */
         this.titleBackgroundColorStr = builder.titleBackgroundColorStr;
 
         this.mTitle = builder.mTitle;
@@ -370,44 +359,22 @@ public class CityConfig {
         this.confirmText = builder.confirmText;
         this.confirmTextSize = builder.confirmTextSize;
 
-        /**
-         * 滚轮相关的属性：
-         * 1、item显示的个数
-         * 2、省份是否可以循环
-         * 3、城市是否可以循环
-         * 4、地区是否可以循环
-         */
         this.visibleItems = builder.visibleItems;
         this.isProvinceCyclic = builder.isProvinceCyclic;
         this.isDistrictCyclic = builder.isDistrictCyclic;
         this.isCityCyclic = builder.isCityCyclic;
 
-        /**
-         * 默认的省市区地址
-         */
         this.defaultDistrict = builder.defaultDistrict;
         this.defaultCityName = builder.defaultCityName;
         this.defaultProvinceName = builder.defaultProvinceName;
 
-        /**
-         * 是否显示城市和地区
-         */
         this.mWheelType = builder.mWheelType;
 
-        /**
-         * 是否显示半透明
-         */
         this.isShowBackground = builder.isShowBackground;
 
-        /**
-         * 自定义item的布局，必须制定Layout和id
-         */
         this.customItemLayout = builder.customItemLayout;
         this.customItemTextViewId = builder.customItemTextViewId;
 
-        /**
-         * 是否显示滚轮上面的模糊阴影效果
-         */
         this.drawShadows = builder.drawShadows;
         this.lineColor = builder.lineColor;
         this.lineHeigh = builder.lineHeigh;

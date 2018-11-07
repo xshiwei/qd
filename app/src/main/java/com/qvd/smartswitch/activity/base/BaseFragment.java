@@ -1,20 +1,21 @@
 package com.qvd.smartswitch.activity.base;
 
-/**
- * Created by Administrator on 2018/4/2.
- */
-
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.gyf.barlibrary.ImmersionBar;
-import com.qvd.smartswitch.receiver.NetBroadcastReceiver;
+import com.qvd.smartswitch.api.RetrofitService;
+import com.qvd.smartswitch.model.login.LoginVo;
+import com.qvd.smartswitch.utils.CommonUtils;
+import com.qvd.smartswitch.utils.ConfigUtils;
+import com.qvd.smartswitch.utils.SharedPreferencesUtil;
 import com.qvd.smartswitch.widget.MyEmptyLayout;
 import com.qvd.smartswitch.widget.MyErrorLayout;
 import com.qvd.smartswitch.widget.MyLoadingLayout;
@@ -23,6 +24,10 @@ import com.trello.rxlifecycle2.components.support.RxFragment;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 
 /**
@@ -31,7 +36,7 @@ import butterknife.Unbinder;
 public abstract class BaseFragment extends RxFragment {
 
     protected Activity mActivity;
-    protected View mRootView;
+    private View mRootView;
 
     protected ImmersionBar mImmersionBar;
     private Unbinder unbinder;
@@ -50,7 +55,7 @@ public abstract class BaseFragment extends RxFragment {
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mRootView = inflater.inflate(setLayoutId(), container, false);
         return mRootView;
     }
@@ -59,13 +64,53 @@ public abstract class BaseFragment extends RxFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         unbinder = ButterKnife.bind(this, view);
-        if (isImmersionBarEnabled())
             initImmersionBar();
         myEmptyLayout = new MyEmptyLayout(getActivity());
         myErrorLayout = new MyErrorLayout(getActivity());
         myLoadingLayout = new MyLoadingLayout(getActivity());
         initData();
         initView();
+    }
+
+    /**
+     * 自动登录
+     */
+    public void AutoLogin() {
+        String password = SharedPreferencesUtil.getString(getActivity(), SharedPreferencesUtil.PASSWORD);
+        String identifier = SharedPreferencesUtil.getString(getActivity(), SharedPreferencesUtil.IDENTIFIER);
+        if (!CommonUtils.isEmptyString(password) && !CommonUtils.isEmptyString(identifier)) {
+            RetrofitService.qdoApi.login(identifier, password)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Observer<LoginVo>() {
+                        @Override
+                        public void onSubscribe(Disposable d) {
+
+                        }
+
+                        @Override
+                        public void onNext(LoginVo loginVo) {
+                            if (loginVo != null) {
+                                if (loginVo.getData() != null && loginVo.getCode() == 200) {
+                                    SharedPreferencesUtil.putString(getActivity(), SharedPreferencesUtil.USER_ID, loginVo.getData().getUser_id());
+                                    SharedPreferencesUtil.putString(getActivity(), SharedPreferencesUtil.IDENTIFIER, loginVo.getData().getIdentifier());
+                                    SharedPreferencesUtil.putString(getActivity(), SharedPreferencesUtil.PASSWORD, loginVo.getData().getPassword());
+                                    ConfigUtils.user_id = loginVo.getData().getUser_id();
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+
+                        }
+
+                        @Override
+                        public void onComplete() {
+
+                        }
+                    });
+        }
     }
 
     @Override
@@ -91,15 +136,6 @@ public abstract class BaseFragment extends RxFragment {
     protected abstract int setLayoutId();
 
     /**
-     * 是否在Fragment使用沉浸式
-     *
-     * @return the boolean
-     */
-    protected boolean isImmersionBarEnabled() {
-        return true;
-    }
-
-    /**
      * 初始化沉浸式
      */
     protected void initImmersionBar() {
@@ -118,7 +154,7 @@ public abstract class BaseFragment extends RxFragment {
     /**
      * view与数据绑定
      */
-    protected void initView() {
+    private void initView() {
 
     }
 

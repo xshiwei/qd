@@ -17,7 +17,6 @@ public class DevicePrivacyActivity extends BaseActivity {
     TextView tvCommonActionbarTitle;
     @BindView(R.id.tv_text)
     TextView tvText;
-    private String text;
 
     @Override
     protected int setLayoutId() {
@@ -27,8 +26,8 @@ public class DevicePrivacyActivity extends BaseActivity {
     @Override
     protected void initData() {
         super.initData();
-        tvCommonActionbarTitle.setText("使用条款");
-        text = FucUtil.readFile(this, "device_privacy_policy", "utf-8");
+        tvCommonActionbarTitle.setText(R.string.device_privacy_title);
+        String text = FucUtil.readFile(this, "device_privacy_policy", "utf-8");
         tvText.setText(text);
     }
 

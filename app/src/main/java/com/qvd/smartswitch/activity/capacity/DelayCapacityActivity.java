@@ -1,6 +1,5 @@
 package com.qvd.smartswitch.activity.capacity;
 
-import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -8,11 +7,7 @@ import android.widget.TextView;
 import com.qvd.smartswitch.R;
 import com.qvd.smartswitch.activity.base.BaseActivity;
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.carbswang.android.numberpickerview.library.NumberPickerView;
 
@@ -46,14 +41,14 @@ public class DelayCapacityActivity extends BaseActivity {
     @Override
     protected void initData() {
         super.initData();
-        setData(pickerSecond, 0, 59, 0);
-        setData(pickerMinute, 0, 59, 0);
+        setData(pickerSecond);
+        setData(pickerMinute);
     }
 
-    private void setData(NumberPickerView picker, int minValue, int maxValue, int value) {
-        picker.setMinValue(minValue);
-        picker.setMaxValue(maxValue);
-        picker.setValue(value);
+    private void setData(NumberPickerView picker) {
+        picker.setMinValue(0);
+        picker.setMaxValue(59);
+        picker.setValue(0);
     }
 
 

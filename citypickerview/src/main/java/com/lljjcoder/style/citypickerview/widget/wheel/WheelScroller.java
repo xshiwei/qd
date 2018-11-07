@@ -31,7 +31,7 @@ import android.widget.Scroller;
 /**
  * Scroller class handles scrolling events and updates the 
  */
-public class WheelScroller {
+class WheelScroller {
     /**
      * Scrolling listener interface
      */
@@ -65,13 +65,13 @@ public class WheelScroller {
     public static final int MIN_DELTA_FOR_SCROLLING = 1;
 
     // Listener
-    private ScrollingListener listener;
+    private final ScrollingListener listener;
     
     // Context
-    private Context context;
+    private final Context context;
     
     // Scrolling
-    private GestureDetector gestureDetector;
+    private final GestureDetector gestureDetector;
     private Scroller scroller;
     private int lastScrollY;
     private float lastTouchedY;
@@ -83,6 +83,22 @@ public class WheelScroller {
      * @param listener the scrolling listener
      */
     public WheelScroller(Context context, ScrollingListener listener) {
+        SimpleOnGestureListener gestureListener = new SimpleOnGestureListener() {
+            public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+                // Do scrolling in onTouchEvent() since onScroll() are not call immediately
+                //  when user touch and move the wheel
+                return true;
+            }
+
+            public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+                lastScrollY = 0;
+                final int maxY = 0x7FFFFFFF;
+                final int minY = -maxY;
+                scroller.fling(0, lastScrollY, 0, (int) -velocityY, 0, 0, minY, maxY);
+                setNextMessage(MESSAGE_SCROLL);
+                return true;
+            }
+        };
         gestureDetector = new GestureDetector(context, gestureListener);
         gestureDetector.setIsLongpressEnabled(false);
         
@@ -154,24 +170,6 @@ public class WheelScroller {
 
         return true;
     }
-    
-    // gesture listener
-    private SimpleOnGestureListener gestureListener = new SimpleOnGestureListener() {
-        public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
-            // Do scrolling in onTouchEvent() since onScroll() are not call immediately
-            //  when user touch and move the wheel
-            return true;
-        }
-        
-        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-            lastScrollY = 0;
-            final int maxY = 0x7FFFFFFF;
-            final int minY = -maxY;
-            scroller.fling(0, lastScrollY, 0, (int) -velocityY, 0, 0, minY, maxY);
-            setNextMessage(MESSAGE_SCROLL);
-            return true;
-        }
-    };
 
     // Messages
     private final int MESSAGE_SCROLL = 0;
@@ -196,7 +194,7 @@ public class WheelScroller {
     }
     
     // animation handler
-    private Handler animationHandler = new Handler() {
+    private final Handler animationHandler = new Handler() {
         public void handleMessage(Message msg) {
             scroller.computeScrollOffset();
             int currY = scroller.getCurrY();
@@ -243,7 +241,7 @@ public class WheelScroller {
     /**
      * Finishes scrolling
      */
-    void finishScrolling() {
+    private void finishScrolling() {
         if (isScrollingPerformed) {
             listener.onFinished();
             isScrollingPerformed = false;

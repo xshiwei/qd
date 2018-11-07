@@ -1,6 +1,7 @@
 package com.qvd.smartswitch.activity.device;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -9,8 +10,8 @@ import com.qvd.smartswitch.R;
 import com.qvd.smartswitch.activity.base.BaseFragment;
 import com.qvd.smartswitch.activity.device.Ble.DeviceSearchBleActivity;
 import com.qvd.smartswitch.activity.device.wifi.ConfirmLightFlickerActivity;
+import com.qvd.smartswitch.activity.user.UserFragment;
 import com.qvd.smartswitch.adapter.ClassifyDetailAdapter;
-import com.qvd.smartswitch.adapter.AddDeviceListener;
 import com.qvd.smartswitch.model.device.AddDeviceListVo;
 import com.qvd.smartswitch.model.home.RightBean;
 import com.qvd.smartswitch.widget.CheckListener;
@@ -18,6 +19,7 @@ import com.qvd.smartswitch.widget.ItemHeaderDecoration;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import butterknife.BindView;
 
@@ -25,14 +27,19 @@ import butterknife.BindView;
 public class DeviceSortDetailFragment extends BaseFragment implements CheckListener {
     @BindView(R.id.rv)
     RecyclerView mRv;
-    private ClassifyDetailAdapter mAdapter;
     private GridLayoutManager mManager;
-    private List<RightBean> mDatas = new ArrayList<>();
-    private ItemHeaderDecoration mDecoration;
+    private final List<RightBean> mDatas = new ArrayList<>();
     private boolean move = false;
     private int mIndex = 0;
     private CheckListener checkListener;
 
+    public static DeviceSortDetailFragment newInstance(String param1) {
+        DeviceSortDetailFragment fragment = new DeviceSortDetailFragment();
+        Bundle args = new Bundle();
+        args.putString("agrs1", param1);
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Override
     protected int setLayoutId() {
@@ -52,28 +59,25 @@ public class DeviceSortDetailFragment extends BaseFragment implements CheckListe
         });
         mRv.setLayoutManager(mManager);
         //当前点击事件
-        mAdapter = new ClassifyDetailAdapter(getActivity(), mDatas, new AddDeviceListener() {
-            @Override
-            public void onItemClick(int id, int position) {
-                switch (id) {
-                    case R.id.root:
-                        break;
-                    case R.id.content:
-                        String deviceNo = mDatas.get(position).getDeviceNo();
-                        switchToActivity(deviceNo, mDatas.get(position).getConnectType());
-                        break;
-                }
-
+        ClassifyDetailAdapter mAdapter = new ClassifyDetailAdapter(getActivity(), mDatas, (id, position) -> {
+            switch (id) {
+                case R.id.root:
+                    break;
+                case R.id.content:
+                    String deviceNo = mDatas.get(position).getDeviceNo();
+                    switchToActivity(deviceNo, mDatas.get(position).getConnectType());
+                    break;
             }
+
         });
 
         mRv.setAdapter(mAdapter);
-        mDecoration = new ItemHeaderDecoration(getActivity(), mDatas);
+        ItemHeaderDecoration mDecoration = new ItemHeaderDecoration(Objects.requireNonNull(getActivity()), mDatas);
         mRv.addItemDecoration(mDecoration);
         mDecoration.setCheckListener(checkListener);
 
-        AddDeviceListVo addDeviceListVo = (AddDeviceListVo) getArguments().getSerializable("right");
-        List<AddDeviceListVo.DataBean> rightList = addDeviceListVo.getData();
+        AddDeviceListVo addDeviceListVo = (AddDeviceListVo) Objects.requireNonNull(getArguments()).getSerializable("right");
+        List<AddDeviceListVo.DataBean> rightList = Objects.requireNonNull(addDeviceListVo).getData();
         for (int i = 0; i < rightList.size(); i++) {
             RightBean head = new RightBean(rightList.get(i).getDevice_type());
             //头部设置为true
@@ -105,12 +109,12 @@ public class DeviceSortDetailFragment extends BaseFragment implements CheckListe
             case 1:
                 startActivity(new Intent(getActivity(), DeviceSearchBleActivity.class)
                         .putExtra("deviceNo", deviceNo));
-                getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+                Objects.requireNonNull(getActivity()).overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
                 break;
             case 2:
                 startActivity(new Intent(getActivity(), ConfirmLightFlickerActivity.class)
                         .putExtra("wifi_ssid", deviceNo));
-                getActivity().overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+                Objects.requireNonNull(getActivity()).overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
                 break;
         }
     }

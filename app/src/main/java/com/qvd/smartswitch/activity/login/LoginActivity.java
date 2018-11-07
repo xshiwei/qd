@@ -1,6 +1,5 @@
 package com.qvd.smartswitch.activity.login;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.view.View;
 import android.widget.EditText;
@@ -16,7 +15,7 @@ import com.qvd.smartswitch.model.login.LoginVo;
 import com.qvd.smartswitch.utils.CommonUtils;
 import com.qvd.smartswitch.utils.ConfigUtils;
 import com.qvd.smartswitch.utils.SharedPreferencesUtil;
-import com.qvd.smartswitch.utils.SnackbarUtils;
+import com.qvd.smartswitch.utils.ToastUtil;
 import com.qvd.smartswitch.widget.MyProgressDialog;
 
 import butterknife.BindView;
@@ -70,25 +69,19 @@ public class LoginActivity extends BaseActivity {
     @Override
     protected void initData() {
         super.initData();
-        etAccount.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    ivUser.setBackgroundResource(R.mipmap.login_user_selete);
-                } else {
-                    ivUser.setBackgroundResource(R.mipmap.login_user_unselete);
-                }
+        etAccount.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
+                ivUser.setBackgroundResource(R.mipmap.login_user_selete);
+            } else {
+                ivUser.setBackgroundResource(R.mipmap.login_user_unselete);
             }
         });
 
-        etPassword.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    ivPassword.setBackgroundResource(R.mipmap.login_password_selete);
-                } else {
-                    ivPassword.setBackgroundResource(R.mipmap.login_password_unselete);
-                }
+        etPassword.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus) {
+                ivPassword.setBackgroundResource(R.mipmap.login_password_selete);
+            } else {
+                ivPassword.setBackgroundResource(R.mipmap.login_password_unselete);
             }
         });
     }
@@ -137,14 +130,11 @@ public class LoginActivity extends BaseActivity {
         }
 
         final MyProgressDialog progressDialog = MyProgressDialog.createProgressDialog(this, 5000,
-                new MyProgressDialog.OnTimeOutListener() {
-                    @Override
-                    public void onTimeOut(ProgressDialog dialog) {
-                        dialog.dismiss();
-                        onLoginFailed();
-                    }
+                dialog -> {
+                    dialog.dismiss();
+                    onLoginFailed();
                 });
-        progressDialog.setMessage("登录中");
+        progressDialog.setMessage(getString(R.string.common_login));
         progressDialog.show();
 
         //调用接口登录，登陆成功关闭progressDialog
@@ -167,10 +157,6 @@ public class LoginActivity extends BaseActivity {
                                 ConfigUtils.user_id = messageVo.getData().getUser_id();
                                 onLoginSuccess();
                                 progressDialog.dismiss();
-                            } else if (messageVo.getCode() == 400) {
-                                SnackbarUtils.Short(btnLogin, "登录失败");
-                            } else {
-                                SnackbarUtils.Short(btnLogin, "连接超时");
                             }
                         }
                     }
@@ -196,10 +182,10 @@ public class LoginActivity extends BaseActivity {
         boolean valid = true;
         if (CommonUtils.isEmptyString(etAccount.getText().toString().trim()) || CommonUtils.isEmptyString(etPassword.getText().toString().trim())) {
             valid = false;
-            SnackbarUtils.Short(btnLogin, "密码或账号不能为空").show();
+            ToastUtil.showToast(getString(R.string.login_password_account_not_empty));
         } else if (etPassword.length() < 6 || etPassword.length() > 16) {
             valid = false;
-            SnackbarUtils.Short(btnLogin, "密码长度不规范").show();
+            ToastUtil.showToast(getString(R.string.login_password_length));
         }
         return valid;
     }
@@ -208,7 +194,7 @@ public class LoginActivity extends BaseActivity {
     /**
      * 登录成功
      */
-    public void onLoginSuccess() {
+    private void onLoginSuccess() {
         startActivity(new Intent(this, MainActivity.class));
         finish();
         overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
@@ -218,6 +204,6 @@ public class LoginActivity extends BaseActivity {
      * 登录失败
      */
     private void onLoginFailed() {
-        SnackbarUtils.Short(btnLogin, "登录失败").show();
+        ToastUtil.showToast(getString(R.string.common_login_fail));
     }
 }

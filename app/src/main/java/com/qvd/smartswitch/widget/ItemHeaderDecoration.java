@@ -21,11 +21,11 @@ import java.util.List;
 
 
 public class ItemHeaderDecoration extends RecyclerView.ItemDecoration {
-    private int mTitleHeight;
+    private final int mTitleHeight;
     private List<RightBean> mDatas;
-    private LayoutInflater mInflater;
+    private final LayoutInflater mInflater;
     private CheckListener mCheckListener;
-    public static String currentTag = "0";//标记当前左侧选中的position，因为有可能选中的item，右侧不能置顶，所以强制替换掉当前的tag
+    private static String currentTag = "0";//标记当前左侧选中的position，因为有可能选中的item，右侧不能置顶，所以强制替换掉当前的tag
 
     public void setCheckListener(CheckListener checkListener) {
         mCheckListener = checkListener;
@@ -42,9 +42,8 @@ public class ItemHeaderDecoration extends RecyclerView.ItemDecoration {
     }
 
 
-    public ItemHeaderDecoration setData(List<RightBean> mDatas) {
+    public void setData(List<RightBean> mDatas) {
         this.mDatas = mDatas;
-        return this;
     }
 
     public static void setCurrentTag(String currentTag) {
@@ -96,7 +95,7 @@ public class ItemHeaderDecoration extends RecyclerView.ItemDecoration {
      */
     private void drawHeader(RecyclerView parent, int pos, Canvas canvas) {
         View topTitleView = mInflater.inflate(R.layout.item_title, parent, false);
-        TextView tvTitle = (TextView) topTitleView.findViewById(R.id.tv_title);
+        TextView tvTitle = topTitleView.findViewById(R.id.tv_title);
         tvTitle.setText(mDatas.get(pos).getTitleName());
         //绘制title开始
         int toDrawWidthSpec;//用于测量的widthMeasureSpec
@@ -107,23 +106,31 @@ public class ItemHeaderDecoration extends RecyclerView.ItemDecoration {
             topTitleView.setLayoutParams(lp);
         }
         topTitleView.setLayoutParams(lp);
-        if (lp.width == ViewGroup.LayoutParams.MATCH_PARENT) {
-            //如果是MATCH_PARENT，则用父控件能分配的最大宽度和EXACTLY构建MeasureSpec
-            toDrawWidthSpec = View.MeasureSpec.makeMeasureSpec(parent.getWidth() - parent.getPaddingLeft() - parent.getPaddingRight(), View.MeasureSpec.EXACTLY);
-        } else if (lp.width == ViewGroup.LayoutParams.WRAP_CONTENT) {
-            //如果是WRAP_CONTENT，则用父控件能分配的最大宽度和AT_MOST构建MeasureSpec
-            toDrawWidthSpec = View.MeasureSpec.makeMeasureSpec(parent.getWidth() - parent.getPaddingLeft() - parent.getPaddingRight(), View.MeasureSpec.AT_MOST);
-        } else {
-            //否则则是具体的宽度数值，则用这个宽度和EXACTLY构建MeasureSpec
-            toDrawWidthSpec = View.MeasureSpec.makeMeasureSpec(lp.width, View.MeasureSpec.EXACTLY);
+        switch (lp.width) {
+            case ViewGroup.LayoutParams.MATCH_PARENT:
+                //如果是MATCH_PARENT，则用父控件能分配的最大宽度和EXACTLY构建MeasureSpec
+                toDrawWidthSpec = View.MeasureSpec.makeMeasureSpec(parent.getWidth() - parent.getPaddingLeft() - parent.getPaddingRight(), View.MeasureSpec.EXACTLY);
+                break;
+            case ViewGroup.LayoutParams.WRAP_CONTENT:
+                //如果是WRAP_CONTENT，则用父控件能分配的最大宽度和AT_MOST构建MeasureSpec
+                toDrawWidthSpec = View.MeasureSpec.makeMeasureSpec(parent.getWidth() - parent.getPaddingLeft() - parent.getPaddingRight(), View.MeasureSpec.AT_MOST);
+                break;
+            default:
+                //否则则是具体的宽度数值，则用这个宽度和EXACTLY构建MeasureSpec
+                toDrawWidthSpec = View.MeasureSpec.makeMeasureSpec(lp.width, View.MeasureSpec.EXACTLY);
+                break;
         }
         //高度同理
-        if (lp.height == ViewGroup.LayoutParams.MATCH_PARENT) {
-            toDrawHeightSpec = View.MeasureSpec.makeMeasureSpec(parent.getHeight() - parent.getPaddingTop() - parent.getPaddingBottom(), View.MeasureSpec.EXACTLY);
-        } else if (lp.height == ViewGroup.LayoutParams.WRAP_CONTENT) {
-            toDrawHeightSpec = View.MeasureSpec.makeMeasureSpec(parent.getHeight() - parent.getPaddingTop() - parent.getPaddingBottom(), View.MeasureSpec.AT_MOST);
-        } else {
-            toDrawHeightSpec = View.MeasureSpec.makeMeasureSpec(mTitleHeight, View.MeasureSpec.EXACTLY);
+        switch (lp.height) {
+            case ViewGroup.LayoutParams.MATCH_PARENT:
+                toDrawHeightSpec = View.MeasureSpec.makeMeasureSpec(parent.getHeight() - parent.getPaddingTop() - parent.getPaddingBottom(), View.MeasureSpec.EXACTLY);
+                break;
+            case ViewGroup.LayoutParams.WRAP_CONTENT:
+                toDrawHeightSpec = View.MeasureSpec.makeMeasureSpec(parent.getHeight() - parent.getPaddingTop() - parent.getPaddingBottom(), View.MeasureSpec.AT_MOST);
+                break;
+            default:
+                toDrawHeightSpec = View.MeasureSpec.makeMeasureSpec(mTitleHeight, View.MeasureSpec.EXACTLY);
+                break;
         }
         //依次调用 measure,layout,draw方法，将复杂头部显示在屏幕上
         topTitleView.measure(toDrawWidthSpec, toDrawHeightSpec);

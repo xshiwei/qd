@@ -1,6 +1,5 @@
 package com.qvd.smartswitch.activity.robot;
 
-import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.SeekBar;
@@ -10,7 +9,6 @@ import com.qvd.smartswitch.R;
 import com.qvd.smartswitch.activity.base.BaseActivity;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class RobotSettingVolumeModeActivity extends BaseActivity {

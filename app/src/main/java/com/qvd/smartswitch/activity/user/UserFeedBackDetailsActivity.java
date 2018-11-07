@@ -26,8 +26,6 @@ public class UserFeedBackDetailsActivity extends BaseActivity {
     TextView tvText;
 
 
-    private UserFeedbackListVo.DataBean dataBean;
-
     @Override
     protected int setLayoutId() {
         return R.layout.activity_user_feedback_details;
@@ -36,8 +34,8 @@ public class UserFeedBackDetailsActivity extends BaseActivity {
     @Override
     protected void initData() {
         super.initData();
-        dataBean = (UserFeedbackListVo.DataBean) getIntent().getSerializableExtra("data");
-        tvCommonActionbarTitle.setText("反馈详情");
+        UserFeedbackListVo.DataBean dataBean = (UserFeedbackListVo.DataBean) getIntent().getSerializableExtra("data");
+        tvCommonActionbarTitle.setText(R.string.user_feedback_details_title);
         tvContent.setText(dataBean.getFeedback_content());
         tvName.setText(CommonUtils.getDeviceName(dataBean.getCategory_type()) + "  |");
         tvTime.setText("  " + dataBean.getFeedback_time());

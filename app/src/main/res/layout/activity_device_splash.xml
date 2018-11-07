@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:paddingTop="@dimen/y30"
-        android:text="新手引导"
+        android:text="@string/device_splash_title"
         android:textColor="@color/home_setting_text"
         android:textSize="15sp" />
 
@@ -22,6 +22,6 @@
         app:indicator_drawable_unselected="@drawable/circle_gray_five"
         app:indicator_height="@dimen/y20"
         app:indicator_margin="@dimen/x10"
-        app:indicator_width="@dimen/x20"></com.youth.banner.Banner>
+        app:indicator_width="@dimen/x20" />
 
 </LinearLayout>

@@ -5,17 +5,17 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.qvd.smartswitch.R;
 import com.qvd.smartswitch.model.home.RightBean;
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
 
 public class ClassifyDetailAdapter extends AddDeviceAdapter<RightBean> {
 
-    private Context context;
-    private List<RightBean> list;
+    private final Context context;
+    private final List<RightBean> list;
 
     public ClassifyDetailAdapter(Context context, List<RightBean> list, AddDeviceListener listener) {
         super(context, list, listener);
@@ -44,15 +44,15 @@ public class ClassifyDetailAdapter extends AddDeviceAdapter<RightBean> {
         ImageView avatar;
         TextView tvTitle;
 
-        public ClassifyHolder(View itemView, int type, AddDeviceListener listener) {
+        ClassifyHolder(View itemView, int type, AddDeviceListener listener) {
             super(itemView, type, listener);
             switch (type) {
                 case 0:
-                    tvTitle = (TextView) itemView.findViewById(R.id.tv_title);
+                    tvTitle = itemView.findViewById(R.id.tv_title);
                     break;
                 case 1:
-                    tvCity = (TextView) itemView.findViewById(R.id.tvCity);
-                    avatar = (ImageView) itemView.findViewById(R.id.ivAvatar);
+                    tvCity = itemView.findViewById(R.id.tvCity);
+                    avatar = itemView.findViewById(R.id.ivAvatar);
                     break;
             }
 
@@ -66,7 +66,7 @@ public class ClassifyDetailAdapter extends AddDeviceAdapter<RightBean> {
                     tvTitle.setText(sortBean.getName());
                     break;
                 case 1:
-                    Picasso.with(context).load(sortBean.getImgsrc()).into(avatar);
+                    Glide.with(mContext).load(sortBean.getImgsrc()).into(avatar);
                     tvCity.setText(sortBean.getName());
                     break;
             }
